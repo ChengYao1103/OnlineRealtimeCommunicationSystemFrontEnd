@@ -5,5 +5,6 @@ build:
   stage: build
 
   script:
+    - yum install nodejs
     - npm i -g npx
     - npx yarn
