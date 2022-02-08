@@ -5,4 +5,5 @@ build:
   stage: build
 
   script:
+    - npm i -g npx
     - npx yarn
