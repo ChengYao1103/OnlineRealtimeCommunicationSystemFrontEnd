@@ -22,11 +22,12 @@ const NonAuthLayoutWrapper = (props: NonAuthLayoutWrapperProps) => {
                   <h3>
                     <Link to="/" className="text-white">
                       <i className="bx bxs-message-alt-detail align-middle text-white h3 mb-1 me-2"></i>{" "}
-                      Doot
+                      {/* Doot */}網路即時通訊系統
                     </Link>
                   </h3>
                   <p className="font-size-16">
-                    Responsive Bootstrap 5 Chat App
+                    {/*Responsive Bootstrap 5 Chat App*/}Online Realtime
+                    Communication System
                   </p>
                 </div>
                 <div className="mt-auto">
@@ -44,9 +45,9 @@ const NonAuthLayoutWrapper = (props: NonAuthLayoutWrapperProps) => {
                     <Col xl={12}>
                       <div className="text-center text-muted p-4">
                         <p className="mb-0">
-                          &copy; {new Date().getFullYear()} Doot. Crafted with{" "}
-                          <i className="mdi mdi-heart text-danger"></i> by
-                          Themesbrand
+                          {new Date().getFullYear()} &copy; {/*Doot.*/} Crafted
+                          with <i className="mdi mdi-heart text-danger"></i> by
+                          何秉育 陳琴蓮 廖酉詳 劉程耀
                         </p>
                       </div>
                     </Col>
