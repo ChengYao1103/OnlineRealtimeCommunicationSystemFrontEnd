@@ -74,7 +74,7 @@ const Register = (props: RegisterProps) => {
           <div className="py-md-5 py-4">
             <AuthHeader
               title="Register Account"
-              subtitle="Get your free Doot account now."
+              subtitle="Get your free account now."
             />
 
             {user && user ? (
@@ -105,15 +105,29 @@ const Register = (props: RegisterProps) => {
               </div>
 
               <div className="mb-3">
+                <label htmlFor="role">Role</label>
+                <select
+                  className="form-control"
+                  id="role"
+                  name="role"
+                  defaultValue={2}
+                >
+                  <option value={0}>老師 (Teacher)</option>
+                  <option value={1}>助教 (TA)</option>
+                  <option value={2}>學生 (Student)</option>
+                </select>
+              </div>
+
+              <div className="mb-3">
                 <FormInput
-                  label="Username"
+                  label="Name"
                   type="text"
                   name="username"
                   register={register}
                   errors={errors}
                   control={control}
                   labelClassName="form-label"
-                  placeholder="Enter username"
+                  placeholder="Enter Your Name"
                   className="form-control"
                 />
               </div>
@@ -126,6 +140,7 @@ const Register = (props: RegisterProps) => {
                   register={register}
                   errors={errors}
                   control={control}
+                  withoutLabel={true}
                   labelClassName="form-label"
                   className="form-control pe-5"
                   placeholder="Enter Password"
@@ -134,7 +149,7 @@ const Register = (props: RegisterProps) => {
 
               <div className="mb-4">
                 <p className="mb-0">
-                  By registering you agree to the Doot{" "}
+                  By registering you agree to the{" "}
                   <Link to="#" className="text-primary">
                     Terms of Use
                   </Link>

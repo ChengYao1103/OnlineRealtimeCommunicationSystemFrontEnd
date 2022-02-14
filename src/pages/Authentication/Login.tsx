@@ -134,7 +134,7 @@ const Login = (props: LoginProps) => {
           <div className="py-md-5 py-4">
             <AuthHeader
               title="Welcome Back !"
-              subtitle="Sign in to continue to Doot."
+              subtitle="Sign in to continue."
             />
 
             {error && <Alert color="danger">{error}</Alert>}
@@ -146,14 +146,14 @@ const Login = (props: LoginProps) => {
               {loginLoading && <Loader />}
               <div className="mb-3">
                 <FormInput
-                  label="Username"
+                  label="Email"
                   type="text"
                   name="email"
                   register={register}
                   errors={errors}
                   control={control}
                   labelClassName="form-label"
-                  placeholder="Enter username"
+                  placeholder="Enter Email"
                   className="form-control"
                 />
               </div>
