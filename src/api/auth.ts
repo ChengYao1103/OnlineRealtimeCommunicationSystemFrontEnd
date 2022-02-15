@@ -13,7 +13,7 @@ const postJwtForgetPwd = (data: any) =>
 
 const postFakeLogin = (data: any) => api.create(url.POST_FAKE_LOGIN, data);
 
-const postJwtLogin = (data: any) => api.create(url.POST_FAKE_JWT_LOGIN, data);
+const postJwtLogin = (data: any) => api.create(url.POST_JWT_LOGIN, data);
 
 // Register Method
 const postFakeRegister = (data: any) => {

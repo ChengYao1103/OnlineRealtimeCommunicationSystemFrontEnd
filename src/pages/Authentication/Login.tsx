@@ -77,8 +77,8 @@ const Login = (props: LoginProps) => {
   );
 
   const defaultValues: any = {
-    email: "admin@themesbrand.com",
-    password: "123456",
+    email: "a@b.c",
+    password: "1234",
   };
 
   const methods = useForm({ defaultValues, resolver });
