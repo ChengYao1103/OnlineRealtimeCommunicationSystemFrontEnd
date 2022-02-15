@@ -132,10 +132,7 @@ const Login = (props: LoginProps) => {
       <Row className=" justify-content-center my-auto">
         <Col sm={8} lg={6} xl={5} className="col-xxl-4">
           <div className="py-md-5 py-4">
-            <AuthHeader
-              title="Welcome Back !"
-              subtitle="Sign in to continue."
-            />
+            <AuthHeader title="Welcome Back !" subtitle="Log in to continue." />
 
             {error && <Alert color="danger">{error}</Alert>}
 
@@ -194,7 +191,7 @@ const Login = (props: LoginProps) => {
 
               <div className="mt-4 text-center">
                 <div className="signin-other-title">
-                  <h5 className="font-size-14 mb-4 title">Sign in with</h5>
+                  <h5 className="font-size-14 mb-4 title">Log in with</h5>
                 </div>
                 <Row className="">
                   <div className="col-4">

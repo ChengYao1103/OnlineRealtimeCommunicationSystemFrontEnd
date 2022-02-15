@@ -57,7 +57,7 @@ const PasswordInput: React.FunctionComponent<PasswordInputProps> = ({
             }}
             data-password={showPassword ? "true" : "false"}
           >
-            <i className="ri-eye-fill align-middle"></i>
+            <i className="ri-eye-fill align-middle me-3"></i>
           </button>
         )}
       </div>

@@ -4,6 +4,9 @@ import { Alert, Row, Col, Form } from "reactstrap";
 // hooks
 import { useRedux } from "../../hooks/index";
 
+// router
+import { Link } from "react-router-dom";
+
 // validations
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -128,7 +131,7 @@ const ChangePassword = (props: ChangePasswordProps) => {
                   errors={errors}
                   control={control}
                   labelClassName="form-label"
-                  placeholder="Enter Confirm Password"
+                  placeholder="Enter New Password Again"
                   className="form-control"
                   withoutLabel={true}
                   hidePasswordButton={true}
@@ -143,9 +146,11 @@ const ChangePassword = (props: ChangePasswordProps) => {
                     </button>
                   </div>
                   <div className="col-6">
-                    <button className="btn btn-light w-100" type="button">
-                      Cancel
-                    </button>
+                    <Link to="/dashboard" className="text-dark">
+                      <button className="btn btn-light w-100" type="reset">
+                        Cancel
+                      </button>
+                    </Link>
                   </div>
                 </div>
               </div>

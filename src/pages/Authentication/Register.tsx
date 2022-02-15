@@ -41,8 +41,8 @@ const Register = (props: RegisterProps) => {
       email: yup
         .string()
         .email("This value should be a valid email.")
-        .required("Please Enter E-mail."),
-      username: yup.string().required("Please Enter E-mail."),
+        .required("Please Enter Email."),
+      username: yup.string().required("Please Enter Your Name."),
       password: yup.string().required("Please Enter Password."),
     })
   );
@@ -107,7 +107,7 @@ const Register = (props: RegisterProps) => {
               <div className="mb-3">
                 <label htmlFor="role">Role</label>
                 <select
-                  className="form-control"
+                  className="form-control form-select"
                   id="role"
                   name="role"
                   defaultValue={2}
@@ -167,7 +167,7 @@ const Register = (props: RegisterProps) => {
               </div>
               <div className="mt-4 text-center">
                 <div className="signin-other-title">
-                  <h5 className="font-size-14 mb-4 title">Sign up using</h5>
+                  <h5 className="font-size-14 mb-4 title">Register using</h5>
                 </div>
                 <Row className="">
                   <div className="col-4">
