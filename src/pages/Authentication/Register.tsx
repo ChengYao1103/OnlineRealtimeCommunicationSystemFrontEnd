@@ -23,6 +23,7 @@ import NonAuthLayoutWrapper from "../../components/NonAutnLayoutWrapper";
 import AuthHeader from "../../components/AuthHeader";
 import FormInput from "../../components/FormInput";
 import Loader from "../../components/Loader";
+import { Roles } from "../../repository/role";
 
 interface RegisterProps {}
 const Register = (props: RegisterProps) => {
@@ -42,7 +43,8 @@ const Register = (props: RegisterProps) => {
         .string()
         .email("This value should be a valid email.")
         .required("Please Enter Email."),
-      username: yup.string().required("Please Enter Your Name."),
+      name: yup.string().required("Please Enter Your Name."),
+      role: yup.number(),
       password: yup.string().required("Please Enter Password."),
     })
   );
@@ -105,24 +107,25 @@ const Register = (props: RegisterProps) => {
               </div>
 
               <div className="mb-3">
-                <label htmlFor="role">Role</label>
-                <select
-                  className="form-control form-select"
-                  id="role"
+                <FormInput
+                  label="Role"
+                  type="select"
                   name="role"
+                  register={register}
+                  errors={errors}
+                  control={control}
+                  labelClassName="form-label"
+                  className="form-control form-select"
+                  options={Roles}
                   defaultValue={2}
-                >
-                  <option value={0}>老師 (Teacher)</option>
-                  <option value={1}>助教 (TA)</option>
-                  <option value={2}>學生 (Student)</option>
-                </select>
+                />
               </div>
 
               <div className="mb-3">
                 <FormInput
                   label="Name"
                   type="text"
-                  name="username"
+                  name="name"
                   register={register}
                   errors={errors}
                   control={control}
@@ -159,7 +162,7 @@ const Register = (props: RegisterProps) => {
               <div className="text-center mb-3">
                 <Button
                   color="primary"
-                  className="w-100  waves-effect waves-light"
+                  className="w-100 waves-effect waves-light"
                   type="submit"
                 >
                   Register

@@ -65,6 +65,56 @@ const PasswordInput: React.FunctionComponent<PasswordInputProps> = ({
   );
 };
 
+interface SelectInputProps {
+  name: string;
+  placeholder?: string;
+  refCallback?: any;
+  errors: any;
+  register?: any;
+  className?: string;
+  withoutLabel?: boolean;
+  options?: any[];
+  defaultValue?: any;
+}
+
+/* Select Input */
+const SelectInput: React.FunctionComponent<SelectInputProps> = ({
+  name,
+  refCallback,
+  errors,
+  register,
+  className,
+  options,
+  defaultValue,
+}) => {  
+  return (
+    <>
+      <div className="position-relative auth-pass-inputgroup mb-3">
+        <select
+          name={name}
+          id={name}
+          ref={(r: HTMLInputElement) => {
+            if (refCallback) refCallback(r);
+          }}
+          className={classNames(className, {
+            "is-invalid": errors && errors[name],
+          })}
+          {...(register ? register(name) : {})}
+          autoComplete={name}
+          defaultValue={defaultValue}
+        >
+          {options?.map((option) => 
+            <option value={option.value}>{option.label}</option>
+          )}
+        </select>
+        {errors && errors[name] ? (
+          <FormFeedback type="invalid"> {errors[name]["message"]}</FormFeedback>
+        ) : null}
+      </div>
+    </>
+  );
+};
+
 interface FormInputProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   type?: string;
@@ -80,6 +130,8 @@ interface FormInputProps extends InputHTMLAttributes<HTMLInputElement> {
   control?: any;
   withoutLabel?: boolean;
   hidePasswordButton?: boolean;
+  options?: any[];
+  dafaultValue?: any;
 }
 
 const FormInput: React.FunctionComponent<FormInputProps> = ({
@@ -97,6 +149,8 @@ const FormInput: React.FunctionComponent<FormInputProps> = ({
   control,
   withoutLabel,
   hidePasswordButton,
+  options,
+  defaultValue,
   ...otherProps
 }) => {
   return (
@@ -170,32 +224,58 @@ const FormInput: React.FunctionComponent<FormInputProps> = ({
                 </>
               ) : (
                 <>
-                  {label ? (
-                    <Label htmlFor={name} className={labelClassName}>
-                      {label}
-                    </Label>
-                  ) : null}
-                  <input
-                    type={type}
-                    placeholder={placeholder}
-                    name={name}
-                    id={name}
-                    ref={(r: HTMLInputElement) => {
-                      if (refCallback) refCallback(r);
-                    }}
-                    className={classNames(className, {
-                      "is-invalid": errors && errors[name],
-                    })}
-                    {...(register ? register(name) : {})}
-                    {...otherProps}
-                    autoComplete={name}
-                    tag="input"
-                  />
-                  {errors && errors[name] ? (
-                    <FormFeedback type="invalid">
-                      {errors[name]["message"]}
-                    </FormFeedback>
-                  ) : null}
+                  {type === "select" ? (
+                    <>
+                      {label ? (
+                        <Label htmlFor={name} className={labelClassName}>
+                          {label}
+                        </Label>
+                      ) : null}
+                      <SelectInput
+                        name={name}
+                        refCallback={refCallback}
+                        errors={errors}
+                        register={register}
+                        className={className}
+                        options={options}
+                        defaultValue={defaultValue}
+                      />
+                      {errors && errors[name] ? (
+                        <FormFeedback type="invalid">
+                          {errors[name]["message"]}
+                        </FormFeedback>
+                      ) : null}
+                    </>
+                  ) : (
+                    <>
+                      {label ? (
+                        <Label htmlFor={name} className={labelClassName}>
+                          {label}
+                        </Label>
+                      ) : null}
+                      <input
+                        type={type}
+                        placeholder={placeholder}
+                        name={name}
+                        id={name}
+                        ref={(r: HTMLInputElement) => {
+                          if (refCallback) refCallback(r);
+                        }}
+                        className={classNames(className, {
+                          "is-invalid": errors && errors[name],
+                        })}
+                        {...(register ? register(name) : {})}
+                        {...otherProps}
+                        autoComplete={name}
+                        tag="input"
+                      />
+                      {errors && errors[name] ? (
+                        <FormFeedback type="invalid">
+                          {errors[name]["message"]}
+                        </FormFeedback>
+                      ) : null}
+                    </>
+                  )}
                 </>
               )}
             </>
