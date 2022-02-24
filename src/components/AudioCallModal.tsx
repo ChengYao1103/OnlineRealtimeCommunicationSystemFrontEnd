@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Button, Modal, ModalBody } from "reactstrap";
 
 // interface
@@ -13,6 +13,17 @@ interface AudioCallModalProps {
 }
 
 const AudioCallModal = ({ isOpen, onClose, user }: AudioCallModalProps) => {
+  const [isMute, setIsMute] = useState(false);
+  const [isCloseSpeaker, setIsCloseSpeaker] = useState(false);
+
+  const setMute = () => {
+    setIsMute(!isMute);
+  };
+
+  const setSpeaker = () => {
+    setIsCloseSpeaker(!isCloseSpeaker);
+  };
+
   return (
     <Modal
       isOpen={isOpen}
@@ -38,12 +49,19 @@ const AudioCallModal = ({ isOpen, onClose, user }: AudioCallModalProps) => {
             <div className="avatar-md h-auto">
               <Button
                 type="button"
-                color="light"
+                color={isMute ? "danger" : "light"}
+                onClick={() => setMute()}
                 className="avatar-sm rounded-circle"
               >
-                <span className="avatar-title bg-transparent text-muted font-size-20">
-                  <i className="bx bx-microphone-off"></i>
-                </span>
+                {isMute ? (
+                  <span className="avatar-title bg-transparent text-white font-size-20">
+                    <i className="bx bx-microphone-off"></i>
+                  </span>
+                ) : (
+                  <span className="avatar-title bg-transparent text-muted font-size-20">
+                    <i className="bx bx-microphone"></i>
+                  </span>
+                )}
               </Button>
               <h5 className="font-size-11 text-uppercase text-muted mt-2">
                 Mute
@@ -52,12 +70,19 @@ const AudioCallModal = ({ isOpen, onClose, user }: AudioCallModalProps) => {
             <div className="avatar-md h-auto">
               <Button
                 type="button"
-                color="light"
-                className=" avatar-sm rounded-circle"
+                color={isCloseSpeaker ? "danger" : "light"}
+                onClick={() => setSpeaker()}
+                className="avatar-sm rounded-circle"
               >
-                <span className="avatar-title bg-transparent text-muted font-size-20">
-                  <i className="bx bx-volume-full"></i>
-                </span>
+                {isCloseSpeaker ? (
+                  <span className="avatar-title bg-transparent text-white font-size-20">
+                    <i className="bx bx-volume-mute"></i>
+                  </span>
+                ) : (
+                  <span className="avatar-title bg-transparent text-muted font-size-20">
+                    <i className="bx bx-volume-full"></i>
+                  </span>
+                )}
               </Button>
               <h5 className="font-size-11 text-uppercase text-muted mt-2">
                 Speaker

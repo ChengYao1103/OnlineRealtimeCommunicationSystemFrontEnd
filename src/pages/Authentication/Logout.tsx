@@ -44,7 +44,7 @@ const Logout = (props: any) => {
                   to="/auth-login"
                   className="btn btn-primary w-100 waves-effect waves-light"
                 >
-                  Back to Log In Page
+                  Back to Login Page
                 </Link>
               </div>
             </div>

@@ -72,7 +72,7 @@ const RecoverPassword = (props: RecoverPasswordProps) => {
           <div className="py-md-5 py-4">
             <AuthHeader
               title="Reset Password"
-              subtitle="Reset Password with Doot."
+              subtitle="Reset Password with Email."
             />
 
             {forgetError && forgetError ? (
