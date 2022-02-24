@@ -32,7 +32,7 @@ const Login = (state = INIT_STATE, action: any) => {
         case AuthLoginActionTypes.LOGIN_USER:
           return {
             ...state,
-            error: action.payload.error,
+            error: action.payload.error.data.message,
             isUserLogin: false,
             loading: false,
           };

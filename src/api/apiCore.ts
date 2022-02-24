@@ -14,7 +14,7 @@ axios.interceptors.response.use(
   },
   function (error: any) {
     // Any status codes that falls outside the range of 2xx cause this function to trigger
-    let message;
+    /*let message;
     switch (error.status) {
       case 500:
         message = "Internal Server Error";
@@ -29,6 +29,13 @@ axios.interceptors.response.use(
         message = error.message || error;
     }
     return Promise.reject(message);
+    */
+    if(error.response)
+      return Promise.reject(error.response);
+    else if(error.request)
+      return Promise.reject(error.request);
+    else
+      return Promise.reject(error);
   }
 );
 

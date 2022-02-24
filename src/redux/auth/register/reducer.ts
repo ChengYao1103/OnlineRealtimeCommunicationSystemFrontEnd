@@ -2,7 +2,6 @@ import { AuthRegisterActionTypes, AuthRegisterState } from "./types";
 
 export const INIT_STATE: AuthRegisterState = {
   registrationError: null,
-  message: "",
   loading: false,
   user: null,
 };
@@ -29,7 +28,7 @@ const Register = (state = INIT_STATE, action: any) => {
           return {
             ...state,
             loading: false,
-            registrationError: action.payload.error,
+            registrationError: action.payload.error.data.message,
             isUserRegistered: false,
           };
         default:

@@ -6,8 +6,7 @@ export enum AuthRegisterActionTypes {
 }
 
 export interface AuthRegisterState {
-  registrationError: any;
-  message: string;
+  registrationError: string | null;
   loading: boolean;
   user: object | null;
 }
