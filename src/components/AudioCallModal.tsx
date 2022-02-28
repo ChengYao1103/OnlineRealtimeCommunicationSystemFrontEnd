@@ -13,15 +13,46 @@ interface AudioCallModalProps {
 }
 
 const AudioCallModal = ({ isOpen, onClose, user }: AudioCallModalProps) => {
+  const [isLoad, setIsLoad] = useState(false);
   const [isMute, setIsMute] = useState(false);
   const [isCloseSpeaker, setIsCloseSpeaker] = useState(false);
+  const [tracks, setTracks] = useState<MediaStreamTrack[]>([]);
 
   const setMute = () => {
     setIsMute(!isMute);
+    tracks.forEach(track => {
+      if (track.kind === "audio" && track.readyState === "live") {
+        track.enabled = isMute;
+      }
+    });
+    console.log(tracks); // enabled:true/false
   };
 
   const setSpeaker = () => {
     setIsCloseSpeaker(!isCloseSpeaker);
+  };
+
+  const initMic = () => {
+    navigator.mediaDevices
+      .getUserMedia({ audio: true })
+      .then(function (stream) {
+        setTracks(stream.getTracks());
+      })
+      .catch(function (err) {
+        console.log(err);
+      });
+    console.log("Loaded!!");
+    setIsLoad(true);
+  };
+
+  const finishCall = () => {
+    tracks.forEach(track => {
+      if (track.readyState === "live") {
+        track.stop();
+      }
+    });
+    console.log(tracks); // readyState:"ended"(分頁的取用圖示消失)
+    onClose();
   };
 
   return (
@@ -44,6 +75,8 @@ const AudioCallModal = ({ isOpen, onClose, user }: AudioCallModalProps) => {
               className="img-thumbnail rounded-circle"
             />
           </div>
+
+          {isOpen && !isLoad && initMic()}
 
           <div className="d-flex justify-content-center align-items-center mt-4">
             <div className="avatar-md h-auto">
@@ -109,7 +142,7 @@ const AudioCallModal = ({ isOpen, onClose, user }: AudioCallModalProps) => {
               type="button"
               className="btn btn-danger avatar-md call-close-btn rounded-circle"
               color="danger"
-              onClick={onClose}
+              onClick={() => finishCall()}
             >
               <span className="avatar-title bg-transparent font-size-24">
                 <i className="mdi mdi-phone-hangup"></i>
