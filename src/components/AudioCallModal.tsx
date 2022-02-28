@@ -58,7 +58,6 @@ const AudioCallModal = ({ isOpen, onClose, user }: AudioCallModalProps) => {
   return (
     <Modal
       isOpen={isOpen}
-      toggle={onClose}
       tabIndex={-1}
       centered
       className="audiocallModal"

@@ -44,7 +44,6 @@ const VideoCallModal = ({ isOpen, onClose, user }: VideoCallModalProps) => {
   return (
     <Modal
       isOpen={isOpen}
-      toggle={onClose}
       tabIndex={-1}
       centered
       className="videocallModal"
