@@ -174,7 +174,9 @@ const Register = (props: RegisterProps) => {
               </div>
               <div className="mt-4 text-center">
                 <div className="signin-other-title">
-                  <h5 className="font-size-14 mb-4 title">Register using</h5>
+                  <h5 className="font-size-14 mb-4 title">
+                    Create an account using
+                  </h5>
                 </div>
                 <Row className="">
                   <div className="col-4">

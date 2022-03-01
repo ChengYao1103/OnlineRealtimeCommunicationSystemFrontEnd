@@ -16,27 +16,27 @@ const AudioCallModal = ({ isOpen, onClose, user }: AudioCallModalProps) => {
   const [isLoad, setIsLoad] = useState(false);
   const [isMute, setIsMute] = useState(false);
   const [isCloseSpeaker, setIsCloseSpeaker] = useState(false);
-  const [tracks, setTracks] = useState<MediaStreamTrack[]>([]);
+  const [currentStream, setCurrentStream] = useState(new MediaStream());
 
   const setMute = () => {
     setIsMute(!isMute);
-    tracks.forEach(track => {
+    currentStream.getTracks().forEach(track => {
       if (track.kind === "audio" && track.readyState === "live") {
         track.enabled = isMute;
       }
     });
-    console.log(tracks); // enabled:true/false
+    console.log(currentStream.getTracks()); // enabled:true/false
   };
 
   const setSpeaker = () => {
     setIsCloseSpeaker(!isCloseSpeaker);
   };
 
-  const initMic = () => {
+  const initMedia = () => {
     navigator.mediaDevices
       .getUserMedia({ audio: true })
       .then(function (stream) {
-        setTracks(stream.getTracks());
+        setCurrentStream(stream);
       })
       .catch(function (err) {
         console.log(err);
@@ -46,12 +46,12 @@ const AudioCallModal = ({ isOpen, onClose, user }: AudioCallModalProps) => {
   };
 
   const finishCall = () => {
-    tracks.forEach(track => {
+    currentStream.getTracks().forEach(track => {
       if (track.readyState === "live") {
         track.stop();
       }
     });
-    console.log(tracks); // readyState:"ended"(分頁的取用圖示消失)
+    console.log(currentStream.getTracks()); // readyState:"ended"(分頁的取用圖示消失)
     onClose();
   };
 
@@ -63,6 +63,8 @@ const AudioCallModal = ({ isOpen, onClose, user }: AudioCallModalProps) => {
       className="audiocallModal"
       contentClassName="shadow-lg border-0"
     >
+      {isOpen && !isLoad && initMedia()}
+
       <ModalBody className="p-0">
         <div className="text-center p-4 pb-0">
           <div className="avatar-xl mx-auto mb-4">
@@ -74,8 +76,6 @@ const AudioCallModal = ({ isOpen, onClose, user }: AudioCallModalProps) => {
               className="img-thumbnail rounded-circle"
             />
           </div>
-
-          {isOpen && !isLoad && initMic()}
 
           <div className="d-flex justify-content-center align-items-center mt-4">
             <div className="avatar-md h-auto">
