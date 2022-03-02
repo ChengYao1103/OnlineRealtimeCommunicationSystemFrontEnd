@@ -34,7 +34,7 @@ const Logout = (props: any) => {
               </div>
             </div>
             <div className="mt-4 pt-2">
-              <h5>You are Logged Out</h5>
+              <h5>You are Signed Out</h5>
               <p className="text-muted font-size-15">
                 Thank you for using{" "}
                 <span className="fw-semibold text-dark"></span>!

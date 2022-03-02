@@ -1,20 +1,19 @@
 import React from "react";
+import { userInfo } from "../../../redux/profile/types";
 
 // interface
 import { BasicDetailsTypes } from "../../../data/myProfile";
 
 interface UserDescriptionProps {
-  basicDetails: BasicDetailsTypes;
+  user: userInfo;
+  location: string;
 }
-const UserDescription = ({ basicDetails }: UserDescriptionProps) => {
+
+const UserDescription = ({ user, location }: UserDescriptionProps) => {
   return (
     <>
       <div className="text-muted">
-        <p className="mb-4">
-          {basicDetails && basicDetails.description
-            ? basicDetails.description
-            : "-"}
-        </p>
+        <p className="mb-4">{"從缺"}</p>
       </div>
 
       <div>
@@ -23,11 +22,7 @@ const UserDescription = ({ basicDetails }: UserDescriptionProps) => {
             <i className="bx bx-user align-middle text-muted"></i>
           </div>
           <div className="flex-grow-1">
-            <p className="mb-0">
-              {basicDetails && basicDetails.fullName
-                ? basicDetails.fullName
-                : "-"}
-            </p>
+            <p className="mb-0">{user.name ? user.name : "-"}</p>
           </div>
         </div>
 
@@ -36,9 +31,7 @@ const UserDescription = ({ basicDetails }: UserDescriptionProps) => {
             <i className="bx bx-message-rounded-dots align-middle text-muted"></i>
           </div>
           <div className="flex-grow-1">
-            <p className="mb-0">
-              {basicDetails && basicDetails.email ? basicDetails.email : "-"}
-            </p>
+            <p className="mb-0">{user.email ? user.email : "-"}</p>
           </div>
         </div>
 
@@ -47,11 +40,7 @@ const UserDescription = ({ basicDetails }: UserDescriptionProps) => {
             <i className="bx bx-location-plus align-middle text-muted"></i>
           </div>
           <div className="flex-grow-1">
-            <p className="mb-0">
-              {basicDetails && basicDetails.location
-                ? basicDetails.location
-                : "-"}
-            </p>
+            <p className="mb-0">{location ? location : "-"}</p>
           </div>
         </div>
       </div>

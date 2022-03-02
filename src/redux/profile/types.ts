@@ -7,3 +7,10 @@ export enum ProfileActionTypes {
 export interface ProfileState {
   profileDetails: object;
 }
+
+export interface userInfo {
+  email: string;
+  id: number;
+  name: string;
+  role: number;
+}

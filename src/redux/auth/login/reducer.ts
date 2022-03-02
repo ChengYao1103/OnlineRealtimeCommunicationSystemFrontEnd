@@ -3,6 +3,11 @@ import { AuthLoginActionTypes, AuthLoginState } from "./types";
 export const INIT_STATE: AuthLoginState = {
   error: "",
   loading: false,
+  response: {
+    error: "",
+    token: "",
+    user: { email: "", id: 0, name: "", role: 0 },
+  },
 };
 
 const Login = (state = INIT_STATE, action: any) => {
@@ -12,7 +17,7 @@ const Login = (state = INIT_STATE, action: any) => {
         case AuthLoginActionTypes.LOGIN_USER:
           return {
             ...state,
-            user: action.payload.data,
+            response: action.payload.data,
             loading: false,
             isUserLogin: true,
             isUserLogout: false,

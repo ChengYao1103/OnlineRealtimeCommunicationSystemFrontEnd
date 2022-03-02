@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { userInfo } from "../../../redux/profile/types";
 
 import {
   Dropdown,
@@ -11,16 +12,15 @@ import {
 import { BasicDetailsTypes } from "../../../data/myProfile";
 
 interface MyProfileProps {
+  user: userInfo;
   basicDetails: BasicDetailsTypes;
 }
-const MyProfile = ({ basicDetails }: MyProfileProps) => {
+
+const MyProfile = ({ user, basicDetails }: MyProfileProps) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const toggle = () => setDropdownOpen(!dropdownOpen);
 
-  const fullName = basicDetails
-    ? `${basicDetails.firstName} ${basicDetails.lastName}`
-    : "-";
   return (
     <>
       <div className="user-profile-img">
@@ -91,7 +91,7 @@ const MyProfile = ({ basicDetails }: MyProfileProps) => {
           )}
         </div>
 
-        <h5 className="font-size-16 mb-1 text-truncate">{fullName}</h5>
+        <h5 className="font-size-16 mb-1 text-truncate">{user.name}</h5>
         <p className="text-muted font-size-14 text-truncate mb-0">
           {basicDetails && basicDetails.title ? basicDetails.title : "-"}
         </p>

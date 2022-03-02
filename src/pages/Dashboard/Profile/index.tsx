@@ -1,7 +1,11 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 // hooks
 import { useRedux } from "../../../hooks/index";
+import { useSelector } from "react-redux";
+import type { RootState } from "../../../redux/store";
+import { AuthLoginState } from "../../../redux/auth/login/types";
+import { userInfo } from "../../../redux/profile/types";
 
 // components
 import Loader from "../../../components/Loader";
@@ -18,6 +22,16 @@ interface IndexProps {}
 const Index = (props: IndexProps) => {
   // global store
   const { dispatch, useAppSelector } = useRedux();
+  const [isLoad, setIsLoad] = useState(false);
+  const LoginState: AuthLoginState = useSelector(
+    (state: RootState) => state.Login
+  );
+  const [user, setUser] = useState({} as userInfo);
+
+  if (!isLoad) {
+    setUser(LoginState.response.user);
+    setIsLoad(true);
+  }
 
   const { profileDetails, getProfileLoading, isProfileFetched } =
     useAppSelector(state => ({
@@ -34,10 +48,10 @@ const Index = (props: IndexProps) => {
   return (
     <div className="position-relative">
       {getProfileLoading && !isProfileFetched && <Loader />}
-      <MyProfile basicDetails={profileDetails.basicDetails} />
+      <MyProfile user={user} basicDetails={profileDetails.basicDetails} />
 
       <AppSimpleBar className="p-4 profile-desc">
-        <UserDescription basicDetails={profileDetails.basicDetails} />
+        <UserDescription user={user} location={"location"} />
         <hr className="my-4" />
 
         <Media media={profileDetails.media} limit={2} />
