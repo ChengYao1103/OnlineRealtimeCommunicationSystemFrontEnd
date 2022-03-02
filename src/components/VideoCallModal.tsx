@@ -15,7 +15,7 @@ interface VideoCallModalProps {
 }
 
 const VideoCallModal = ({ isOpen, onClose, user }: VideoCallModalProps) => {
-  const [isLoadMedia, setIsLoad] = useState(false);
+  const [isLoadMedia, setIsLoadMedia] = useState(false);
   const [isMute, setIsMute] = useState(false);
   const [isCloseSpeaker, setIsCloseSpeaker] = useState(false);
   const [isCloseCamera, setIsCloseCamera] = useState(false);
@@ -56,6 +56,7 @@ const VideoCallModal = ({ isOpen, onClose, user }: VideoCallModalProps) => {
   };
 
   const initMedia = () => {
+    setIsLoadMedia(true);
     //取得相機列表
     let list: MediaDeviceInfo[] = [];
     navigator.mediaDevices
@@ -67,7 +68,7 @@ const VideoCallModal = ({ isOpen, onClose, user }: VideoCallModalProps) => {
           }
         });
         setCameraList(list);
-        console.log(list);
+        //console.log(list);
       })
       .catch(err => {
         console.error(err);
@@ -89,34 +90,27 @@ const VideoCallModal = ({ isOpen, onClose, user }: VideoCallModalProps) => {
             console.log(err);
           });
         console.log("Loaded!!");
-        setIsLoad(true);
       });
   };
 
   //防止回音
   const setVideo = (video: HTMLVideoElement) => {
-    let stream = new MediaStream(),
-      videoTracks: MediaStreamTrack[] = [];
-    //取得vidro track
-    currentStream.getTracks().forEach(track => {
-      if (track.kind === "video") {
-        videoTracks.push(track);
-      }
-    });
-    //只輸出video track
-    videoTracks.forEach(track => {
+    let stream = new MediaStream();
+    //取得video track
+    currentStream.getVideoTracks().forEach(track => {
       stream.addTrack(track);
     });
+    //只輸出video track
     video.srcObject = stream;
   };
 
   const finishCall = () => {
-    setIsCloseCamera(true);
-    setIsMute(true);
-    currentStream.getTracks().forEach(track => {
-      track.enabled = false;
+    let stream = currentStream;
+    stream.getTracks().forEach(track => {
       track.stop();
+      track.enabled = false;
     });
+    setCurrentStream(stream);
     console.log(currentStream.getTracks()); // readyState:"ended"(分頁的取用圖示消失)
     onClose();
   };
@@ -142,7 +136,7 @@ const VideoCallModal = ({ isOpen, onClose, user }: VideoCallModalProps) => {
           <video
             autoPlay
             ref={video => {
-              if (video) {
+              if (video && isLoadMedia) {
                 setVideo(video);
               }
             }}

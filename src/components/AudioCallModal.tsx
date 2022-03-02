@@ -33,6 +33,7 @@ const AudioCallModal = ({ isOpen, onClose, user }: AudioCallModalProps) => {
   };
 
   const initMedia = () => {
+    setIsLoad(true);
     navigator.mediaDevices
       .getUserMedia({ audio: true })
       .then(function (stream) {
@@ -42,7 +43,6 @@ const AudioCallModal = ({ isOpen, onClose, user }: AudioCallModalProps) => {
         console.log(err);
       });
     console.log("Loaded!!");
-    setIsLoad(true);
   };
 
   const finishCall = () => {
