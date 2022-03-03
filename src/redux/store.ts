@@ -24,7 +24,7 @@ export function configureStore(initialState: any) {
     composeEnhancers(applyMiddleware(...middlewares))
   );
   sagaMiddleware.run(rootSaga);
-  persistStore(store);
+  persistStore(store); //把整個store(所有state)裡面有persistReducer的內容永久保存
   return store;
 }
 

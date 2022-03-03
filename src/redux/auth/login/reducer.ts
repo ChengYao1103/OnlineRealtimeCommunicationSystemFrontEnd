@@ -16,7 +16,7 @@ const Login = persistReducer(
     storage,
     key: "orcsAuth",
     whitelist: ["response"],
-  },
+  }, //把LoginState的response資料存到localStorage永久保存
   (state: AuthLoginState = INIT_STATE, action: any) => {
     switch (action.type) {
       case AuthLoginActionTypes.API_RESPONSE_SUCCESS:
@@ -41,12 +41,12 @@ const Login = persistReducer(
       case AuthLoginActionTypes.API_RESPONSE_ERROR:
         switch (action.payload.actionType) {
           case AuthLoginActionTypes.LOGIN_USER:
-            state.error = action.payload.data.message;
+            state.error = action.payload.error.data.message;
+            console.log(action.payload);
             state.loading = false;
             state.isUserLogin = false;
             return { ...state };
           case AuthLoginActionTypes.LOGOUT_USER:
-            state.error = action.payload.data.message;
             state.loading = false;
             state.isUserLogin = false;
             state.isUserLogout = false;
