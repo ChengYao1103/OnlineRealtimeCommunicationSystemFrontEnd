@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Alert, Row, Col, Form } from "reactstrap";
 
 // hooks
@@ -27,10 +27,33 @@ import Loader from "../../components/Loader";
 //images
 import avatar1 from "../../assets/images/users/avatar-1.jpg";
 
+//user information
+import { useSelector } from "react-redux";
+import type { RootState } from "../../redux/store";
+import { AuthLoginState } from "../../redux/auth/login/types";
+import { userModel } from "../../redux/profile/types";
+
 interface ChangePasswordProps {}
-const ChangePassword = (props: ChangePasswordProps) => {
+
+interface ChangePasswordFormProps {
+  oldPassword: string;
+  newPassword: string;
+  confirmPassword: string;
+}
+
+const ChangePassword = (prop: ChangePasswordProps) => {
   // global store
-  const { dispatch, useAppSelector } = useRedux();
+  const { dispatch, useAppSelector } = useRedux(); //set user information
+  const [isLoad, setIsLoad] = useState(false);
+  const LoginState: AuthLoginState = useSelector(
+    (state: RootState) => state.Login
+  );
+  const [user, setUser] = useState({} as userModel);
+
+  if (!isLoad && LoginState.response) {
+    setIsLoad(true);
+    setUser(LoginState.response.user);
+  }
 
   const { changepasswordError, passwordChanged, changePassLoading } =
     useAppSelector(state => ({
@@ -42,10 +65,10 @@ const ChangePassword = (props: ChangePasswordProps) => {
   const resolver = yupResolver(
     yup.object().shape({
       oldPassword: yup.string().required("Please Enter Old Password."),
-      password: yup.string().required("Please Enter New Password."),
-      confirmpassword: yup
+      newPassword: yup.string().required("Please Enter New Password."),
+      confirmPassword: yup
         .string()
-        .oneOf([yup.ref("password"), null], "Passwords don't match")
+        .oneOf([yup.ref("newPassword"), null], "Passwords don't match")
         .required("This value is required."),
     })
   );
@@ -60,8 +83,10 @@ const ChangePassword = (props: ChangePasswordProps) => {
     formState: { errors },
   } = methods;
 
-  const onSubmitForm = (values: object) => {
-    dispatch(userChangePassword(values));
+  const onSubmitForm = (values: ChangePasswordFormProps) => {
+    let data = { email: user.email, newPassword: values.newPassword };
+    console.log(data);
+    //dispatch(userChangePassword(values));
   };
 
   // const { userProfile, loading } = useProfile();
@@ -78,7 +103,7 @@ const ChangePassword = (props: ChangePasswordProps) => {
                 className="rounded-circle img-thumbnail avatar-lg"
                 alt="thumbnail"
               />
-              <h5 className="font-size-15 mt-3">Kathryn Swarey</h5>
+              <h5 className="font-size-15 mt-3">{user.name}</h5>
             </div>
             {changepasswordError && changepasswordError ? (
               <Alert color="danger">{changepasswordError}</Alert>
@@ -111,7 +136,7 @@ const ChangePassword = (props: ChangePasswordProps) => {
                 <FormInput
                   label="New Password"
                   type="password"
-                  name="password"
+                  name="newPassword"
                   register={register}
                   errors={errors}
                   control={control}
@@ -126,7 +151,7 @@ const ChangePassword = (props: ChangePasswordProps) => {
                 <FormInput
                   label="Confirm New Password"
                   type="password"
-                  name="confirmpassword"
+                  name="confirmPassword"
                   register={register}
                   errors={errors}
                   control={control}

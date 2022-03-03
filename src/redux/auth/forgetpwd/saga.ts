@@ -60,9 +60,12 @@ function* forgetUser({ payload: user }: any) {
   }
 }
 
-function* changePassword({ payload: newPassword }: any) {
+function* changePassword({ payload: { data } }: any) {
   try {
-    yield call(changePasswordApi, newPassword);
+    yield call(changePasswordApi, {
+      email: data.email,
+      newPassword: data.newPassword,
+    });
     yield put(
       authForgetPassApiResponseSuccess(
         AuthForgetPassActionTypes.CHANGE_PASSWORD,
