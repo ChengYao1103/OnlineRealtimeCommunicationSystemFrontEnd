@@ -1,11 +1,11 @@
 import React from "react";
-import { userInfo } from "../../../redux/profile/types";
+import { userModel } from "../../../redux/profile/types";
 
 // interface
 import { BasicDetailsTypes } from "../../../data/myProfile";
 
 interface UserDescriptionProps {
-  user: userInfo;
+  user: userModel;
   location: string;
 }
 

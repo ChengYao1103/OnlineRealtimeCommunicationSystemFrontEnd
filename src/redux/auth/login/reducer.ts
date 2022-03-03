@@ -1,74 +1,74 @@
 import { AuthLoginActionTypes, AuthLoginState } from "./types";
+import { persistReducer } from "redux-persist";
+import storage from "redux-persist/lib/storage";
+import { AuthLoginResponse } from "./types";
 
 export const INIT_STATE: AuthLoginState = {
   error: "",
   loading: false,
-  response: {
-    error: "",
-    token: "",
-    user: { email: "", id: 0, name: "", role: 0 },
+  response: undefined,
+  isUserLogin: undefined,
+  isUserLogout: undefined,
+};
+
+const Login = persistReducer(
+  {
+    storage,
+    key: "orcsAuth",
+    whitelist: ["response"],
   },
-};
+  (state: AuthLoginState = INIT_STATE, action: any) => {
+    switch (action.type) {
+      case AuthLoginActionTypes.API_RESPONSE_SUCCESS:
+        switch (action.payload.actionType) {
+          case AuthLoginActionTypes.LOGIN_USER:
+            const response: AuthLoginResponse = action.payload.data;
+            state.response = response;
+            state.loading = false;
+            state.isUserLogin = true;
+            state.isUserLogout = false;
+            return { ...state };
+          case AuthLoginActionTypes.LOGOUT_USER:
+            state.response = undefined;
+            state.loading = false;
+            state.isUserLogin = false;
+            state.isUserLogout = true;
+            return { ...state };
+          default:
+            return { ...state };
+        }
 
-const Login = (state = INIT_STATE, action: any) => {
-  switch (action.type) {
-    case AuthLoginActionTypes.API_RESPONSE_SUCCESS:
-      switch (action.payload.actionType) {
-        case AuthLoginActionTypes.LOGIN_USER:
-          return {
-            ...state,
-            response: action.payload.data,
-            loading: false,
-            isUserLogin: true,
-            isUserLogout: false,
-          };
-        case AuthLoginActionTypes.LOGOUT_USER:
-          return {
-            ...state,
-            loading: false,
-            isUserLogout: true,
-          };
-        default:
-          return { ...state };
+      case AuthLoginActionTypes.API_RESPONSE_ERROR:
+        switch (action.payload.actionType) {
+          case AuthLoginActionTypes.LOGIN_USER:
+            state.error = action.payload.data.message;
+            state.loading = false;
+            state.isUserLogin = false;
+            return { ...state };
+          case AuthLoginActionTypes.LOGOUT_USER:
+            state.error = action.payload.data.message;
+            state.loading = false;
+            state.isUserLogin = false;
+            state.isUserLogout = false;
+            return { ...state };
+          default:
+            return { ...state };
+        }
+
+      case AuthLoginActionTypes.LOGIN_USER: {
+        state.loading = true;
+        state.isUserLogin = false;
+        return { ...state };
       }
 
-    case AuthLoginActionTypes.API_RESPONSE_ERROR:
-      switch (action.payload.actionType) {
-        case AuthLoginActionTypes.LOGIN_USER:
-          return {
-            ...state,
-            error: action.payload.error.data.message,
-            isUserLogin: false,
-            loading: false,
-          };
-        case AuthLoginActionTypes.LOGOUT_USER:
-          return {
-            ...state,
-            loading: false,
-            isUserLogin: false,
-            isUserLogout: false,
-          };
-        default:
-          return { ...state };
-      }
-
-    case AuthLoginActionTypes.LOGIN_USER: {
-      return {
-        ...state,
-        loading: true,
-        isUserLogin: false,
-      };
+      case AuthLoginActionTypes.LOGOUT_USER:
+        state.loading = true;
+        state.isUserLogout = false;
+        return { ...state };
+      default:
+        return { ...state };
     }
-
-    case AuthLoginActionTypes.LOGOUT_USER:
-      return {
-        ...state,
-        loading: false,
-        isUserLogout: false,
-      };
-    default:
-      return { ...state };
   }
-};
+);
 
 export default Login;

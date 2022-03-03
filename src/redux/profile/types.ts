@@ -8,7 +8,7 @@ export interface ProfileState {
   profileDetails: object;
 }
 
-export interface userInfo {
+export interface userModel {
   email: string;
   id: number;
   name: string;

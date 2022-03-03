@@ -5,7 +5,7 @@ import { useRedux } from "../../../hooks/index";
 import { useSelector } from "react-redux";
 import type { RootState } from "../../../redux/store";
 import { AuthLoginState } from "../../../redux/auth/login/types";
-import { userInfo } from "../../../redux/profile/types";
+import { userModel } from "../../../redux/profile/types";
 
 // components
 import Loader from "../../../components/Loader";
@@ -26,11 +26,11 @@ const Index = (props: IndexProps) => {
   const LoginState: AuthLoginState = useSelector(
     (state: RootState) => state.Login
   );
-  const [user, setUser] = useState({} as userInfo);
+  const [user, setUser] = useState({} as userModel);
 
-  if (!isLoad) {
-    setUser(LoginState.response.user);
+  if (!isLoad && LoginState.response) {
     setIsLoad(true);
+    setUser(LoginState.response.user);
   }
 
   const { profileDetails, getProfileLoading, isProfileFetched } =

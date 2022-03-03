@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { userInfo } from "../../../redux/profile/types";
+import { userModel } from "../../../redux/profile/types";
 
 import {
   Dropdown,
@@ -12,7 +12,7 @@ import {
 import { BasicDetailsTypes } from "../../../data/myProfile";
 
 interface MyProfileProps {
-  user: userInfo;
+  user: userModel;
   basicDetails: BasicDetailsTypes;
 }
 
