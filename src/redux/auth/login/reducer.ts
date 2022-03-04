@@ -41,8 +41,7 @@ const Login = persistReducer(
       case AuthLoginActionTypes.API_RESPONSE_ERROR:
         switch (action.payload.actionType) {
           case AuthLoginActionTypes.LOGIN_USER:
-            state.error = action.payload.error.data.message;
-            console.log(action.payload);
+            state.error = action.payload.error;
             state.loading = false;
             state.isUserLogin = false;
             return { ...state };
