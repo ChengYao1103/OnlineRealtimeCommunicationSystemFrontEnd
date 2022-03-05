@@ -36,7 +36,6 @@ import { userModel } from "../../redux/profile/types";
 interface ChangePasswordProps {}
 
 interface ChangePasswordFormProps {
-  oldPassword: string;
   newPassword: string;
   confirmPassword: string;
 }
@@ -84,7 +83,6 @@ const ChangePassword = (prop: ChangePasswordProps) => {
   } = methods;
 
   const onSubmitForm = (values: ChangePasswordFormProps) => {
-    console.log(values);
     dispatch(userChangePassword(values));
   };
 
