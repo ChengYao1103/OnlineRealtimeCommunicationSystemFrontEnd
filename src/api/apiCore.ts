@@ -30,12 +30,9 @@ axios.interceptors.response.use(
     }
     return Promise.reject(message);
     */
-    if(error.response)
-      return Promise.reject(error.response);
-    else if(error.request)
-      return Promise.reject(error.request);
-    else
-      return Promise.reject(error);
+    if (error.response) return Promise.reject(error.response);
+    else if (error.request) return Promise.reject(error.request);
+    else return Promise.reject(error);
   }
 );
 
@@ -74,6 +71,13 @@ class APIClient {
    */
   delete = (url: string, config?: {}) => {
     return axios.delete(url, { ...config });
+  };
+
+  /**
+   * Patch data
+   */
+  patch = (url: string, data?: {}) => {
+    return axios.patch(url, data);
   };
 
   /*

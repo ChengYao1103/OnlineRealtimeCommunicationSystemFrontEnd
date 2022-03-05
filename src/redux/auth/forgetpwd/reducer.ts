@@ -39,9 +39,9 @@ const ForgetPassword = (state = INIT_STATE, action: any) => {
         case AuthForgetPassActionTypes.CHANGE_PASSWORD: {
           return {
             ...state,
-            changepasswordError: action.payload.error,
+            changepasswordError: action.payload.error.data.msg,
             passwordChanged: false,
-            loading: true,
+            loading: false,
           };
         }
 

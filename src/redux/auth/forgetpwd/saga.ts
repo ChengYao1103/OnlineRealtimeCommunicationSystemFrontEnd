@@ -63,7 +63,6 @@ function* forgetUser({ payload: user }: any) {
 function* changePassword({ payload: { data } }: any) {
   try {
     yield call(changePasswordApi, {
-      email: data.email,
       newPassword: data.newPassword,
     });
     yield put(

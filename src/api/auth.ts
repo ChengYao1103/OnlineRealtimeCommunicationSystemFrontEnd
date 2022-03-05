@@ -25,7 +25,7 @@ const postJwtRegister = (data: any) => {
   return api.create(url.JWT_REGISTER, data);
 };
 const changePassword = (data: object) => {
-  return api.update(url.USER_CHANGE_PASSWORD, data);
+  return api.patch(url.USER_CHANGE_PASSWORD, data);
 };
 
 // postSocialLogin
