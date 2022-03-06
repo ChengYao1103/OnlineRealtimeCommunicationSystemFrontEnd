@@ -135,7 +135,7 @@ const ProfileImage = ({
               </div>
             )}
           </div>
-          <div className="flex-grow-1 overflow-hidden">
+          <div className="flex-grow-1 position-relative">
             <h6 className="text-truncate mb-0 font-size-18">
               <Link
                 to="#"
@@ -204,20 +204,20 @@ const More = ({
       </DropdownToggle>
       <DropdownMenu className="dropdown-menu-end">
         <DropdownItem
-          className="d-flex justify-content-between align-items-center d-lg-none user-profile-show"
+          className="d-flex justify-content-between align-items-center user-profile-show"
           to="#"
         >
           View Profile <i className="bx bx-user text-muted"></i>
         </DropdownItem>
         <DropdownItem
-          className="d-flex justify-content-between align-items-center d-lg-none"
+          className="d-flex justify-content-between align-items-center d-xxl-none"
           to="#"
           onClick={onOpenAudio}
         >
           Audio <i className="bx bxs-phone-call text-muted"></i>
         </DropdownItem>
         <DropdownItem
-          className="d-flex justify-content-between align-items-center d-lg-none"
+          className="d-flex justify-content-between align-items-center d-xxl-none"
           to="#"
           onClick={onOpenVideo}
         >
@@ -352,7 +352,7 @@ const UserHead = ({
   return (
     <div className="p-3 p-lg-4 user-chat-topbar">
       <Row className="align-items-center">
-        <Col sm={4} className="col-8">
+        <Col className="col-9">
           <ProfileImage
             chatUserDetails={chatUserDetails}
             onCloseConversation={onCloseConversation}
@@ -360,7 +360,7 @@ const UserHead = ({
             isChannel={isChannel}
           />
         </Col>
-        <Col sm={8} className="col-4">
+        <Col className="col-3">
           <ul className="list-inline user-chat-nav text-end mb-0">
             <li className="list-inline-item">
               <Search />
@@ -368,7 +368,7 @@ const UserHead = ({
 
             {!isChannel && (
               <>
-                <li className="list-inline-item d-none d-lg-inline-block me-2 ms-0">
+                <li className="list-inline-item d-none d-xxl-inline-block me-2 ms-0">
                   <Button
                     type="button"
                     color="none"
@@ -379,7 +379,7 @@ const UserHead = ({
                   </Button>
                 </li>
 
-                <li className="list-inline-item d-none d-lg-inline-block me-2 ms-0">
+                <li className="list-inline-item d-none d-xxl-inline-block me-2 ms-0">
                   <Button
                     type="button"
                     color="none"
@@ -392,7 +392,7 @@ const UserHead = ({
               </>
             )}
 
-            <li className="list-inline-item d-none d-lg-inline-block me-2 ms-0">
+            <li className="list-inline-item d-none me-2 ms-0">
               <button
                 onClick={onOpenUserDetails}
                 type="button"

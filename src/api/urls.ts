@@ -7,9 +7,9 @@ export const SOCIAL_LOGIN = "/social-login";
 export const JWT_REGISTER = "/user/create";
 export const POST_FAKE_REGISTER = "/post-fake-register";
 
-export const USER_CHANGE_PASSWORD = "/user/changePassword";
-
 // profile & settings
+export const USER_CHANGE_PASSWORD = "/user/changePassword";
+export const USER_CHANGE_INFOMATION = "/user/changeInfomation";
 export const GET_PROFILE_DETAILS = "/profile-details";
 export const GET_USER_SETTINGS = "/user-settings";
 export const UPDATE_ETTINGS = "/update-user-settings";

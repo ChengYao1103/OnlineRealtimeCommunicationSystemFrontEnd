@@ -32,7 +32,7 @@ const AudioCallModal = ({ isOpen, onClose, user }: AudioCallModalProps) => {
     setIsCloseSpeaker(!isCloseSpeaker);
   };
 
-  const initMedia = () => {
+  if (isOpen && !isLoad) {
     setIsLoad(true);
     navigator.mediaDevices
       .getUserMedia({ audio: true })
@@ -43,7 +43,7 @@ const AudioCallModal = ({ isOpen, onClose, user }: AudioCallModalProps) => {
         console.log(err);
       });
     console.log("Loaded!!");
-  };
+  }
 
   const finishCall = () => {
     currentStream.getTracks().forEach(track => {
@@ -63,8 +63,6 @@ const AudioCallModal = ({ isOpen, onClose, user }: AudioCallModalProps) => {
       className="audiocallModal"
       contentClassName="shadow-lg border-0"
     >
-      {isOpen && !isLoad && initMedia()}
-
       <ModalBody className="p-0">
         <div className="text-center p-4 pb-0">
           <div className="avatar-xl mx-auto mb-4">

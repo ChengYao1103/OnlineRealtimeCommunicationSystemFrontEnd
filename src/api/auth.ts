@@ -28,6 +28,11 @@ const changePassword = (data: object) => {
   return api.patch(url.USER_CHANGE_PASSWORD, data);
 };
 
+// Change Information
+const changeInformation = (data: object) => {
+  return api.patch(url.USER_CHANGE_INFOMATION, data);
+};
+
 // postSocialLogin
 const postSocialLogin = (data: any) => api.create(url.SOCIAL_LOGIN, data);
 

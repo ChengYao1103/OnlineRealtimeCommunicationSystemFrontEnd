@@ -55,7 +55,7 @@ const VideoCallModal = ({ isOpen, onClose, user }: VideoCallModalProps) => {
     toast.success(mes);
   };
 
-  const initMedia = () => {
+  if (isOpen && !isLoadMedia) {
     setIsLoadMedia(true);
     //取得相機列表
     let list: MediaDeviceInfo[] = [];
@@ -91,7 +91,7 @@ const VideoCallModal = ({ isOpen, onClose, user }: VideoCallModalProps) => {
           });
         console.log("Loaded!!");
       });
-  };
+  }
 
   //防止回音
   const setVideo = (video: HTMLVideoElement) => {
@@ -123,8 +123,6 @@ const VideoCallModal = ({ isOpen, onClose, user }: VideoCallModalProps) => {
       className="videocallModal"
       contentClassName="shadow-lg border-0"
     >
-      {isOpen && !isLoadMedia && initMedia()}
-
       <ModalBody className="p-0">
         <img
           src={user && user.profileImage ? user.profileImage : imagePlaceholder}
