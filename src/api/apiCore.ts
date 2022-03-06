@@ -36,12 +36,17 @@ axios.interceptors.response.use(
   }
 );
 
+if (localStorage.getItem("token") !== null){
+  axios.defaults.headers.common["Authorization"] = localStorage.getItem("token");
+}
+
 /**
  * Sets the default authorization
  * @param {*} token
  */
 const setAuthorization = (token: any) => {
-  axios.defaults.headers.common["Authorization"] = "Bearer " + token;
+  localStorage.setItem("token", "Bearer " + token);
+  axios.defaults.headers.common["Authorization"] = localStorage.getItem("token");
 };
 
 class APIClient {
