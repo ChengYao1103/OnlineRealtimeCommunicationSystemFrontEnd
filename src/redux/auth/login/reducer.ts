@@ -42,7 +42,6 @@ const Login = persistReducer(
         switch (action.payload.actionType) {
           case AuthLoginActionTypes.LOGIN_USER:
             state.error = action.payload.error.data.message;
-            console.log(action.payload);
             state.loading = false;
             state.isUserLogin = false;
             return { ...state };

@@ -5,7 +5,7 @@ import config from "../config";
 axios.defaults.baseURL = config.API_URL;
 
 // content type
-axios.defaults.headers.post["Content-Type"] = "application/json";
+axios.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded";
 
 // intercepting to capture errors
 axios.interceptors.response.use(

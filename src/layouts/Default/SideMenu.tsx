@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import {
   Nav,
   NavItem,
@@ -91,6 +91,7 @@ interface MenuNavItemProps {
       | TABS.USERS
   ) => void;
 }
+
 const MenuNavItem = ({ item, selectedTab, onChangeTab }: MenuNavItemProps) => {
   const onClick = () => {
     onChangeTab(item.tabId);
@@ -129,6 +130,11 @@ interface ProfileDropdownMenuProps {
 const ProfileDropdownMenu = ({ onChangeTab }: ProfileDropdownMenuProps) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const toggle = () => setDropdownOpen(!dropdownOpen);
+  
+  let history = useHistory(); 
+  const redirect = (path: string) => {
+    history.push(path);
+  }
 
   return (
     <Dropdown
@@ -155,9 +161,9 @@ const ProfileDropdownMenu = ({ onChangeTab }: ProfileDropdownMenuProps) => {
         </DropdownItem>
         <DropdownItem
           className="d-flex align-items-center justify-content-between"
-          href="/auth-changepassword"
+          onClick={() => redirect("/auth-changepassword")}
         >
-          Change Password <i className="bx bx-lock-open text-muted ms-1"></i>
+          Change Password <i className="bx bx-lock-open text-muted ms-1" />
         </DropdownItem>
 
         <DropdownItem />
