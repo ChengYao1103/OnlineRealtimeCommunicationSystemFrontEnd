@@ -5,7 +5,7 @@ import { Alert, Row, Col, Form } from "reactstrap";
 import { useRedux } from "../../hooks/index";
 
 // router
-import { Link } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 // validations
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -16,7 +16,10 @@ import { useForm } from "react-hook-form";
 // import { useProfile } from "../../hooks";
 
 //actions
-import { userChangePassword } from "../../redux/actions";
+import {
+  userChangePassword,
+  clearChangePasswordState,
+} from "../../redux/actions";
 
 // components
 import NonAuthLayoutWrapper from "../../components/NonAutnLayoutWrapper";
@@ -55,12 +58,17 @@ const ChangePassword = (prop: ChangePasswordProps) => {
     setUser(LoginState.response.user);
   }
 
-  const { changepasswordError, passwordChanged, changePassLoading } =
-    useAppSelector(state => ({
-      passwordChanged: state.ForgetPassword.passwordChanged,
-      changepasswordError: state.ForgetPassword.changepasswordError,
-      changePassLoading: state.ForgetPassword.loading,
-    }));
+  const {
+    changepasswordError,
+    changepasswordSuccess,
+    passwordChanged,
+    changePassLoading,
+  } = useAppSelector(state => ({
+    passwordChanged: state.ForgetPassword.passwordChanged,
+    changepasswordSuccess: state.ForgetPassword.changepasswordSuccess,
+    changepasswordError: state.ForgetPassword.changepasswordError,
+    changePassLoading: state.ForgetPassword.loading,
+  }));
 
   const resolver = yupResolver(
     yup.object().shape({
@@ -87,6 +95,17 @@ const ChangePassword = (prop: ChangePasswordProps) => {
     dispatch(userChangePassword(values));
   };
 
+  let history = useHistory();
+
+  const goBack = () => {
+    dispatch(clearChangePasswordState());
+    history.goBack();
+  };
+
+  if (passwordChanged) {
+    setTimeout(() => goBack(), 1000);
+  }
+
   // const { userProfile, loading } = useProfile();
 
   return (
@@ -107,7 +126,7 @@ const ChangePassword = (prop: ChangePasswordProps) => {
               <Alert color="danger">{changepasswordError}</Alert>
             ) : null}
             {passwordChanged ? (
-              <Alert color="success">Your Password is changed</Alert>
+              <Alert color="success">{changepasswordSuccess}</Alert>
             ) : null}
 
             <Form
@@ -169,11 +188,15 @@ const ChangePassword = (prop: ChangePasswordProps) => {
                     </button>
                   </div>
                   <div className="col-6">
-                    <Link to="/dashboard" className="text-dark">
-                      <button className="btn btn-light w-100" type="reset">
-                        Cancel
-                      </button>
-                    </Link>
+                    <button
+                      className="btn btn-light w-100"
+                      type="reset"
+                      onClick={() => {
+                        goBack();
+                      }}
+                    >
+                      Cancel
+                    </button>
                   </div>
                 </div>
               </div>

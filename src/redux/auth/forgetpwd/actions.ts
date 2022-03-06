@@ -30,3 +30,7 @@ export const userChangePassword = (data: any) => {
     payload: { data },
   };
 };
+
+export const clearChangePasswordState = () => {
+  return { type: AuthForgetPassActionTypes.CLEAR_CHANGE_PASSWORD_STATE };
+};

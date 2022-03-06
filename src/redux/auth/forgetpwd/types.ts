@@ -4,6 +4,7 @@ export enum AuthForgetPassActionTypes {
 
   FORGET_PASSWORD = "@@auth/forgetPass/FORGET_PASSWORD",
   CHANGE_PASSWORD = "@@auth/forgetPass/CHANGE_PASSWORD",
+  CLEAR_CHANGE_PASSWORD_STATE = "@@auth/forgetPass/CLEAR_CHANGE_PASSWORD_STATE",
 }
 export interface AuthForgetPassState {
   forgetSuccessMsg: any;

@@ -20,6 +20,7 @@ const ForgetPassword = (state = INIT_STATE, action: any) => {
           return {
             ...state,
             passwordChanged: true,
+            changepasswordSuccess: action.payload.data,
             loading: false,
           };
         }
@@ -63,6 +64,16 @@ const ForgetPassword = (state = INIT_STATE, action: any) => {
         ...state,
         passwordChanged: false,
         loading: true,
+      };
+    }
+
+    case AuthForgetPassActionTypes.CLEAR_CHANGE_PASSWORD_STATE: {
+      return {
+        ...state,
+        passwordChanged: false,
+        changepasswordSuccess: undefined,
+        changepasswordError: undefined,
+        loading: false,
       };
     }
 

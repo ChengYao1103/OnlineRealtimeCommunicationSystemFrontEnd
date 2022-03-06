@@ -69,7 +69,7 @@ function* changePassword({ payload: { data } }: any) {
     yield put(
       authForgetPassApiResponseSuccess(
         AuthForgetPassActionTypes.CHANGE_PASSWORD,
-        "Your Password is Changed"
+        "Your Password is Changed, will go back in 0.5 sec"
       )
     );
   } catch (error: any) {
