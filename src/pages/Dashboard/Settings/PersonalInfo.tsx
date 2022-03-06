@@ -18,12 +18,17 @@ interface PersonalInfoProps {
 const PersonalInfo = ({ basicDetails, user }: PersonalInfoProps) => {
   const fullName = user && user.name ? user.name : "-";
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [editName, setEditName] = useState("");
+
+  //modal setting
+  const openModal = () => {
+    setValue("newName", fullName);
+    setIsModalOpen(true);
+  };
 
   // form setting
   const resolver = yupResolver(
     yup.object().shape({
-      newName: yup.string().required("Please Enter E-mail."),
+      newName: yup.string().required("Please Enter New Name."),
     })
   );
   const defaultValues: any = {
@@ -34,21 +39,11 @@ const PersonalInfo = ({ basicDetails, user }: PersonalInfoProps) => {
     handleSubmit,
     register,
     control,
+    setValue,
     formState: { errors },
   } = methods;
   const onSubmitForm = (values: object) => {
     console.log(values);
-    console.log(editName);
-  };
-
-  //modal setting
-  const openModal = () => {
-    setEditName(fullName);
-    setIsModalOpen(true);
-  };
-  const closeModal = () => {
-    setEditName(fullName);
-    setIsModalOpen(false);
   };
 
   return (
@@ -87,7 +82,6 @@ const PersonalInfo = ({ basicDetails, user }: PersonalInfoProps) => {
       <Modal
         id={"editNameModal"}
         isOpen={isModalOpen}
-        toggle={() => closeModal()}
         tabIndex={-1}
         centered
         className="w-100"
@@ -103,10 +97,6 @@ const PersonalInfo = ({ basicDetails, user }: PersonalInfoProps) => {
               label="Name"
               type="text"
               name="newName"
-              value={editName}
-              onChange={e => {
-                setEditName(e.target.value);
-              }}
               register={register}
               errors={errors}
               control={control}
@@ -116,7 +106,11 @@ const PersonalInfo = ({ basicDetails, user }: PersonalInfoProps) => {
             />
           </div>
           <ModalFooter>
-            <Button color="Secondary" onClick={() => closeModal()}>
+            <Button
+              color="Secondary"
+              type="reset"
+              onClick={() => setIsModalOpen(false)}
+            >
               Cancel
             </Button>
             <Button color="primary" type="submit">
