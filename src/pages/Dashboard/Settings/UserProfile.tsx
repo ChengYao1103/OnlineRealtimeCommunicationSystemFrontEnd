@@ -10,17 +10,17 @@ import classnames from "classnames";
 
 // interface
 import { BasicDetailsTypes } from "../../../data/settings";
+import { userModel } from "../../../redux/profile/types";
 
 // CONSTANTS
 import { STATUS_TYPES } from "../../../constants";
 interface UserProfileProps {
   basicDetails: BasicDetailsTypes;
+  user: userModel;
   status: STATUS_TYPES;
 }
-const UserProfile = ({ basicDetails, status }: UserProfileProps) => {
-  const fullName = basicDetails
-    ? `${basicDetails.firstName} ${basicDetails.lastName}`
-    : "-";
+const UserProfile = ({ basicDetails, user, status }: UserProfileProps) => {
+  const fullName = user ? user.name : "-";
 
   /*
     profile image

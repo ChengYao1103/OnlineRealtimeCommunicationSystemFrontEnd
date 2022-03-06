@@ -4,6 +4,9 @@ import classnames from "classnames";
 
 // hooks
 import { useRedux } from "../../../hooks/index";
+import { useSelector } from "react-redux";
+import type { RootState } from "../../../redux/store";
+import { AuthLoginState } from "../../../redux/auth/login/types";
 
 // actions
 import { getSettings, updateSettings } from "../../../redux/actions";
@@ -13,6 +16,7 @@ import { SETTINGS_COLLAPSES } from "../../../constants";
 
 // interface
 import { SettingsTypes } from "../../../data/settings";
+import { userModel } from "../../../redux/profile/types";
 
 // components
 import Loader from "../../../components/Loader";
@@ -105,6 +109,18 @@ const Index = (props: IndexProps) => {
   // global store
   const { dispatch, useAppSelector } = useRedux();
 
+  //get user information
+  const [isLoad, setIsLoad] = useState(false);
+  const LoginState: AuthLoginState = useSelector(
+    (state: RootState) => state.Login
+  );
+  const [user, setUser] = useState({} as userModel);
+
+  if (!isLoad && LoginState.response) {
+    setIsLoad(true);
+    setUser(LoginState.response.user);
+  }
+
   const { settingsData, getSettingsLoading } = useAppSelector(state => ({
     settingsData: state.Settings.settings,
     getSettingsLoading: state.Profile.getSettingsLoading,
@@ -145,7 +161,9 @@ const Index = (props: IndexProps) => {
       value: SETTINGS_COLLAPSES.PROFILE,
       label: "Personal Info",
       icon: "bx bxs-user",
-      component: <PersonalInfo basicDetails={settings.basicDetails} />,
+      component: (
+        <PersonalInfo basicDetails={settings.basicDetails} user={user} />
+      ),
     },
     {
       value: SETTINGS_COLLAPSES.THEME,
@@ -201,6 +219,7 @@ const Index = (props: IndexProps) => {
 
       <UserProfile
         basicDetails={settings.basicDetails}
+        user={user}
         status={settings.status}
       />
       {/* Start User profile description */}

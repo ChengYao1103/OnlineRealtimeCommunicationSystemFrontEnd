@@ -2,8 +2,6 @@ import React from "react";
 import { userModel } from "../../../redux/profile/types";
 
 // interface
-import { BasicDetailsTypes } from "../../../data/myProfile";
-
 interface UserDescriptionProps {
   user: userModel;
   location: string;
@@ -28,7 +26,7 @@ const UserDescription = ({ user, location }: UserDescriptionProps) => {
 
         <div className="d-flex py-2">
           <div className="flex-shrink-0 me-3">
-            <i className="bx bx-message-rounded-dots align-middle text-muted"></i>
+            <i className="bx bx-envelope-open align-middle text-muted"></i>
           </div>
           <div className="flex-grow-1">
             <p className="mb-0">{user.email ? user.email : "-"}</p>

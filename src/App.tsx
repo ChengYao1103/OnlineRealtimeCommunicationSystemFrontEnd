@@ -17,7 +17,6 @@ import Routes from "./routes";
 // import config from "./config";
 import fakeBackend from "./helpers/fakeBackend";
 
-
 // TODO
 fakeBackend();
 
@@ -42,7 +41,7 @@ const App = () => {
     layoutMode: state.Layout.layoutMode,
   }));
 
-  // Dark/Light Mode 
+  // Dark/Light Mode
   useEffect(() => {
     var getLayoutMode = localStorage.getItem("layoutMode");
     if (getLayoutMode) {

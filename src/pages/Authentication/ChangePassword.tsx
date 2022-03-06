@@ -36,6 +36,7 @@ import { userModel } from "../../redux/profile/types";
 interface ChangePasswordProps {}
 
 interface ChangePasswordFormProps {
+  oldPassword: string;
   newPassword: string;
   confirmPassword: string;
 }
@@ -63,7 +64,7 @@ const ChangePassword = (prop: ChangePasswordProps) => {
 
   const resolver = yupResolver(
     yup.object().shape({
-      //oldPassword: yup.string().required("Please Enter Old Password."),
+      oldPassword: yup.string().required("Please Enter Old Password."),
       newPassword: yup.string().required("Please Enter New Password."),
       confirmPassword: yup
         .string()
@@ -114,7 +115,7 @@ const ChangePassword = (prop: ChangePasswordProps) => {
               className="position-relative"
             >
               {changePassLoading && <Loader />}
-              {/*<div className="mb-3">
+              <div className="mb-3">
                 <FormInput
                   label="Old Password"
                   type="password"
@@ -128,7 +129,7 @@ const ChangePassword = (prop: ChangePasswordProps) => {
                   withoutLabel={true}
                   hidePasswordButton={true}
                 />
-            </div>*/}
+              </div>
               <div className="mb-3">
                 <FormInput
                   label="New Password"

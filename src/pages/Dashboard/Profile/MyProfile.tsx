@@ -8,6 +8,15 @@ import {
   DropdownItem,
 } from "reactstrap";
 
+// hooks
+import { useRedux } from "../../../hooks/index";
+
+// costants
+import { TABS } from "../../../constants/index";
+
+// actions
+import { changeTab } from "../../../redux/actions";
+
 // interface
 import { BasicDetailsTypes } from "../../../data/myProfile";
 
@@ -20,6 +29,11 @@ const MyProfile = ({ user, basicDetails }: MyProfileProps) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const toggle = () => setDropdownOpen(!dropdownOpen);
+  const { dispatch } = useRedux();
+
+  const onChangeTab = () => {
+    dispatch(changeTab(TABS.SETTINGS));
+  };
 
   return (
     <>
@@ -49,7 +63,7 @@ const MyProfile = ({ user, basicDetails }: MyProfileProps) => {
                     >
                       <i className="bx bx-dots-vertical-rounded"></i>
                     </DropdownToggle>
-                    <DropdownMenu className="dropdown-menu-end">
+                    <DropdownMenu className="dropdown-menu-end" right>
                       <DropdownItem
                         className="d-flex align-items-center justify-content-between"
                         href="#"
@@ -59,7 +73,7 @@ const MyProfile = ({ user, basicDetails }: MyProfileProps) => {
                       </DropdownItem>
                       <DropdownItem
                         className="d-flex align-items-center justify-content-between"
-                        href="#"
+                        onClick={() => onChangeTab()}
                       >
                         Setting <i className="bx bx-cog text-muted ms-2"></i>
                       </DropdownItem>
