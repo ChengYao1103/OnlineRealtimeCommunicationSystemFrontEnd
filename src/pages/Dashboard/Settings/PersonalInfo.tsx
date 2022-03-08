@@ -1,11 +1,24 @@
 import React, { useState } from "react";
-import { Button, Modal, ModalFooter, ModalHeader, Form } from "reactstrap";
+import {
+  Alert,
+  Button,
+  Modal,
+  ModalFooter,
+  ModalHeader,
+  Form,
+} from "reactstrap";
+
+// hooks
+import { useRedux } from "../../../hooks/index";
 
 // form
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import FormInput from "../../../components/FormInput";
+
+// actions
+import { userChangeInformation } from "../../../redux/actions";
 
 // interface
 import { BasicDetailsTypes } from "../../../data/settings";
@@ -16,8 +29,16 @@ interface PersonalInfoProps {
   user: userModel;
 }
 const PersonalInfo = ({ basicDetails, user }: PersonalInfoProps) => {
+  const { dispatch, useAppSelector } = useRedux();
   const fullName = user && user.name ? user.name : "-";
   const [isModalOpen, setIsModalOpen] = useState(false);
+  //const [toastShowed, setToastShowed] = useState(false);
+  const { informationChanged, changeInfomationError } = useAppSelector(
+    state => ({
+      informationChanged: state.Auth.informationChanged,
+      changeInfomationError: state.Auth.changeInfomationError,
+    })
+  );
 
   //modal setting
   const openModal = () => {
@@ -31,9 +52,11 @@ const PersonalInfo = ({ basicDetails, user }: PersonalInfoProps) => {
       newName: yup.string().required("Please Enter New Name."),
     })
   );
+
   const defaultValues: any = {
     newName: fullName,
   };
+
   const methods = useForm({ defaultValues, resolver });
   const {
     handleSubmit,
@@ -42,12 +65,21 @@ const PersonalInfo = ({ basicDetails, user }: PersonalInfoProps) => {
     setValue,
     formState: { errors },
   } = methods;
-  const onSubmitForm = (values: object) => {
-    console.log(values);
+
+  const onSubmitForm = async (values: object) => {
+    await dispatch(userChangeInformation(values));
+    setIsModalOpen(false);
   };
 
   return (
     <div className="accordion-body">
+      <div>
+        {informationChanged ? (
+          <Alert color="success">Change Name Successfully</Alert>
+        ) : changeInfomationError ? (
+          <Alert color="danger">{changeInfomationError}</Alert>
+        ) : null}
+      </div>
       <div className="float-end">
         <Button
           color="none"

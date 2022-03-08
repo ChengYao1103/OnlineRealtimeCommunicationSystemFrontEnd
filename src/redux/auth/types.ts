@@ -11,6 +11,8 @@ export enum AuthActionTypes {
   CLEAR_CHANGE_PASSWORD_STATE = "@@auth/CLEAR_CHANGE_PASSWORD_STATE",
 
   REGISTER_USER = "@@auth/REGISTER_USER",
+
+  USER_CHANGE_INFORMATION = "@@auth/USER_CHANGE_INFORMATION",
 }
 
 interface AuthLoginResponse {
@@ -26,10 +28,13 @@ export interface userModel {
   role: number;
 }
 
+const init_user = { email: "", id: 0, name: "", role: 0 };
+export const init_response = { error: "", token: "", user: init_user };
+
 export interface AuthState {
   error: string;
   loading: boolean;
-  response?: AuthLoginResponse;
+  response: AuthLoginResponse;
   isUserLogin?: boolean;
   isUserLogout?: boolean;
   forgetSuccessMsg?: string;
@@ -40,4 +45,6 @@ export interface AuthState {
   changepasswordError?: string;
   registrationError?: string;
   isUserRegistered?: boolean;
+  informationChanged?: boolean;
+  changeInfomationError?: string;
 }

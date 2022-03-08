@@ -23,10 +23,11 @@ import {
   postJwtForgetPwd,
   changePassword as changePasswordApi,
   postJwtRegister,
+  changeInformation as changeInformationApi,
 } from "../../api/index";
 
 const fireBaseBackend = getFirebaseBackend();
-/*          Login         */
+//////////Login & Logout
 function* loginUser({ payload: { user } }: any) {
   try {
     if (process.env.REACT_APP_DEFAULTAUTH === "firebase") {
@@ -91,7 +92,7 @@ function* logoutUser() {
   }
 }
 
-/*          Forget Password & Change password         */
+//////////Forget Password & Change password
 //If user is send successfully send mail link then dispatch redux action's are directly from here.
 function* forgetUser({ payload: user }: any) {
   try {
@@ -108,20 +109,6 @@ function* forgetUser({ payload: user }: any) {
     }
   } catch (error: any) {
     yield put(authApiResponseError(AuthActionTypes.FORGET_PASSWORD, error));
-  }
-}
-
-/*          Register          */
-function* registerUser({ payload: { user } }: any) {
-  try {
-    if (process.env.REACT_APP_DEFAULTAUTH === "jwt") {
-      const response: Promise<any> = yield call(postJwtRegister, user);
-      yield put(
-        authApiResponseSuccess(AuthActionTypes.REGISTER_USER, response)
-      );
-    }
-  } catch (error: any) {
-    yield put(authApiResponseError(AuthActionTypes.REGISTER_USER, error));
   }
 }
 
@@ -142,6 +129,36 @@ function* changePassword({ payload: { data } }: any) {
   }
 }
 
+//////////Register
+function* registerUser({ payload: { user } }: any) {
+  try {
+    if (process.env.REACT_APP_DEFAULTAUTH === "jwt") {
+      const response: Promise<any> = yield call(postJwtRegister, user);
+      yield put(
+        authApiResponseSuccess(AuthActionTypes.REGISTER_USER, response)
+      );
+    }
+  } catch (error: any) {
+    yield put(authApiResponseError(AuthActionTypes.REGISTER_USER, error));
+  }
+}
+
+//////////Change Information
+function* userChangeInformation({ payload: { data } }: any) {
+  try {
+    const response: Promise<any> = yield call(changeInformationApi, {
+      newName: data.newName,
+    });
+    yield put(
+      authApiResponseSuccess(AuthActionTypes.USER_CHANGE_INFORMATION, response)
+    );
+  } catch (error: any) {
+    yield put(
+      authApiResponseError(AuthActionTypes.USER_CHANGE_INFORMATION, error)
+    );
+  }
+}
+
 export function* watchUserPasswordForget() {
   yield takeEvery(AuthActionTypes.FORGET_PASSWORD, forgetUser);
 }
@@ -159,8 +176,14 @@ function* AuthSaga() {
   yield takeEvery(AuthActionTypes.LOGOUT_USER, logoutUser);
   yield takeLatest(AuthActionTypes.SOCIAL_LOGIN, socialLogin);
 
-  yield all([fork(watchUserRegister)]);
   yield all([fork(watchUserPasswordForget), fork(watchUserChangePassword)]);
+
+  yield all([fork(watchUserRegister)]);
+
+  yield takeEvery(
+    AuthActionTypes.USER_CHANGE_INFORMATION,
+    userChangeInformation
+  );
 }
 
 export default AuthSaga;

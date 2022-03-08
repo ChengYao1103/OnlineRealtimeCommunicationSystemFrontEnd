@@ -45,4 +45,5 @@ export {
   postJwtRegister,
   changePassword,
   postSocialLogin,
+  changeInformation,
 };

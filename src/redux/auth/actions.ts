@@ -12,6 +12,7 @@ export const authApiResponseError = (actionType: string, error: string) => ({
   payload: { actionType, error },
 });
 
+// Login & Logout
 export const loginUser = (user: any) => {
   return {
     type: AuthActionTypes.LOGIN_USER,
@@ -56,5 +57,13 @@ export const registerUser = (user: any) => {
   return {
     type: AuthActionTypes.REGISTER_USER,
     payload: { user },
+  };
+};
+
+//Change information
+export const userChangeInformation = (data: any) => {
+  return {
+    type: AuthActionTypes.USER_CHANGE_INFORMATION,
+    payload: { data },
   };
 };

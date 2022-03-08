@@ -4,9 +4,6 @@ import classnames from "classnames";
 
 // hooks
 import { useRedux } from "../../../hooks/index";
-import { useSelector } from "react-redux";
-import type { RootState } from "../../../redux/store";
-import { AuthState } from "../../../redux/auth/types";
 
 // actions
 import { getSettings, updateSettings } from "../../../redux/actions";
@@ -110,14 +107,10 @@ const Index = (props: IndexProps) => {
   const { dispatch, useAppSelector } = useRedux();
 
   //get user information
-  const [isLoad, setIsLoad] = useState(false);
-  const LoginState: AuthState = useSelector((state: RootState) => state.Auth);
-  const [user, setUser] = useState({} as userModel);
-
-  if (!isLoad && LoginState.response) {
-    setIsLoad(true);
-    setUser(LoginState.response.user);
-  }
+  const { response } = useAppSelector(state => ({
+    response: state.Auth.response,
+  }));
+  const user: userModel = response.user;
 
   const { settingsData, getSettingsLoading } = useAppSelector(state => ({
     settingsData: state.Settings.settings,
