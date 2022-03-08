@@ -30,11 +30,11 @@ const Register = (props: RegisterProps) => {
   // global store
   const { dispatch, useAppSelector } = useRedux();
 
-  const { user, registrationError, regLoading } = useAppSelector(state => ({
-    user: state.Register.user,
-    registrationError: state.Register.registrationError,
-    regLoading: state.Register.loading,
-    isUserRegistered: state.Register.isUserRegistered,
+  const { response, registrationError, regLoading } = useAppSelector(state => ({
+    response: state.Auth.response,
+    registrationError: state.Auth.registrationError,
+    regLoading: state.Auth.loading,
+    isUserRegistered: state.Auth.isUserRegistered,
   }));
 
   const resolver = yupResolver(
@@ -83,7 +83,7 @@ const Register = (props: RegisterProps) => {
               subtitle="Get your free account now."
             />
 
-            {user && user ? (
+            {response && response ? (
               <Alert color="success">Register User Successfully</Alert>
             ) : null}
 

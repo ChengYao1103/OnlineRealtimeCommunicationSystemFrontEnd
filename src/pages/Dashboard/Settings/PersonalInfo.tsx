@@ -9,7 +9,7 @@ import FormInput from "../../../components/FormInput";
 
 // interface
 import { BasicDetailsTypes } from "../../../data/settings";
-import { userModel } from "../../../redux/profile/types";
+import { userModel } from "../../../redux/auth/types";
 
 interface PersonalInfoProps {
   basicDetails: BasicDetailsTypes;

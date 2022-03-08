@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { userModel } from "../../../redux/profile/types";
+import { userModel } from "../../../redux/auth/types";
 
 import {
   Dropdown,

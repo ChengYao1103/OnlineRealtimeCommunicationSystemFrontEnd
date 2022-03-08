@@ -46,10 +46,10 @@ const Login = (props: LoginProps) => {
 
   const { isUserLogin, error, loginLoading, isUserLogout } = useAppSelector(
     state => ({
-      isUserLogin: state.Login.isUserLogin,
-      error: state.Login.error,
-      loginLoading: state.Login.loading,
-      isUserLogout: state.Login.isUserLogout,
+      isUserLogin: state.Auth.isUserLogin,
+      error: state.Auth.error,
+      loginLoading: state.Auth.loading,
+      isUserLogout: state.Auth.isUserLogout,
     })
   );
 

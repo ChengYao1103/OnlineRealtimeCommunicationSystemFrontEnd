@@ -33,8 +33,8 @@ import avatar1 from "../../assets/images/users/avatar-1.jpg";
 //user information
 import { useSelector } from "react-redux";
 import type { RootState } from "../../redux/store";
-import { AuthLoginState } from "../../redux/auth/login/types";
-import { userModel } from "../../redux/profile/types";
+import { AuthState } from "../../redux/auth/types";
+import { userModel } from "../../redux/auth/types";
 
 interface ChangePasswordProps {}
 
@@ -48,9 +48,7 @@ const ChangePassword = (prop: ChangePasswordProps) => {
   // global store
   const { dispatch, useAppSelector } = useRedux(); //set user information
   const [isLoad, setIsLoad] = useState(false);
-  const LoginState: AuthLoginState = useSelector(
-    (state: RootState) => state.Login
-  );
+  const LoginState: AuthState = useSelector((state: RootState) => state.Auth);
   const [user, setUser] = useState({} as userModel);
 
   if (!isLoad && LoginState.response) {
@@ -64,10 +62,10 @@ const ChangePassword = (prop: ChangePasswordProps) => {
     passwordChanged,
     changePassLoading,
   } = useAppSelector(state => ({
-    passwordChanged: state.ForgetPassword.passwordChanged,
-    changepasswordSuccess: state.ForgetPassword.changepasswordSuccess,
-    changepasswordError: state.ForgetPassword.changepasswordError,
-    changePassLoading: state.ForgetPassword.loading,
+    passwordChanged: state.Auth.passwordChanged,
+    changepasswordSuccess: state.Auth.changepasswordSuccess,
+    changepasswordError: state.Auth.changepasswordError,
+    changePassLoading: state.Auth.loading,
   }));
 
   const resolver = yupResolver(

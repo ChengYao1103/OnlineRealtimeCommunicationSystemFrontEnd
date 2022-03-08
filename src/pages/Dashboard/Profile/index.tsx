@@ -4,8 +4,8 @@ import React, { useEffect, useState } from "react";
 import { useRedux } from "../../../hooks/index";
 import { useSelector } from "react-redux";
 import type { RootState } from "../../../redux/store";
-import { AuthLoginState } from "../../../redux/auth/login/types";
-import { userModel } from "../../../redux/profile/types";
+import { AuthState } from "../../../redux/auth/types";
+import { userModel } from "../../../redux/auth/types";
 
 // components
 import Loader from "../../../components/Loader";
@@ -23,9 +23,7 @@ const Index = (props: IndexProps) => {
   // global store
   const { dispatch, useAppSelector } = useRedux();
   const [isLoad, setIsLoad] = useState(false);
-  const LoginState: AuthLoginState = useSelector(
-    (state: RootState) => state.Login
-  );
+  const LoginState: AuthState = useSelector((state: RootState) => state.Auth);
   const [user, setUser] = useState({} as userModel);
 
   if (!isLoad && LoginState.response) {

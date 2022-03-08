@@ -4,7 +4,7 @@ export const POST_JWT_LOGIN = "/user/login";
 export const POST_FAKE_PASSWORD_FORGET = "/fake-forget-pwd";
 export const POST_FAKE_JWT_PASSWORD_FORGET = "/jwt-forget-pwd";
 export const SOCIAL_LOGIN = "/social-login";
-export const JWT_REGISTER = "/user/create";
+export const JWT_REGISTER = "/user/register";
 export const POST_FAKE_REGISTER = "/post-fake-register";
 
 // profile & settings

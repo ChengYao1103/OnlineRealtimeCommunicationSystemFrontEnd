@@ -10,7 +10,7 @@ import classnames from "classnames";
 
 // interface
 import { BasicDetailsTypes } from "../../../data/settings";
-import { userModel } from "../../../redux/profile/types";
+import { userModel } from "../../../redux/auth/types";
 
 // CONSTANTS
 import { STATUS_TYPES } from "../../../constants";

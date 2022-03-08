@@ -6,7 +6,7 @@ import classnames from "classnames";
 import { useRedux } from "../../../hooks/index";
 import { useSelector } from "react-redux";
 import type { RootState } from "../../../redux/store";
-import { AuthLoginState } from "../../../redux/auth/login/types";
+import { AuthState } from "../../../redux/auth/types";
 
 // actions
 import { getSettings, updateSettings } from "../../../redux/actions";
@@ -16,7 +16,7 @@ import { SETTINGS_COLLAPSES } from "../../../constants";
 
 // interface
 import { SettingsTypes } from "../../../data/settings";
-import { userModel } from "../../../redux/profile/types";
+import { userModel } from "../../../redux/auth/types";
 
 // components
 import Loader from "../../../components/Loader";
@@ -111,9 +111,7 @@ const Index = (props: IndexProps) => {
 
   //get user information
   const [isLoad, setIsLoad] = useState(false);
-  const LoginState: AuthLoginState = useSelector(
-    (state: RootState) => state.Login
-  );
+  const LoginState: AuthState = useSelector((state: RootState) => state.Auth);
   const [user, setUser] = useState({} as userModel);
 
   if (!isLoad && LoginState.response) {

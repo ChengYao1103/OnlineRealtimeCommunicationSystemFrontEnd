@@ -31,9 +31,9 @@ const RecoverPassword = (props: RecoverPasswordProps) => {
 
   const { forgetError, forgetSuccessMsg, forgetPassLoading } = useAppSelector(
     state => ({
-      forgetError: state.ForgetPassword.forgetError,
-      forgetSuccessMsg: state.ForgetPassword.forgetSuccessMsg,
-      forgetPassLoading: state.ForgetPassword.loading,
+      forgetError: state.Auth.forgetError,
+      forgetSuccessMsg: state.Auth.forgetSuccessMsg,
+      forgetPassLoading: state.Auth.loading,
     })
   );
 
