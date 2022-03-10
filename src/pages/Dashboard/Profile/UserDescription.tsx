@@ -1,5 +1,6 @@
 import React from "react";
 import { userModel } from "../../../redux/auth/types";
+import { Roles } from "../../../repository/role";
 
 // interface
 interface UserDescriptionProps {
@@ -35,10 +36,10 @@ const UserDescription = ({ user, location }: UserDescriptionProps) => {
 
         <div className="d-flex py-2">
           <div className="flex-shrink-0 me-3">
-            <i className="bx bx-location-plus align-middle text-muted"></i>
+            <i className="bx bx-award align-middle text-muted"></i>
           </div>
           <div className="flex-grow-1">
-            <p className="mb-0">{location ? location : "-"}</p>
+            <p className="mb-0">{Roles[user.role].label}</p>
           </div>
         </div>
       </div>

@@ -1,10 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 
 // hooks
 import { useRedux } from "../../../hooks/index";
-import { useSelector } from "react-redux";
-import type { RootState } from "../../../redux/store";
-import { AuthState } from "../../../redux/auth/types";
 import { userModel } from "../../../redux/auth/types";
 
 // components
@@ -22,21 +19,15 @@ interface IndexProps {}
 const Index = (props: IndexProps) => {
   // global store
   const { dispatch, useAppSelector } = useRedux();
-  const [isLoad, setIsLoad] = useState(false);
-  const LoginState: AuthState = useSelector((state: RootState) => state.Auth);
-  const [user, setUser] = useState({} as userModel);
 
-  if (!isLoad && LoginState.response) {
-    setIsLoad(true);
-    setUser(LoginState.response.user);
-  }
-
-  const { profileDetails, getProfileLoading, isProfileFetched } =
+  const { response, profileDetails, getProfileLoading, isProfileFetched } =
     useAppSelector(state => ({
+      response: state.Auth.response,
       profileDetails: state.Profile.profileDetails,
       getProfileLoading: state.Profile.getProfileLoading,
       isProfileFetched: state.Profile.isProfileFetched,
     }));
+  const user: userModel = response.user;
 
   // get user profile details
   useEffect(() => {

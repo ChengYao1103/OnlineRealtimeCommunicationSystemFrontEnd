@@ -23,6 +23,7 @@ import { userChangeInformation } from "../../../redux/actions";
 // interface
 import { BasicDetailsTypes } from "../../../data/settings";
 import { userModel } from "../../../redux/auth/types";
+import { Roles } from "../../../repository/role";
 
 interface PersonalInfoProps {
   basicDetails: BasicDetailsTypes;
@@ -104,11 +105,8 @@ const PersonalInfo = ({ basicDetails, user }: PersonalInfoProps) => {
       </div>
 
       <div className="mt-4">
-        <p className="text-muted mb-1">Location</p>
-        <h5 className="font-size-14 mb-0">
-          {/*user && user.location ? user.location : "-"*/}
-          現在還沒有
-        </h5>
+        <p className="text-muted mb-1">Role</p>
+        <h5 className="font-size-14 mb-0">{Roles[user.role].label}</h5>
       </div>
       {/* begin::修改姓名的modal */}
       <Modal

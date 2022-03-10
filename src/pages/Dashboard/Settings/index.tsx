@@ -107,16 +107,15 @@ const Index = (props: IndexProps) => {
   const { dispatch, useAppSelector } = useRedux();
 
   //get user information
-  const { response } = useAppSelector(state => ({
-    response: state.Auth.response,
-  }));
+  const { response, settingsData, getSettingsLoading } = useAppSelector(
+    state => ({
+      response: state.Auth.response,
+      settingsData: state.Settings.settings,
+      getSettingsLoading: state.Profile.getSettingsLoading,
+      isSettingsFetched: state.Profile.isSettingsFetched,
+    })
+  );
   const user: userModel = response.user;
-
-  const { settingsData, getSettingsLoading } = useAppSelector(state => ({
-    settingsData: state.Settings.settings,
-    getSettingsLoading: state.Profile.getSettingsLoading,
-    isSettingsFetched: state.Profile.isSettingsFetched,
-  }));
 
   // get user settings
   useEffect(() => {
