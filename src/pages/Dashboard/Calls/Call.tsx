@@ -192,11 +192,13 @@ const Call = ({ call }: CallProps) => {
         isOpen={isOpenAudioModal}
         onClose={onCloseAudio}
         user={user}
+        userName={`${user?.firstName} ${user?.lastName}`}
       />
       <VideoCallModal
         isOpen={isOpenVideoModal}
         onClose={onCloseVideo}
         user={user}
+        userName={`${user?.firstName} ${user?.lastName}`}
       />
     </>
   );

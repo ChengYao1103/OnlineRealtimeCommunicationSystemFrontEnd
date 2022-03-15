@@ -10,11 +10,17 @@ import imagePlaceholder from "../assets/images/users/profile-placeholder.png";
 
 interface VideoCallModalProps {
   user: CallItem | null;
+  userName: string | undefined;
   isOpen: boolean;
   onClose: () => void;
 }
 
-const VideoCallModal = ({ isOpen, onClose, user }: VideoCallModalProps) => {
+const VideoCallModal = ({
+  isOpen,
+  onClose,
+  user,
+  userName,
+}: VideoCallModalProps) => {
   const [isLoadMedia, setIsLoadMedia] = useState(false);
   const [isMute, setIsMute] = useState(false);
   const [isCloseSpeaker, setIsCloseSpeaker] = useState(false);
@@ -229,7 +235,7 @@ const VideoCallModal = ({ isOpen, onClose, user }: VideoCallModalProps) => {
           <div className="p-4 bg-primary mt-n4">
             <div className="text-white mt-4 text-center">
               <h5 className="font-size-18 text-truncate mb-0 text-white">
-                {user ? `${user.firstName} ${user.lastName}` : ""}
+                {userName}
               </h5>
             </div>
           </div>

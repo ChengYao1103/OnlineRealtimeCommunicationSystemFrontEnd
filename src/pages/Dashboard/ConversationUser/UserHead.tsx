@@ -420,6 +420,11 @@ const UserHead = ({
           isOpen={isOpenAudioModal}
           onClose={onCloseAudio}
           user={chatUserDetails}
+          userName={
+            !isChannel
+              ? `${chatUserDetails.firstName} ${chatUserDetails.lastName}`
+              : chatUserDetails.name
+          }
         />
       )}
       {isOpenVideoModal && (
@@ -427,6 +432,11 @@ const UserHead = ({
           isOpen={isOpenVideoModal}
           onClose={onCloseVideo}
           user={chatUserDetails}
+          userName={
+            !isChannel
+              ? `${chatUserDetails.firstName} ${chatUserDetails.lastName}`
+              : chatUserDetails.name
+          }
         />
       )}
       {isOpenPinnedTabModal && (

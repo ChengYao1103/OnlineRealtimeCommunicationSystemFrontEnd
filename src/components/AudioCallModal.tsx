@@ -7,12 +7,18 @@ import { CallItem } from "../data/calls";
 //images
 import imagePlaceholder from "../assets/images/users/profile-placeholder.png";
 interface AudioCallModalProps {
+  user: CallItem | null;
+  userName: string | undefined;
   isOpen: boolean;
   onClose: () => void;
-  user: CallItem | null;
 }
 
-const AudioCallModal = ({ isOpen, onClose, user }: AudioCallModalProps) => {
+const AudioCallModal = ({
+  isOpen,
+  onClose,
+  user,
+  userName,
+}: AudioCallModalProps) => {
   const [isLoad, setIsLoad] = useState(false);
   const [isMute, setIsMute] = useState(false);
   const [isCloseSpeaker, setIsCloseSpeaker] = useState(false);
@@ -150,9 +156,7 @@ const AudioCallModal = ({ isOpen, onClose, user }: AudioCallModalProps) => {
 
         <div className="p-4 bg-soft-primary mt-n4">
           <div className="mt-4 text-center">
-            <h5 className="font-size-18 mb-0 text-truncate">
-              {user ? `${user.firstName} ${user.lastName}` : ""}
-            </h5>
+            <h5 className="font-size-18 mb-0 text-truncate">{userName}</h5>
           </div>
         </div>
       </ModalBody>

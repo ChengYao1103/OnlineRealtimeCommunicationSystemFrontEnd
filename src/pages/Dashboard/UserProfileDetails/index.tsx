@@ -147,6 +147,7 @@ const Index = ({ isChannel }: IndexProps) => {
               isOpen={isOpenAudioModal}
               onClose={onCloseAudio}
               user={chatUserDetails}
+              userName={`${chatUserDetails.firstName} ${chatUserDetails.lastName}`}
             />
           )}
           {isOpenVideoModal && (
@@ -154,6 +155,7 @@ const Index = ({ isChannel }: IndexProps) => {
               isOpen={isOpenVideoModal}
               onClose={onCloseVideo}
               user={chatUserDetails}
+              userName={`${chatUserDetails.firstName} ${chatUserDetails.lastName}`}
             />
           )}
         </div>
