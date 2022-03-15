@@ -130,13 +130,14 @@ const VideoCallModal = ({
       contentClassName="shadow-lg border-0"
     >
       <ModalBody className="p-0">
-        <img
-          src={user && user.profileImage ? user.profileImage : imagePlaceholder}
-          alt=""
-          className="videocallModal-bg"
-        />
-
-        <div className="position-absolute start-0 end-0 bottom-0">
+        <div className="videocallModal-bg">
+          <img
+            src={
+              user && user.profileImage ? user.profileImage : imagePlaceholder
+            }
+            alt=""
+            className="videocallModal-bg"
+          />
           <video
             autoPlay
             ref={video => {
@@ -145,9 +146,12 @@ const VideoCallModal = ({
               }
             }}
             id="testVideo"
-            className="position-absolute ms-3"
-            style={{ width: "25%", top: "-100px" }}
+            className="position-absolute w-25 start-0 rounded-3"
+            style={{ margin: "20px" }}
           ></video>
+        </div>
+
+        <div className="position-absolute start-0 end-0 bottom-0">
           <div className="text-center">
             <div className="d-flex justify-content-center align-items-center text-center">
               <div className="avatar-md h-auto">
