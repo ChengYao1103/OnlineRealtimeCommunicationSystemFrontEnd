@@ -36,6 +36,12 @@ const changeInformation = (data: object) => {
 // postSocialLogin
 const postSocialLogin = (data: any) => api.create(url.SOCIAL_LOGIN, data);
 
+// get other user's information
+const getUserInfo = (userId: string) => {
+  let destUrl = `${url.GET_USER_INFOMATION}/${userId}`;
+  return api.get(destUrl);
+};
+
 export {
   postFakeForgetPwd,
   postJwtForgetPwd,
@@ -46,4 +52,5 @@ export {
   changePassword,
   postSocialLogin,
   changeInformation,
+  getUserInfo,
 };

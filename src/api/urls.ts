@@ -13,6 +13,7 @@ export const USER_CHANGE_INFOMATION = "/user/changeInformation";
 export const GET_PROFILE_DETAILS = "/profile-details";
 export const GET_USER_SETTINGS = "/user-settings";
 export const UPDATE_ETTINGS = "/update-user-settings";
+export const GET_USER_INFOMATION = "user";
 
 // contacts
 export const GET_CONTACTS = "/user-contacts";
