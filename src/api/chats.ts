@@ -10,8 +10,10 @@ const getFavourites = () => {
 const getDirectMessages = () => {
   return api.get(url.GET_DIRECT_MESSAGES);
 };
-const getChannels = () => {
-  return api.get(url.GET_CHANNELS);
+
+const getChannels = (userId: string) => {
+  let destUrl = `${url.GET_USER_INFOMATION}/${userId}`;
+  return api.get(destUrl);
 };
 
 const addContacts = (contacts: Array<string | number>) => {

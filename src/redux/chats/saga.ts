@@ -63,9 +63,9 @@ function* getDirectMessages() {
   }
 }
 
-function* getChannels() {
+function* getChannels({ payload: data }: any) {
   try {
-    const response: Promise<any> = yield call(getChannelsApi);
+    const response: Promise<any> = yield call(getChannelsApi, data.userId);
     yield put(chatsApiResponseSuccess(ChatsActionTypes.GET_CHANNELS, response));
   } catch (error: any) {
     yield put(chatsApiResponseError(ChatsActionTypes.GET_CHANNELS, error));
@@ -281,7 +281,7 @@ function* readConversation({ payload: id }: any) {
     );
     yield put(getDirectMessagesAction());
     yield put(getFavouritesAction());
-    yield put(getChannelsAction());
+    //yield put(getChannelsAction());
   } catch (error: any) {
     yield put(chatsApiResponseError(ChatsActionTypes.READ_CONVERSATION, error));
   }

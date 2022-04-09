@@ -102,11 +102,13 @@ const CharacterItem = ({
 interface AddGroupModalProps {
   isOpen: boolean;
   onClose: () => void;
+  founderId: number;
   onCreateChannel: (params: CreateChannelPostData) => void;
 }
 const AddGroupModal = ({
   isOpen,
   onClose,
+  founderId,
   onCreateChannel,
 }: AddGroupModalProps) => {
   /*
@@ -157,9 +159,10 @@ const AddGroupModal = ({
   const [valid, setValid] = useState(false);
   useEffect(() => {
     if (
-      selectedContacts.length === 0 &&
+      /*selectedContacts.length === 0 &&
       !data.description &&
-      data.description === ""
+      data.description === ""*/
+      data.channelName === ""
     ) {
       setValid(false);
     } else {
@@ -173,8 +176,9 @@ const AddGroupModal = ({
   const onSubmit = () => {
     const params = {
       name: data.channelName,
-      members: selectedContacts,
-      description: data.description,
+      founderId: founderId,
+      //members: selectedContacts,
+      //description: data.description,
     };
     onCreateChannel(params);
   };
@@ -190,28 +194,29 @@ const AddGroupModal = ({
       role="dialog"
     >
       <ModalHeader className="modal-title-custom" toggle={onClose}>
-        Create New Group
+        Create New Channel
       </ModalHeader>
 
       <ModalBody className="p-4">
         <Form>
           <div className="mb-4">
             <Label htmlFor="addgroupname-input" className="form-label">
-              Group Name
+              Channel Name
             </Label>
             <Input
               type="text"
               className="form-control"
               id="addgroupname-input"
-              placeholder="Enter Group Name"
+              placeholder="Enter Channel Name"
               value={data.channelName || ""}
               onChange={(e: any) => {
                 onDataChange("channelName", e.target.value);
               }}
             />
           </div>
+          {/*
           <div className="mb-4">
-            <label className="form-label">Group Members</label>
+            <label className="form-label">Channel Members</label>
             <div className="mb-3">
               <Button
                 color="light"
@@ -262,6 +267,7 @@ const AddGroupModal = ({
               }}
             />
           </div>
+            */}
         </Form>
       </ModalBody>
       <ModalFooter>

@@ -28,10 +28,18 @@ export enum ChatsActionTypes {
   READ_CONVERSATION = "@@chats/READ_CONVERSATION",
   DELETE_IMAGE = "@@chats/DELETE_IMAGE",
 }
+
+export interface Channel {
+  founderID: number;
+  id: number;
+  name: string;
+  recordPath: string;
+}
+
 export interface ChatsState {
   favourites: Array<any>;
   directMessages: Array<any>;
-  channels: Array<any>;
+  channels: Array<Channel>;
   selectedChat: string | number | null;
   chatUserDetails: object;
   chatUserConversations: {};

@@ -10,10 +10,10 @@ export const POST_FAKE_REGISTER = "/post-fake-register";
 // profile & settings
 export const USER_CHANGE_PASSWORD = "/user/changePassword";
 export const USER_CHANGE_INFOMATION = "/user/changeInformation";
+export const GET_USER_INFOMATION = "user";
 export const GET_PROFILE_DETAILS = "/profile-details";
 export const GET_USER_SETTINGS = "/user-settings";
 export const UPDATE_ETTINGS = "/update-user-settings";
-export const GET_USER_INFOMATION = "user";
 
 // contacts
 export const GET_CONTACTS = "/user-contacts";
@@ -28,11 +28,11 @@ export const DELETE_BOOKMARK = "/bookmarks-delete";
 export const UPDATE_BOOKMARK = "/bookmarks-update";
 
 // chats
+export const GET_CHANNELS = "user/allChannel";
 export const GET_FAVOURITES = "/get-favourites";
 export const GET_DIRECT_MESSAGES = "/get-direct-messages";
-export const GET_CHANNELS = "/get-channles";
 export const ADD_CONTACTS = "/add-contact";
-export const CREATE_CHANNEL = "/create-channel";
+export const CREATE_CHANNEL = "/channel/create";
 export const GET_CHAT_USER_DETAILS = "/get-user-details";
 export const GET_CHAT_USER_CONVERSATIONS = "/get-user-conversations";
 export const SEND_MESSAGE = "/send-message";

@@ -19,8 +19,9 @@ export const getDirectMessages = () => ({
   type: ChatsActionTypes.GET_DIRECT_MESSAGES,
 });
 
-export const getChannels = () => ({
+export const getChannels = (userId: string) => ({
   type: ChatsActionTypes.GET_CHANNELS,
+  payload: { userId },
 });
 
 export const addContacts = (contacts: Array<string | number>) => ({
@@ -29,9 +30,10 @@ export const addContacts = (contacts: Array<string | number>) => ({
 });
 
 export interface CreateChannelPostData {
+  founderId: number;
   name: string;
-  members: Array<string | number>;
-  description?: string;
+  //members: Array<string | number>;
+  //description?: string;
 }
 export const createChannel = (channelData: CreateChannelPostData) => ({
   type: ChatsActionTypes.CREATE_CHANNEL,

@@ -24,6 +24,7 @@ import {
 
 // interfaces
 import { CreateChannelPostData } from "../../../redux/actions";
+import { userModel } from "../../../redux/auth/types";
 
 // components
 import AppSimpleBar from "../../../components/AppSimpleBar";
@@ -44,6 +45,7 @@ const Index = (props: IndexProps) => {
   const { dispatch, useAppSelector } = useRedux();
 
   const {
+    response,
     isContactInvited,
     favourites,
     directMessages,
@@ -56,6 +58,7 @@ const Index = (props: IndexProps) => {
     isContactArchiveToggled,
     chatUserDetails,
   } = useAppSelector(state => ({
+    response: state.Auth.response,
     isContactInvited: state.Contacts.isContactInvited,
     favourites: state.Chats.favourites,
     directMessages: state.Chats.directMessages,
@@ -68,6 +71,7 @@ const Index = (props: IndexProps) => {
     isContactArchiveToggled: state.Chats.isContactArchiveToggled,
     chatUserDetails: state.Chats.chatUserDetails,
   }));
+  const authUser: userModel = response.user;
 
   /*
   get data
@@ -75,7 +79,7 @@ const Index = (props: IndexProps) => {
   useEffect(() => {
     dispatch(getFavourites());
     dispatch(getDirectMessages());
-    dispatch(getChannels());
+    dispatch(getChannels(authUser.id.toString()));
   }, [dispatch]);
   useEffect(() => {
     if (isFavouriteContactToggled) {
@@ -147,7 +151,7 @@ const Index = (props: IndexProps) => {
   useEffect(() => {
     if (isChannelCreated) {
       setIsOpenCreateChannel(false);
-      dispatch(getChannels());
+      dispatch(getChannels(authUser.id.toString()));
     }
   }, [dispatch, isChannelCreated]);
 
@@ -187,7 +191,7 @@ const Index = (props: IndexProps) => {
       dispatch(getArchiveContact());
       dispatch(getFavourites());
       dispatch(getDirectMessages());
-      dispatch(getChannels());
+      dispatch(getChannels(authUser.id.toString()));
       dispatch(getChatUserDetails(chatUserDetails.id));
     }
   }, [dispatch, isContactArchiveToggled, chatUserDetails.id]);
@@ -295,6 +299,7 @@ const Index = (props: IndexProps) => {
         <AddGroupModal
           isOpen={isOpenCreateChannel}
           onClose={closeCreateChannelModal}
+          founderId={authUser.id}
           onCreateChannel={onCreateChannel}
         />
       )}
