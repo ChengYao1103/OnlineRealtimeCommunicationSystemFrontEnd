@@ -280,7 +280,7 @@ const AddGroupModal = ({
           onClick={onSubmit}
           disabled={!valid}
         >
-          Create Groups
+          Create Channel
         </Button>
       </ModalFooter>
     </Modal>

@@ -40,6 +40,7 @@ export interface ChatsState {
   favourites: Array<any>;
   directMessages: Array<any>;
   channels: Array<Channel>;
+  getChannelsError?: string;
   selectedChat: string | number | null;
   chatUserDetails: object;
   chatUserConversations: {};

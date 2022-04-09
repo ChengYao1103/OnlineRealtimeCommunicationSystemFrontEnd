@@ -43,24 +43,14 @@ const Chanels = ({
 
       <div className="chat-message-list">
         <ul className="list-unstyled chat-list chat-user-list mb-3">
-          {/*channels
-            ? channels.forEach(channel => {
-                <ChatChannel
-                  channel={channel}
-                  key={key}
-                  selectedChat={selectedChat}
-                  onSelectChat={onSelectChat}
-                />;
-              })
-            : null*/}
-          {/*(channels || []).map((channel: Channel, key: number) => (
+          {(channels || []).map((channel: Channel, key: number) => (
             <ChatChannel
               channel={channel}
               key={key}
               selectedChat={selectedChat}
               onSelectChat={onSelectChat}
             />
-          ))*/}
+          ))}
         </ul>
       </div>
     </>

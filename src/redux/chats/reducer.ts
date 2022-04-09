@@ -7,6 +7,7 @@ export const INIT_STATE: ChatsState = {
   favourites: [],
   directMessages: [],
   channels: [],
+  getChannelsError: undefined,
   selectedChat: null,
   chatUserDetails: {},
   chatUserConversations: {},
@@ -41,9 +42,10 @@ const Chats = persistReducer(
               isContactsAdded: false,
             };
           case ChatsActionTypes.GET_CHANNELS:
+            console.log("444", action.payload.data);
             return {
               ...state,
-              channels: action.payload.data,
+              channels: action.payload.data.channelUser,
               isChannelsFetched: true,
               getChannelsLoading: false,
               isChannelCreated: false,
@@ -159,6 +161,7 @@ const Chats = persistReducer(
           case ChatsActionTypes.GET_CHANNELS:
             return {
               ...state,
+              getChannelsError: action.payload.data.msg,
               isChannelsFetched: false,
               getChannelsLoading: false,
             };

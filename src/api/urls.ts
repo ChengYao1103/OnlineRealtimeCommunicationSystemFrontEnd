@@ -28,7 +28,7 @@ export const DELETE_BOOKMARK = "/bookmarks-delete";
 export const UPDATE_BOOKMARK = "/bookmarks-update";
 
 // chats
-export const GET_CHANNELS = "user/allChannel";
+export const GET_CHANNELS = "/user/allChannel";
 export const GET_FAVOURITES = "/get-favourites";
 export const GET_DIRECT_MESSAGES = "/get-direct-messages";
 export const ADD_CONTACTS = "/add-contact";

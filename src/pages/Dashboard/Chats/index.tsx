@@ -80,7 +80,7 @@ const Index = (props: IndexProps) => {
     dispatch(getFavourites());
     dispatch(getDirectMessages());
     dispatch(getChannels(authUser.id.toString()));
-  }, [dispatch]);
+  }, [dispatch, authUser]);
   useEffect(() => {
     if (isFavouriteContactToggled) {
       dispatch(getFavourites());
@@ -153,7 +153,7 @@ const Index = (props: IndexProps) => {
       setIsOpenCreateChannel(false);
       dispatch(getChannels(authUser.id.toString()));
     }
-  }, [dispatch, isChannelCreated]);
+  }, [dispatch, isChannelCreated, authUser]);
 
   /*
   select chat handeling :
@@ -194,7 +194,7 @@ const Index = (props: IndexProps) => {
       dispatch(getChannels(authUser.id.toString()));
       dispatch(getChatUserDetails(chatUserDetails.id));
     }
-  }, [dispatch, isContactArchiveToggled, chatUserDetails.id]);
+  }, [dispatch, isContactArchiveToggled, chatUserDetails.id, authUser]);
 
   return (
     <>

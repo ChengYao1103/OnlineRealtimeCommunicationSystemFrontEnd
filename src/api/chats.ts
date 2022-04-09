@@ -12,7 +12,7 @@ const getDirectMessages = () => {
 };
 
 const getChannels = (userId: string) => {
-  let destUrl = `${url.GET_USER_INFOMATION}/${userId}`;
+  let destUrl = `${url.GET_CHANNELS}/${userId}`;
   return api.get(destUrl);
 };
 
