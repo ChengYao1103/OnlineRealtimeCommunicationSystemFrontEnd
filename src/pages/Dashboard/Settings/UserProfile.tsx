@@ -37,7 +37,17 @@ const UserProfile = ({ basicDetails, user, status }: UserProfileProps) => {
     const files = [...e.target.files];
     if (files[0]) {
       const src = URL.createObjectURL(files[0]);
-      setImage(src);
+      // 將圖片轉換為base64
+      const reader = new FileReader();
+      reader.readAsDataURL(files[0]);
+      reader.onload = () => {
+        //儲存轉換完成之圖片
+        const base64 = reader.result;
+        console.log(base64);
+        if (typeof base64 === "string") {
+          setImage(base64);
+        }
+      };
     }
   };
 
