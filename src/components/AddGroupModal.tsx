@@ -28,7 +28,6 @@ interface DataTypes {
   channelName: string;
   description: string;
 }
-/*
 interface ContactItemProps {
   contact: ContactTypes;
   selected: boolean;
@@ -100,7 +99,6 @@ const CharacterItem = ({
     </div>
   );
 };
-*/
 interface AddGroupModalProps {
   isOpen: boolean;
   onClose: () => void;
