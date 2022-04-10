@@ -28,7 +28,11 @@ interface DataTypes {
   channelName: string;
   description: string;
 }
+<<<<<<< HEAD
 /*
+=======
+/*  建立群組時勾選邀請人的item::start
+>>>>>>> parent of c93c8de (test push3)
 interface ContactItemProps {
   contact: ContactTypes;
   selected: boolean;
@@ -100,7 +104,11 @@ const CharacterItem = ({
     </div>
   );
 };
+<<<<<<< HEAD
 */
+=======
+  建立群組時勾選邀請人的item::end  */
+>>>>>>> parent of c93c8de (test push3)
 interface AddGroupModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -216,6 +224,7 @@ const AddGroupModal = ({
               }}
             />
           </div>
+          {/*
           <div className="mb-4">
             <label className="form-label">Channel Members</label>
             <div className="mb-3">
@@ -269,6 +278,7 @@ const AddGroupModal = ({
             />
             */}
           </div>
+            */}
         </Form>
       </ModalBody>
       <ModalFooter>
