@@ -42,7 +42,7 @@ const Chats = persistReducer(
               isContactsAdded: false,
             };
           case ChatsActionTypes.GET_CHANNELS:
-            console.log("444", action.payload.data);
+            console.log("444", action.payload.data.channelUser);
             return {
               ...state,
               channels: action.payload.data.channelUser,

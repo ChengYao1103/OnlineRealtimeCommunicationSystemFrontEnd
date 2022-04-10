@@ -205,7 +205,7 @@ const AddGroupModal = ({
             <Label htmlFor="addgroupname-input" className="form-label">
               Channel Name
             </Label>
-            <Input
+            <input
               type="text"
               className="form-control"
               id="addgroupname-input"
