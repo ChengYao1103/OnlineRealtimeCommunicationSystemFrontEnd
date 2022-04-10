@@ -16,7 +16,6 @@ import { TABS } from "../../../constants/index";
 
 // actions
 import { changeTab } from "../../../redux/actions";
-import { getUserInformation } from "../../../redux/actions";
 
 // interface
 import { BasicDetailsTypes } from "../../../data/myProfile";
@@ -34,11 +33,6 @@ const MyProfile = ({ user, basicDetails }: MyProfileProps) => {
 
   const onChangeTab = () => {
     dispatch(changeTab(TABS.SETTINGS));
-  };
-
-  const testGetInfo = () => {
-    let id = 3;
-    dispatch(getUserInformation(id.toString()));
   };
 
   return (
@@ -73,7 +67,6 @@ const MyProfile = ({ user, basicDetails }: MyProfileProps) => {
                       <DropdownItem
                         className="d-flex align-items-center justify-content-between"
                         href="#"
-                        onClick={() => testGetInfo()}
                       >
                         Info{" "}
                         <i className="bx bx-info-circle ms-2 text-muted"></i>

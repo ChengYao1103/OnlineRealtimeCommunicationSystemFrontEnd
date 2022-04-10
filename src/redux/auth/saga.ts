@@ -24,7 +24,6 @@ import {
   changePassword as changePasswordApi,
   postJwtRegister,
   changeInformation as changeInformationApi,
-  getUserInfo as getUserInfoApi,
 } from "../../api/index";
 
 const fireBaseBackend = getFirebaseBackend();
@@ -144,7 +143,7 @@ function* registerUser({ payload: { user } }: any) {
   }
 }
 
-//////////Change information
+//////////Change Information
 function* userChangeInformation({ payload: { data } }: any) {
   try {
     const response: Promise<any> = yield call(changeInformationApi, {
@@ -157,18 +156,6 @@ function* userChangeInformation({ payload: { data } }: any) {
     yield put(
       authApiResponseError(AuthActionTypes.USER_CHANGE_INFORMATION, error)
     );
-  }
-}
-
-//////////Get user information
-function* getUserInformation({ payload: data }: any) {
-  try {
-    const response: Promise<any> = yield call(getUserInfoApi, data.userId);
-    yield put(
-      authApiResponseSuccess(AuthActionTypes.GET_USER_INFOMATION, response)
-    );
-  } catch (error: any) {
-    yield put(authApiResponseError(AuthActionTypes.GET_USER_INFOMATION, error));
   }
 }
 
@@ -197,7 +184,6 @@ function* AuthSaga() {
     AuthActionTypes.USER_CHANGE_INFORMATION,
     userChangeInformation
   );
-  yield takeEvery(AuthActionTypes.GET_USER_INFOMATION, getUserInformation);
 }
 
 export default AuthSaga;

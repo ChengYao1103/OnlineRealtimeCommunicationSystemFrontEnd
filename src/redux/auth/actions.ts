@@ -60,18 +60,10 @@ export const registerUser = (user: any) => {
   };
 };
 
-// Change information
+//Change information
 export const userChangeInformation = (data: any) => {
   return {
     type: AuthActionTypes.USER_CHANGE_INFORMATION,
     payload: { data },
-  };
-};
-
-// Get user information
-export const getUserInformation = (userId: string) => {
-  return {
-    type: AuthActionTypes.GET_USER_INFOMATION,
-    payload: { userId },
   };
 };

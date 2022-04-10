@@ -18,8 +18,6 @@ export const INIT_STATE: AuthState = {
   isUserRegistered: undefined,
   informationChanged: undefined,
   changeInfomationError: undefined,
-  otherUserInfo: undefined,
-  getInfoError: undefined,
 };
 
 const Auth = persistReducer(
@@ -66,12 +64,6 @@ const Auth = persistReducer(
             state.changeInfomationError = undefined;
             state.informationChanged = true;
             return { ...state };
-          case AuthActionTypes.GET_USER_INFOMATION:
-            state.loading = false;
-            state.getInfoError = undefined;
-            state.otherUserInfo = action.payload.data.user;
-            console.log(state.otherUserInfo);
-            return { ...state };
           default:
             return { ...state };
         }
@@ -107,11 +99,6 @@ const Auth = persistReducer(
             state.loading = false;
             state.changeInfomationError = action.payload.error.data.msg;
             state.informationChanged = false;
-            return { ...state };
-          case AuthActionTypes.GET_USER_INFOMATION:
-            state.loading = false;
-            state.getInfoError = action.payload.data.msg;
-            console.log(state.getInfoError);
             return { ...state };
           default:
             return { ...state };
@@ -155,10 +142,6 @@ const Auth = persistReducer(
         state.loading = true;
         state.changeInfomationError = undefined;
         state.informationChanged = false;
-        return { ...state };
-
-      case AuthActionTypes.GET_USER_INFOMATION:
-        state.loading = true;
         return { ...state };
 
       default:

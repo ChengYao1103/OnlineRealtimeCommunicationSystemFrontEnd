@@ -13,7 +13,6 @@ export enum AuthActionTypes {
   REGISTER_USER = "@@auth/REGISTER_USER",
 
   USER_CHANGE_INFORMATION = "@@auth/USER_CHANGE_INFORMATION",
-  GET_USER_INFOMATION = "@@auth/GET_USER_INFOMATION",
 }
 
 interface AuthLoginResponse {
@@ -48,6 +47,4 @@ export interface AuthState {
   isUserRegistered?: boolean;
   informationChanged?: boolean;
   changeInfomationError?: string;
-  otherUserInfo?: userModel;
-  getInfoError?: string;
 }
