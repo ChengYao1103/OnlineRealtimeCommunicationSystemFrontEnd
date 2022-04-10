@@ -28,7 +28,6 @@ interface DataTypes {
   channelName: string;
   description: string;
 }
-/*  建立群組時勾選邀請人的item::start
 interface ContactItemProps {
   contact: ContactTypes;
   selected: boolean;
@@ -100,7 +99,6 @@ const CharacterItem = ({
     </div>
   );
 };
-  建立群組時勾選邀請人的item::end  */
 interface AddGroupModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -216,7 +214,6 @@ const AddGroupModal = ({
               }}
             />
           </div>
-          {/*
           <div className="mb-4">
             <label className="form-label">Channel Members</label>
             <div className="mb-3">
@@ -269,7 +266,6 @@ const AddGroupModal = ({
               }}
             />
           </div>
-            */}
         </Form>
       </ModalBody>
       <ModalFooter>

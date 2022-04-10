@@ -36,7 +36,7 @@ const Chanels = ({
             {/* addgroup-exampleModal */}
           </div>
           <UncontrolledTooltip target="create-group" placement="bottom">
-            Create group
+            Create channel
           </UncontrolledTooltip>
         </div>
       </div>

@@ -13,7 +13,7 @@ const getDirectMessages = () => {
 
 const getChannels = (userId: string) => {
   let destUrl = `${url.GET_CHANNELS}/${userId}`;
-  return api.get(destUrl);
+  return api.get(destUrl, { id: parseInt(userId) });
 };
 
 const addContacts = (contacts: Array<string | number>) => {
