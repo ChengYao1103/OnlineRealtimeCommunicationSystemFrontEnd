@@ -161,7 +161,7 @@ const Chats = persistReducer(
           case ChatsActionTypes.GET_CHANNELS:
             return {
               ...state,
-              getChannelsError: action.payload.data.msg,
+              getChannelsError: action.payload.data,
               isChannelsFetched: false,
               getChannelsLoading: false,
             };

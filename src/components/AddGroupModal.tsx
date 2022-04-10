@@ -217,60 +217,58 @@ const AddGroupModal = ({
             />
           </div>
           {/*
-          <div className="mb-4">
-            {/*
-            <label className="form-label">Channel Members</label>
-            <div className="mb-3">
-              <Button
-                color="light"
-                size="sm"
-                type="button"
-                onClick={toggleCollapse}
-              >
-                Select Members
-              </Button>
-            </div>
-            <Collapse isOpen={isOpenCollapse} id="groupmembercollapse">
-              <div className="card border">
-                <div className="card-header">
-                  <h5 className="font-size-15 mb-0">Contacts</h5>
-                </div>
-                <div className="card-body p-2">
-                  <AppSimpleBar style={{ maxHeight: "150px" }}>
-                    {(categorizedContacts || []).map(
-                      (letterContacts: DivideByKeyResultTypes, key: number) => (
-                        <CharacterItem
-                          letterContacts={letterContacts}
-                          key={key}
-                          index={key}
-                          totalContacts={totalContacts}
-                          selectedContacts={selectedContacts}
-                          onSelectContact={onSelectContact}
-                        />
-                      )
-                    )}
-                  </AppSimpleBar>
-                </div>
-              </div>
-            </Collapse>
+    <div className="mb-4">
+      <label className="form-label">Channel Members</label>
+      <div className="mb-3">
+        <Button
+          color="light"
+          size="sm"
+          type="button"
+          onClick={toggleCollapse}
+        >
+          Select Members
+        </Button>
+      </div>
+      <Collapse isOpen={isOpenCollapse} id="groupmembercollapse">
+        <div className="card border">
+          <div className="card-header">
+            <h5 className="font-size-15 mb-0">Contacts</h5>
           </div>
-          <div className="mb-3">
-            <Label htmlFor="addgroupdescription-input" className="form-label">
-              Description
-            </Label>
-            <textarea
-              className="form-control"
-              id="addgroupdescription-input"
-              rows={3}
-              placeholder="Enter Description"
-              value={data.description || ""}
-              onChange={(e: any) => {
-                onDataChange("description", e.target.value);
-              }}
-            />
-            */}
+          <div className="card-body p-2">
+            <AppSimpleBar style={{ maxHeight: "150px" }}>
+              {(categorizedContacts || []).map(
+                (letterContacts: DivideByKeyResultTypes, key: number) => (
+                  <CharacterItem
+                    letterContacts={letterContacts}
+                    key={key}
+                    index={key}
+                    totalContacts={totalContacts}
+                    selectedContacts={selectedContacts}
+                    onSelectContact={onSelectContact}
+                  />
+                )
+              )}
+            </AppSimpleBar>
           </div>
-            */}
+        </div>
+      </Collapse>
+    </div>
+    <div className="mb-3">
+      <Label htmlFor="addgroupdescription-input" className="form-label">
+        Description
+      </Label>
+      <textarea
+        className="form-control"
+        id="addgroupdescription-input"
+        rows={3}
+        placeholder="Enter Description"
+        value={data.description || ""}
+        onChange={(e: any) => {
+          onDataChange("description", e.target.value);
+        }}
+      />
+        </div>
+      */}
         </Form>
       </ModalBody>
       <ModalFooter>
