@@ -42,10 +42,10 @@ const Chats = persistReducer(
               isContactsAdded: false,
             };
           case ChatsActionTypes.GET_CHANNELS:
-            console.log("444", action.payload.data.channelUser);
+            console.log("response:\n", action.payload.data);
             return {
               ...state,
-              channels: action.payload.data.channelUser,
+              channels: action.payload.data.channel,
               isChannelsFetched: true,
               getChannelsLoading: false,
               isChannelCreated: false,
