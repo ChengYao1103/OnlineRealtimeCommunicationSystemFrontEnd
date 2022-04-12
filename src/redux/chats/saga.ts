@@ -90,7 +90,7 @@ function* createChannel({ payload: channelData }: any) {
     );
     yield call(showSuccessNotification, response + "");
   } catch (error: any) {
-    yield call(showErrorNotification, error);
+    yield call(showErrorNotification, error.data.message);
     yield put(chatsApiResponseError(ChatsActionTypes.CREATE_CHANNEL, error));
   }
 }

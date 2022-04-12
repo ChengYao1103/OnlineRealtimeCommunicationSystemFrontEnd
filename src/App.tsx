@@ -14,11 +14,11 @@ import Routes from "./routes";
 // import { initFirebaseBackend } from "./helpers/firebase_helper";
 
 //api config
-// import config from "./config";
-import fakeBackend from "./helpers/fakeBackend";
+import config from "./config";
+//import fakeBackend from "./helpers/fakeBackend";
 
 // TODO
-fakeBackend();
+//fakeBackend();
 
 // const firebaseConfig = {
 //   apiKey: config.FIRE_BASE.API_KEY,

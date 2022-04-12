@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { userModel } from "../../../redux/auth/types";
+import coverPlaceHolder from "../../../assets/images/pattern-1.jpg";
+import avatarPlaceHolder from "../../../assets/images/users/profile-placeholder.png";
 
 import {
   Dropdown,
@@ -47,6 +49,14 @@ const MyProfile = ({ user, basicDetails }: MyProfileProps) => {
         {basicDetails && basicDetails.coverImage && (
           <img
             src={basicDetails.coverImage}
+            className="profile-img"
+            style={{ height: "160px" }}
+            alt=""
+          />
+        )}
+        {!basicDetails && (
+          <img
+            src={coverPlaceHolder}
             className="profile-img"
             style={{ height: "160px" }}
             alt=""
@@ -103,9 +113,16 @@ const MyProfile = ({ user, basicDetails }: MyProfileProps) => {
 
       <div className="text-center p-3 p-lg-4 border-bottom pt-2 pt-lg-2 mt-n5 position-relative">
         <div className="mb-lg-3 mb-2">
-          {basicDetails && basicDetails.coverImage && (
+          {basicDetails && basicDetails.avatar && (
             <img
               src={basicDetails.avatar}
+              className="rounded-circle avatar-lg img-thumbnail"
+              alt=""
+            />
+          )}
+          {(!basicDetails || !basicDetails.avatar) && (
+            <img
+              src={avatarPlaceHolder}
               className="rounded-circle avatar-lg img-thumbnail"
               alt=""
             />
