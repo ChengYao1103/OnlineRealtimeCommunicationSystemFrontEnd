@@ -47,10 +47,15 @@ const postSocialLogin = (data: any) => {
   return api.create(url.SOCIAL_LOGIN, data);
 };
 
+// get auth user's information
+const getAuthInfo = () => {
+  return api.get(url.GET_AUTH_INFOMATION);
+};
+
 // get other user's information
-const getUserInfo = (data: object) => {
-  //let destUrl = `${url.GET_USER_INFOMATION}/${userId}`;
-  return api.get(url.GET_USER_INFOMATION, data);
+const getUserInfo = (userId: string) => {
+  let destUrl = `/user/${userId}`;
+  return api.get(destUrl);
 };
 
 export {
@@ -63,5 +68,6 @@ export {
   changePassword,
   postSocialLogin,
   changeInformation,
+  getAuthInfo,
   getUserInfo,
 };

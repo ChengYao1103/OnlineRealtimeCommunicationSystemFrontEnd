@@ -13,6 +13,7 @@ export enum AuthActionTypes {
   REGISTER_USER = "@@auth/REGISTER_USER",
 
   USER_CHANGE_INFORMATION = "@@auth/USER_CHANGE_INFORMATION",
+  GET_AUTH_INFOMATION = "@@auth/GET_AUTH_INFOMATION",
   GET_USER_INFOMATION = "@@auth/GET_USER_INFOMATION",
 }
 
@@ -27,9 +28,11 @@ export interface userModel {
   id: number;
   name: string;
   role: number;
+  cover: string;
+  photo: string;
 }
 
-const init_user = { email: "", id: 0, name: "", role: 0 };
+const init_user = { email: "", id: 0, name: "", role: 0, cover: "", photo: "" };
 export const init_response = { error: "", token: "", user: init_user };
 
 export interface AuthState {

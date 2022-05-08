@@ -24,6 +24,7 @@ import {
   changePassword as changePasswordApi,
   postJwtRegister,
   changeInformation as changeInformationApi,
+  getAuthInfo as getAuthInfoApi,
   getUserInfo as getUserInfoApi,
 } from "../../api/index";
 
@@ -162,9 +163,21 @@ function* userChangeInformation({ payload: { data } }: any) {
 }
 
 //////////Get user information
+function* getAuthInformation() {
+  try {
+    const response: Promise<any> = yield call(getAuthInfoApi);
+    yield put(
+      authApiResponseSuccess(AuthActionTypes.GET_AUTH_INFOMATION, response)
+    );
+  } catch (error: any) {
+    yield put(authApiResponseError(AuthActionTypes.GET_AUTH_INFOMATION, error));
+  }
+}
+
+//////////Get user information
 function* getUserInformation({ payload: data }: any) {
   try {
-    const response: Promise<any> = yield call(getUserInfoApi, data);
+    const response: Promise<any> = yield call(getUserInfoApi, data.userId);
     yield put(
       authApiResponseSuccess(AuthActionTypes.GET_USER_INFOMATION, response)
     );
@@ -198,6 +211,7 @@ function* AuthSaga() {
     AuthActionTypes.USER_CHANGE_INFORMATION,
     userChangeInformation
   );
+  yield takeEvery(AuthActionTypes.GET_AUTH_INFOMATION, getAuthInformation);
   yield takeEvery(AuthActionTypes.GET_USER_INFOMATION, getUserInformation);
 }
 

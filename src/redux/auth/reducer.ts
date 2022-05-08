@@ -66,6 +66,12 @@ const Auth = persistReducer(
             state.changeInfomationError = undefined;
             state.informationChanged = true;
             return { ...state };
+          case AuthActionTypes.GET_AUTH_INFOMATION:
+            state.loading = false;
+            state.getInfoError = undefined;
+            state.response.user = action.payload.data.user;
+            console.log(state.response);
+            return { ...state };
           case AuthActionTypes.GET_USER_INFOMATION:
             state.loading = false;
             state.getInfoError = undefined;
@@ -107,6 +113,11 @@ const Auth = persistReducer(
             state.loading = false;
             state.changeInfomationError = action.payload.error.data.msg;
             state.informationChanged = false;
+            return { ...state };
+          case AuthActionTypes.GET_AUTH_INFOMATION:
+            state.loading = false;
+            state.getInfoError = action.payload.data.msg;
+            console.log(state.getInfoError);
             return { ...state };
           case AuthActionTypes.GET_USER_INFOMATION:
             state.loading = false;
@@ -155,6 +166,10 @@ const Auth = persistReducer(
         state.loading = true;
         state.changeInfomationError = undefined;
         state.informationChanged = false;
+        return { ...state };
+
+      case AuthActionTypes.GET_AUTH_INFOMATION:
+        state.loading = true;
         return { ...state };
 
       case AuthActionTypes.GET_USER_INFOMATION:

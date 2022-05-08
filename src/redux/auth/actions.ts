@@ -68,10 +68,18 @@ export const userChangeInformation = (data: any) => {
   };
 };
 
+// Get auth user information
+export const getAuthInformation = () => {
+  return {
+    type: AuthActionTypes.GET_AUTH_INFOMATION,
+    payload: {},
+  };
+};
+
 // Get user information
-export const getUserInformation = (id: number) => {
+export const getUserInformation = (userId: string) => {
   return {
     type: AuthActionTypes.GET_USER_INFOMATION,
-    payload: { id },
+    payload: { userId },
   };
 };

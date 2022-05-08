@@ -18,7 +18,7 @@ import { TABS } from "../../../constants/index";
 
 // actions
 import { changeTab } from "../../../redux/actions";
-import { getUserInformation } from "../../../redux/actions";
+import { getAuthInformation, getUserInformation } from "../../../redux/actions";
 
 // interface
 import { BasicDetailsTypes } from "../../../data/myProfile";
@@ -38,9 +38,13 @@ const MyProfile = ({ user, basicDetails }: MyProfileProps) => {
     dispatch(changeTab(TABS.SETTINGS));
   };
 
-  const testGetInfo = () => {
+  const testGetAuthInfo = () => {
+    dispatch(getAuthInformation());
+  };
+
+  const testGetUserInfo = () => {
     let id = 3;
-    dispatch(getUserInformation(id));
+    dispatch(getUserInformation(id.toString()));
   };
 
   return (
@@ -83,9 +87,17 @@ const MyProfile = ({ user, basicDetails }: MyProfileProps) => {
                       <DropdownItem
                         className="d-flex align-items-center justify-content-between"
                         href="#"
-                        onClick={() => testGetInfo()}
+                        onClick={() => testGetAuthInfo()}
                       >
                         Info{" "}
+                        <i className="bx bx-info-circle ms-2 text-muted"></i>
+                      </DropdownItem>
+                      <DropdownItem
+                        className="d-flex align-items-center justify-content-between"
+                        href="#"
+                        onClick={() => testGetUserInfo()}
+                      >
+                        test get user by id{" "}
                         <i className="bx bx-info-circle ms-2 text-muted"></i>
                       </DropdownItem>
                       <DropdownItem
