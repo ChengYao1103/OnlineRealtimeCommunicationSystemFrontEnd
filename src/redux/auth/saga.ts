@@ -82,6 +82,7 @@ function* socialLogin({ payload: { data, type } }: any) {
 function* logoutUser() {
   try {
     localStorage.removeItem("authUser");
+    localStorage.removeItem("token");
     if (process.env.REACT_APP_DEFAULTAUTH === "firebase") {
       const response: Promise<any> = yield call(fireBaseBackend.logout);
       yield put(authApiResponseSuccess(AuthActionTypes.LOGOUT_USER, response));
@@ -163,7 +164,7 @@ function* userChangeInformation({ payload: { data } }: any) {
 //////////Get user information
 function* getUserInformation({ payload: data }: any) {
   try {
-    const response: Promise<any> = yield call(getUserInfoApi, data.userId);
+    const response: Promise<any> = yield call(getUserInfoApi, data);
     yield put(
       authApiResponseSuccess(AuthActionTypes.GET_USER_INFOMATION, response)
     );

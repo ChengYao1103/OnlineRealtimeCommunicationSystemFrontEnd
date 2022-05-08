@@ -40,7 +40,7 @@ const MyProfile = ({ user, basicDetails }: MyProfileProps) => {
 
   const testGetInfo = () => {
     let id = 3;
-    dispatch(getUserInformation(id.toString()));
+    dispatch(getUserInformation(id));
   };
 
   return (

@@ -10,7 +10,7 @@ export const POST_FAKE_REGISTER = "/post-fake-register";
 // profile & settings
 export const USER_CHANGE_PASSWORD = "/user/changePassword";
 export const USER_CHANGE_INFOMATION = "/user/changeInformation";
-export const GET_USER_INFOMATION = "/user";
+export const GET_USER_INFOMATION = "/user/information";
 export const GET_PROFILE_DETAILS = "/profile-details";
 export const GET_USER_SETTINGS = "/user-settings";
 export const UPDATE_ETTINGS = "/update-user-settings";

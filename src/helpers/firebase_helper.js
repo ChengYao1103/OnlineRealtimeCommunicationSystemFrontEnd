@@ -185,7 +185,7 @@ class FirebaseAuthBackend {
 let _fireBaseBackend = null;
 
 const setLoggeedInUser = user => {
-  localStorage.setItem("authUser", JSON.stringify(user));
+  localStorage.setItem("authUser", JSON.stringify(user["user"]));
   setAuthorization(user["token"]);
 };
 
