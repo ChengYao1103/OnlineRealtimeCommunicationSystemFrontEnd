@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import avatarPlaceHolder from "../../../assets/images/users/profile-placeholder.png";
 import {
   Label,
   Dropdown,
@@ -36,14 +37,13 @@ const UserProfile = ({ basicDetails, user, status }: UserProfileProps) => {
   const onChangeProfile = (e: any) => {
     const files = [...e.target.files];
     if (files[0]) {
-      const src = URL.createObjectURL(files[0]);
+      //const src = URL.createObjectURL(files[0]);
       // 將圖片轉換為base64
       const reader = new FileReader();
       reader.readAsDataURL(files[0]);
       reader.onload = () => {
         //儲存轉換完成之圖片
         const base64 = reader.result;
-        console.log(base64);
         if (typeof base64 === "string") {
           setImage(base64);
         }
@@ -74,7 +74,7 @@ const UserProfile = ({ basicDetails, user, status }: UserProfileProps) => {
     <div className="text-center p-3 p-lg-4 border-bottom pt-2 pt-lg-2 mt-n5 position-relative">
       <div className="mb-3 profile-user">
         <img
-          src={image}
+          src={image ? image : avatarPlaceHolder}
           className="rounded-circle avatar-lg img-thumbnail user-profile-image"
           alt="user-profile"
         />

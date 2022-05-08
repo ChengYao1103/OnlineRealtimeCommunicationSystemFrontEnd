@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Label, UncontrolledTooltip } from "reactstrap";
+import coverPlaceHolder from "../../../assets/images/pattern-1.jpg";
 
 // interface
 import { BasicDetailsTypes } from "../../../data/settings";
@@ -20,13 +21,22 @@ const UserCoverImage = ({ basicDetails }: UserCoverImageProps) => {
     const files = [...e.target.files];
     if (files[0]) {
       const src = URL.createObjectURL(files[0]);
-      setImage(src);
+      // 將圖片轉換為base64
+      const reader = new FileReader();
+      reader.readAsDataURL(files[0]);
+      reader.onload = () => {
+        //儲存轉換完成之圖片
+        const base64 = reader.result;
+        if (typeof base64 === "string") {
+          setImage(base64);
+        }
+      };
     }
   };
   return (
     <div className="user-profile-img">
       <img
-        src={image}
+        src={image ? image : coverPlaceHolder}
         className="profile-img profile-foreground-img"
         style={{ height: "160px" }}
         alt=""
