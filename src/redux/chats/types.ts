@@ -36,6 +36,21 @@ export interface Channel {
   recordPath: string;
 }
 
+export interface senderModel {
+  name: string | null;
+  email: string | null;
+  id: number | null;
+}
+
+let contentTypes = ["文字", "圖片", "音訊", "檔案"];
+
+export interface messageModel {
+  sender: senderModel | null;
+  receiverID: number;
+  content: any;
+  type: number;
+}
+
 export interface ChatsState {
   favourites: Array<any>;
   directMessages: Array<any>;

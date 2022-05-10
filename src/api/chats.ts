@@ -34,6 +34,10 @@ const getChatUserConversations = (id: string | number) => {
   });
 };
 
+const getRecentChat = (data: object) => {
+  return api.get(url.GET_RECENT_CHAT, data);
+};
+
 const sendMessage = (data: object) => {
   return api.create(url.SEND_MESSAGE, data);
 };
@@ -111,6 +115,7 @@ export {
   createChannel,
   getChatUserDetails,
   getChatUserConversations,
+  getRecentChat,
   sendMessage,
   receiveMessage,
   readMessage,

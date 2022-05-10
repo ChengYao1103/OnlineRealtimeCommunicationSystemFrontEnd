@@ -23,6 +23,11 @@ interface AuthLoginResponse {
   user: userModel;
 }
 
+export interface getUserIdResponse {
+  data: any;
+  status: number;
+}
+
 export interface userModel {
   email: string;
   id: number;

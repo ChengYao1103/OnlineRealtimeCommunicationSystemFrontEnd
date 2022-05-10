@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
-
+import { toast } from "react-toastify";
 import { Button, Form, UncontrolledTooltip } from "reactstrap";
 import { Link } from "react-router-dom";
+// get receiver id api
+import { getUserIdByEmail } from "../../../api/index";
 // hooks
 import { useRedux } from "../../../hooks/index";
 
@@ -24,12 +26,15 @@ import {
 
 // interfaces
 import { CreateChannelPostData } from "../../../redux/actions";
-import { userModel } from "../../../redux/auth/types";
+import { getUserIdResponse, userModel } from "../../../redux/auth/types";
+import { messageModel } from "../../../redux/chats/types";
+import { DataTypes as newMessageTypes } from "../../../components/StartNewMessageModal";
 
 // components
 import AppSimpleBar from "../../../components/AppSimpleBar";
 import AddGroupModal from "../../../components/AddGroupModal";
 import InviteContactModal from "../../../components/InviteContactModal";
+import StartNewMessageModal from "../../../components/StartNewMessageModal";
 import AddButton from "../../../components/AddButton";
 import ContactModal from "../../../components/ContactModal";
 
@@ -115,21 +120,43 @@ const Index = (props: IndexProps) => {
   }, [dispatch, isContactInvited]);
 
   /*
-  contact add handeling
+  Start a new message handeling
   */
-  const [isOpenAddContact, setIsOpenAddContact] = useState<boolean>(false);
-  const openAddContactModal = () => {
-    setIsOpenAddContact(true);
+  const [isOpenNewMessage, setIsOpenNewMessage] = useState<boolean>(false);
+  const openNewMessageModal = () => {
+    setIsOpenNewMessage(true);
   };
-  const closeAddContactModal = () => {
-    setIsOpenAddContact(false);
+  const closeNewMessageModal = () => {
+    setIsOpenNewMessage(false);
   };
-  const onAddContact = (contacts: Array<string | number>) => {
-    dispatch(addContacts(contacts));
+  const onCreateNewMessage = async (contacts: newMessageTypes) => {
+    let response: getUserIdResponse = { data: {}, status: 0 };
+    if (contacts.email) {
+      response = await getUserIdByEmail(contacts.email);
+    }
+    if (response.status === 200) {
+      if (response.data.id === 0) {
+        toast.error("The email is incorrect, no corresponding user.");
+      } else {
+        let data: messageModel = {
+          sender: contacts.sender,
+          receiverID: response.data.userId,
+          content: contacts.content,
+          type: 0,
+        };
+        //dispatch(addContacts(contacts));
+        console.log(data, response);
+      }
+    } else if (response.status === 401) {
+      toast.error(response.data.msg);
+    } else {
+      toast.error(response.data.message);
+    }
+    console.log(contacts, response);
   };
   useEffect(() => {
     if (isContactsAdded) {
-      setIsOpenAddContact(false);
+      setIsOpenNewMessage(false);
       dispatch(getDirectMessages());
     }
   }, [dispatch, isContactsAdded]);
@@ -248,7 +275,7 @@ const Index = (props: IndexProps) => {
               {/* direct messages */}
               <DirectMessages
                 users={directMessages}
-                openAddContact={openAddContactModal}
+                openAddContact={openNewMessageModal}
                 selectedChat={selectedChat}
                 onSelectChat={onSelectChat}
               />
@@ -313,11 +340,13 @@ const Index = (props: IndexProps) => {
         />
       )}
 
-      {isOpenAddContact && (
-        <ContactModal
-          isOpen={isOpenAddContact}
-          onClose={closeAddContactModal}
-          onAddContact={onAddContact}
+      {/* start new message modal */}
+      {isOpenNewMessage && (
+        <StartNewMessageModal
+          user={authUser}
+          isOpen={isOpenNewMessage}
+          onClose={closeNewMessageModal}
+          onCreateNewMessage={onCreateNewMessage}
         />
       )}
     </>

@@ -5,7 +5,8 @@ import config from "../config";
 axios.defaults.baseURL = config.API_URL;
 
 // content type
-axios.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded";
+axios.defaults.headers.post["Content-Type"] =
+  "application/x-www-form-urlencoded";
 
 // intercepting to capture errors
 axios.interceptors.response.use(
@@ -36,8 +37,9 @@ axios.interceptors.response.use(
   }
 );
 
-if (localStorage.getItem("token") !== null){
-  axios.defaults.headers.common["Authorization"] = localStorage.getItem("token");
+if (localStorage.getItem("token") !== null) {
+  axios.defaults.headers.common["Authorization"] =
+    localStorage.getItem("token");
 }
 
 /**
@@ -46,7 +48,8 @@ if (localStorage.getItem("token") !== null){
  */
 const setAuthorization = (token: any) => {
   localStorage.setItem("token", "Bearer " + token);
-  axios.defaults.headers.common["Authorization"] = localStorage.getItem("token");
+  axios.defaults.headers.common["Authorization"] =
+    localStorage.getItem("token");
 };
 
 class APIClient {

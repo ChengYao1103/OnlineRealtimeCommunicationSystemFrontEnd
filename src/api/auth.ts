@@ -1,3 +1,4 @@
+import { getUserIdResponse } from "../redux/auth/types";
 import { APIClient } from "./apiCore";
 import * as url from "./urls";
 
@@ -58,6 +59,24 @@ const getUserInfo = (userId: string) => {
   return api.get(destUrl);
 };
 
+// get user id by email
+async function getUserIdByEmail(email: string): Promise<getUserIdResponse> {
+  // 不經過redux，直接透過api回傳id，但不以object包住直接傳值的話無法執行
+  // 因此以加在網址後面的方式傳入值
+  try {
+    /*const { data, status } = await api.get(
+      `${url.GET_USERID_BY_EMAIL}?email=${email}`
+    );*/
+    const { data, status } = await api.get(url.GET_USERID_BY_EMAIL, {
+      email: email,
+    });
+    return { data, status };
+  } catch (err: any) {
+    const { data, status } = err;
+    return { data, status };
+  }
+}
+
 export {
   postFakeForgetPwd,
   postJwtForgetPwd,
@@ -70,4 +89,5 @@ export {
   changeInformation,
   getAuthInfo,
   getUserInfo,
+  getUserIdByEmail,
 };

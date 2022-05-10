@@ -6,11 +6,12 @@ export const POST_FAKE_JWT_PASSWORD_FORGET = "/jwt-forget-pwd";
 export const SOCIAL_LOGIN = "/social-login";
 export const JWT_REGISTER = "/user/register";
 export const POST_FAKE_REGISTER = "/post-fake-register";
+export const GET_AUTH_INFOMATION = "/user/information";
+export const GET_USERID_BY_EMAIL = "/user/getID";
 
 // profile & settings
 export const USER_CHANGE_PASSWORD = "/user/changePassword";
 export const USER_CHANGE_INFOMATION = "/user/changeInformation";
-export const GET_AUTH_INFOMATION = "/user/information";
 export const GET_PROFILE_DETAILS = "/profile-details";
 export const GET_USER_SETTINGS = "/user-settings";
 export const UPDATE_ETTINGS = "/update-user-settings";
@@ -28,12 +29,13 @@ export const DELETE_BOOKMARK = "/bookmarks-delete";
 export const UPDATE_BOOKMARK = "/bookmarks-update";
 
 // chats
+export const SEND_MESSAGE = "/message/send";
+export const GET_RECENT_CHAT = "/message/recentChat";
 export const GET_FAVOURITES = "/get-favourites";
 export const GET_DIRECT_MESSAGES = "/get-direct-messages";
 export const ADD_CONTACTS = "/add-contact";
 export const GET_CHAT_USER_DETAILS = "/get-user-details";
 export const GET_CHAT_USER_CONVERSATIONS = "/get-user-conversations";
-export const SEND_MESSAGE = "/send-message";
 export const RECEIVE_MESSAGE = "/receive-message";
 export const READ_MESSAGE = "/read-message";
 export const RECEIVE_MESSAGE_FROM_USER = "/receive-message-from-user";
