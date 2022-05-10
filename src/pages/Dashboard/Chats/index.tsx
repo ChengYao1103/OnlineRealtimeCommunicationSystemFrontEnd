@@ -3,7 +3,7 @@ import { toast } from "react-toastify";
 import { Button, Form, UncontrolledTooltip } from "reactstrap";
 import { Link } from "react-router-dom";
 // get receiver id api
-import { getUserIdByEmail } from "../../../api/index";
+import { getUserId } from "../../../redux/actions";
 // hooks
 import { useRedux } from "../../../hooks/index";
 
@@ -50,7 +50,7 @@ const Index = (props: IndexProps) => {
   const { dispatch, useAppSelector } = useRedux();
 
   const {
-    response,
+    AuthState,
     isContactInvited,
     favourites,
     directMessages,
@@ -63,7 +63,7 @@ const Index = (props: IndexProps) => {
     isContactArchiveToggled,
     chatUserDetails,
   } = useAppSelector(state => ({
-    response: state.Auth.response,
+    AuthState: state.Auth,
     isContactInvited: state.Contacts.isContactInvited,
     favourites: state.Chats.favourites,
     directMessages: state.Chats.directMessages,
@@ -76,7 +76,7 @@ const Index = (props: IndexProps) => {
     isContactArchiveToggled: state.Chats.isContactArchiveToggled,
     chatUserDetails: state.Chats.chatUserDetails,
   }));
-  const authUser: userModel = response.user;
+  const authUser: userModel = AuthState.response.user;
 
   /*
   get data
@@ -129,12 +129,14 @@ const Index = (props: IndexProps) => {
   const closeNewMessageModal = () => {
     setIsOpenNewMessage(false);
   };
-  const onCreateNewMessage = async (contacts: newMessageTypes) => {
-    let response: getUserIdResponse = { data: {}, status: 0 };
+  const onCreateNewMessage = (contacts: newMessageTypes) => {
     if (contacts.email) {
-      response = await getUserIdByEmail(contacts.email);
+      dispatch(getUserId(contacts.email));
     }
-    if (response.status === 200) {
+    if (AuthState.getInfoError !== undefined) {
+      toast.error(AuthState.getInfoError);
+    }
+    /*if (response.status === 200) {
       if (response.data.id === 0) {
         toast.error("The email is incorrect, no corresponding user.");
       } else {
@@ -151,8 +153,8 @@ const Index = (props: IndexProps) => {
       toast.error(response.data.msg);
     } else {
       toast.error(response.data.message);
-    }
-    console.log(contacts, response);
+    }*/
+    console.log(contacts);
   };
   useEffect(() => {
     if (isContactsAdded) {

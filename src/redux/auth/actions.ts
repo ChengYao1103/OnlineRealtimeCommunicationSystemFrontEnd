@@ -83,3 +83,11 @@ export const getUserInformation = (userId: string) => {
     payload: { userId },
   };
 };
+
+// get user id by email
+export const getUserId = (Email: string) => {
+  return {
+    type: AuthActionTypes.GET_USER_ID_BY_EMAIL,
+    payload: { Email },
+  };
+};

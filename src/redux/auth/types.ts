@@ -15,6 +15,7 @@ export enum AuthActionTypes {
   USER_CHANGE_INFORMATION = "@@auth/USER_CHANGE_INFORMATION",
   GET_AUTH_INFOMATION = "@@auth/GET_AUTH_INFOMATION",
   GET_USER_INFOMATION = "@@auth/GET_USER_INFOMATION",
+  GET_USER_ID_BY_EMAIL = "@@auth/GET_USER_ID_BY_EMAIL",
 }
 
 interface AuthLoginResponse {
@@ -56,6 +57,7 @@ export interface AuthState {
   isUserRegistered?: boolean;
   informationChanged?: boolean;
   changeInfomationError?: string;
+  otherUserId?: number;
   otherUserInfo?: userModel;
   getInfoError?: string;
 }

@@ -6,6 +6,7 @@ import {
   all,
   fork,
 } from "redux-saga/effects";
+import { toast } from "react-toastify";
 
 // Auth Redux States
 import { AuthActionTypes } from "./types";
@@ -26,6 +27,7 @@ import {
   changeInformation as changeInformationApi,
   getAuthInfo as getAuthInfoApi,
   getUserInfo as getUserInfoApi,
+  getUserIdByEmail as getUserIdByEmailApi,
 } from "../../api/index";
 
 const fireBaseBackend = getFirebaseBackend();
@@ -170,6 +172,7 @@ function* getAuthInformation() {
       authApiResponseSuccess(AuthActionTypes.GET_AUTH_INFOMATION, response)
     );
   } catch (error: any) {
+    toast.error(error.data.message ? error.data.message : error.data.msg);
     yield put(authApiResponseError(AuthActionTypes.GET_AUTH_INFOMATION, error));
   }
 }
@@ -182,7 +185,24 @@ function* getUserInformation({ payload: data }: any) {
       authApiResponseSuccess(AuthActionTypes.GET_USER_INFOMATION, response)
     );
   } catch (error: any) {
+    toast.error(error.data.message ? error.data.message : error.data.msg);
     yield put(authApiResponseError(AuthActionTypes.GET_USER_INFOMATION, error));
+  }
+}
+
+//////////Get user id by email
+function* getUserId({ payload: data }: any) {
+  try {
+    const response: Promise<any> = yield call(getUserIdByEmailApi, data);
+    console.log(response);
+    yield put(
+      authApiResponseSuccess(AuthActionTypes.GET_USER_ID_BY_EMAIL, response)
+    );
+  } catch (error: any) {
+    toast.error(error.data.message ? error.data.message : error.data.msg);
+    yield put(
+      authApiResponseError(AuthActionTypes.GET_USER_ID_BY_EMAIL, error)
+    );
   }
 }
 
@@ -213,6 +233,7 @@ function* AuthSaga() {
   );
   yield takeEvery(AuthActionTypes.GET_AUTH_INFOMATION, getAuthInformation);
   yield takeEvery(AuthActionTypes.GET_USER_INFOMATION, getUserInformation);
+  yield takeEvery(AuthActionTypes.GET_USER_ID_BY_EMAIL, getUserId);
 }
 
 export default AuthSaga;

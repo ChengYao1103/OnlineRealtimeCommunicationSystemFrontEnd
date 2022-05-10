@@ -18,6 +18,7 @@ export const INIT_STATE: AuthState = {
   isUserRegistered: undefined,
   informationChanged: undefined,
   changeInfomationError: undefined,
+  otherUserId: undefined,
   otherUserInfo: undefined,
   getInfoError: undefined,
 };
@@ -68,14 +69,17 @@ const Auth = persistReducer(
             return { ...state };
           case AuthActionTypes.GET_AUTH_INFOMATION:
             state.loading = false;
-            state.getInfoError = undefined;
             state.response.user = action.payload.data.user;
             console.log(state.response);
             return { ...state };
           case AuthActionTypes.GET_USER_INFOMATION:
             state.loading = false;
-            state.getInfoError = undefined;
             state.otherUserInfo = action.payload.data.user;
+            console.log(state.otherUserInfo);
+            return { ...state };
+          case AuthActionTypes.GET_USER_ID_BY_EMAIL:
+            state.loading = false;
+            state.otherUserId = action.payload.data.id;
             console.log(state.otherUserInfo);
             return { ...state };
           default:
@@ -116,13 +120,12 @@ const Auth = persistReducer(
             return { ...state };
           case AuthActionTypes.GET_AUTH_INFOMATION:
             state.loading = false;
-            state.getInfoError = action.payload.data.msg;
-            console.log(state.getInfoError);
             return { ...state };
           case AuthActionTypes.GET_USER_INFOMATION:
             state.loading = false;
-            state.getInfoError = action.payload.data.msg;
-            console.log(state.getInfoError);
+            return { ...state };
+          case AuthActionTypes.GET_USER_ID_BY_EMAIL:
+            state.loading = false;
             return { ...state };
           default:
             return { ...state };
@@ -173,6 +176,10 @@ const Auth = persistReducer(
         return { ...state };
 
       case AuthActionTypes.GET_USER_INFOMATION:
+        state.loading = true;
+        return { ...state };
+
+      case AuthActionTypes.GET_USER_ID_BY_EMAIL:
         state.loading = true;
         return { ...state };
 

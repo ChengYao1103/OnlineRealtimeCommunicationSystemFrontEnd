@@ -60,22 +60,28 @@ const getUserInfo = (userId: string) => {
 };
 
 // get user id by email
-async function getUserIdByEmail(email: string): Promise<getUserIdResponse> {
+/*async function getUserIdByEmail(email: string): Promise<getUserIdResponse> {
   // 不經過redux，直接透過api回傳id，但不以object包住直接傳值的話無法執行
   // 因此以加在網址後面的方式傳入值
   try {
-    /*const { data, status } = await api.get(
+    const { data, status } = await api.get(
       `${url.GET_USERID_BY_EMAIL}?email=${email}`
-    );*/
-    const { data, status } = await api.get(url.GET_USERID_BY_EMAIL, {
-      email: email,
+    );
+    const response = await api.get(url.GET_USERID_BY_EMAIL, {
+      params: {
+        email: email,
+      },
     });
-    return { data, status };
+    return response;
   } catch (err: any) {
     const { data, status } = err;
     return { data, status };
   }
-}
+}*/
+const getUserIdByEmail = (data: any) => {
+  console.log(data);
+  return api.get(url.GET_USERID_BY_EMAIL, data);
+};
 
 export {
   postFakeForgetPwd,
