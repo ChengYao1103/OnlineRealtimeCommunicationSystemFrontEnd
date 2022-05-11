@@ -14,19 +14,16 @@ import {
 
 /* interface */
 interface StartNewMessageModalProps {
-  user: userModel;
   isOpen: boolean;
   onClose: () => void;
   onCreateNewMessage: (data: any) => void;
 }
 export interface DataTypes {
-  sender: senderModel | null;
   email: string | null;
   content: string | null;
 }
 
 const StartNewMessageModal = ({
-  user,
   isOpen,
   onClose,
   onCreateNewMessage: onInvite,
@@ -35,13 +32,11 @@ const StartNewMessageModal = ({
   data input handeling
   */
   const [data, setData] = useState<DataTypes>({
-    sender: null,
     email: null,
     content: null,
   });
   useEffect(() => {
     setData({
-      sender: { name: user.name, email: user.email, id: user.id },
       email: null,
       content: null,
     });

@@ -1,4 +1,3 @@
-import { getUserIdResponse } from "../redux/auth/types";
 import { APIClient } from "./apiCore";
 import * as url from "./urls";
 
@@ -60,7 +59,7 @@ const getUserInfo = (userId: string) => {
 };
 
 // get user id by email
-/*async function getUserIdByEmail(email: string): Promise<getUserIdResponse> {
+/*async function getUserIdByEmail(email: string): Promise<> {
   // 不經過redux，直接透過api回傳id，但不以object包住直接傳值的話無法執行
   // 因此以加在網址後面的方式傳入值
   try {
@@ -79,8 +78,7 @@ const getUserInfo = (userId: string) => {
   }
 }*/
 const getUserIdByEmail = (data: any) => {
-  console.log(data);
-  return api.get(url.GET_USERID_BY_EMAIL, data);
+  return api.create(url.GET_USERID_BY_EMAIL, data);
 };
 
 export {

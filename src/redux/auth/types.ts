@@ -16,17 +16,13 @@ export enum AuthActionTypes {
   GET_AUTH_INFOMATION = "@@auth/GET_AUTH_INFOMATION",
   GET_USER_INFOMATION = "@@auth/GET_USER_INFOMATION",
   GET_USER_ID_BY_EMAIL = "@@auth/GET_USER_ID_BY_EMAIL",
+  CLEAR_OTHER_USER_ID = "@@auth/CLEAR_OTHER_USER_ID",
 }
 
 interface AuthLoginResponse {
   error: string;
   token: string;
   user: userModel;
-}
-
-export interface getUserIdResponse {
-  data: any;
-  status: number;
 }
 
 export interface userModel {

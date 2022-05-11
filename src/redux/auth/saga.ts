@@ -194,7 +194,6 @@ function* getUserInformation({ payload: data }: any) {
 function* getUserId({ payload: data }: any) {
   try {
     const response: Promise<any> = yield call(getUserIdByEmailApi, data);
-    console.log(response);
     yield put(
       authApiResponseSuccess(AuthActionTypes.GET_USER_ID_BY_EMAIL, response)
     );

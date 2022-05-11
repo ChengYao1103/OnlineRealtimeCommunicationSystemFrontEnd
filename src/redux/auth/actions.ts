@@ -91,3 +91,10 @@ export const getUserId = (Email: string) => {
     payload: { Email },
   };
 };
+// clear other user id state
+export const clearOtherUserId = () => {
+  return {
+    type: AuthActionTypes.CLEAR_OTHER_USER_ID,
+    payload: {},
+  };
+};

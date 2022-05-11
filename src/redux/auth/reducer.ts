@@ -80,7 +80,6 @@ const Auth = persistReducer(
           case AuthActionTypes.GET_USER_ID_BY_EMAIL:
             state.loading = false;
             state.otherUserId = action.payload.data.id;
-            console.log(state.otherUserInfo);
             return { ...state };
           default:
             return { ...state };
@@ -181,6 +180,10 @@ const Auth = persistReducer(
 
       case AuthActionTypes.GET_USER_ID_BY_EMAIL:
         state.loading = true;
+        return { ...state };
+
+      case AuthActionTypes.CLEAR_OTHER_USER_ID:
+        state.otherUserId = undefined;
         return { ...state };
 
       default:

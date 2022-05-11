@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { Button, Form, UncontrolledTooltip } from "reactstrap";
 import { Link } from "react-router-dom";
-// get receiver id api
-import { getUserId } from "../../../redux/actions";
+// action
+import { getUserId, clearOtherUserId } from "../../../redux/actions";
 // hooks
 import { useRedux } from "../../../hooks/index";
 
@@ -26,7 +26,7 @@ import {
 
 // interfaces
 import { CreateChannelPostData } from "../../../redux/actions";
-import { getUserIdResponse, userModel } from "../../../redux/auth/types";
+import { userModel } from "../../../redux/auth/types";
 import { messageModel } from "../../../redux/chats/types";
 import { DataTypes as newMessageTypes } from "../../../components/StartNewMessageModal";
 
@@ -122,7 +122,24 @@ const Index = (props: IndexProps) => {
   /*
   Start a new message handeling
   */
+  const sender = {
+    id: authUser.id,
+    email: authUser.email,
+    name: authUser.name,
+  };
   const [isOpenNewMessage, setIsOpenNewMessage] = useState<boolean>(false);
+  const [isGetReceicerId, setIsGetReceicerId] = useState<boolean>(false);
+  const [onSendMessage, setOnSendMessage] = useState<boolean>(false);
+  const [contacts, setContacts] = useState<newMessageTypes>({
+    email: null,
+    content: null,
+  });
+  const [newMessageData, setNewMessageData] = useState<messageModel>({
+    sender: sender,
+    receiverID: 0,
+    content: null,
+    type: 0,
+  });
   const openNewMessageModal = () => {
     setIsOpenNewMessage(true);
   };
@@ -131,31 +148,54 @@ const Index = (props: IndexProps) => {
   };
   const onCreateNewMessage = (contacts: newMessageTypes) => {
     if (contacts.email) {
+      setContacts(contacts);
       dispatch(getUserId(contacts.email));
+      setIsGetReceicerId(false);
+      setOnSendMessage(true);
     }
-    if (AuthState.getInfoError !== undefined) {
-      toast.error(AuthState.getInfoError);
-    }
-    /*if (response.status === 200) {
-      if (response.data.id === 0) {
-        toast.error("The email is incorrect, no corresponding user.");
-      } else {
-        let data: messageModel = {
-          sender: contacts.sender,
-          receiverID: response.data.userId,
+  };
+  useEffect(() => {
+    if (AuthState.otherUserId && !isGetReceicerId) {
+      setIsGetReceicerId(true);
+      if (AuthState.otherUserId === authUser.id) {
+        toast.error("Can't send message to self.");
+      } else if (AuthState.otherUserId !== 0) {
+        setNewMessageData({
+          sender: sender,
+          receiverID: AuthState.otherUserId,
           content: contacts.content,
           type: 0,
-        };
-        //dispatch(addContacts(contacts));
-        console.log(data, response);
+        });
+      } else {
+        toast.error("No corresponding user, please check email again.");
       }
-    } else if (response.status === 401) {
-      toast.error(response.data.msg);
-    } else {
-      toast.error(response.data.message);
-    }*/
-    console.log(contacts);
-  };
+    }
+    if (AuthState.otherUserId && isGetReceicerId) {
+      dispatch(clearOtherUserId());
+    }
+    if (newMessageData.receiverID !== 0 && onSendMessage) {
+      setOnSendMessage(false);
+      console.log(newMessageData);
+      //dispatch(...(newMessageData));
+      setNewMessageData({
+        sender: sender,
+        receiverID: 0,
+        content: null,
+        type: 0,
+      });
+    }
+    /*setTimeout(() => {
+        dispatch(resetContacts("isContactInvited", false));
+      }, 1000);*/
+  }, [
+    dispatch,
+    AuthState,
+    authUser,
+    isGetReceicerId,
+    onSendMessage,
+    contacts,
+    newMessageData,
+  ]);
   useEffect(() => {
     if (isContactsAdded) {
       setIsOpenNewMessage(false);
@@ -345,7 +385,6 @@ const Index = (props: IndexProps) => {
       {/* start new message modal */}
       {isOpenNewMessage && (
         <StartNewMessageModal
-          user={authUser}
           isOpen={isOpenNewMessage}
           onClose={closeNewMessageModal}
           onCreateNewMessage={onCreateNewMessage}
