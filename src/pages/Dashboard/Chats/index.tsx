@@ -122,11 +122,6 @@ const Index = (props: IndexProps) => {
   /*
   Start a new message handeling
   */
-  const sender = {
-    id: authUser.id,
-    email: authUser.email,
-    name: authUser.name,
-  };
   const [isOpenNewMessage, setIsOpenNewMessage] = useState<boolean>(false);
   const [isGetReceicerId, setIsGetReceicerId] = useState<boolean>(false);
   const [onSendMessage, setOnSendMessage] = useState<boolean>(false);
@@ -135,7 +130,11 @@ const Index = (props: IndexProps) => {
     content: null,
   });
   const [newMessageData, setNewMessageData] = useState<messageModel>({
-    sender: sender,
+    sender: {
+      id: authUser.id,
+      email: authUser.email,
+      name: authUser.name,
+    },
     receiverID: 0,
     content: null,
     type: 0,
@@ -161,7 +160,11 @@ const Index = (props: IndexProps) => {
         toast.error("Can't send message to self.");
       } else if (AuthState.otherUserId !== 0) {
         setNewMessageData({
-          sender: sender,
+          sender: {
+            id: authUser.id,
+            email: authUser.email,
+            name: authUser.name,
+          },
           receiverID: AuthState.otherUserId,
           content: contacts.content,
           type: 0,
@@ -178,7 +181,11 @@ const Index = (props: IndexProps) => {
       console.log(newMessageData);
       //dispatch(...(newMessageData));
       setNewMessageData({
-        sender: sender,
+        sender: {
+          id: authUser.id,
+          email: authUser.email,
+          name: authUser.name,
+        },
         receiverID: 0,
         content: null,
         type: 0,
