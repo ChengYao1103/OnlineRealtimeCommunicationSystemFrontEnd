@@ -79,6 +79,9 @@ const Chats = persistReducer(
               isMessageDeleted: false,
               isMessageForwarded: false,
             };
+          case ChatsActionTypes.GET_RECENT_CHAT:
+            console.log(action.payload.data);
+            return { ...state };
           case ChatsActionTypes.ON_SEND_MESSAGE:
             return {
               ...state,

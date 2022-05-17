@@ -12,7 +12,8 @@ import {
   createChannel as createChannelApi,
   getChatUserDetails as getChatUserDetailsApi,
   getChatUserConversations as getChatUserConversationsApi,
-  sendMessage,
+  getRecentChat as getRecentChatApi,
+  sendMessage as sendMessageApi,
   receiveMessage as receiveMessageApi,
   readMessage as readMessageApi,
   receiveMessageFromUser as receiveMessageFromUserApi,
@@ -72,6 +73,20 @@ function* getChannels({ payload: data }: any) {
   }
 }
 
+function* getRecentChat({ payload: data }: any) {
+  try {
+    const response: Promise<any> = yield call(getRecentChatApi, {
+      n: data.amount,
+      m: data.userId,
+    });
+    yield put(
+      chatsApiResponseSuccess(ChatsActionTypes.GET_RECENT_CHAT, response)
+    );
+  } catch (error: any) {
+    yield put(chatsApiResponseError(ChatsActionTypes.GET_RECENT_CHAT, error));
+  }
+}
+
 function* addContacts({ payload: contacts }: any) {
   try {
     const response: Promise<any> = yield call(addContactsApi, contacts);
@@ -126,7 +141,7 @@ function* getChatUserConversations({ payload: id }: any) {
 
 function* onSendMessage({ payload: data }: any) {
   try {
-    const response: Promise<any> = yield call(sendMessage, data);
+    const response: Promise<any> = yield call(sendMessageApi, data);
     yield put(
       chatsApiResponseSuccess(ChatsActionTypes.ON_SEND_MESSAGE, response)
     );
@@ -326,6 +341,9 @@ export function* watchGetChatUserConversations() {
     getChatUserConversations
   );
 }
+export function* watchGetRecentChat() {
+  yield takeEvery(ChatsActionTypes.GET_RECENT_CHAT, getRecentChat);
+}
 export function* watchOnSendMessage() {
   yield takeEvery(ChatsActionTypes.ON_SEND_MESSAGE, onSendMessage);
 }
@@ -384,6 +402,7 @@ function* chatsSaga() {
     fork(watchCreateChannel),
     fork(watchGetChatUserDetails),
     fork(watchGetChatUserConversations),
+    fork(watchGetRecentChat),
     fork(watchOnSendMessage),
     fork(watchReceiveMessage),
     fork(watchReadMessage),

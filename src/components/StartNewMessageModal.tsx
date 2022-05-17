@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { userModel } from "../redux/auth/types";
-import { senderModel } from "../redux/chats/types";
 import {
   Form,
   Button,

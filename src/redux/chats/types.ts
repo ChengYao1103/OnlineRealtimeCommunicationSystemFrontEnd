@@ -11,6 +11,7 @@ export enum ChatsActionTypes {
   CHANGE_SELECTED_CHAT = "@@chats/CHANGE_SELECTED_CHAT",
   GET_CHAT_USER_DETAILS = "@@chats/GET_CHAT_USER_DETAILS",
   GET_CHAT_USER_CONVERSATIONS = "@@chats/GET_CHAT_USER_CONVERSATIONS",
+  GET_RECENT_CHAT = "@@chats/GET_RECENT_CHAT",
   TOGGLE_USER_DETAILS_TAB = "@@chats/TOGGLE_USER_DETAILS_TAB",
 
   // MESSAGE
@@ -45,7 +46,6 @@ export interface senderModel {
 let contentTypes = ["文字", "圖片", "音訊", "檔案"];
 
 export interface messageModel {
-  sender: senderModel | null;
   receiverID: number;
   content: any;
   type: number;

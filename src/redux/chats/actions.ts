@@ -24,6 +24,11 @@ export const getChannels = (userId: string) => ({
   payload: { userId },
 });
 
+export const getRecentChat = (userId: number, amount: number) => ({
+  type: ChatsActionTypes.GET_RECENT_CHAT,
+  payload: { userId, amount },
+});
+
 export const addContacts = (contacts: Array<string | number>) => ({
   type: ChatsActionTypes.ADD_CONTACTS,
   payload: contacts,

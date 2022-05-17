@@ -14,6 +14,7 @@ import {
   getFavourites,
   getDirectMessages,
   getChannels,
+  getRecentChat,
   addContacts,
   createChannel,
   changeSelectedChat,
@@ -21,6 +22,7 @@ import {
   getChatUserConversations,
   getChannelDetails,
   getArchiveContact,
+  onSendMessage,
   readConversation,
 } from "../../../redux/actions";
 
@@ -124,17 +126,12 @@ const Index = (props: IndexProps) => {
   */
   const [isOpenNewMessage, setIsOpenNewMessage] = useState<boolean>(false);
   const [isGetReceicerId, setIsGetReceicerId] = useState<boolean>(false);
-  const [onSendMessage, setOnSendMessage] = useState<boolean>(false);
+  const [isWaitingSend, setIsWaitingSend] = useState<boolean>(false);
   const [contacts, setContacts] = useState<newMessageTypes>({
     email: null,
     content: null,
   });
   const [newMessageData, setNewMessageData] = useState<messageModel>({
-    sender: {
-      id: authUser.id,
-      email: authUser.email,
-      name: authUser.name,
-    },
     receiverID: 0,
     content: null,
     type: 0,
@@ -150,7 +147,7 @@ const Index = (props: IndexProps) => {
       setContacts(contacts);
       dispatch(getUserId(contacts.email));
       setIsGetReceicerId(false);
-      setOnSendMessage(true);
+      setIsWaitingSend(true);
     }
   };
   useEffect(() => {
@@ -160,11 +157,6 @@ const Index = (props: IndexProps) => {
         toast.error("Can't send message to self.");
       } else if (AuthState.otherUserId !== 0) {
         setNewMessageData({
-          sender: {
-            id: authUser.id,
-            email: authUser.email,
-            name: authUser.name,
-          },
           receiverID: AuthState.otherUserId,
           content: contacts.content,
           type: 0,
@@ -176,30 +168,24 @@ const Index = (props: IndexProps) => {
     if (AuthState.otherUserId && isGetReceicerId) {
       dispatch(clearOtherUserId());
     }
-    if (newMessageData.receiverID !== 0 && onSendMessage) {
-      setOnSendMessage(false);
-      console.log(newMessageData);
-      //dispatch(...(newMessageData));
+    if (newMessageData.receiverID !== 0 && isWaitingSend) {
+      setIsWaitingSend(false);
+      dispatch(onSendMessage(newMessageData));
+
+      setContacts({ email: null, content: null });
       setNewMessageData({
-        sender: {
-          id: authUser.id,
-          email: authUser.email,
-          name: authUser.name,
-        },
         receiverID: 0,
         content: null,
         type: 0,
       });
+      setIsOpenNewMessage(false);
     }
-    /*setTimeout(() => {
-        dispatch(resetContacts("isContactInvited", false));
-      }, 1000);*/
   }, [
     dispatch,
     AuthState,
     authUser,
     isGetReceicerId,
-    onSendMessage,
+    isWaitingSend,
     contacts,
     newMessageData,
   ]);
@@ -284,6 +270,11 @@ const Index = (props: IndexProps) => {
               <div id="add-contact">
                 {/* Button trigger modal */}
                 <AddButton onClick={openModal} />
+                <AddButton
+                  onClick={() => {
+                    dispatch(getRecentChat(1, authUser.id));
+                  }}
+                />
               </div>
               <UncontrolledTooltip target="add-contact" placement="bottom">
                 Add Contact
