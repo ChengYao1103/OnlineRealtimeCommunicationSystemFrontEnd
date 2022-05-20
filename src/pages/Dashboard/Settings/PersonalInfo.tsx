@@ -104,10 +104,6 @@ const PersonalInfo = ({ basicDetails, user }: PersonalInfoProps) => {
         </h5>
       </div>
 
-      <div className="mt-4">
-        <p className="text-muted mb-1">Role</p>
-        <h5 className="font-size-14 mb-0">{Roles[user.role].label}</h5>
-      </div>
       {/* begin::修改姓名的modal */}
       <Modal
         id={"editNameModal"}

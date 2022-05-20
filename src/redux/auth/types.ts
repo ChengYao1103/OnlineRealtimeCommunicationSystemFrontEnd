@@ -29,12 +29,11 @@ export interface userModel {
   email: string;
   id: number;
   name: string;
-  role: number;
   cover: string;
   photo: string;
 }
 
-const init_user = { email: "", id: 0, name: "", role: 0, cover: "", photo: "" };
+const init_user = { email: "", id: 0, name: "", cover: "", photo: "" };
 export const init_response = { error: "", token: "", user: init_user };
 
 export interface AuthState {
