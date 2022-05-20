@@ -1,4 +1,5 @@
 import { persistReducer } from "redux-persist";
+import { toast } from "react-toastify";
 import storage from "redux-persist/lib/storage";
 // types
 import { ChatsActionTypes, ChatsState } from "./types";
@@ -80,8 +81,11 @@ const Chats = persistReducer(
               isMessageForwarded: false,
             };
           case ChatsActionTypes.GET_RECENT_CHAT:
-            console.log(action.payload.data);
-            return { ...state };
+            return {
+              ...state,
+              recentChatUsers:
+                action.payload.data.recentChatUser.GetMessageRecordResult,
+            };
           case ChatsActionTypes.ON_SEND_MESSAGE:
             return {
               ...state,
@@ -194,7 +198,11 @@ const Chats = persistReducer(
               getUserConversationsLoading: false,
               isUserMessageSent: false,
             };
+          case ChatsActionTypes.GET_RECENT_CHAT:
+            toast.error(action.payload.error.data);
+            return { ...state };
           case ChatsActionTypes.ON_SEND_MESSAGE:
+            toast.error(action.payload.error);
             return {
               ...state,
               isUserMessageSent: false,

@@ -30,17 +30,23 @@ export enum ChatsActionTypes {
   DELETE_IMAGE = "@@chats/DELETE_IMAGE",
 }
 
+export interface senderModel {
+  name: string | null;
+  email: string | null;
+  id: number | null;
+}
+export interface recentChatUserTypes {
+  Messages: object;
+  SeenMessageID: number;
+  User1: number; // me?
+  User2: number; // others?
+}
+
 export interface Channel {
   founderID: number;
   id: number;
   name: string;
   recordPath: string;
-}
-
-export interface senderModel {
-  name: string | null;
-  email: string | null;
-  id: number | null;
 }
 
 let contentTypes = ["文字", "圖片", "音訊", "檔案"];

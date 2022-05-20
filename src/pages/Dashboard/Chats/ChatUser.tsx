@@ -2,18 +2,36 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import classnames from "classnames";
 
+// hooks
+import { useRedux } from "../../../hooks/index";
+
 // interface
 import { UserTypes } from "../../../data/chat";
 import { STATUS_TYPES } from "../../../constants";
+import { recentChatUserTypes } from "../../../redux/chats/types";
+
+//actions
+import { getUserInformation } from "../../../redux/actions";
 
 interface ChatUserProps {
-  user: UserTypes;
+  user: recentChatUserTypes;
   selectedChat: string | number;
   onSelectChat: (id: number | string) => void;
 }
+
 const ChatUser = ({ user, selectedChat, onSelectChat }: ChatUserProps) => {
-  const fullName = `${user.firstName} ${user.lastName}`;
-  const shortName = `${user.firstName.charAt(0)}${user.lastName.charAt(0)}`;
+  const { dispatch, useAppSelector } = useRedux();
+  const [isload, setIsLoad] = useState<boolean>(false);
+  /* -------------多筆資料可能會錯亂？------------- */
+  if (!isload) {
+    setIsLoad(true);
+    dispatch(getUserInformation(user.User2.toString()));
+  }
+  const { userInfo } = useAppSelector(state => ({
+    userInfo: state.Auth.otherUserInfo,
+  }));
+  /* -------------多筆資料可能會錯亂？------------- */
+  const fullName = userInfo ? userInfo.name : "";
 
   const colors = [
     "bg-primary",
@@ -25,13 +43,15 @@ const ChatUser = ({ user, selectedChat, onSelectChat }: ChatUserProps) => {
     "bg-purple",
   ];
   const [color] = useState(Math.floor(Math.random() * colors.length));
-  const isOnline = user.status && user.status === STATUS_TYPES.ACTIVE;
-  const unRead = user.meta && user.meta.unRead;
+  //const isOnline = user.status && user.status === STATUS_TYPES.ACTIVE;
+  //const unRead = user.meta && user.meta.unRead;
+  const isOnline = STATUS_TYPES.ACTIVE;
+  const unRead = 0;
 
   const isSelectedChat: boolean =
-    selectedChat && selectedChat === user.id ? true : false;
+    selectedChat && selectedChat === userInfo.id ? true : false;
   const onClick = () => {
-    onSelectChat(user.id);
+    onSelectChat(userInfo.id);
   };
   return (
     <li className={classnames({ active: isSelectedChat })} onClick={onClick}>
@@ -46,10 +66,10 @@ const ChatUser = ({ user, selectedChat, onSelectChat }: ChatUserProps) => {
               { online: isOnline }
             )}
           >
-            {user.profileImage ? (
+            {userInfo && userInfo.photo ? (
               <>
                 <img
-                  src={user.profileImage}
+                  src={userInfo.photo}
                   className="rounded-circle avatar-xs"
                   alt=""
                 />
@@ -66,7 +86,7 @@ const ChatUser = ({ user, selectedChat, onSelectChat }: ChatUserProps) => {
                     colors[color]
                   )}
                 >
-                  <span className="username"> {shortName}</span>
+                  <span className="username">{fullName.substring(0, 1)}</span>
                   <span className="user-status"></span>
                 </span>
               </div>

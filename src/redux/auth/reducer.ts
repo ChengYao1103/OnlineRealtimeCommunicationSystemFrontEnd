@@ -75,7 +75,6 @@ const Auth = persistReducer(
           case AuthActionTypes.GET_USER_INFOMATION:
             state.loading = false;
             state.otherUserInfo = action.payload.data.user;
-            console.log(state.otherUserInfo);
             return { ...state };
           case AuthActionTypes.GET_USER_ID_BY_EMAIL:
             state.loading = false;

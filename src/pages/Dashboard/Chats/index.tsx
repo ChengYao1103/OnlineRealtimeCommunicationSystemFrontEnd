@@ -68,7 +68,7 @@ const Index = (props: IndexProps) => {
     AuthState: state.Auth,
     isContactInvited: state.Contacts.isContactInvited,
     favourites: state.Chats.favourites,
-    directMessages: state.Chats.directMessages,
+    directMessages: state.Chats.recentChatUsers,
     channels: state.Chats.channels,
     isContactsAdded: state.Chats.isContactsAdded,
     isChannelCreated: state.Chats.isChannelCreated,
@@ -270,11 +270,6 @@ const Index = (props: IndexProps) => {
               <div id="add-contact">
                 {/* Button trigger modal */}
                 <AddButton onClick={openModal} />
-                <AddButton
-                  onClick={() => {
-                    dispatch(getRecentChat(1, authUser.id));
-                  }}
-                />
               </div>
               <UncontrolledTooltip target="add-contact" placement="bottom">
                 Add Contact
@@ -305,16 +300,17 @@ const Index = (props: IndexProps) => {
           {/* Start chat-message-list */}
           {active === CHATS_TABS.DEFAULT && (
             <>
-              {/* favourite */}
+              {/* favourite *
               <Favourites
                 users={favourites}
                 selectedChat={selectedChat}
                 onSelectChat={onSelectChat}
-              />
+              />/}
 
               {/* direct messages */}
               <DirectMessages
-                users={directMessages}
+                authUser={authUser}
+                recentChatArray={directMessages}
                 openAddContact={openNewMessageModal}
                 selectedChat={selectedChat}
                 onSelectChat={onSelectChat}
