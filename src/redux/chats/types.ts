@@ -38,8 +38,8 @@ export interface senderModel {
 export interface recentChatUserTypes {
   Messages: object;
   SeenMessageID: number;
-  User1: number; // me?
-  User2: number; // others?
+  User1: number; // smaller id
+  User2: number; // larger id
 }
 
 export interface Channel {

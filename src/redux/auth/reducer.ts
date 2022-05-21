@@ -177,6 +177,10 @@ const Auth = persistReducer(
         state.loading = true;
         return { ...state };
 
+      case AuthActionTypes.CLEAR_OTHER_USER_INFOMATION:
+        state.otherUserInfo = undefined;
+        return { ...state };
+
       case AuthActionTypes.GET_USER_ID_BY_EMAIL:
         state.loading = true;
         return { ...state };

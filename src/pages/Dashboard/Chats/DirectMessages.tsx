@@ -8,7 +8,10 @@ import ChatUser from "./ChatUser";
 
 // interface
 import { UserTypes } from "../../../data/chat";
-import { getRecentChat } from "../../../redux/actions";
+import {
+  clearOtherUserInformation,
+  getRecentChat,
+} from "../../../redux/actions";
 import { userModel } from "../../../redux/auth/types";
 import { recentChatUserTypes } from "../../../redux/chats/types";
 
@@ -30,16 +33,17 @@ const DirectMessages = ({
   onSelectChat,
 }: DirectMessagesProps) => {
   const { dispatch, useAppSelector } = useRedux();
-  const [isLoad, setIsLoad] = useState<boolean>(false);
+  const [isLoadInformation, setIsLoadInformation] = useState<boolean>(false);
   const { userInfoState } = useAppSelector(state => ({
     userInfoState: state.Auth.otherUserInfo,
   }));
-  const chatUsers: Array<userModel> = [];
+  const [chatUsers, setChatUsers] = useState<Array<userModel>>([]);
 
   useEffect(() => {
     let targetId = 0;
-    if (!isLoad && recentChatArray) {
-      setIsLoad(true);
+    if (!isLoadInformation && recentChatArray) {
+      dispatch(clearOtherUserInformation()); // handle duplicate
+      setIsLoadInformation(true);
       recentChatArray.forEach(element => {
         // 辨認是否為他人id
         targetId =
@@ -47,15 +51,22 @@ const DirectMessages = ({
         dispatch(getUserInformation(targetId.toString()));
       });
     }
-  }, [dispatch, isLoad, authUser, recentChatArray, userInfoState]);
-  if (
-    isLoad &&
-    userInfoState &&
-    chatUsers.findIndex(element => element === userInfoState) === -1
-  ) {
-    chatUsers.push(userInfoState);
-    //setChatUserArray(test);
-  }
+  }, [dispatch, isLoadInformation, authUser, recentChatArray, userInfoState]);
+
+  useEffect(() => {
+    let tmpChatUsers: Array<userModel> = [];
+    chatUsers.forEach(user => {
+      tmpChatUsers.push(user);
+    });
+    if (
+      isLoadInformation &&
+      userInfoState &&
+      tmpChatUsers.findIndex(element => element === userInfoState) === -1
+    ) {
+      tmpChatUsers.push(userInfoState);
+      setChatUsers(tmpChatUsers);
+    }
+  }, [dispatch, isLoadInformation, userInfoState, chatUsers, recentChatArray]);
 
   /*
     add contacts
@@ -74,7 +85,9 @@ const DirectMessages = ({
             <button
               type="button"
               onClick={() => {
-                dispatch(getRecentChat(10, authUser.id));
+                dispatch(getRecentChat(10, 10));
+                setIsLoadInformation(false);
+                setChatUsers([]);
               }}
               className="btn btn-soft-primary btn-sm"
             >
@@ -99,10 +112,10 @@ const DirectMessages = ({
 
       <div className="chat-message-list">
         <ul className="list-unstyled chat-list chat-user-list">
-          {chatUsers.map((user: userModel) => (
+          {chatUsers.map((user: userModel, key: number) => (
             <ChatUser
               user={user}
-              key={user.id}
+              key={key}
               selectedChat={selectedChat}
               onSelectChat={onSelectChat}
             />
