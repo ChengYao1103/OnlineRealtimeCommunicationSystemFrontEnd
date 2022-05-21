@@ -1,5 +1,10 @@
 import axios from "axios";
 import config from "../config";
+import { WSConnection } from "./webSocket";
+import { logoutUser } from "./../redux/auth/actions";
+
+let ws: WSConnection;
+const WS_URL = config.WS_URL ?? "";
 
 // default
 axios.defaults.baseURL = config.API_URL;
@@ -37,19 +42,32 @@ axios.interceptors.response.use(
   }
 );
 
-if (localStorage.getItem("token") !== null) {
-  axios.defaults.headers.common["Authorization"] =
-    localStorage.getItem("token");
+
+let onMessage = (event: any) => {
+  let data = JSON.stringify(event.data);
+  console.log(data);
+}
+
+let onClose = (event: any) => {
+}
+
+let authInit = (token: string) => {
+  axios.defaults.headers.common["Authorization"] = token;
+  ws = new WSConnection(WS_URL, token, onMessage, undefined, undefined, onClose);
+}
+
+if (localStorage.getItem("token")) {
+  authInit(localStorage.getItem("token") ?? "");
 }
 
 /**
  * Sets the default authorization
- * @param {*} token
+ * @param { string } token
  */
-const setAuthorization = (token: any) => {
-  localStorage.setItem("token", "Bearer " + token);
-  axios.defaults.headers.common["Authorization"] =
-    localStorage.getItem("token");
+const setAuthorization = (token: string) => {
+  token = "Bearer " + token;
+  localStorage.setItem("token", token);
+  authInit(token);
 };
 
 class APIClient {
@@ -121,6 +139,10 @@ class APIClient {
     };
     return axios.post(url, formData, config);
   };
+
+  WSSend = (data: string) => {
+    ws.sendMessage(data);
+  }
 }
 
 const getLoggedinUser = () => {
