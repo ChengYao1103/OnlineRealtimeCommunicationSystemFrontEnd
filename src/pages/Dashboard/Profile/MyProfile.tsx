@@ -38,13 +38,8 @@ const MyProfile = ({ user, basicDetails }: MyProfileProps) => {
     dispatch(changeTab(TABS.SETTINGS));
   };
 
-  const testGetAuthInfo = () => {
+  const GetAuthInfo = () => {
     dispatch(getAuthInformation());
-  };
-
-  const testGetUserInfo = () => {
-    let id = 3;
-    dispatch(getUserInformation(id.toString()));
   };
 
   return (
@@ -87,17 +82,9 @@ const MyProfile = ({ user, basicDetails }: MyProfileProps) => {
                       <DropdownItem
                         className="d-flex align-items-center justify-content-between"
                         href="#"
-                        onClick={() => testGetAuthInfo()}
+                        onClick={() => GetAuthInfo()}
                       >
                         Info{" "}
-                        <i className="bx bx-info-circle ms-2 text-muted"></i>
-                      </DropdownItem>
-                      <DropdownItem
-                        className="d-flex align-items-center justify-content-between"
-                        href="#"
-                        onClick={() => testGetUserInfo()}
-                      >
-                        test get user by id{" "}
                         <i className="bx bx-info-circle ms-2 text-muted"></i>
                       </DropdownItem>
                       <DropdownItem
@@ -142,9 +129,6 @@ const MyProfile = ({ user, basicDetails }: MyProfileProps) => {
         </div>
 
         <h5 className="font-size-16 mb-1 text-truncate">{user.name}</h5>
-        <p className="text-muted font-size-14 text-truncate mb-0">
-          {basicDetails && basicDetails.title ? basicDetails.title : "-"}
-        </p>
       </div>
     </>
   );

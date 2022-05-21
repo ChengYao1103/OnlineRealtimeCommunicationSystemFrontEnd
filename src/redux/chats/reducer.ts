@@ -202,7 +202,11 @@ const Chats = persistReducer(
             toast.error(action.payload.error.data);
             return { ...state };
           case ChatsActionTypes.ON_SEND_MESSAGE:
-            toast.error(action.payload.error);
+            toast.error(
+              action.payload.error.data.msg
+                ? action.payload.error.data.msg
+                : action.payload.error.data.message
+            );
             return {
               ...state,
               isUserMessageSent: false,

@@ -2,36 +2,18 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import classnames from "classnames";
 
-// hooks
-import { useRedux } from "../../../hooks/index";
-
 // interface
-import { UserTypes } from "../../../data/chat";
 import { STATUS_TYPES } from "../../../constants";
-import { recentChatUserTypes } from "../../../redux/chats/types";
-
-//actions
-import { getUserInformation } from "../../../redux/actions";
+import { userModel } from "../../../redux/auth/types";
 
 interface ChatUserProps {
-  user: recentChatUserTypes;
+  user: userModel;
   selectedChat: string | number;
   onSelectChat: (id: number | string) => void;
 }
 
 const ChatUser = ({ user, selectedChat, onSelectChat }: ChatUserProps) => {
-  const { dispatch, useAppSelector } = useRedux();
-  const [isload, setIsLoad] = useState<boolean>(false);
-  /* -------------多筆資料可能會錯亂？------------- */
-  if (!isload) {
-    setIsLoad(true);
-    dispatch(getUserInformation(user.User2.toString()));
-  }
-  const { userInfo } = useAppSelector(state => ({
-    userInfo: state.Auth.otherUserInfo,
-  }));
-  /* -------------多筆資料可能會錯亂？------------- */
-  const fullName = userInfo ? userInfo.name : "";
+  const fullName = user.name;
 
   const colors = [
     "bg-primary",
@@ -49,9 +31,9 @@ const ChatUser = ({ user, selectedChat, onSelectChat }: ChatUserProps) => {
   const unRead = 0;
 
   const isSelectedChat: boolean =
-    selectedChat && selectedChat === userInfo.id ? true : false;
+    selectedChat && selectedChat === user.id ? true : false;
   const onClick = () => {
-    onSelectChat(userInfo.id);
+    onSelectChat(user.id);
   };
   return (
     <li className={classnames({ active: isSelectedChat })} onClick={onClick}>
@@ -66,10 +48,10 @@ const ChatUser = ({ user, selectedChat, onSelectChat }: ChatUserProps) => {
               { online: isOnline }
             )}
           >
-            {userInfo && userInfo.photo ? (
+            {user.photo ? (
               <>
                 <img
-                  src={userInfo.photo}
+                  src={user.photo}
                   className="rounded-circle avatar-xs"
                   alt=""
                 />

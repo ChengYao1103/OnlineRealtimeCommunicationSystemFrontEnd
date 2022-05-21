@@ -23,10 +23,11 @@ import { TABS } from "../../constants/index";
 import LightDarkMode from "../../components/LightDarkMode";
 
 //images
-import avatar1 from "../../assets/images/users/avatar-1.jpg";
+import avatarPlaceHolder from "../../assets/images/users/profile-placeholder.png";
 
 // menu
 import { MENU_ITEMS, MenuItemType } from "./menu";
+import { userModel } from "../../redux/auth/types";
 
 const LogoLightSVG = () => {
   return (
@@ -117,6 +118,7 @@ const MenuNavItem = ({ item, selectedTab, onChangeTab }: MenuNavItemProps) => {
 };
 
 interface ProfileDropdownMenuProps {
+  authUser: userModel;
   onChangeTab: (
     id:
       | TABS.BOOKMARK
@@ -127,14 +129,17 @@ interface ProfileDropdownMenuProps {
       | TABS.USERS
   ) => void;
 }
-const ProfileDropdownMenu = ({ onChangeTab }: ProfileDropdownMenuProps) => {
+const ProfileDropdownMenu = ({
+  authUser,
+  onChangeTab,
+}: ProfileDropdownMenuProps) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const toggle = () => setDropdownOpen(!dropdownOpen);
-  
-  let history = useHistory(); 
+
+  let history = useHistory();
   const redirect = (path: string) => {
     history.push(path);
-  }
+  };
 
   return (
     <Dropdown
@@ -144,7 +149,11 @@ const ProfileDropdownMenu = ({ onChangeTab }: ProfileDropdownMenuProps) => {
       toggle={toggle}
     >
       <DropdownToggle nav className="bg-transparent">
-        <img src={avatar1} alt="" className="profile-user rounded-circle" />
+        <img
+          src={authUser.photo ? authUser.photo : avatarPlaceHolder}
+          alt=""
+          className="profile-user rounded-circle"
+        />
       </DropdownToggle>
       <DropdownMenu>
         <DropdownItem
@@ -184,10 +193,12 @@ const SideMenu = ({ onChangeLayoutMode }: any) => {
   const { dispatch, useAppSelector } = useRedux();
 
   const menuItems: MenuItemType[] = MENU_ITEMS;
-  const { activeTab, layoutMode } = useAppSelector(state => ({
+  const { AuthState, activeTab, layoutMode } = useAppSelector(state => ({
+    AuthState: state.Auth,
     activeTab: state.Layout.activeTab,
     layoutMode: state.Layout.layoutMode,
   }));
+  const authUser: userModel = AuthState.response.user;
 
   /* 
     tab activation
@@ -242,7 +253,7 @@ const SideMenu = ({ onChangeLayoutMode }: any) => {
           />
 
           {/* profile menu dropdown */}
-          <ProfileDropdownMenu onChangeTab={onChangeTab} />
+          <ProfileDropdownMenu authUser={authUser} onChangeTab={onChangeTab} />
         </Nav>
       </div>
       {/* end side-menu nav */}

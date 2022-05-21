@@ -55,7 +55,7 @@ const Index = (props: IndexProps) => {
     AuthState,
     isContactInvited,
     favourites,
-    directMessages,
+    recentChatUsers,
     channels,
     isContactsAdded,
     isChannelCreated,
@@ -68,7 +68,7 @@ const Index = (props: IndexProps) => {
     AuthState: state.Auth,
     isContactInvited: state.Contacts.isContactInvited,
     favourites: state.Chats.favourites,
-    directMessages: state.Chats.recentChatUsers,
+    recentChatUsers: state.Chats.recentChatUsers,
     channels: state.Chats.channels,
     isContactsAdded: state.Chats.isContactsAdded,
     isChannelCreated: state.Chats.isChannelCreated,
@@ -84,6 +84,7 @@ const Index = (props: IndexProps) => {
   get data
   */
   useEffect(() => {
+    dispatch(getRecentChat(5, authUser.id));
     dispatch(getFavourites());
     dispatch(getDirectMessages());
     dispatch(getChannels(authUser.id.toString()));
@@ -310,7 +311,7 @@ const Index = (props: IndexProps) => {
               {/* direct messages */}
               <DirectMessages
                 authUser={authUser}
-                recentChatArray={directMessages}
+                recentChatArray={recentChatUsers}
                 openAddContact={openNewMessageModal}
                 selectedChat={selectedChat}
                 onSelectChat={onSelectChat}

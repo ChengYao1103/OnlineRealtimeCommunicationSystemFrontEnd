@@ -11,10 +11,6 @@ interface UserDescriptionProps {
 const UserDescription = ({ user, location }: UserDescriptionProps) => {
   return (
     <>
-      <div className="text-muted">
-        <p className="mb-4">{"從缺"}</p>
-      </div>
-
       <div>
         <div className="d-flex py-2">
           <div className="flex-shrink-0 me-3">

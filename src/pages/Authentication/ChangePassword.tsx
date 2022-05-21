@@ -12,7 +12,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
 
-// // hooks
+// hooks
 // import { useProfile } from "../../hooks";
 
 //actions
@@ -28,7 +28,7 @@ import FormInput from "../../components/FormInput";
 import Loader from "../../components/Loader";
 
 //images
-import avatar1 from "../../assets/images/users/avatar-1.jpg";
+import avatarPlaceHolder from "../../assets/images/users/profile-placeholder.png";
 
 //user information
 import { useSelector } from "react-redux";
@@ -114,7 +114,7 @@ const ChangePassword = (prop: ChangePasswordProps) => {
             <AuthHeader title="Change Password" />
             <div className="user-thumb text-center mb-4">
               <img
-                src={avatar1}
+                src={user.photo ? user.photo : avatarPlaceHolder}
                 className="rounded-circle img-thumbnail avatar-lg"
                 alt="thumbnail"
               />

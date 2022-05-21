@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { UncontrolledTooltip } from "reactstrap";
 import { useRedux } from "../../../hooks/index";
 
 //components
 import AddButton from "../../../components/AddButton";
+import ChatUser from "./ChatUser";
 
 // interface
 import { UserTypes } from "../../../data/chat";
@@ -11,8 +12,8 @@ import { getRecentChat } from "../../../redux/actions";
 import { userModel } from "../../../redux/auth/types";
 import { recentChatUserTypes } from "../../../redux/chats/types";
 
-// component
-import ChatUser from "./ChatUser";
+// actions
+import { getUserInformation } from "../../../redux/actions";
 
 interface DirectMessagesProps {
   authUser: userModel;
@@ -23,12 +24,39 @@ interface DirectMessagesProps {
 }
 const DirectMessages = ({
   authUser,
-  recentChatArray: users,
+  recentChatArray,
   openAddContact,
   selectedChat,
   onSelectChat,
 }: DirectMessagesProps) => {
-  const { dispatch } = useRedux();
+  const { dispatch, useAppSelector } = useRedux();
+  const [isLoad, setIsLoad] = useState<boolean>(false);
+  const { userInfoState } = useAppSelector(state => ({
+    userInfoState: state.Auth.otherUserInfo,
+  }));
+  const chatUsers: Array<userModel> = [];
+
+  useEffect(() => {
+    let targetId = 0;
+    if (!isLoad && recentChatArray) {
+      setIsLoad(true);
+      recentChatArray.forEach(element => {
+        // 辨認是否為他人id
+        targetId =
+          element.User1 === authUser.id ? element.User2 : element.User1;
+        dispatch(getUserInformation(targetId.toString()));
+      });
+    }
+  }, [dispatch, isLoad, authUser, recentChatArray, userInfoState]);
+  if (
+    isLoad &&
+    userInfoState &&
+    chatUsers.findIndex(element => element === userInfoState) === -1
+  ) {
+    chatUsers.push(userInfoState);
+    //setChatUserArray(test);
+  }
+
   /*
     add contacts
     */
@@ -71,10 +99,10 @@ const DirectMessages = ({
 
       <div className="chat-message-list">
         <ul className="list-unstyled chat-list chat-user-list">
-          {(users || []).map((user: recentChatUserTypes, key: number) => (
+          {chatUsers.map((user: userModel) => (
             <ChatUser
               user={user}
-              key={key}
+              key={user.id}
               selectedChat={selectedChat}
               onSelectChat={onSelectChat}
             />
