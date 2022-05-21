@@ -23,7 +23,6 @@ import NonAuthLayoutWrapper from "../../components/NonAutnLayoutWrapper";
 import AuthHeader from "../../components/AuthHeader";
 import FormInput from "../../components/FormInput";
 import Loader from "../../components/Loader";
-import { Roles } from "../../repository/role";
 
 interface RegisterProps {}
 const Register = (props: RegisterProps) => {
@@ -45,7 +44,6 @@ const Register = (props: RegisterProps) => {
         .email("This value should be a valid email.")
         .required("Please Enter Email."),
       name: yup.string().required("Please Enter Your Name."),
-      role: yup.number(),
       password: yup.string().required("Please Enter Password."),
     })
   );
@@ -108,21 +106,6 @@ const Register = (props: RegisterProps) => {
                   labelClassName="form-label"
                   placeholder="Enter Email"
                   className="form-control"
-                />
-              </div>
-
-              <div className="mb-3">
-                <FormInput
-                  label="Role"
-                  type="select"
-                  name="role"
-                  register={register}
-                  errors={errors}
-                  control={control}
-                  labelClassName="form-label"
-                  className="form-control form-select"
-                  options={Roles}
-                  defaultValue={2}
                 />
               </div>
 

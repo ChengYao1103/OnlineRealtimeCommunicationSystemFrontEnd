@@ -163,7 +163,7 @@ const Index = (props: IndexProps) => {
         <ThemeSettings theme={settings.theme} onChangeData={onChangeData} />
       ),
     },
-    {
+    /*{
       value: SETTINGS_COLLAPSES.PRIVACY,
       label: "Privacy",
       icon: "bx bxs-lock",
@@ -187,7 +187,7 @@ const Index = (props: IndexProps) => {
       label: "Help",
       icon: "bx bxs-help-circle",
       component: <Help />,
-    },
+    },*/
   ];
 
   const onChangeCollapse = (
