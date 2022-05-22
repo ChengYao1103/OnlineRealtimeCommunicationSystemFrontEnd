@@ -419,16 +419,16 @@ const UserHead = ({
         <AudioCallModal
           isOpen={isOpenAudioModal}
           onClose={onCloseAudio}
+          callInfo={chatUserDetails}
           user={chatUserDetails}
-          userName={chatUserDetails.name}
         />
       )}
       {isOpenVideoModal && (
         <VideoCallModal
           isOpen={isOpenVideoModal}
           onClose={onCloseVideo}
+          callInfo={chatUserDetails}
           user={chatUserDetails}
-          userName={chatUserDetails.name}
         />
       )}
       {isOpenPinnedTabModal && (

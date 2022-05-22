@@ -7,10 +7,11 @@ import { CallItem } from "../data/calls";
 
 //images
 import imagePlaceholder from "../assets/images/users/profile-placeholder.png";
+import { userModel } from "../redux/auth/types";
 
 interface VideoCallModalProps {
-  user: CallItem | null;
-  userName: string | undefined;
+  callInfo: CallItem | null;
+  user: userModel; //對方
   isOpen: boolean;
   onClose: () => void;
 }
@@ -18,8 +19,8 @@ interface VideoCallModalProps {
 const VideoCallModal = ({
   isOpen,
   onClose,
+  callInfo,
   user,
-  userName,
 }: VideoCallModalProps) => {
   const [isLoadMedia, setIsLoadMedia] = useState(false);
   const [isMute, setIsMute] = useState(false);
@@ -132,9 +133,7 @@ const VideoCallModal = ({
       <ModalBody className="p-0">
         <div className="videocallModal-bg">
           <img
-            src={
-              user && user.profileImage ? user.profileImage : imagePlaceholder
-            }
+            src={user.photo ? user.photo : imagePlaceholder}
             alt=""
             className="videocallModal-bg"
           />
@@ -239,7 +238,7 @@ const VideoCallModal = ({
           <div className="p-4 bg-primary mt-n4">
             <div className="text-white mt-4 text-center">
               <h5 className="font-size-18 text-truncate mb-0 text-white">
-                {userName}
+                {user.name}
               </h5>
             </div>
           </div>

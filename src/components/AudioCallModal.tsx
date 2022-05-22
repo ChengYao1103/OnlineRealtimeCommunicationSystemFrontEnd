@@ -3,12 +3,13 @@ import { Button, Modal, ModalBody } from "reactstrap";
 
 // interface
 import { CallItem } from "../data/calls";
+import { userModel } from "../redux/auth/types";
 
 //images
 import imagePlaceholder from "../assets/images/users/profile-placeholder.png";
 interface AudioCallModalProps {
-  user: CallItem | null;
-  userName: string | undefined;
+  callInfo: CallItem | null;
+  user: userModel; //對方
   isOpen: boolean;
   onClose: () => void;
 }
@@ -16,8 +17,8 @@ interface AudioCallModalProps {
 const AudioCallModal = ({
   isOpen,
   onClose,
+  callInfo,
   user,
-  userName,
 }: AudioCallModalProps) => {
   const [isLoad, setIsLoad] = useState(false);
   const [isMute, setIsMute] = useState(false);
@@ -73,9 +74,7 @@ const AudioCallModal = ({
         <div className="text-center p-4 pb-0">
           <div className="avatar-xl mx-auto mb-4">
             <img
-              src={
-                user && user.profileImage ? user.profileImage : imagePlaceholder
-              }
+              src={user.photo ? user.photo : imagePlaceholder}
               alt=""
               className="img-thumbnail rounded-circle"
             />
@@ -156,7 +155,7 @@ const AudioCallModal = ({
 
         <div className="p-4 bg-soft-primary mt-n4">
           <div className="mt-4 text-center">
-            <h5 className="font-size-18 mb-0 text-truncate">{userName}</h5>
+            <h5 className="font-size-18 mb-0 text-truncate">{user.name}</h5>
           </div>
         </div>
       </ModalBody>

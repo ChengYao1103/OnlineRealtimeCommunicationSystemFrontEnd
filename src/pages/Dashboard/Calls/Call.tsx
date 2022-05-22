@@ -188,18 +188,18 @@ const Call = ({ call }: CallProps) => {
           </div>
         </div>
       </li>
-      <AudioCallModal
+      {/*<AudioCallModal
         isOpen={isOpenAudioModal}
         onClose={onCloseAudio}
-        user={user}
-        userName={`${user?.firstName} ${user?.lastName}`}
+        callInfo={user}
+        user={`${user?.firstName} ${user?.lastName}`}
       />
       <VideoCallModal
         isOpen={isOpenVideoModal}
         onClose={onCloseVideo}
         user={user}
         userName={`${user?.firstName} ${user?.lastName}`}
-      />
+                />*/}
     </>
   );
 };
