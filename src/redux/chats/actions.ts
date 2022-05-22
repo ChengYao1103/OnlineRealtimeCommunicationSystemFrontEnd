@@ -59,11 +59,9 @@ export const getChatUserDetails = (selectedChat: string | number | null) => ({
   payload: selectedChat,
 });
 
-export const getChatUserConversations = (
-  selectedChat: string | number | null
-) => ({
+export const getChatUserConversations = (data: any) => ({
   type: ChatsActionTypes.GET_CHAT_USER_CONVERSATIONS,
-  payload: selectedChat,
+  payload: { data },
 });
 
 export const toggleUserDetailsTab = (value: boolean) => ({

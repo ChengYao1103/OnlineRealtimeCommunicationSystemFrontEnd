@@ -85,7 +85,7 @@ const DirectMessages = ({
             <button
               type="button"
               onClick={() => {
-                dispatch(getRecentChat(10, 10));
+                dispatch(getRecentChat(1, 10));
                 setIsLoadInformation(false);
                 setChatUsers([]);
               }}

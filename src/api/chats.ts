@@ -28,10 +28,9 @@ const getChatUserDetails = (id: string | number) => {
   return api.get(url.GET_CHAT_USER_DETAILS + "/" + id, { params: { id } });
 };
 
-const getChatUserConversations = (id: string | number) => {
-  return api.get(url.GET_CHAT_USER_CONVERSATIONS + "/" + id, {
-    params: { id },
-  });
+const getChatUserConversations = (data: object) => {
+  console.log(data);
+  return api.create(url.GET_CHAT_USER_CONVERSATIONS, data);
 };
 
 const getRecentChat = (data: object) => {

@@ -123,9 +123,13 @@ function* getChatUserDetails({ payload: id }: any) {
   }
 }
 
-function* getChatUserConversations({ payload: id }: any) {
+function* getChatUserConversations({ payload: data }: any) {
   try {
-    const response: Promise<any> = yield call(getChatUserConversationsApi, id);
+    const response: Promise<any> = yield call(
+      getChatUserConversationsApi,
+      data
+    );
+    console.log(response);
     yield put(
       chatsApiResponseSuccess(
         ChatsActionTypes.GET_CHAT_USER_CONVERSATIONS,

@@ -129,6 +129,19 @@ const Index = ({ isChannel }: IndexProps) => {
     isImageDeleted,
   ]);
 
+  useEffect(() => {
+    if (selectedChatInfo) {
+      dispatch(
+        getChatUserConversations({
+          userID: userProfile.id,
+          otherSideID: selectedChatInfo.id,
+          lastMessageID: 5,
+          n: 15,
+        })
+      );
+    }
+  }, [dispatch, selectedChatInfo, userProfile]);
+
   const onDeleteMessage = (messageId: string | number) => {
     dispatch(deleteMessage(chatUserDetails.id, messageId));
   };
@@ -153,7 +166,7 @@ const Index = ({ isChannel }: IndexProps) => {
       />
       <Conversation
         chatUserConversations={chatUserConversations}
-        chatUserDetails={chatUserDetails}
+        chatUserDetails={selectedChatInfo}
         onDelete={onDeleteMessage}
         onSetReplyData={onSetReplyData}
         isChannel={isChannel}

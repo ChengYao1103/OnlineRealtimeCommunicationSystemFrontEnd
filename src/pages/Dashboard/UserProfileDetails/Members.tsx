@@ -41,7 +41,7 @@ const Member = ({ member }: GroupProps) => {
     } else {
       dispatch(getChatUserDetails(id));
     }
-    dispatch(getChatUserConversations(id));
+    //dispatch(getChatUserConversations(id));
     dispatch(changeSelectedChat(id));
   };
 

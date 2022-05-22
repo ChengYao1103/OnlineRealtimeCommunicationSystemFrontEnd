@@ -13,13 +13,14 @@ const useProfile = () => {
   // global store
   const { useAppSelector } = useRedux();
 
-  const { settings } = useAppSelector(state => ({
+  const { settings, userProfile } = useAppSelector(state => ({
     settings: state.Settings.settings,
+    userProfile: state.Auth.response.user,
   }));
   const image = settings.basicDetails && settings.basicDetails.profile;
   const userProfileSession = getLoggedinUser();
   const [loading] = useState(userProfileSession ? false : true);
-  const [userProfile, setUserProfile] = useState(
+  /*const [userProfile, setUserProfile] = useState(
     userProfileSession ? { ...userProfileSession, profileImage: image } : null
   );
   useEffect(() => {
@@ -27,7 +28,7 @@ const useProfile = () => {
     setUserProfile(
       userProfileSession ? { ...userProfileSession, profileImage: image } : null
     );
-  }, [image]);
+  }, [image]);*/
 
   return { userProfile, loading };
 };
