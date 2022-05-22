@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 // action
 import { getUserId, clearOtherUserId } from "../../../redux/actions";
 // hooks
-import { useRedux } from "../../../hooks/index";
+import { useProfile, useRedux } from "../../../hooks/index";
 
 // actions
 import {
@@ -78,7 +78,7 @@ const Index = (props: IndexProps) => {
     isContactArchiveToggled: state.Chats.isContactArchiveToggled,
     chatUserDetails: state.Chats.chatUserDetails,
   }));
-  const authUser: userModel = AuthState.response.user;
+  const { userProfile } = useProfile();
 
   /*
   get data
@@ -87,8 +87,8 @@ const Index = (props: IndexProps) => {
     dispatch(getRecentChat(5, 10)); // get recent 10 messages with 5 users
     dispatch(getFavourites());
     dispatch(getDirectMessages());
-    dispatch(getChannels(authUser.id.toString()));
-  }, [dispatch, authUser]);
+    dispatch(getChannels(userProfile.id.toString()));
+  }, [dispatch, userProfile]);
   useEffect(() => {
     if (isFavouriteContactToggled) {
       dispatch(getFavourites());
@@ -154,7 +154,7 @@ const Index = (props: IndexProps) => {
   useEffect(() => {
     if (AuthState.otherUserId && !isGetReceicerId) {
       setIsGetReceicerId(true);
-      if (AuthState.otherUserId === authUser.id) {
+      if (AuthState.otherUserId === userProfile.id) {
         toast.error("Can't send message to self.");
       } else if (AuthState.otherUserId !== 0) {
         setNewMessageData({
@@ -184,7 +184,7 @@ const Index = (props: IndexProps) => {
   }, [
     dispatch,
     AuthState,
-    authUser,
+    userProfile,
     isGetReceicerId,
     isWaitingSend,
     contacts,
@@ -214,9 +214,9 @@ const Index = (props: IndexProps) => {
   useEffect(() => {
     if (isChannelCreated) {
       setIsOpenCreateChannel(false);
-      dispatch(getChannels(authUser.id.toString()));
+      dispatch(getChannels(userProfile.id.toString()));
     }
-  }, [dispatch, isChannelCreated, authUser]);
+  }, [dispatch, isChannelCreated, userProfile]);
 
   /*
   select chat handeling :
@@ -258,10 +258,10 @@ const Index = (props: IndexProps) => {
       dispatch(getArchiveContact());
       dispatch(getFavourites());
       dispatch(getDirectMessages());
-      dispatch(getChannels(authUser.id.toString()));
+      dispatch(getChannels(userProfile.id.toString()));
       dispatch(getChatUserDetails(chatUserDetails.id));
     }
-  }, [dispatch, isContactArchiveToggled, chatUserDetails.id, authUser]);
+  }, [dispatch, isContactArchiveToggled, chatUserDetails.id, userProfile]);
 
   return (
     <>
@@ -314,7 +314,7 @@ const Index = (props: IndexProps) => {
 
               {/* direct messages */}
               <DirectMessages
-                authUser={authUser}
+                authUser={userProfile}
                 recentChatArray={recentChatUsers}
                 openAddContact={openNewMessageModal}
                 selectedChat={selectedChat}
@@ -367,7 +367,7 @@ const Index = (props: IndexProps) => {
         <AddGroupModal
           isOpen={isOpenCreateChannel}
           onClose={closeCreateChannelModal}
-          founderId={authUser.id}
+          founderId={userProfile.id}
           onCreateChannel={onCreateChannel}
         />
       )}

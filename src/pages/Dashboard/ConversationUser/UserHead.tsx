@@ -177,6 +177,7 @@ const Search = () => {
   );
 };
 interface MoreProps {
+  onOpenUserDetails: () => void;
   onOpenAudio: () => void;
   onOpenVideo: () => void;
   onDelete: () => void;
@@ -184,6 +185,7 @@ interface MoreProps {
   onToggleArchive: () => void;
 }
 const More = ({
+  onOpenUserDetails,
   onOpenAudio,
   onOpenVideo,
   onDelete,
@@ -202,6 +204,7 @@ const More = ({
         <DropdownItem
           className="d-flex justify-content-between align-items-center user-profile-show"
           to="#"
+          onClick={onOpenUserDetails}
         >
           View Profile <i className="bx bx-user text-muted"></i>
         </DropdownItem>
@@ -400,6 +403,7 @@ const UserHead = ({
 
             <li className="list-inline-item">
               <More
+                onOpenUserDetails={onOpenUserDetails}
                 onOpenAudio={onOpenAudio}
                 onOpenVideo={onOpenVideo}
                 onDelete={onDelete}
@@ -410,17 +414,13 @@ const UserHead = ({
           </ul>
         </Col>
       </Row>
-      <PinnedAlert onOpenPinnedTab={onOpenPinnedTab} />
+      {/*<PinnedAlert onOpenPinnedTab={onOpenPinnedTab} />*/}
       {isOpenAudioModal && (
         <AudioCallModal
           isOpen={isOpenAudioModal}
           onClose={onCloseAudio}
           user={chatUserDetails}
-          userName={
-            !isChannel
-              ? `${chatUserDetails.firstName} ${chatUserDetails.lastName}`
-              : chatUserDetails.name
-          }
+          userName={chatUserDetails.name}
         />
       )}
       {isOpenVideoModal && (
@@ -428,11 +428,7 @@ const UserHead = ({
           isOpen={isOpenVideoModal}
           onClose={onCloseVideo}
           user={chatUserDetails}
-          userName={
-            !isChannel
-              ? `${chatUserDetails.firstName} ${chatUserDetails.lastName}`
-              : chatUserDetails.name
-          }
+          userName={chatUserDetails.name}
         />
       )}
       {isOpenPinnedTabModal && (
