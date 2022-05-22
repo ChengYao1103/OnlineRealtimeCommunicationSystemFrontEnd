@@ -1,7 +1,6 @@
 import axios from "axios";
 import config from "../config";
 import { WSConnection } from "./webSocket";
-import { logoutUser } from "./../redux/auth/actions";
 
 let ws: WSConnection;
 const WS_URL = config.WS_URL ?? "";
