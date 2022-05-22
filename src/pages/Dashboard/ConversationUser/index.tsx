@@ -135,7 +135,7 @@ const Index = ({ isChannel }: IndexProps) => {
         getChatUserConversations({
           userID: userProfile.id,
           otherSideID: selectedChatInfo.id,
-          lastMessageID: 5,
+          lastMessageID: 10,
           n: 15,
         })
       );

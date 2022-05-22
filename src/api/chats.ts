@@ -29,7 +29,6 @@ const getChatUserDetails = (id: string | number) => {
 };
 
 const getChatUserConversations = (data: object) => {
-  console.log(data);
   return api.create(url.GET_CHAT_USER_CONVERSATIONS, data);
 };
 

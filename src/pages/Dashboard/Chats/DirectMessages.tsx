@@ -85,13 +85,13 @@ const DirectMessages = ({
             <button
               type="button"
               onClick={() => {
-                dispatch(getRecentChat(1, 10));
+                dispatch(getRecentChat(10, 1));
                 setIsLoadInformation(false);
                 setChatUsers([]);
               }}
               className="btn btn-soft-primary btn-sm"
             >
-              <i className="bx bx-chat"></i>
+              <i className="bx bx-loader"></i>
             </button>
           </div>
           <UncontrolledTooltip target="refresh-message" placement="bottom">

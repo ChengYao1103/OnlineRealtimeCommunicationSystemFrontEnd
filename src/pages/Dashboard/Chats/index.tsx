@@ -84,7 +84,7 @@ const Index = (props: IndexProps) => {
   get data
   */
   useEffect(() => {
-    dispatch(getRecentChat(1, 10)); // get recent 1 messages with 10 users
+    dispatch(getRecentChat(10, 1)); // get recent 1 messages with 10 users
     dispatch(getFavourites());
     dispatch(getDirectMessages());
     dispatch(getChannels(userProfile.id.toString()));
