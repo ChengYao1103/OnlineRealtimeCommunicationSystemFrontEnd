@@ -38,6 +38,7 @@ const Index = ({ isChannel }: IndexProps) => {
   const { dispatch, useAppSelector } = useRedux();
 
   const {
+    selectedChatInfo, // 用途可能跟chatUserDetails重複
     chatUserDetails,
     chatUserConversations,
     isUserMessageSent,
@@ -46,6 +47,7 @@ const Index = ({ isChannel }: IndexProps) => {
     isUserMessagesDeleted,
     isImageDeleted,
   } = useAppSelector(state => ({
+    selectedChatInfo: state.Chats.selectedChatInfo,
     chatUserDetails: state.Chats.chatUserDetails,
     chatUserConversations: state.Chats.chatUserConversations,
     isUserMessageSent: state.Chats.isUserMessageSent,
@@ -142,7 +144,7 @@ const Index = ({ isChannel }: IndexProps) => {
   return (
     <>
       <UserHead
-        chatUserDetails={chatUserDetails}
+        chatUserDetails={selectedChatInfo}
         pinnedTabs={pinnedTabs}
         onOpenUserDetails={onOpenUserDetails}
         onDelete={onDeleteUserMessages}

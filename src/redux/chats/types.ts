@@ -42,7 +42,7 @@ export interface recentChatUserTypes {
   User2: number; // larger id
 }
 
-export interface Channel {
+export interface channelModel {
   founderID: number;
   id: number;
   name: string;
@@ -60,7 +60,7 @@ export interface messageModel {
 export interface ChatsState {
   favourites: Array<any>;
   directMessages: Array<any>;
-  channels: Array<Channel>;
+  channels: Array<channelModel>;
   getChannelsError?: string;
   selectedChat: string | number | null;
   chatUserDetails: object;

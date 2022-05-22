@@ -42,18 +42,14 @@ const ProfileImage = ({
   onOpenUserDetails,
   isChannel,
 }: ProfileImageProps) => {
-  const fullName = !isChannel
-    ? chatUserDetails.firstName
-      ? `${chatUserDetails.firstName} ${chatUserDetails.lastName}`
-      : "-"
-    : chatUserDetails.name;
-  const shortName = !isChannel
+  const fullName = chatUserDetails.name;
+  /*const shortName = !isChannel
     ? chatUserDetails.firstName
       ? `${chatUserDetails.firstName.charAt(
           0
         )}${chatUserDetails.lastName.charAt(0)}`
       : "-"
-    : "#";
+    : "#";*/
 
   const colors = [
     "bg-primary",
@@ -66,8 +62,8 @@ const ProfileImage = ({
   ];
   const [color] = useState(Math.floor(Math.random() * colors.length));
 
-  const isOnline =
-    chatUserDetails.status && chatUserDetails.status === STATUS_TYPES.ACTIVE;
+  const isOnline = true;
+  //chatUserDetails.status && chatUserDetails.status === STATUS_TYPES.ACTIVE;
 
   const members = (chatUserDetails.members || []).length;
   return (
@@ -129,7 +125,7 @@ const ProfileImage = ({
                     colors[color]
                   )}
                 >
-                  <span className="username"> {shortName}</span>
+                  <span className="username"> {fullName.substring(0, 1)}</span>
                   <span className="user-status"></span>
                 </span>
               </div>

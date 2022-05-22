@@ -23,7 +23,7 @@ interface DirectMessagesProps {
   recentChatArray: Array<recentChatUserTypes>;
   openAddContact: () => void;
   selectedChat: string | number;
-  onSelectChat: (id: number | string) => void;
+  onSelectChat: (id: number | string, user: userModel) => void;
 }
 const DirectMessages = ({
   authUser,
@@ -112,10 +112,10 @@ const DirectMessages = ({
 
       <div className="chat-message-list">
         <ul className="list-unstyled chat-list chat-user-list">
-          {chatUsers.map((user: userModel, key: number) => (
+          {chatUsers.map((user: userModel) => (
             <ChatUser
               user={user}
-              key={key}
+              key={user.id}
               selectedChat={selectedChat}
               onSelectChat={onSelectChat}
             />

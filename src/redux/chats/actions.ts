@@ -1,4 +1,5 @@
-import { ChatsActionTypes } from "./types";
+import { userModel } from "../auth/types";
+import { channelModel, ChatsActionTypes } from "./types";
 
 // common success
 export const chatsApiResponseSuccess = (actionType: string, data: any) => ({
@@ -45,9 +46,12 @@ export const createChannel = (channelData: CreateChannelPostData) => ({
   payload: channelData,
 });
 
-export const changeSelectedChat = (selectedChat: string | number | null) => ({
+export const changeSelectedChat = (
+  selectedChat: string | number | null,
+  selectedChatInfo?: userModel | channelModel
+) => ({
   type: ChatsActionTypes.CHANGE_SELECTED_CHAT,
-  payload: selectedChat,
+  payload: { selectedChat, selectedChatInfo },
 });
 
 export const getChatUserDetails = (selectedChat: string | number | null) => ({

@@ -29,7 +29,7 @@ import {
 // interfaces
 import { CreateChannelPostData } from "../../../redux/actions";
 import { userModel } from "../../../redux/auth/types";
-import { messageModel } from "../../../redux/chats/types";
+import { channelModel, messageModel } from "../../../redux/chats/types";
 import { DataTypes as newMessageTypes } from "../../../components/StartNewMessageModal";
 
 // components
@@ -224,7 +224,11 @@ const Index = (props: IndexProps) => {
     get chat user details
   */
 
-  const onSelectChat = (id: string | number, isChannel?: boolean) => {
+  const onSelectChat = (
+    id: string | number,
+    info: userModel | channelModel,
+    isChannel?: boolean
+  ) => {
     if (isChannel) {
       dispatch(getChannelDetails(id));
     } else {
@@ -232,7 +236,7 @@ const Index = (props: IndexProps) => {
     }
     dispatch(readConversation(id));
     dispatch(getChatUserConversations(id));
-    dispatch(changeSelectedChat(id));
+    dispatch(changeSelectedChat(id, info));
   };
 
   /*
