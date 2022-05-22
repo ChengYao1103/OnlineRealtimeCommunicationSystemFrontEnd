@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import { Alert, Row, Col, Form } from "reactstrap";
 
 // hooks
-import { useRedux } from "../../hooks/index";
+import { useProfile, useRedux } from "../../hooks/index";
 
 // router
 import { useHistory } from "react-router-dom";
@@ -11,9 +11,6 @@ import { useHistory } from "react-router-dom";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
-
-// hooks
-// import { useProfile } from "../../hooks";
 
 //actions
 import {
@@ -30,12 +27,6 @@ import Loader from "../../components/Loader";
 //images
 import avatarPlaceHolder from "../../assets/images/users/profile-placeholder.png";
 
-//user information
-import { useSelector } from "react-redux";
-import type { RootState } from "../../redux/store";
-import { AuthState } from "../../redux/auth/types";
-import { userModel } from "../../redux/auth/types";
-
 interface ChangePasswordProps {}
 
 interface ChangePasswordFormProps {
@@ -46,15 +37,8 @@ interface ChangePasswordFormProps {
 
 const ChangePassword = (prop: ChangePasswordProps) => {
   // global store
-  const { dispatch, useAppSelector } = useRedux(); //set user information
-  const [isLoad, setIsLoad] = useState(false);
-  const LoginState: AuthState = useSelector((state: RootState) => state.Auth);
-  const [user, setUser] = useState({} as userModel);
-
-  if (!isLoad && LoginState.response) {
-    setIsLoad(true);
-    setUser(LoginState.response.user);
-  }
+  const { dispatch, useAppSelector } = useRedux();
+  const { userProfile } = useProfile();
 
   const {
     changepasswordError,
@@ -114,11 +98,11 @@ const ChangePassword = (prop: ChangePasswordProps) => {
             <AuthHeader title="Change Password" />
             <div className="user-thumb text-center mb-4">
               <img
-                src={user.photo ? user.photo : avatarPlaceHolder}
+                src={userProfile.photo ? userProfile.photo : avatarPlaceHolder}
                 className="rounded-circle img-thumbnail avatar-lg"
                 alt="thumbnail"
               />
-              <h5 className="font-size-15 mt-3">{user.name}</h5>
+              <h5 className="font-size-15 mt-3">{userProfile.name}</h5>
             </div>
             {changepasswordError && changepasswordError ? (
               <Alert color="danger">{changepasswordError}</Alert>

@@ -25,7 +25,7 @@ const Group = ({ group }: GroupProps) => {
     } else {
       dispatch(getChatUserDetails(id));
     }
-    dispatch(getChatUserConversations(id));
+    //dispatch(getChatUserConversations(id));
     dispatch(changeSelectedChat(id));
   };
 
@@ -71,7 +71,7 @@ const Groups = ({ chatUserDetails }: GroupsProps) => {
           ))}
         </ul>
       ) : (
-        <p>No Groups</p> 
+        <p>No Groups</p>
       )}
     </div>
   );

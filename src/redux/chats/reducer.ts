@@ -295,7 +295,8 @@ const Chats = persistReducer(
       case ChatsActionTypes.CHANGE_SELECTED_CHAT:
         return {
           ...state,
-          selectedChat: action.payload,
+          selectedChat: action.payload.selectedChat,
+          selectedChatInfo: action.payload.selectedChatInfo,
         };
       case ChatsActionTypes.GET_CHAT_USER_DETAILS:
         return {

@@ -3,17 +3,21 @@ import { UncontrolledTooltip } from "reactstrap";
 
 // interface
 import { ChannelTypes } from "../../../data/chat";
-import { Channel } from "../../../redux/chats/types";
+import { channelModel } from "../../../redux/chats/types";
 
 // components
 import AddButton from "../../../components/AddButton";
 import ChatChannel from "./ChatChannel";
 
 interface ChanelsProps {
-  channels: Array<Channel>;
+  channels: Array<channelModel>;
   openCreateChannel: () => void;
   selectedChat: string | number;
-  onSelectChat: (id: number | string, isChannel?: boolean) => void;
+  onSelectChat: (
+    id: number | string,
+    info: channelModel,
+    isChannel?: boolean
+  ) => void;
 }
 const Chanels = ({
   channels,
@@ -43,7 +47,7 @@ const Chanels = ({
 
       <div className="chat-message-list">
         <ul className="list-unstyled chat-list chat-user-list mb-3">
-          {(channels || []).map((channel: Channel, key: number) => (
+          {(channels || []).map((channel: channelModel, key: number) => (
             <ChatChannel
               channel={channel}
               key={key}

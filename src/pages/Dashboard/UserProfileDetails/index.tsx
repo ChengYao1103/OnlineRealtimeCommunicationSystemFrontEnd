@@ -34,11 +34,13 @@ const Index = ({ isChannel }: IndexProps) => {
   const { dispatch, useAppSelector } = useRedux();
 
   const {
+    selectedChatInfo, // 用途可能跟chatUserDetails重複
     chatUserDetails,
     getUserDetailsLoading,
     isOpenUserDetails,
     isFavouriteContactToggled,
   } = useAppSelector(state => ({
+    selectedChatInfo: state.Chats.selectedChatInfo,
     chatUserDetails: state.Chats.chatUserDetails,
     getUserDetailsLoading: state.Chats.getUserDetailsLoading,
     isOpenUserDetails: state.Chats.isOpenUserDetails,
@@ -106,7 +108,7 @@ const Index = ({ isChannel }: IndexProps) => {
 
           <ProfileUser
             onCloseUserDetails={onCloseUserDetails}
-            chatUserDetails={chatUserDetails}
+            chatUserDetails={selectedChatInfo}
             onOpenVideo={onOpenVideo}
             onOpenAudio={onOpenAudio}
           />
@@ -123,10 +125,10 @@ const Index = ({ isChannel }: IndexProps) => {
               onToggleFavourite={onToggleFavourite}
               onToggleArchive={onToggleArchive}
             />
-            <Status about={chatUserDetails.about} />
+            {/*<Status about={chatUserDetails.about} />*/}
             {!isChannel ? (
               <>
-                <BasicDetails chatUserDetails={chatUserDetails} />
+                <BasicDetails chatUserDetails={selectedChatInfo} />
                 <hr className="my-4" />
                 <Groups chatUserDetails={chatUserDetails} />
                 <hr className="my-4" />
@@ -146,16 +148,16 @@ const Index = ({ isChannel }: IndexProps) => {
             <AudioCallModal
               isOpen={isOpenAudioModal}
               onClose={onCloseAudio}
-              user={chatUserDetails}
-              userName={`${chatUserDetails.firstName} ${chatUserDetails.lastName}`}
+              callInfo={chatUserDetails}
+              user={selectedChatInfo}
             />
           )}
           {isOpenVideoModal && (
             <VideoCallModal
               isOpen={isOpenVideoModal}
               onClose={onCloseVideo}
-              user={chatUserDetails}
-              userName={`${chatUserDetails.firstName} ${chatUserDetails.lastName}`}
+              callInfo={chatUserDetails}
+              user={selectedChatInfo}
             />
           )}
         </div>

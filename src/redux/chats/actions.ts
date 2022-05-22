@@ -1,4 +1,5 @@
-import { ChatsActionTypes } from "./types";
+import { userModel } from "../auth/types";
+import { channelModel, ChatsActionTypes } from "./types";
 
 // common success
 export const chatsApiResponseSuccess = (actionType: string, data: any) => ({
@@ -24,9 +25,9 @@ export const getChannels = (userId: string) => ({
   payload: { userId },
 });
 
-export const getRecentChat = (userId: number, amount: number) => ({
+export const getRecentChat = (userAmount: number, messageAmount: number) => ({
   type: ChatsActionTypes.GET_RECENT_CHAT,
-  payload: { userId, amount },
+  payload: { userAmount, messageAmount },
 });
 
 export const addContacts = (contacts: Array<string | number>) => ({
@@ -45,9 +46,12 @@ export const createChannel = (channelData: CreateChannelPostData) => ({
   payload: channelData,
 });
 
-export const changeSelectedChat = (selectedChat: string | number | null) => ({
+export const changeSelectedChat = (
+  selectedChat: string | number | null,
+  selectedChatInfo?: userModel | channelModel
+) => ({
   type: ChatsActionTypes.CHANGE_SELECTED_CHAT,
-  payload: selectedChat,
+  payload: { selectedChat, selectedChatInfo },
 });
 
 export const getChatUserDetails = (selectedChat: string | number | null) => ({
@@ -55,11 +59,9 @@ export const getChatUserDetails = (selectedChat: string | number | null) => ({
   payload: selectedChat,
 });
 
-export const getChatUserConversations = (
-  selectedChat: string | number | null
-) => ({
+export const getChatUserConversations = (data: any) => ({
   type: ChatsActionTypes.GET_CHAT_USER_CONVERSATIONS,
-  payload: selectedChat,
+  payload: data,
 });
 
 export const toggleUserDetailsTab = (value: boolean) => ({

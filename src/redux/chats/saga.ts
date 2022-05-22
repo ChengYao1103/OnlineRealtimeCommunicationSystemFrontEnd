@@ -76,8 +76,8 @@ function* getChannels({ payload: data }: any) {
 function* getRecentChat({ payload: data }: any) {
   try {
     const response: Promise<any> = yield call(getRecentChatApi, {
-      n: data.amount,
-      m: data.userId,
+      n: data.userAmount,
+      m: data.messageAmount,
     });
     yield put(
       chatsApiResponseSuccess(ChatsActionTypes.GET_RECENT_CHAT, response)
@@ -123,9 +123,13 @@ function* getChatUserDetails({ payload: id }: any) {
   }
 }
 
-function* getChatUserConversations({ payload: id }: any) {
+function* getChatUserConversations({ payload: data }: any) {
   try {
-    const response: Promise<any> = yield call(getChatUserConversationsApi, id);
+    const response: Promise<any> = yield call(
+      getChatUserConversationsApi,
+      data
+    );
+    console.log(response);
     yield put(
       chatsApiResponseSuccess(
         ChatsActionTypes.GET_CHAT_USER_CONVERSATIONS,

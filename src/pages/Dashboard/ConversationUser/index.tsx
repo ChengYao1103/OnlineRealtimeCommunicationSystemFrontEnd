@@ -38,6 +38,7 @@ const Index = ({ isChannel }: IndexProps) => {
   const { dispatch, useAppSelector } = useRedux();
 
   const {
+    selectedChatInfo, // 用途可能跟chatUserDetails重複
     chatUserDetails,
     chatUserConversations,
     isUserMessageSent,
@@ -46,6 +47,7 @@ const Index = ({ isChannel }: IndexProps) => {
     isUserMessagesDeleted,
     isImageDeleted,
   } = useAppSelector(state => ({
+    selectedChatInfo: state.Chats.selectedChatInfo,
     chatUserDetails: state.Chats.chatUserDetails,
     chatUserConversations: state.Chats.chatUserConversations,
     isUserMessageSent: state.Chats.isUserMessageSent,
@@ -127,6 +129,18 @@ const Index = ({ isChannel }: IndexProps) => {
     isImageDeleted,
   ]);
 
+  useEffect(() => {
+    if (selectedChatInfo) {
+      dispatch(
+        getChatUserConversations({
+          otherSideID: selectedChatInfo.id,
+          lastMessageID: 10,
+          n: 15,
+        })
+      );
+    }
+  }, [dispatch, selectedChatInfo, userProfile]);
+
   const onDeleteMessage = (messageId: string | number) => {
     dispatch(deleteMessage(chatUserDetails.id, messageId));
   };
@@ -142,7 +156,7 @@ const Index = ({ isChannel }: IndexProps) => {
   return (
     <>
       <UserHead
-        chatUserDetails={chatUserDetails}
+        chatUserDetails={selectedChatInfo}
         pinnedTabs={pinnedTabs}
         onOpenUserDetails={onOpenUserDetails}
         onDelete={onDeleteUserMessages}
@@ -151,7 +165,7 @@ const Index = ({ isChannel }: IndexProps) => {
       />
       <Conversation
         chatUserConversations={chatUserConversations}
-        chatUserDetails={chatUserDetails}
+        chatUserDetails={selectedChatInfo}
         onDelete={onDeleteMessage}
         onSetReplyData={onSetReplyData}
         isChannel={isChannel}

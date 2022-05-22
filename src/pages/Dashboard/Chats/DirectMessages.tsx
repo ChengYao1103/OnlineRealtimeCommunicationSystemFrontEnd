@@ -8,7 +8,10 @@ import ChatUser from "./ChatUser";
 
 // interface
 import { UserTypes } from "../../../data/chat";
-import { getRecentChat } from "../../../redux/actions";
+import {
+  clearOtherUserInformation,
+  getRecentChat,
+} from "../../../redux/actions";
 import { userModel } from "../../../redux/auth/types";
 import { recentChatUserTypes } from "../../../redux/chats/types";
 
@@ -20,7 +23,7 @@ interface DirectMessagesProps {
   recentChatArray: Array<recentChatUserTypes>;
   openAddContact: () => void;
   selectedChat: string | number;
-  onSelectChat: (id: number | string) => void;
+  onSelectChat: (id: number | string, user: userModel) => void;
 }
 const DirectMessages = ({
   authUser,
@@ -30,16 +33,17 @@ const DirectMessages = ({
   onSelectChat,
 }: DirectMessagesProps) => {
   const { dispatch, useAppSelector } = useRedux();
-  const [isLoad, setIsLoad] = useState<boolean>(false);
+  const [isLoadInformation, setIsLoadInformation] = useState<boolean>(false);
   const { userInfoState } = useAppSelector(state => ({
     userInfoState: state.Auth.otherUserInfo,
   }));
-  const chatUsers: Array<userModel> = [];
+  const [chatUsers, setChatUsers] = useState<Array<userModel>>([]);
 
   useEffect(() => {
     let targetId = 0;
-    if (!isLoad && recentChatArray) {
-      setIsLoad(true);
+    if (!isLoadInformation && recentChatArray) {
+      dispatch(clearOtherUserInformation()); // handle duplicate
+      setIsLoadInformation(true);
       recentChatArray.forEach(element => {
         // 辨認是否為他人id
         targetId =
@@ -47,15 +51,22 @@ const DirectMessages = ({
         dispatch(getUserInformation(targetId.toString()));
       });
     }
-  }, [dispatch, isLoad, authUser, recentChatArray, userInfoState]);
-  if (
-    isLoad &&
-    userInfoState &&
-    chatUsers.findIndex(element => element === userInfoState) === -1
-  ) {
-    chatUsers.push(userInfoState);
-    //setChatUserArray(test);
-  }
+  }, [dispatch, isLoadInformation, authUser, recentChatArray, userInfoState]);
+
+  useEffect(() => {
+    let tmpChatUsers: Array<userModel> = [];
+    chatUsers.forEach(user => {
+      tmpChatUsers.push(user);
+    });
+    if (
+      isLoadInformation &&
+      userInfoState &&
+      tmpChatUsers.findIndex(element => element === userInfoState) === -1
+    ) {
+      tmpChatUsers.push(userInfoState);
+      setChatUsers(tmpChatUsers);
+    }
+  }, [dispatch, isLoadInformation, userInfoState, chatUsers, recentChatArray]);
 
   /*
     add contacts
@@ -74,11 +85,13 @@ const DirectMessages = ({
             <button
               type="button"
               onClick={() => {
-                dispatch(getRecentChat(10, authUser.id));
+                dispatch(getRecentChat(10, 1));
+                setIsLoadInformation(false);
+                setChatUsers([]);
               }}
               className="btn btn-soft-primary btn-sm"
             >
-              <i className="bx bx-chat"></i>
+              <i className="bx bx-loader"></i>
             </button>
           </div>
           <UncontrolledTooltip target="refresh-message" placement="bottom">

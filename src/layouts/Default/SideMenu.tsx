@@ -13,7 +13,7 @@ import {
 } from "reactstrap";
 
 // hooks
-import { useRedux } from "../../hooks/index";
+import { useProfile, useRedux } from "../../hooks/index";
 
 // actions
 import { changeTab } from "../../redux/actions";
@@ -193,12 +193,11 @@ const SideMenu = ({ onChangeLayoutMode }: any) => {
   const { dispatch, useAppSelector } = useRedux();
 
   const menuItems: MenuItemType[] = MENU_ITEMS;
-  const { AuthState, activeTab, layoutMode } = useAppSelector(state => ({
-    AuthState: state.Auth,
+  const { activeTab, layoutMode } = useAppSelector(state => ({
     activeTab: state.Layout.activeTab,
     layoutMode: state.Layout.layoutMode,
   }));
-  const authUser: userModel = AuthState.response.user;
+  const { userProfile } = useProfile();
 
   /* 
     tab activation
@@ -253,7 +252,10 @@ const SideMenu = ({ onChangeLayoutMode }: any) => {
           />
 
           {/* profile menu dropdown */}
-          <ProfileDropdownMenu authUser={authUser} onChangeTab={onChangeTab} />
+          <ProfileDropdownMenu
+            authUser={userProfile}
+            onChangeTab={onChangeTab}
+          />
         </Nav>
       </div>
       {/* end side-menu nav */}

@@ -9,7 +9,7 @@ import { userModel } from "../../../redux/auth/types";
 interface ChatUserProps {
   user: userModel;
   selectedChat: string | number;
-  onSelectChat: (id: number | string) => void;
+  onSelectChat: (id: number | string, user: userModel) => void;
 }
 
 const ChatUser = ({ user, selectedChat, onSelectChat }: ChatUserProps) => {
@@ -33,7 +33,7 @@ const ChatUser = ({ user, selectedChat, onSelectChat }: ChatUserProps) => {
   const isSelectedChat: boolean =
     selectedChat && selectedChat === user.id ? true : false;
   const onClick = () => {
-    onSelectChat(user.id);
+    onSelectChat(user.id, user);
   };
   return (
     <li className={classnames({ active: isSelectedChat })} onClick={onClick}>

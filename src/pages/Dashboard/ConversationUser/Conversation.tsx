@@ -14,13 +14,14 @@ import Message from "./Message";
 
 // interface
 import { MessagesTypes } from "../../../data/messages";
+import { userModel } from "../../../redux/auth/types";
 import ForwardModal from "../../../components/ForwardModal";
 
 // actions
 import { forwardMessage, deleteImage } from "../../../redux/actions";
 interface ConversationProps {
   chatUserConversations: any;
-  chatUserDetails: any;
+  chatUserDetails: userModel;
   onDelete: (messageId: string | number) => any;
   onSetReplyData: (reply: null | MessagesTypes | undefined) => void;
   isChannel: boolean;

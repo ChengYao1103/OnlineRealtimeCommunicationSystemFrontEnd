@@ -84,6 +84,14 @@ export const getUserInformation = (userId: string) => {
   };
 };
 
+// clear other user info state
+export const clearOtherUserInformation = () => {
+  return {
+    type: AuthActionTypes.CLEAR_OTHER_USER_INFOMATION,
+    payload: {},
+  };
+};
+
 // get user id by email
 export const getUserId = (Email: string) => {
   return {

@@ -38,11 +38,11 @@ export interface senderModel {
 export interface recentChatUserTypes {
   Messages: object;
   SeenMessageID: number;
-  User1: number; // me?
-  User2: number; // others?
+  User1: number; // smaller id
+  User2: number; // larger id
 }
 
-export interface Channel {
+export interface channelModel {
   founderID: number;
   id: number;
   name: string;
@@ -60,7 +60,7 @@ export interface messageModel {
 export interface ChatsState {
   favourites: Array<any>;
   directMessages: Array<any>;
-  channels: Array<Channel>;
+  channels: Array<channelModel>;
   getChannelsError?: string;
   selectedChat: string | number | null;
   chatUserDetails: object;

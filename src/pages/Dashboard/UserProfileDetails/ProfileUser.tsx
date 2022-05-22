@@ -13,9 +13,13 @@ import imagePlaceholder from "../../../assets/images/users/profile-placeholder.p
 
 // constants
 import { STATUS_TYPES } from "../../../constants";
+
+//interfaces
+import { userModel } from "../../../redux/auth/types";
+
 interface ProfileUserProps {
   onCloseUserDetails: () => any;
-  chatUserDetails: any;
+  chatUserDetails: userModel;
   onOpenVideo: () => void;
   onOpenAudio: () => void;
 }
@@ -28,15 +32,10 @@ const ProfileUser = ({
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const toggle = () => setDropdownOpen(!dropdownOpen);
 
-  const profile = chatUserDetails.profileImage
-    ? chatUserDetails.profileImage
+  const profile = chatUserDetails.photo
+    ? chatUserDetails.photo
     : imagePlaceholder;
-  const fullName =
-    chatUserDetails.name === undefined
-      ? chatUserDetails.firstName
-        ? `${chatUserDetails.firstName} ${chatUserDetails.lastName}`
-        : "-"
-      : chatUserDetails.name;
+  const fullName = chatUserDetails.name;
 
   return (
     <div className="p-3 border-bottom">
@@ -118,7 +117,7 @@ const ProfileUser = ({
           </div>
           <div className="mt-auto p-3">
             <h5 className="user-name mb-1 text-truncate">{fullName}</h5>
-            {chatUserDetails.status && (
+            {/*chatUserDetails.status && (
               <p className="font-size-14 text-truncate mb-0">
                 <i
                   className={classnames(
@@ -141,9 +140,9 @@ const ProfileUser = ({
                     }
                   )}
                 ></i>{" "}
-                {chatUserDetails.status}
+                {chatUserDetails.status*}
               </p>
-            )}
+            )*/}
           </div>
         </div>
       </div>

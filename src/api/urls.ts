@@ -31,11 +31,11 @@ export const UPDATE_BOOKMARK = "/bookmarks-update";
 // chats
 export const SEND_MESSAGE = "/message/send";
 export const GET_RECENT_CHAT = "/message/recentChat";
+export const GET_CHAT_USER_CONVERSATIONS = "/message/record";
 export const GET_FAVOURITES = "/get-favourites";
 export const GET_DIRECT_MESSAGES = "/get-direct-messages";
 export const ADD_CONTACTS = "/add-contact";
 export const GET_CHAT_USER_DETAILS = "/get-user-details";
-export const GET_CHAT_USER_CONVERSATIONS = "/get-user-conversations";
 export const RECEIVE_MESSAGE = "/receive-message";
 export const READ_MESSAGE = "/read-message";
 export const RECEIVE_MESSAGE_FROM_USER = "/receive-message-from-user";
