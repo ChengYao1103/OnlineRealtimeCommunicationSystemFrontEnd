@@ -133,7 +133,6 @@ const Index = ({ isChannel }: IndexProps) => {
     if (selectedChatInfo) {
       dispatch(
         getChatUserConversations({
-          userID: userProfile.id,
           otherSideID: selectedChatInfo.id,
           lastMessageID: 10,
           n: 15,
