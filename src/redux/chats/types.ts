@@ -49,12 +49,19 @@ export interface channelModel {
   recordPath: string;
 }
 
-let contentTypes = ["文字", "圖片", "音訊", "檔案"];
-
+//contentTypes = ["文字", "圖片", "音訊", "檔案"];
 export interface messageModel {
   receiverID: number;
   content: any;
   type: number;
+}
+
+export interface messageRecordModel {
+  SenderID: number;
+  ReceiverID: number;
+  Content: any;
+  Type: number;
+  Time: string;
 }
 
 export interface ChatsState {

@@ -164,13 +164,15 @@ const Index = ({ isChannel }: IndexProps) => {
         isChannel={isChannel}
         onToggleArchive={onToggleArchive}
       />
-      <Conversation
-        chatUserConversations={chatUserConversations}
-        chatUserDetails={selectedChatInfo}
-        onDelete={onDeleteMessage}
-        onSetReplyData={onSetReplyData}
-        isChannel={isChannel}
-      />
+      {chatUserConversations.length > 0 && (
+        <Conversation
+          chatUserConversations={chatUserConversations}
+          chatUserDetails={selectedChatInfo}
+          onDelete={onDeleteMessage}
+          onSetReplyData={onSetReplyData}
+          isChannel={isChannel}
+        />
+      )}
       <ChatInputSection
         onSend={onSend}
         replyData={replyData}

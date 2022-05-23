@@ -20,12 +20,14 @@ import {
   ImageTypes,
   AttachmentTypes,
 } from "../../../data/messages";
+import { userModel } from "../../../redux/auth/types";
+import { channelModel, messageRecordModel } from "../../../redux/chats/types";
 
 // hooks
 import { useProfile } from "../../../hooks";
 
 // utils
-import { formateDate } from "../../../utils";
+import { getDateTime } from "../../../utils";
 import RepliedMessage from "./RepliedMessage";
 
 interface MenuProps {
@@ -265,8 +267,8 @@ const Typing = () => {
   );
 };
 interface MessageProps {
-  message: MessagesTypes;
-  chatUserDetails: any;
+  message: messageRecordModel;
+  chatUserDetails: userModel;
   onDelete: (messageId: string | number) => any;
   onSetReplyData: (reply: null | MessagesTypes | undefined) => void;
   isFromMe: boolean;
@@ -285,50 +287,47 @@ const Message = ({
   onDeleteImage,
 }: MessageProps) => {
   const { userProfile } = useProfile();
-  const hasImages = message.image && message.image.length;
-  const hasAttachments = message.attachments && message.attachments.length;
-  const hasText = message.text;
+  const hasText = message.Type === 0;
+  const hasImages = message.Type === 1;
+  const hasAttachments = message.Type === 3;
   const isTyping = false;
 
-  const chatUserFullName = chatUserDetails.firstName
-    ? `${chatUserDetails.firstName} ${chatUserDetails.lastName}`
-    : "-";
+  const chatUserFullName = chatUserDetails.name;
 
-  const myProfile = userProfile.profileImage
-    ? userProfile.profileImage
-    : imagePlaceholder;
-  const channeluserProfile =
-    message.meta.userData && message.meta.userData.profileImage
+  const myProfile = userProfile.photo ? userProfile.photo : imagePlaceholder;
+  const channeluserProfile = imagePlaceholder;
+  /*message.meta.userData && message.meta.userData.profileImage
       ? message.meta.userData.profileImage
-      : imagePlaceholder;
-  const chatUserprofile = chatUserDetails.profileImage
-    ? chatUserDetails.profileImage
+      : imagePlaceholder;*/
+  const chatUserprofile = chatUserDetails.photo
+    ? chatUserDetails.photo
     : imagePlaceholder;
   const profile = isChannel ? channeluserProfile : chatUserprofile;
-  const date = formateDate(message.time, "hh:mmaaa");
-  const isSent = message.meta.sent;
-  const isReceived = message.meta.received;
-  const isRead = message.meta.read;
-  const isForwarded = message.meta.isForwarded;
-  const channdelSenderFullname = message.meta.userData
+  const date = getDateTime(message.Time);
+  const isSent = true; //message.meta.sent;
+  const isReceived = true; //message.meta.received;
+  const isRead = false; //message.meta.read;
+  const isForwarded = false; //message.meta.isForwarded;
+  const channelSenderFullname = "-";
+  /*message.meta.userData
     ? `${message.meta.userData.firstName} ${message.meta.userData.lastName}`
-    : "-";
-  const fullName = isChannel ? channdelSenderFullname : chatUserFullName;
+    : "-";*/
+  const ChatUserfullName = isChannel ? channelSenderFullname : chatUserFullName;
   const onDeleteMessage = () => {
-    onDelete(message.mId);
+    //onDelete(message.mId);
   };
 
   const onClickReply = () => {
-    onSetReplyData(message);
+    //onSetReplyData(message);
   };
-  const isRepliedMessage = message.replyOf;
+  const isRepliedMessage = false; //message.replyOf;
 
   const onForwardMessage = () => {
-    onOpenForward(message);
+    //onOpenForward(message);
   };
 
   const onDeleteImg = (imageId: number | string) => {
-    onDeleteImage(message.mId, imageId);
+    //onDeleteImage(message.mId, imageId);
   };
   return (
     <li
@@ -344,10 +343,10 @@ const Message = ({
         </div>
 
         <div className="user-chat-content">
-          {hasImages && message.text && (
+          {hasImages && message.Content && (
             <div className="ctext-wrap">
               <div className="ctext-wrap-content">
-                <p className="mb-0 ctext-content">{message.text}</p>
+                <p className="mb-0 ctext-content">{message.Content}</p>
               </div>
             </div>
           )}
@@ -379,21 +378,21 @@ const Message = ({
             {/* image message start */}
             {hasImages ? (
               <>
-                <Images images={message.image!} onDeleteImg={onDeleteImg} />
+                <Images images={message.Content!} onDeleteImg={onDeleteImg} />
               </>
             ) : (
               <>
                 <div className="ctext-wrap-content">
-                  {isRepliedMessage && (
+                  {/*isRepliedMessage && (
                     <RepliedMessage
                       fullName={fullName}
                       message={message}
                       isFromMe={isFromMe}
                     />
-                  )}
+                  )*/}
 
                   {hasText && (
-                    <p className="mb-0 ctext-content">{message.text}</p>
+                    <p className="mb-0 ctext-content">{message.Content}</p>
                   )}
 
                   {/* typing start */}
@@ -402,7 +401,7 @@ const Message = ({
                   {/* typing end */}
                   {/* files message start */}
                   {hasAttachments && (
-                    <Attachments attachments={message.attachments} />
+                    <Attachments attachments={message.Content} />
                   )}
                   {/* files message end */}
                 </div>
@@ -441,7 +440,7 @@ const Message = ({
               </>
             ) : (
               <>
-                {fullName}
+                {ChatUserfullName}
                 <small className={classnames("text-muted", "mb-0", "ms-2")}>
                   {date}
                 </small>

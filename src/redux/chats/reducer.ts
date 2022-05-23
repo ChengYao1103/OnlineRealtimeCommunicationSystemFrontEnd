@@ -73,7 +73,7 @@ const Chats = persistReducer(
           case ChatsActionTypes.GET_CHAT_USER_CONVERSATIONS:
             return {
               ...state,
-              chatUserConversations: action.payload.data,
+              chatUserConversations: action.payload.data.message.Messages,
               isUserConversationsFetched: true,
               getUserConversationsLoading: false,
               isUserMessageSent: false,
