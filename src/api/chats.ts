@@ -1,3 +1,4 @@
+import * as WSInterfaces from "../repository/wsEvent";
 import { APIClient } from "./apiCore";
 import * as url from "./urls";
 
@@ -37,7 +38,18 @@ const getRecentChat = (data: object) => {
 };
 
 const sendMessage = (data: object) => {
-  return api.create(url.SEND_MESSAGE, data);
+  let send: WSInterfaces.WSEvent = {
+    event: WSInterfaces.WSSendEvents.SendContent,
+    data: {
+      to: 1,
+      type: 1,
+      content: ""
+    }
+  }
+  
+  console.log(send);
+  console.log(data);
+  return api.WSSend('{"": ""}');
 };
 
 const receiveMessage = (id: string | number) => {
