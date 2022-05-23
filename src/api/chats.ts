@@ -1,4 +1,5 @@
-import * as WSInterfaces from "../repository/wsEvent";
+import { messageModel } from "../redux/chats/types";
+import { WSEvent, WSSendEvents } from "../repository/wsEvent";
 import { APIClient } from "./apiCore";
 import * as url from "./urls";
 
@@ -37,19 +38,17 @@ const getRecentChat = (data: object) => {
   return api.create(url.GET_RECENT_CHAT, data);
 };
 
-const sendMessage = (data: object) => {
-  let send: WSInterfaces.WSEvent = {
-    event: WSInterfaces.WSSendEvents.SendContent,
+const sendMessage = (data: messageModel) => {
+  let send: WSEvent = {
+    event: WSSendEvents.SendContent,
     data: {
-      to: 1,
-      type: 1,
-      content: ""
+      to: data.receiverID,
+      type: data.type,
+      content: data.content
     }
   }
   
-  console.log(send);
-  console.log(data);
-  return api.WSSend('{"": ""}');
+  return api.WSSend(JSON.stringify(send));
 };
 
 const receiveMessage = (id: string | number) => {
