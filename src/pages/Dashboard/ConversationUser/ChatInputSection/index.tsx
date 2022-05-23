@@ -43,7 +43,7 @@ const Index = ({
   /*
   input text
   */
-  const [text, setText] = useState<null | string>(null);
+  const [text, setText] = useState<string>("");
   const onChangeText = (value: string) => {
     setText(value);
   };
@@ -64,7 +64,7 @@ const Index = ({
     setFiles(files);
   };
   useEffect(() => {
-    if (text || images || files) {
+    if (text !== "" || images.length > 0 || files.length > 0) {
       setDisabled(false);
     } else {
       setDisabled(true);
