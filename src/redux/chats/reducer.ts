@@ -199,7 +199,11 @@ const Chats = persistReducer(
               isUserMessageSent: false,
             };
           case ChatsActionTypes.GET_RECENT_CHAT:
-            toast.error(action.payload.error.data);
+            toast.error(
+              action.payload.error.data.msg
+                ? action.payload.error.data.msg
+                : action.payload.error.data.message
+            );
             return { ...state };
           case ChatsActionTypes.ON_SEND_MESSAGE:
             toast.error(

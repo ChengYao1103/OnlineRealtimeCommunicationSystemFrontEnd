@@ -10,18 +10,22 @@ import Reply from "./Reply";
 
 // interface
 import { MessagesTypes } from "../../../../data/messages";
+import { userModel } from "../../../../redux/auth/types";
+import { messageModel } from "../../../../redux/chats/types";
+import { toast } from "react-toastify";
+import is from "date-fns/esm/locale/is/index.js";
 
 interface IndexProps {
   onSend: (data: any) => void;
   replyData: null | MessagesTypes | undefined;
   onSetReplyData: (reply: null | MessagesTypes | undefined) => void;
-  chatUserDetails: any;
+  selectedChatInfo: userModel;
 }
 const Index = ({
   onSend,
   replyData,
   onSetReplyData,
-  chatUserDetails,
+  selectedChatInfo,
 }: IndexProps) => {
   /*
   more menu collapse
@@ -47,7 +51,7 @@ const Index = ({
   /*
   images
   */
-  const [images, setImages] = useState<Array<any> | null | undefined>();
+  const [images, setImages] = useState<Array<any>>([]);
   const onSelectImages = (images: Array<any>) => {
     setImages(images);
   };
@@ -55,7 +59,7 @@ const Index = ({
   /*
   files
   */
-  const [files, setFiles] = useState<Array<any> | null | undefined>();
+  const [files, setFiles] = useState<Array<any>>([]);
   const onSelectFiles = (files: Array<any>) => {
     setFiles(files);
   };
@@ -68,7 +72,28 @@ const Index = ({
   }, [text, images, files]);
 
   const onSubmit = () => {
-    let data: any = {};
+    let datas: Array<messageModel> = [];
+    // text message
+    datas.push({ receiverID: selectedChatInfo.id, content: text, type: 0 });
+
+    //images message ***有bug傳不出去***
+    /*for (const image of images) {
+      let reader = new FileReader();
+      reader.readAsDataURL(image);
+      reader.onload = () => {
+        //儲存轉換完成之圖片
+        const base64 = reader.result;
+        if (typeof base64 === "string") {
+          datas.push({
+            receiverID: selectedChatInfo.id,
+            content: base64,
+            type: 1,
+          });
+        }
+      };
+    }*/
+
+    /*let data: any = {};
     if (text) {
       data["text"] = text;
     }
@@ -94,17 +119,22 @@ const Index = ({
         };
       });
       data["attachments"] = fs;
-    }
+    }*/
 
+    /*if (datas.length === images.length + files.length + (text === "" ? 0 : 1)) {
+      
+    }*/
+    for (const i in datas) {
+      onSend(datas[i]);
+    }
     setText("");
-    setImages(null);
-    setFiles(null);
-    onSend(data);
+    setImages([]);
+    setFiles([]);
   };
 
   const onClearMedia = () => {
-    setImages(null);
-    setFiles(null);
+    setImages([]);
+    setFiles([]);
   };
   return (
     <div className="chat-input-section p-3 p-lg-4">
@@ -142,10 +172,14 @@ const Index = ({
           closeClassName="selected-media-close"
         >
           <p className="me-2 mb-0">
-            {images && !files && ` You have selected ${images.length} images`}
-            {files && !images && ` You have selected ${files.length} files`}
-            {files &&
-              images &&
+            {images.length > 0 &&
+              files.length === 0 &&
+              ` You have selected ${images.length} images`}
+            {files.length > 0 &&
+              images.length === 0 &&
+              ` You have selected ${files.length} files`}
+            {files.length > 0 &&
+              images.length > 0 &&
               ` You have selected ${files.length} files & ${images.length} images.`}
           </p>
         </Alert>
@@ -161,7 +195,7 @@ const Index = ({
       <Reply
         reply={replyData}
         onSetReplyData={onSetReplyData}
-        chatUserDetails={chatUserDetails}
+        chatUserDetails={selectedChatInfo}
       />
     </div>
   );

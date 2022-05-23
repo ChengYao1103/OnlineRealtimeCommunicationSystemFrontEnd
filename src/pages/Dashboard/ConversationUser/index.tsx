@@ -29,6 +29,7 @@ import { MessagesTypes } from "../../../data/messages";
 
 // dummy data
 import { pinnedTabs } from "../../../data/index";
+import { messageModel } from "../../../redux/chats/types";
 
 interface IndexProps {
   isChannel: boolean;
@@ -79,8 +80,8 @@ const Index = ({ isChannel }: IndexProps) => {
   /*
   send message
   */
-  const onSend = (data: any) => {
-    let params: any = {
+  const onSend = (data: messageModel) => {
+    /*let params: any = {
       text: data.text && data.text,
       time: new Date().toISOString(),
       image: data.image && data.image,
@@ -92,18 +93,18 @@ const Index = ({ isChannel }: IndexProps) => {
     };
     if (replyData && replyData !== null) {
       params["replyOf"] = replyData;
-    }
+    }*/
 
-    dispatch(onSendMessage(params));
+    dispatch(onSendMessage(data));
     if (!isChannel) {
       setTimeout(() => {
-        dispatch(receiveMessage(chatUserDetails.id));
+        dispatch(receiveMessage(selectedChatInfo.id));
       }, 1000);
       setTimeout(() => {
-        dispatch(readMessage(chatUserDetails.id));
+        dispatch(readMessage(selectedChatInfo.id));
       }, 1500);
       setTimeout(() => {
-        dispatch(receiveMessageFromUser(chatUserDetails.id));
+        dispatch(receiveMessageFromUser(selectedChatInfo.id));
       }, 2000);
     }
     setReplyData(null);
@@ -117,7 +118,7 @@ const Index = ({ isChannel }: IndexProps) => {
       isUserMessagesDeleted ||
       isImageDeleted
     ) {
-      dispatch(getChatUserConversations(chatUserDetails.id));
+      //dispatch(getChatUserConversations(chatUserDetails.id));
     }
   }, [
     dispatch,
@@ -174,7 +175,7 @@ const Index = ({ isChannel }: IndexProps) => {
         onSend={onSend}
         replyData={replyData}
         onSetReplyData={onSetReplyData}
-        chatUserDetails={chatUserDetails}
+        selectedChatInfo={selectedChatInfo}
       />
     </>
   );
