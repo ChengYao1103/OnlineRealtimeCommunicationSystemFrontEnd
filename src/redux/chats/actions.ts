@@ -12,6 +12,12 @@ export const chatsApiResponseError = (actionType: string, error: string) => ({
   payload: { actionType, error },
 });
 
+// websocket event
+export const chatWebsocketEvent = (actionType: string, data: any) => ({
+  type: ChatsActionTypes.WS_EVENT,
+  payload: { actionType, data },
+});
+
 export const getFavourites = () => ({
   type: ChatsActionTypes.GET_FAVOURITES,
 });

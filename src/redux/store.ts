@@ -13,7 +13,7 @@ declare global {
   }
 }
 
-let store: any;
+export let store: any;
 export function configureStore(initialState: any) {
   const composeEnhancers =
     window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
