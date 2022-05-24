@@ -96,17 +96,6 @@ const Index = ({ isChannel }: IndexProps) => {
     }*/
 
     dispatch(onSendMessage(data));
-    if (!isChannel) {
-      setTimeout(() => {
-        dispatch(receiveMessage(selectedChatInfo.id));
-      }, 1000);
-      setTimeout(() => {
-        dispatch(readMessage(selectedChatInfo.id));
-      }, 1500);
-      setTimeout(() => {
-        dispatch(receiveMessageFromUser(selectedChatInfo.id));
-      }, 2000);
-    }
     setReplyData(null);
   };
 

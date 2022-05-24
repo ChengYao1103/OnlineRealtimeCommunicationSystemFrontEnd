@@ -1,5 +1,5 @@
 import { userModel } from "../auth/types";
-import { channelModel, ChatsActionTypes } from "./types";
+import { channelModel, ChatsActionTypes, messageRecordModel } from "./types";
 
 // common success
 export const chatsApiResponseSuccess = (actionType: string, data: any) => ({
@@ -63,6 +63,11 @@ export const getChatUserConversations = (data: any) => ({
   type: ChatsActionTypes.GET_CHAT_USER_CONVERSATIONS,
   payload: data,
 });
+
+export const receiveNewMessage = (message: messageRecordModel) => ({
+  type: ChatsActionTypes.RECEIVE_MESSAGE,
+  payload: message,
+})
 
 export const toggleUserDetailsTab = (value: boolean) => ({
   type: ChatsActionTypes.TOGGLE_USER_DETAILS_TAB,

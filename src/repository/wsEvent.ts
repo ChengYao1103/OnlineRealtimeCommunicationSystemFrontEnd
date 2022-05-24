@@ -7,14 +7,14 @@ export interface WSData {}
 
 export enum WSSendEvents {
   SendContent = 11,
-  ReadMessage = 12,
+  ReadContent = 12,
   MakePhoneCall = 21,
   MakeChannelMeeting = 31,
 }
 
 export enum WSReceiveEvents {
-  NewMessage = 11,
-  BeenReadMessage = 12,
+  NewContent = 11,
+  BeenReadContent = 12,
   CalledByUser = 21,
   BeenInviteToChannel = 31,
   ChannelMeetingCreated	= 32,
@@ -34,10 +34,12 @@ export interface ReadUserContent extends WSData {
   contentId: number;
 }
 
-export interface NewContentFromUser extends WSData {
+export interface NewContent extends WSData {
   from: number;
+  to: number;
   type: number;
   content: string;
+  time: string;
 }
 
 export interface ContentBeenRead extends WSData {

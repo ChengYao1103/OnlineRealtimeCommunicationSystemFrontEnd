@@ -13,7 +13,7 @@ import { MessagesTypes } from "../../../../data/messages";
 import { userModel } from "../../../../redux/auth/types";
 import { messageModel } from "../../../../redux/chats/types";
 import { toast } from "react-toastify";
-import is from "date-fns/esm/locale/is/index.js";
+import { sendMessage } from "../../../../api";
 
 interface IndexProps {
   onSend: (data: any) => void;

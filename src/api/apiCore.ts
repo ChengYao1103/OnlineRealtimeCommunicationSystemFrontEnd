@@ -1,8 +1,12 @@
 import axios from "axios";
 import config from "../config";
+import { userModel } from "../redux/auth/types";
+import { WSEvent } from "../repository/wsEvent";
 import { WSConnection } from "./webSocket";
+import { WSEventHandler } from "./wsEventHandler";
 
 let ws: WSConnection;
+let selfid: number;
 const WS_URL = config.WS_URL ?? "";
 
 // default
@@ -41,10 +45,11 @@ axios.interceptors.response.use(
   }
 );
 
-
+// websocket event handle
 let onMessage = (event: any) => {
-  let data = JSON.stringify(event.data);
+  let data: WSEvent = JSON.parse(event.data);
   console.log(data);
+  WSEventHandler(data, selfid);
 }
 
 let onClose = (event: any) => {
@@ -52,6 +57,8 @@ let onClose = (event: any) => {
 
 let authInit = (token: string) => {
   axios.defaults.headers.common["Authorization"] = token;
+  let user: userModel = JSON.parse(localStorage.getItem("authUser") ?? "");
+  selfid = user.id;
   ws = new WSConnection(WS_URL, token, onMessage, undefined, undefined, onClose);
 }
 
