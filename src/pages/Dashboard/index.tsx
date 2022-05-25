@@ -12,6 +12,7 @@ import Leftbar from "./Leftbar";
 import ConversationUser from "./ConversationUser/index";
 import UserProfileDetails from "./UserProfileDetails/index";
 import Welcome from "./ConversationUser/Welcome";
+import WSEventHandler from "../../components/wsEventHandler";
 
 interface IndexProps {}
 const Index = (props: IndexProps) => {
@@ -26,6 +27,7 @@ const Index = (props: IndexProps) => {
 
   return (
     <>
+      <WSEventHandler />
       <Leftbar />
 
       <div

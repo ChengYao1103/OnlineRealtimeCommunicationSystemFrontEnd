@@ -12,10 +12,11 @@ export const INIT_STATE: ChatsState = {
   getChannelsError: undefined,
   selectedChat: null,
   chatUserDetails: {},
-  chatUserConversations: {},
+  chatUserConversations: [],
   isOpenUserDetails: false,
   channelDetails: {},
   archiveContacts: [],
+  selectedChatInfo: undefined,
 };
 
 const Chats = persistReducer(
@@ -195,7 +196,7 @@ const Chats = persistReducer(
           case ChatsActionTypes.GET_CHAT_USER_CONVERSATIONS:
             return {
               ...state,
-              chatUserConversations: {},
+              chatUserConversations: [],
               isUserConversationsFetched: false,
               getUserConversationsLoading: false,
               isUserMessageSent: false,
@@ -270,11 +271,11 @@ const Chats = persistReducer(
       case ChatsActionTypes.WS_EVENT:
         switch(action.payload.actionType) {
           case ChatsActionTypes.RECEIVE_MESSAGE:
-            console.log(action.payload.data);
-            console.log(state.chatUserConversations);
+            if(state.selectedChatInfo && (state.selectedChatInfo.id === action.payload.data.ReceiverID || state.selectedChatInfo?.id === action.payload.data.SenderID)){
+              state.chatUserConversations.push(action.payload.data);
+            }
             return {
               ...state,
-              chatUserConversations: action.payload.data,
             };
           default:
             return { ...state };

@@ -1,3 +1,5 @@
+import { userModel } from "../auth/types";
+
 export enum ChatsActionTypes {
   API_RESPONSE_SUCCESS = "@@chats/API_RESPONSE_SUCCESS",
   API_RESPONSE_ERROR = "@@chats/API_RESPONSE_ERROR",
@@ -73,8 +75,9 @@ export interface ChatsState {
   getChannelsError?: string;
   selectedChat: string | number | null;
   chatUserDetails: object;
-  chatUserConversations: {};
+  chatUserConversations: Array<messageRecordModel>;
   isOpenUserDetails: boolean;
   channelDetails: object;
   archiveContacts: Array<any>;
+  selectedChatInfo?: userModel | channelModel;
 }
