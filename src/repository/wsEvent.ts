@@ -14,7 +14,7 @@ export enum WSSendEvents {
 
 export enum WSReceiveEvents {
   NewContent = 11,
-  BeenReadContent = 12,
+  ContentBeenRead = 12,
   CalledByUser = 21,
   BeenInviteToChannel = 31,
   ChannelMeetingCreated	= 32,

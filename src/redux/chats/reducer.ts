@@ -3,6 +3,7 @@ import { toast } from "react-toastify";
 import storage from "redux-persist/lib/storage";
 // types
 import { ChatsActionTypes, ChatsState } from "./types";
+import { getChatUserConversations } from "./actions";
 
 export const INIT_STATE: ChatsState = {
   favourites: [],
@@ -261,6 +262,19 @@ const Chats = persistReducer(
             return {
               ...state,
               isImageDeleted: true,
+            };
+          default:
+            return { ...state };
+        }
+      
+      case ChatsActionTypes.WS_EVENT:
+        switch(action.payload.actionType) {
+          case ChatsActionTypes.RECEIVE_MESSAGE:
+            console.log(action.payload.data);
+            console.log(state.chatUserConversations);
+            return {
+              ...state,
+              chatUserConversations: action.payload.data,
             };
           default:
             return { ...state };
