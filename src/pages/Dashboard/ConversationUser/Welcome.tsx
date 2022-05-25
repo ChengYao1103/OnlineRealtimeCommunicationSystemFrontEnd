@@ -1,5 +1,6 @@
 import React from "react";
 import { Button, Col, Row } from "reactstrap";
+import icon from "../../../assets/images/icon.png";
 
 const Welcome = () => {
   return (
@@ -8,9 +9,9 @@ const Welcome = () => {
         <Row className="w-100 justify-content-center">
           <Col xxl={5} md={7}>
             <div className="p-4 text-center">
-              <div className="avatar-xl mx-auto mb-4">
-                <div className="avatar-title bg-soft-primary rounded-circle">
-                  <i className="bx bxs-message-alt-detail display-4 text-primary m-0"></i>
+              <div className="avatar-xl mx-auto pt-3">
+                <div className="mt-2">
+                  <img src={icon} width="90%" alt="ORCS"></img>
                 </div>
               </div>
               <h4>Welcome to Online Realtime Communication System！</h4>

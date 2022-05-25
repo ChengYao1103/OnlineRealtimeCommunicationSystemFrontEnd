@@ -24,6 +24,7 @@ import LightDarkMode from "../../components/LightDarkMode";
 
 //images
 import avatarPlaceHolder from "../../assets/images/users/profile-placeholder.png";
+import icon from "../../assets/images/icon.png";
 
 // menu
 import { MENU_ITEMS, MenuItemType } from "./menu";
@@ -60,13 +61,13 @@ const Logo = () => {
     <div className="navbar-brand-box">
       <Link to="#" className="logo logo-dark">
         <span className="logo-sm">
-          <LogoLightSVG />
+          <img src={icon} width="48px" alt="ORCS"></img>
         </span>
       </Link>
 
       <Link to="#" className="logo logo-light">
         <span className="logo-sm">
-          <LogoDarkSVG />
+          <img src={icon} width="48px" alt="ORCS"></img>
         </span>
       </Link>
     </div>
