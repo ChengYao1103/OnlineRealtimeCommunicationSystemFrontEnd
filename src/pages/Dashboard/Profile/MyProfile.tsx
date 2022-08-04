@@ -112,14 +112,14 @@ const MyProfile = ({ user, basicDetails }: MyProfileProps) => {
 
       <div className="text-center p-3 p-lg-4 border-bottom pt-2 pt-lg-2 mt-n5 position-relative">
         <div className="mb-lg-3 mb-2">
-          {basicDetails && basicDetails.avatar && (
+          {user && user.Photo && (
             <img
-              src={basicDetails.avatar}
+              src={user.Photo}
               className="rounded-circle avatar-lg img-thumbnail"
               alt=""
             />
           )}
-          {(!basicDetails || !basicDetails.avatar) && (
+          {(!user || !user.Photo) && (
             <img
               src={avatarPlaceHolder}
               className="rounded-circle avatar-lg img-thumbnail"

@@ -151,9 +151,7 @@ function* registerUser({ payload: { user } }: any) {
 //////////Change information
 function* userChangeInformation({ payload: { data } }: any) {
   try {
-    const response: Promise<any> = yield call(changeInformationApi, {
-      newName: data.newName,
-    });
+    const response: Promise<any> = yield call(changeInformationApi, data);
     yield put(
       authApiResponseSuccess(AuthActionTypes.USER_CHANGE_INFORMATION, response)
     );

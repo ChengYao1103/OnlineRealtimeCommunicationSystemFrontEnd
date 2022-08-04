@@ -3,7 +3,7 @@ import { Button, Collapse } from "reactstrap";
 import classnames from "classnames";
 
 // hooks
-import { useRedux } from "../../../hooks/index";
+import { useProfile, useRedux } from "../../../hooks/index";
 
 // actions
 import { getSettings, updateSettings } from "../../../redux/actions";
@@ -107,15 +107,12 @@ const Index = (props: IndexProps) => {
   const { dispatch, useAppSelector } = useRedux();
 
   //get user information
-  const { response, settingsData, getSettingsLoading } = useAppSelector(
-    state => ({
-      response: state.Auth.response,
-      settingsData: state.Settings.settings,
-      getSettingsLoading: state.Profile.getSettingsLoading,
-      isSettingsFetched: state.Profile.isSettingsFetched,
-    })
-  );
-  const user: userModel = response.user;
+  const { settingsData, getSettingsLoading } = useAppSelector(state => ({
+    settingsData: state.Settings.settings,
+    getSettingsLoading: state.Profile.getSettingsLoading,
+    isSettingsFetched: state.Profile.isSettingsFetched,
+  }));
+  const user: userModel = useProfile().userProfile;
 
   // get user settings
   useEffect(() => {

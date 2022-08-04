@@ -299,8 +299,8 @@ const Message = ({
   /*message.meta.userData && message.meta.userData.profileImage
       ? message.meta.userData.profileImage
       : imagePlaceholder;*/
-  const chatUserprofile = chatUserDetails.photo
-    ? chatUserDetails.photo
+  const chatUserprofile = chatUserDetails.Photo
+    ? chatUserDetails.Photo
     : imagePlaceholder;
   const profile = isChannel ? channeluserProfile : chatUserprofile;
   const date = getDateTime(message.Time);

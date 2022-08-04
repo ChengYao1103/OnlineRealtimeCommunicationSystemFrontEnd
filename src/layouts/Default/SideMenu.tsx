@@ -151,7 +151,7 @@ const ProfileDropdownMenu = ({
     >
       <DropdownToggle nav className="bg-transparent">
         <img
-          src={authUser.photo ? authUser.photo : avatarPlaceHolder}
+          src={authUser.Photo ? authUser.Photo : avatarPlaceHolder}
           alt=""
           className="profile-user rounded-circle"
         />

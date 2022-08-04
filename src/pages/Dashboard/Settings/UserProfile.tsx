@@ -7,6 +7,8 @@ import {
   DropdownMenu,
   DropdownItem,
 } from "reactstrap";
+import { useRedux } from "../../../hooks";
+import { userChangeInformation } from "../../../redux/actions";
 import classnames from "classnames";
 
 // interface
@@ -21,6 +23,7 @@ interface UserProfileProps {
   status: STATUS_TYPES;
 }
 const UserProfile = ({ basicDetails, user, status }: UserProfileProps) => {
+  const { dispatch } = useRedux();
   const fullName = user ? user.name : "-";
 
   /*
@@ -30,10 +33,11 @@ const UserProfile = ({ basicDetails, user, status }: UserProfileProps) => {
     basicDetails && basicDetails.profile
   );
   useEffect(() => {
-    if (basicDetails && basicDetails.profile) {
-      setImage(basicDetails.profile);
+    if (user && user.Photo) {
+      console.log(user);
+      setImage(user.Photo);
     }
-  }, [basicDetails]);
+  }, [user]);
   const onChangeProfile = (e: any) => {
     const files = [...e.target.files];
     if (files[0]) {
@@ -44,7 +48,9 @@ const UserProfile = ({ basicDetails, user, status }: UserProfileProps) => {
       reader.onload = () => {
         //儲存轉換完成之圖片
         const base64 = reader.result;
+        var data = { newPhoto: base64 };
         if (typeof base64 === "string") {
+          dispatch(userChangeInformation(data));
           setImage(base64);
         }
       };

@@ -48,10 +48,10 @@ const ChatUser = ({ user, selectedChat, onSelectChat }: ChatUserProps) => {
               { online: isOnline }
             )}
           >
-            {user.photo ? (
+            {user.Photo ? (
               <>
                 <img
-                  src={user.photo}
+                  src={user.Photo}
                   className="rounded-circle avatar-xs"
                   alt=""
                 />

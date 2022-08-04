@@ -70,7 +70,6 @@ const Auth = persistReducer(
           case AuthActionTypes.GET_AUTH_INFOMATION:
             state.loading = false;
             state.response.user = action.payload.data.user;
-            console.log(state.response);
             return { ...state };
           case AuthActionTypes.GET_USER_INFOMATION:
             state.loading = false;

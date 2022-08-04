@@ -74,7 +74,7 @@ const AudioCallModal = ({
         <div className="text-center p-4 pb-0">
           <div className="avatar-xl mx-auto mb-4">
             <img
-              src={user.photo ? user.photo : imagePlaceholder}
+              src={user.Photo ? user.Photo : imagePlaceholder}
               alt=""
               className="img-thumbnail rounded-circle"
             />
