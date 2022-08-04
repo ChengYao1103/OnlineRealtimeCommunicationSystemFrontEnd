@@ -21,7 +21,7 @@ import ForwardModal from "../../../components/ForwardModal";
 import { forwardMessage, deleteImage } from "../../../redux/actions";
 import { messageRecordModel } from "../../../redux/chats/types";
 interface ConversationProps {
-  chatUserConversations: any;
+  chatUserConversations: Array<messageRecordModel>;
   chatUserDetails: userModel;
   onDelete: (messageId: string | number) => any;
   onSetReplyData: (reply: null | MessagesTypes | undefined) => void;
@@ -73,7 +73,7 @@ const Conversation = ({
     if (chatUserConversations) {
       scrollElement();
     }
-  }, [chatUserConversations, scrollElement]);
+  }, [chatUserConversations, chatUserConversations.length, scrollElement]);
 
   /*
   forward message
