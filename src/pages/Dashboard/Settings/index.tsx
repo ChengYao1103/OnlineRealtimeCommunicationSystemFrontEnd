@@ -202,7 +202,7 @@ const Index = (props: IndexProps) => {
   return (
     <div className="position-relative">
       {getSettingsLoading && <Loader />}
-      <UserCoverImage basicDetails={settings.basicDetails} />
+      <UserCoverImage user={user} />
 
       <UserProfile
         basicDetails={settings.basicDetails}

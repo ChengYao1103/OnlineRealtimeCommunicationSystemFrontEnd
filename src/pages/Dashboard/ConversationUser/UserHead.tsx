@@ -89,10 +89,10 @@ const ProfileImage = ({
               { online: isOnline }
             )}
           >
-            {chatUserDetails.profileImage ? (
+            {chatUserDetails.photo ? (
               <>
                 <img
-                  src={chatUserDetails.profileImage}
+                  src={chatUserDetails.photo}
                   className="rounded-circle avatar-sm"
                   alt=""
                 />

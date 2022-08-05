@@ -45,18 +45,18 @@ const MyProfile = ({ user, basicDetails }: MyProfileProps) => {
   return (
     <>
       <div className="user-profile-img">
-        {basicDetails && basicDetails.coverImage && (
+        {user && user.cover && (
           <img
-            src={basicDetails.coverImage}
-            className="profile-img"
+            src={user.cover}
+            className="profile-img profile-foreground-img"
             style={{ height: "160px" }}
             alt=""
           />
         )}
-        {!basicDetails && (
+        {(!user || !user.cover) && (
           <img
             src={coverPlaceHolder}
-            className="profile-img"
+            className="profile-img profile-foreground-img"
             style={{ height: "160px" }}
             alt=""
           />
@@ -112,17 +112,17 @@ const MyProfile = ({ user, basicDetails }: MyProfileProps) => {
 
       <div className="text-center p-3 p-lg-4 border-bottom pt-2 pt-lg-2 mt-n5 position-relative">
         <div className="mb-lg-3 mb-2">
-          {user && user.Photo && (
+          {user && user.photo && (
             <img
-              src={user.Photo}
-              className="rounded-circle avatar-lg img-thumbnail"
+              src={user.photo}
+              className="rounded-circle avatar-lg img-thumbnail user-profile-image"
               alt=""
             />
           )}
-          {(!user || !user.Photo) && (
+          {(!user || !user.photo) && (
             <img
               src={avatarPlaceHolder}
-              className="rounded-circle avatar-lg img-thumbnail"
+              className="rounded-circle avatar-lg img-thumbnail user-profile-image"
               alt=""
             />
           )}

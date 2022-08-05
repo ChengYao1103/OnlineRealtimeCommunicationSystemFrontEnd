@@ -133,7 +133,7 @@ const VideoCallModal = ({
       <ModalBody className="p-0">
         <div className="videocallModal-bg">
           <img
-            src={user.Photo ? user.Photo : imagePlaceholder}
+            src={user.photo ? user.photo : imagePlaceholder}
             alt=""
             className="videocallModal-bg"
           />

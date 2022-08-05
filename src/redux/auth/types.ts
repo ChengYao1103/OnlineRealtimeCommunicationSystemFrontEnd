@@ -30,11 +30,11 @@ export interface userModel {
   email: string;
   id: number;
   name: string;
-  Cover: string;
-  Photo: string;
+  cover: string;
+  photo: string;
 }
 
-const init_user = { email: "", id: 0, name: "", Cover: "", Photo: "" };
+const init_user = { email: "", id: 0, name: "", cover: "", photo: "" };
 export const init_response = { error: "", token: "", user: init_user };
 
 export interface AuthState {

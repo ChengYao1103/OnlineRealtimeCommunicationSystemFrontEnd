@@ -29,19 +29,14 @@ const UserProfile = ({ basicDetails, user, status }: UserProfileProps) => {
   /*
     profile image
     */
-  const [image, setImage] = useState<string>(
-    basicDetails && basicDetails.profile
-  );
+  const [image, setImage] = useState<string>("");
   useEffect(() => {
-    if (user && user.Photo) {
-      console.log(user);
-      setImage(user.Photo);
-    }
+    setImage(user.photo);
   }, [user]);
+
   const onChangeProfile = (e: any) => {
     const files = [...e.target.files];
     if (files[0]) {
-      //const src = URL.createObjectURL(files[0]);
       // 將圖片轉換為base64
       const reader = new FileReader();
       reader.readAsDataURL(files[0]);

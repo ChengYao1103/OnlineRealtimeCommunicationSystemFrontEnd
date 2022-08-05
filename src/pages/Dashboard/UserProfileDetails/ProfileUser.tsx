@@ -32,8 +32,8 @@ const ProfileUser = ({
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const toggle = () => setDropdownOpen(!dropdownOpen);
 
-  const profile = chatUserDetails.Photo
-    ? chatUserDetails.Photo
+  const profile = chatUserDetails.cover
+    ? chatUserDetails.cover
     : imagePlaceholder;
   const fullName = chatUserDetails.name;
 
