@@ -1,5 +1,3 @@
-import { toast } from "react-toastify";
-
 export class WSConnection {
     public static instance: WebSocket;
     token: string;
@@ -26,7 +24,7 @@ export class WSConnection {
     
     //indicates that the connection is ready to send and receive data
     onOpen = (event: any) => {
-        console.log("connected");
+        console.log("websocket is connected!");
         WSConnection.instance.send(this.token);
 
         this.heartbeat = setInterval(() => {
@@ -69,6 +67,7 @@ export class WSConnection {
     //An event listener to be called when the WebSocket connection's readyState changes to CLOSED.
     onClose = (event: any) => {
         clearInterval(this.heartbeat);
+        console.log("websocket connection had closed!");
         if(WSConnection.onCloseEvent)
             WSConnection.onCloseEvent(event);
     }
