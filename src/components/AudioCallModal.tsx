@@ -26,7 +26,7 @@ const AudioCallModal = ({
   const [isCloseSpeaker, setIsCloseSpeaker] = useState(false);
   const [currentStream, setCurrentStream] = useState(new MediaStream());
   const [connection, setConnection] = useState<RTCPeerConnection>();
-  const newSocket = socket;
+  const [newSocket, setNewSocket] = useState(socket);
   const [audioRef, setAudioRef] = useState<HTMLAudioElement>();
   const setAudio = (
     audio: HTMLAudioElement,
@@ -99,7 +99,7 @@ const AudioCallModal = ({
         );
         var isOffer = desc.type === "answer";
         try {
-          if (!newConnection) {
+          if (!currentStream) {
             console.log("尚未開啟視訊");
             return;
           }
@@ -132,8 +132,8 @@ const AudioCallModal = ({
       console.log("房間廣播 => ", message);
     });
     setConnection(newConnection);
-    console.log("Loaded!!");
     newSocket.emit("joinRoom", 123);
+    console.log("Loaded!!");
   }
 
   const finishCall = () => {
@@ -142,6 +142,7 @@ const AudioCallModal = ({
         track.stop();
       }
     });
+    newSocket.close();
     console.log(currentStream.getTracks()); // readyState:"ended"(分頁的取用圖示消失)
     onClose();
   };
