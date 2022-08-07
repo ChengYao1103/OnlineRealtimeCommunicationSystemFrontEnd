@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect, useRef } from "react";
 import { Button, Modal, ModalBody } from "reactstrap";
-import { socket } from "../helpers/call_helper";
+import openSocket, { Socket } from "socket.io-client";
 
 // interface
 import { CallItem } from "../data/calls";
@@ -26,7 +26,7 @@ const AudioCallModal = ({
   const [isCloseSpeaker, setIsCloseSpeaker] = useState(false);
   const [currentStream, setCurrentStream] = useState(new MediaStream());
   const [connection, setConnection] = useState<RTCPeerConnection>();
-  const [newSocket, setNewSocket] = useState(socket);
+  const [socket, setSocket] = useState<Socket>();
   const [audioRef, setAudioRef] = useState<HTMLAudioElement>();
   const setAudio = (
     audio: HTMLAudioElement,
@@ -62,6 +62,10 @@ const AudioCallModal = ({
       });
 
     // 設定connection
+    // wss://orcs-dev-signaling.beeenson.com
+    var newSocket = openSocket("ws://127.0.0.1:8080", {
+      transports: ["websocket"],
+    });
     var newConnection = new RTCPeerConnection({
       iceServers: [
         {
@@ -131,8 +135,18 @@ const AudioCallModal = ({
     newSocket.on("roomBroadcast", message => {
       console.log("房間廣播 => ", message);
     });
+    newSocket.on("connect", function () {
+      console.log("Connected");
+      newSocket.emit("joinRoom", 123);
+    });
+    newSocket.on("connect_error", function () {
+      console.log("Connection failed");
+    });
+    newSocket.on("reconnect_failed", function () {
+      console.log("Reconnection failed");
+    });
     setConnection(newConnection);
-    newSocket.emit("joinRoom", 123);
+    setSocket(newSocket);
     console.log("Loaded!!");
   }
 
@@ -142,8 +156,8 @@ const AudioCallModal = ({
         track.stop();
       }
     });
-    newSocket.close();
-    console.log(currentStream.getTracks()); // readyState:"ended"(分頁的取用圖示消失)
+    socket?.close();
+    console.log(currentStream.getTracks(), socket); // readyState:"ended"(分頁的取用圖示消失)
     onClose();
   };
 
