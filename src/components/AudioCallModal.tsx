@@ -137,7 +137,7 @@ const AudioCallModal = ({
     });
     newSocket.on("connect", function () {
       console.log("Connected");
-      newSocket.emit("joinRoom", 123);
+      newSocket.emit("joinRoom", "123");
     });
     newSocket.on("connect_error", function () {
       console.log("Connection failed");
