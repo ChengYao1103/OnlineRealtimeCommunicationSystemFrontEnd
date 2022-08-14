@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect, useRef } from "react";
+import React, { useState } from "react";
 import { Button, Modal, ModalBody } from "reactstrap";
 import openSocket, { Socket } from "socket.io-client";
 
@@ -28,42 +28,14 @@ const AudioCallModal = ({
   const [connection, setConnection] = useState<RTCPeerConnection>();
   const [socket, setSocket] = useState<Socket>();
   const [audioRef, setAudioRef] = useState<HTMLAudioElement>();
-  const setAudio = (
-    audio: HTMLAudioElement,
-    stream: readonly MediaStream[]
-  ) => {
-    //audio.srcObject = stream;
-  };
-  const setMute = () => {
-    setIsMute(!isMute);
-    currentStream.getTracks().forEach(track => {
-      if (track.kind === "audio" && track.readyState === "live") {
-        track.enabled = isMute;
-      }
-    });
-    console.log(currentStream.getTracks()); // enabled:true/false
-  };
 
-  const setSpeaker = () => {
-    setIsCloseSpeaker(!isCloseSpeaker);
-  };
-
-  if (isOpen && !isLoad) {
-    setIsLoad(true);
-    navigator.mediaDevices
-      .getUserMedia({ audio: true })
-      .then(function (stream) {
-        if (stream) {
-          setCurrentStream(stream);
-        }
-      })
-      .catch(function (err) {
-        console.log(err);
-      });
-
-    // 設定connection
-    // wss://orcs-dev-signaling.beeenson.com
-    var newSocket = openSocket("ws://127.0.0.1:8080", {
+  /** 設定socket和RTC參數
+   * @param stream 從使用者端取得的音訊設備
+   * @returns {Socket} 設定好的socket
+   * @returns {RTCPeerConnection} 設定好的RTC物件
+   *  */
+  const setRTC = (stream: MediaStream) => {
+    var newSocket = openSocket("wss://orcs-dev-signaling.beeenson.com", {
       transports: ["websocket"],
     });
     var newConnection = new RTCPeerConnection({
@@ -73,8 +45,8 @@ const AudioCallModal = ({
         },
       ],
     });
-    currentStream.getTracks().forEach(track => {
-      newConnection.addTrack(track, currentStream);
+    stream.getTracks().forEach(track => {
+      newConnection.addTrack(track, stream);
     });
     newConnection.onicecandidate = ({ candidate }) => {
       if (!candidate) {
@@ -87,6 +59,12 @@ const AudioCallModal = ({
         from: "hiro-1",
         room: "0509",
       });
+    };
+    newConnection.oniceconnectionstatechange = evt => {
+      console.log(
+        "ICE 伺服器狀態變更 => \n",
+        (evt.target as RTCPeerConnection).iceConnectionState
+      );
     };
     newConnection.ontrack = event => {
       if (audioRef && !audioRef.srcObject && event.streams) {
@@ -103,7 +81,7 @@ const AudioCallModal = ({
         );
         var isOffer = desc.type === "answer";
         try {
-          if (!currentStream) {
+          if (!stream) {
             console.log("尚未開啟視訊");
             return;
           }
@@ -145,11 +123,54 @@ const AudioCallModal = ({
     newSocket.on("reconnect_failed", function () {
       console.log("Reconnection failed");
     });
-    setConnection(newConnection);
-    setSocket(newSocket);
+    // 回傳複數參數
+    return [newSocket, newConnection] as const;
+  };
+
+  const setAudio = (
+    audio: HTMLAudioElement,
+    stream: readonly MediaStream[]
+  ) => {
+    //audio.srcObject = stream;
+  };
+
+  /** 設定麥克風禁音 */
+  const setMute = () => {
+    setIsMute(!isMute);
+    currentStream.getTracks().forEach(track => {
+      if (track.kind === "audio" && track.readyState === "live") {
+        track.enabled = isMute;
+      }
+    });
+    console.log(currentStream.getTracks()); // enabled:true/false
+  };
+
+  /** 設定喇叭禁音 */
+  const setSpeaker = () => {
+    setIsCloseSpeaker(!isCloseSpeaker);
+  };
+
+  // 初始化麥克風 & socket和RTC相關設定
+  if (isOpen && !isLoad) {
+    setIsLoad(true);
+    navigator.mediaDevices
+      .getUserMedia({ audio: true })
+      .then(function (stream) {
+        if (stream) {
+          var newSocket: Socket, newConnection: RTCPeerConnection;
+          [newSocket, newConnection] = setRTC(stream);
+          setCurrentStream(stream);
+          setConnection(newConnection);
+          setSocket(newSocket);
+        }
+      })
+      .catch(function (err) {
+        console.log(err);
+      });
     console.log("Loaded!!");
   }
 
+  /** 結束通話 */
   const finishCall = () => {
     currentStream.getTracks().forEach(track => {
       if (track.readyState === "live") {
