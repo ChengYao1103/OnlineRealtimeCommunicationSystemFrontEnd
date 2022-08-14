@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Modal, ModalBody } from "reactstrap";
 import openSocket, { Socket } from "socket.io-client";
 
@@ -27,7 +27,6 @@ const AudioCallModal = ({
   const [currentStream, setCurrentStream] = useState(new MediaStream());
   const [connection, setConnection] = useState<RTCPeerConnection>();
   const [socket, setSocket] = useState<Socket>();
-  const [audioRef, setAudioRef] = useState<HTMLAudioElement>();
 
   /** 設定socket和RTC參數
    * @param stream 從使用者端取得的音訊設備
@@ -67,6 +66,9 @@ const AudioCallModal = ({
       );
     };
     newConnection.ontrack = event => {
+      var audioRef = document.getElementById(
+        "remote_audio"
+      ) as HTMLAudioElement;
       if (audioRef && !audioRef.srcObject && event.streams) {
         // setAudio(audioRef, event.streams);
         console.log(event.streams);
@@ -131,7 +133,7 @@ const AudioCallModal = ({
     audio: HTMLAudioElement,
     stream: readonly MediaStream[]
   ) => {
-    //audio.srcObject = stream;
+    // audio.srcObject = stream;
   };
 
   /** 設定麥克風禁音 */
@@ -151,24 +153,26 @@ const AudioCallModal = ({
   };
 
   // 初始化麥克風 & socket和RTC相關設定
-  if (isOpen && !isLoad) {
-    setIsLoad(true);
-    navigator.mediaDevices
-      .getUserMedia({ audio: true })
-      .then(function (stream) {
-        if (stream) {
-          var newSocket: Socket, newConnection: RTCPeerConnection;
-          [newSocket, newConnection] = setRTC(stream);
-          setCurrentStream(stream);
-          setConnection(newConnection);
-          setSocket(newSocket);
-        }
-      })
-      .catch(function (err) {
-        console.log(err);
-      });
-    console.log("Loaded!!");
-  }
+  useEffect(() => {
+    if (isOpen && !isLoad) {
+      setIsLoad(true);
+      navigator.mediaDevices
+        .getUserMedia({ audio: true })
+        .then(function (stream) {
+          if (stream) {
+            var newSocket: Socket, newConnection: RTCPeerConnection;
+            [newSocket, newConnection] = setRTC(stream);
+            setCurrentStream(stream);
+            setConnection(newConnection);
+            setSocket(newSocket);
+          }
+        })
+        .catch(function (err) {
+          console.log(err);
+        });
+      console.log("Loaded!!");
+    }
+  }, [isOpen, isLoad]);
 
   /** 結束通話 */
   const finishCall = () => {
@@ -202,10 +206,7 @@ const AudioCallModal = ({
 
           <div className="d-flex justify-content-center align-items-center mt-4">
             <div className="avatar-md h-auto">
-              <audio
-                id="remote_audio"
-                ref={audio => (audio ? setAudioRef(audio) : null)}
-              ></audio>
+              <audio id="remote_audio"></audio>
               <Button
                 type="button"
                 color={isMute ? "danger" : "light"}
