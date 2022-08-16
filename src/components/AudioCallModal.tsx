@@ -94,9 +94,10 @@ const AudioCallModal = ({
             offerToReceiveVideo: false,
           });
           await newConnection.setLocalDescription(offer);
+          console.log(newConnection.localDescription);
           console.log(`寄出 ${isOffer ? "offer" : "answer"}`);
           newSocket.emit("peerconnectSignaling", {
-            desc: desc,
+            desc: newConnection.localDescription,
             to: "jedy-0",
             from: "hiro-1",
             room: "0509",
