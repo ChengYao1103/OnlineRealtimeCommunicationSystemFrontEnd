@@ -14,8 +14,8 @@ const getDirectMessages = () => {
 };
 
 const getChannels = (userId: string) => {
-  let destUrl = `${url.GET_CHANNELS}/${userId}`;
-  return api.get(destUrl);
+  let data = { id: userId };
+  return api.get(url.GET_CHANNELS, data);
 };
 
 const addContacts = (contacts: Array<string | number>) => {
@@ -44,10 +44,10 @@ const sendMessage = (data: messageModel) => {
     data: {
       to: data.receiverID,
       type: data.type,
-      content: data.content
-    }
-  }
-  
+      content: data.content,
+    },
+  };
+
   return api.WSSend(JSON.stringify(send));
 };
 

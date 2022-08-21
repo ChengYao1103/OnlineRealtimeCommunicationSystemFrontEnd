@@ -34,7 +34,7 @@ const ChatChannel = ({ channel, selectedChat, onSelectChat }: ChannelProps) => {
             </span>
           </div>
           <div className="flex-grow-1 overflow-hidden">
-            <p className="text-truncate mb-0">{channel.name}</p>
+            <p className="text-truncate mb-0">{channel.Name}</p>
           </div>
           {unRead && unRead !== 0 ? (
             <div className="flex-shrink-0 ms-2">

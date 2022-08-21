@@ -50,7 +50,7 @@ const Chanels = ({
           {(channels || []).map((channel: channelModel, key: number) => (
             <ChatChannel
               channel={channel}
-              key={key}
+              key={channel.id}
               selectedChat={selectedChat}
               onSelectChat={onSelectChat}
             />

@@ -47,9 +47,9 @@ export interface recentChatUserTypes {
 }
 
 export interface channelModel {
-  founderID: number;
   id: number;
-  name: string;
+  founderID: number;
+  Name: string;
   recordPath: string;
 }
 

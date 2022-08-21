@@ -179,8 +179,6 @@ const AddGroupModal = ({
     const params = {
       name: data.channelName,
       founderId: founderId,
-      //members: selectedContacts,
-      //description: data.description,
     };
     onCreateChannel(params);
   };
