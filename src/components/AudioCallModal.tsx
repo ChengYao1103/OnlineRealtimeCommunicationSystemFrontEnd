@@ -66,12 +66,9 @@ const AudioCallModal = ({
       );
     };
     newConnection.ontrack = event => {
-      var audioRef = document.getElementById(
-        "remote_audio"
-      ) as HTMLAudioElement;
+      var audioRef = document.getElementById("remoteAudio") as HTMLAudioElement;
       if (audioRef && !audioRef.srcObject && event.streams) {
-        // setAudio(audioRef, event.streams);
-        console.log(event.streams);
+        setRemoteAudio(audioRef, event.streams[0]);
         console.log("接收流並顯示於遠端視訊！", event);
       }
     };
@@ -130,11 +127,11 @@ const AudioCallModal = ({
     return [newSocket, newConnection] as const;
   };
 
-  const setAudio = (
-    audio: HTMLAudioElement,
-    stream: readonly MediaStream[]
+  const setRemoteAudio = (
+    audioElement: HTMLAudioElement,
+    stream: MediaStream
   ) => {
-    // audio.srcObject = stream;
+    audioElement.srcObject = stream;
   };
 
   /** 設定麥克風禁音 */
@@ -207,7 +204,7 @@ const AudioCallModal = ({
 
           <div className="d-flex justify-content-center align-items-center mt-4">
             <div className="avatar-md h-auto">
-              <audio id="remote_audio"></audio>
+              <audio id="remoteAudio" autoPlay></audio>
               <Button
                 type="button"
                 color={isMute ? "danger" : "light"}
