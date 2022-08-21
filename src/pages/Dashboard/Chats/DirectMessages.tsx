@@ -34,8 +34,8 @@ const DirectMessages = ({
 }: DirectMessagesProps) => {
   const { dispatch, useAppSelector } = useRedux();
   const [isLoadInformation, setIsLoadInformation] = useState<boolean>(false);
-  const { userInfoState } = useAppSelector(state => ({
-    userInfoState: state.Auth.otherUserInfo,
+  const { otherUserInfoState } = useAppSelector(state => ({
+    otherUserInfoState: state.Auth.otherUserInfo,
   }));
   const [chatUsers, setChatUsers] = useState<Array<userModel>>([]);
 
@@ -51,7 +51,13 @@ const DirectMessages = ({
         dispatch(getUserInformation(targetId.toString()));
       });
     }
-  }, [dispatch, isLoadInformation, authUser, recentChatArray, userInfoState]);
+  }, [
+    dispatch,
+    isLoadInformation,
+    authUser,
+    recentChatArray,
+    otherUserInfoState,
+  ]);
 
   useEffect(() => {
     let tmpChatUsers: Array<userModel> = [];
@@ -60,13 +66,21 @@ const DirectMessages = ({
     });
     if (
       isLoadInformation &&
-      userInfoState &&
-      tmpChatUsers.findIndex(element => element === userInfoState) === -1
+      otherUserInfoState &&
+      tmpChatUsers.findIndex(
+        element => element.id === otherUserInfoState.id
+      ) === -1
     ) {
-      tmpChatUsers.push(userInfoState);
+      tmpChatUsers.push(otherUserInfoState);
       setChatUsers(tmpChatUsers);
     }
-  }, [dispatch, isLoadInformation, userInfoState, chatUsers, recentChatArray]);
+  }, [
+    dispatch,
+    isLoadInformation,
+    otherUserInfoState,
+    chatUsers,
+    recentChatArray,
+  ]);
 
   /*
     add contacts

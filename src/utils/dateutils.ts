@@ -9,9 +9,9 @@ const formateDate = (date: any, formate?: string) => {
 
 // hh:mm:aaa
 const getDateTime = (date: string) => {
-  // convert DateTime to TimeStamp
+  // change DateTime format
   let time = new Date(date);
-  let day = time.getMonth() + 1 + "-" + time.getDate(),
+  let day = time.getMonth() + 1 + "/" + time.getDate(),
     hour = time.getHours(),
     minute = time.getMinutes(),
     ampm = "am";

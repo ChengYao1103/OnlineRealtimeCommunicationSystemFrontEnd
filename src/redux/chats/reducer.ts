@@ -267,11 +267,15 @@ const Chats = persistReducer(
           default:
             return { ...state };
         }
-      
-      case ChatsActionTypes.WS_EVENT:
-        switch(action.payload.actionType) {
+
+      case ChatsActionTypes.WS_EVENT: {
+        switch (action.payload.actionType) {
           case ChatsActionTypes.RECEIVE_MESSAGE:
-            if(state.selectedChatInfo && (state.selectedChatInfo.id === action.payload.data.ReceiverID || state.selectedChatInfo?.id === action.payload.data.SenderID)){
+            if (
+              state.selectedChatInfo &&
+              (state.selectedChatInfo.id === action.payload.data.ReceiverID ||
+                state.selectedChatInfo?.id === action.payload.data.SenderID)
+            ) {
               state.chatUserConversations.push(action.payload.data);
             }
             return {
@@ -280,7 +284,7 @@ const Chats = persistReducer(
           default:
             return { ...state };
         }
-
+      }
       case ChatsActionTypes.GET_FAVOURITES: {
         return {
           ...state,
