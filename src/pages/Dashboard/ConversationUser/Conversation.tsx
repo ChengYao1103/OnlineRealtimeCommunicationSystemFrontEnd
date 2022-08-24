@@ -128,7 +128,7 @@ const Conversation = ({
           return (
             <Message
               message={message}
-              key={key}
+              key={message.ID}
               chatUserDetails={chatUserDetails}
               onDelete={onDelete}
               onSetReplyData={onSetReplyData}

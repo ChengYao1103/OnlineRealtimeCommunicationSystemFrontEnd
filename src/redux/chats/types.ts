@@ -62,6 +62,7 @@ export interface messageModel {
 }
 
 export interface messageRecordModel {
+  ID: number;
   SenderID: number;
   ReceiverID: number;
   Content: any;

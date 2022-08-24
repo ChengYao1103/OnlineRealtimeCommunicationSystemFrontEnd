@@ -26,10 +26,10 @@ import ChatInputSection from "./ChatInputSection/index";
 
 // interface
 import { MessagesTypes } from "../../../data/messages";
+import { messageModel, recentChatUserTypes } from "../../../redux/chats/types";
 
 // dummy data
 import { pinnedTabs } from "../../../data/index";
-import { messageModel } from "../../../redux/chats/types";
 
 interface IndexProps {
   isChannel: boolean;
@@ -47,6 +47,7 @@ const Index = ({ isChannel }: IndexProps) => {
     isMessageForwarded,
     isUserMessagesDeleted,
     isImageDeleted,
+    recentChatUsers,
   } = useAppSelector(state => ({
     selectedChatInfo: state.Chats.selectedChatInfo,
     chatUserDetails: state.Chats.chatUserDetails,
@@ -56,8 +57,8 @@ const Index = ({ isChannel }: IndexProps) => {
     isMessageForwarded: state.Chats.isMessageForwarded,
     isUserMessagesDeleted: state.Chats.isUserMessagesDeleted,
     isImageDeleted: state.Chats.isImageDeleted,
+    recentChatUsers: state.Chats.recentChatUsers,
   }));
-
   const onOpenUserDetails = () => {
     dispatch(toggleUserDetailsTab(true));
   };
@@ -124,8 +125,12 @@ const Index = ({ isChannel }: IndexProps) => {
       dispatch(
         getChatUserConversations({
           otherSideID: selectedChatInfo.id,
-          lastMessageID: 100,
-          n: 15,
+          lastMessageID: recentChatUsers.find(
+            (item: recentChatUserTypes) =>
+              item.User1 === selectedChatInfo.id ||
+              item.User2 === selectedChatInfo.id
+          ).Messages[0].ID,
+          n: 50,
         })
       );
     }

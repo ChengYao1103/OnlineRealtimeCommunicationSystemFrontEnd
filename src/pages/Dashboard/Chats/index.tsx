@@ -79,7 +79,6 @@ const Index = (props: IndexProps) => {
     chatUserDetails: state.Chats.chatUserDetails,
   }));
   const { userProfile } = useProfile();
-
   /*
   get data
   */
