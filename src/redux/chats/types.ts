@@ -49,8 +49,9 @@ export interface recentChatUserTypes {
 export interface channelModel {
   id: number;
   founderID: number;
-  Name: string;
+  name: string;
   recordPath: string;
+  deleted: boolean;
 }
 
 //contentTypes = ["文字", "圖片", "音訊", "檔案"];
