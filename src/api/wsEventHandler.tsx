@@ -1,6 +1,6 @@
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
-import { WSConnection } from "../api/webSocket";
+import { WSConnection } from "./webSocket";
 import { useProfile, useRedux } from "../hooks";
 import {
   chatWebsocketEvent,
@@ -8,7 +8,7 @@ import {
   getUserInformation,
 } from "../redux/actions";
 import { ChatsActionTypes } from "../redux/chats/types";
-import { NewContent, WSEvent, WSReceiveEvents } from "../repository/wsEvent";
+import { GetSignalingInformation, NewContent, WSEvent, WSReceiveEvents } from "../repository/wsEvent";
 
 const WSEventHandler = () => {
   const dispatch = useDispatch();
@@ -47,6 +47,20 @@ const WSEventHandler = () => {
         );
         break;
       case WSReceiveEvents.ContentBeenRead:
+        break;
+      case WSReceiveEvents.AskPhoneCall:
+        break;
+      case WSReceiveEvents.AnswerPhoneCall:
+        break;
+      case WSReceiveEvents.GetSignalingInformation:
+        let info = data.data as GetSignalingInformation;
+        if (WSConnection.getSignalingEvent) {
+          WSConnection.getSignalingEvent(info);
+        } else {
+          console.log("TODO");
+        }
+        break;
+      case WSReceiveEvents.HangUpPhoneCall:
         break;
       case WSReceiveEvents.TokenExpired:
         console.log("token expired");

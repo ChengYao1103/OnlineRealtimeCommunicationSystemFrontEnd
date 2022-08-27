@@ -7,7 +7,7 @@ export class WSConnection {
     public static onMessageEvent?: (event: any) => void;
     public static onErrorEvent?: (event: any) => void;
     public static onCloseEvent?: (event: any) => void;
-    
+    public static getSignalingEvent?: (data: any) => void;
 
     constructor(url: string, token: string) {
         WSConnection.instance = new WebSocket(url, "http");
@@ -18,7 +18,7 @@ export class WSConnection {
         WSConnection.instance.onclose = this.onClose;
     }
 
-    sendMessage = (data: string) => {
+    send = (data: string) => {
         WSConnection.instance.send(data);
     }
     

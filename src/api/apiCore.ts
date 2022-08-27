@@ -131,7 +131,7 @@ class APIClient {
   };
 
   WSSend = (data: string) => {
-    ws.sendMessage(data);
+    ws.send(data);
   }
 }
 

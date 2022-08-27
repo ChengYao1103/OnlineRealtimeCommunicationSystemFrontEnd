@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { Button, Modal, ModalBody } from "reactstrap";
-import openSocket, { Socket } from "socket.io-client";
 
 // interface
 import { CallItem } from "../data/calls";
@@ -8,7 +7,11 @@ import { userModel } from "../redux/auth/types";
 
 //images
 import imagePlaceholder from "../assets/images/users/profile-placeholder.png";
+import { APIClient } from "../api/apiCore";
+import { WSEvent, WSSendEvents } from "../repository/wsEvent";
+import { WSConnection } from "../api/webSocket";
 interface AudioCallModalProps {
+  isBeenCalled: boolean;
   callInfo: CallItem | null;
   user: userModel; //對方
   isOpen: boolean;
@@ -20,13 +23,15 @@ const AudioCallModal = ({
   onClose,
   callInfo,
   user,
+  isBeenCalled,
 }: AudioCallModalProps) => {
   const [isLoad, setIsLoad] = useState(false);
   const [isMute, setIsMute] = useState(false);
   const [isCloseSpeaker, setIsCloseSpeaker] = useState(false);
   const [currentStream, setCurrentStream] = useState(new MediaStream());
   const [connection, setConnection] = useState<RTCPeerConnection>();
-  const [socket, setSocket] = useState<Socket>();
+  const api = new APIClient();
+
 
   /** 設定socket和RTC參數
    * @param stream 從使用者端取得的音訊設備
@@ -34,9 +39,6 @@ const AudioCallModal = ({
    * @returns {RTCPeerConnection} 設定好的RTC物件
    *  */
   const setRTC = (stream: MediaStream) => {
-    var newSocket = openSocket("wss://orcs-dev-signaling.beeenson.com", {
-      transports: ["websocket"],
-    });
     var newConnection = new RTCPeerConnection({
       iceServers: [
         {
@@ -44,27 +46,36 @@ const AudioCallModal = ({
         },
       ],
     });
+
     stream.getTracks().forEach(track => {
       newConnection.addTrack(track, stream);
     });
+
     newConnection.onicecandidate = ({ candidate }) => {
       if (!candidate) {
         return;
       }
       console.log("onIceCandidate => ", candidate);
-      newSocket.emit("peerconnectSignaling", {
-        candidate,
-        to: "jedy-0",
-        from: "hiro-1",
-        room: "0509",
-      });
+      
+      let send: WSEvent = {
+        event: WSSendEvents.SendSignalingInformation,
+        data: {
+          to: user.id,
+          info: {
+            candidate: candidate
+          },
+        },
+      };
+      api.WSSend(JSON.stringify(send));
     };
+
     newConnection.oniceconnectionstatechange = evt => {
       console.log(
         "ICE 伺服器狀態變更 => \n",
         (evt.target as RTCPeerConnection).iceConnectionState
       );
     };
+
     newConnection.ontrack = event => {
       var audioRef = document.getElementById("remoteAudio") as HTMLAudioElement;
       if (audioRef && !audioRef.srcObject && event.streams) {
@@ -72,59 +83,53 @@ const AudioCallModal = ({
         console.log("接收流並顯示於遠端視訊！", event);
       }
     };
-    newSocket.on("peerconnectSignaling", async ({ desc, from, candidate }) => {
-      if (desc && !newConnection.currentRemoteDescription) {
-        console.log("desc => ", desc);
-        await newConnection.setRemoteDescription(
-          new RTCSessionDescription(desc)
-        );
-        var isOffer = desc.type === "answer";
-        try {
-          if (!stream) {
-            console.log("尚未開啟視訊");
-            return;
-          }
-          var offer = await newConnection[
-            `create${isOffer ? "Offer" : "Answer"}`
-          ]({
-            offerToReceiveAudio: true,
-            offerToReceiveVideo: false,
-          });
-          await newConnection.setLocalDescription(offer);
-          console.log(newConnection.localDescription);
-          console.log(`寄出 ${isOffer ? "offer" : "answer"}`);
-          newSocket.emit("peerconnectSignaling", {
-            desc: newConnection.localDescription,
-            to: "jedy-0",
-            from: "hiro-1",
-            room: "0509",
-          });
-        } catch (err) {
-          console.log(err);
+    
+    var createSignal = async (isOffer: boolean) => {
+      try {
+        if (!stream) {
+          console.log("尚未開啟視訊");
+          return;
         }
-      } else if (candidate) {
-        console.log("candidate =>", candidate);
-        newConnection.addIceCandidate(new RTCIceCandidate(candidate));
+        var offer = await newConnection[
+          `create${isOffer ? "Offer" : "Answer"}`
+        ]({
+          offerToReceiveAudio: true,
+          offerToReceiveVideo: false,
+        });
+        await newConnection.setLocalDescription(offer);
+        console.log(newConnection.localDescription);
+        console.log(`寄出 ${isOffer ? "offer" : "answer"}`);
+
+        let send: WSEvent = {
+          event: WSSendEvents.SendSignalingInformation,
+          data: {
+            to: user.id,
+            info: {
+              desc: newConnection.localDescription
+            },
+          },
+        };
+        api.WSSend(JSON.stringify(send));
+      } catch (err) {
+        console.log(err);
       }
-    });
-    newSocket.on("message", message => {
-      console.log("房間接收 => ", message);
-    });
-    newSocket.on("roomBroadcast", message => {
-      console.log("房間廣播 => ", message);
-    });
-    newSocket.on("connect", function () {
-      console.log("Connected");
-      newSocket.emit("joinRoom", "123");
-    });
-    newSocket.on("connect_error", function () {
-      console.log("Connection failed");
-    });
-    newSocket.on("reconnect_failed", function () {
-      console.log("Reconnection failed");
-    });
-    // 回傳複數參數
-    return [newSocket, newConnection] as const;
+    };
+
+    WSConnection.getSignalingEvent = async (info) => {
+      if (info.desc && !newConnection.currentRemoteDescription) {
+        console.log("desc => ", info.desc);
+        await newConnection.setRemoteDescription(
+          new RTCSessionDescription(info.desc)
+        );
+        var isOffer = info.desc.type === "answer";
+        await createSignal(isOffer);
+      } else if (info.candidate) {
+        console.log("candidate =>", info.candidate);
+        newConnection.addIceCandidate(new RTCIceCandidate(info.candidate));
+      }
+    };
+    
+    return newConnection;
   };
 
   const setRemoteAudio = (
@@ -158,29 +163,33 @@ const AudioCallModal = ({
         .getUserMedia({ audio: true })
         .then(function (stream) {
           if (stream) {
-            var newSocket: Socket, newConnection: RTCPeerConnection;
-            [newSocket, newConnection] = setRTC(stream);
+            var newConnection: RTCPeerConnection;
+            newConnection = setRTC(stream);
             setCurrentStream(stream);
             setConnection(newConnection);
-            setSocket(newSocket);
           }
+
+          if (!isBeenCalled) {
+            // call createSignal(true)
+          }
+          console.log("Loaded!!");
         })
         .catch(function (err) {
           console.log(err);
         });
-      console.log("Loaded!!");
     }
+
   }, [isOpen, isLoad]);
 
   /** 結束通話 */
   const finishCall = () => {
+    WSConnection.getSignalingEvent = undefined;
     currentStream.getTracks().forEach(track => {
       if (track.readyState === "live") {
         track.stop();
       }
     });
-    socket?.close();
-    console.log(currentStream.getTracks(), socket); // readyState:"ended"(分頁的取用圖示消失)
+    console.log(currentStream.getTracks()); // readyState:"ended"(分頁的取用圖示消失)
     onClose();
   };
 

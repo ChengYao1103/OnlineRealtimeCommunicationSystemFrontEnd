@@ -12,7 +12,8 @@ import Leftbar from "./Leftbar";
 import ConversationUser from "./ConversationUser/index";
 import UserProfileDetails from "./UserProfileDetails/index";
 import Welcome from "./ConversationUser/Welcome";
-import WSEventHandler from "../../components/wsEventHandler";
+import WSEventHandler from "../../api/wsEventHandler";
+import VideoCallModal from "../../components/VideoCallModal";
 
 interface IndexProps {}
 const Index = (props: IndexProps) => {

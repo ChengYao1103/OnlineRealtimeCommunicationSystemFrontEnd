@@ -417,6 +417,7 @@ const UserHead = ({
       {/*<PinnedAlert onOpenPinnedTab={onOpenPinnedTab} />*/}
       {isOpenAudioModal && (
         <AudioCallModal
+          isBeenCalled={false}
           isOpen={isOpenAudioModal}
           onClose={onCloseAudio}
           callInfo={chatUserDetails}

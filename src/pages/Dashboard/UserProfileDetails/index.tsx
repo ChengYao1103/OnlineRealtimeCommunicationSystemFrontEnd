@@ -146,6 +146,7 @@ const Index = ({ isChannel }: IndexProps) => {
           {/* <!-- end user-profile-desc --> */}
           {isOpenAudioModal && (
             <AudioCallModal
+              isBeenCalled={false}
               isOpen={isOpenAudioModal}
               onClose={onCloseAudio}
               callInfo={chatUserDetails}
