@@ -45,7 +45,12 @@ const VideoCallModal = ({
     var newConnection = new RTCPeerConnection({
       iceServers: [
         {
-          urls: "stun:stun.l.google.com:19302", // Google's public STUN server
+          urls: "stun:stun.beeenson.com:19302", // GCP's STUN server
+        },
+        {
+          urls: "turn:turn.beeenson.com:19302", // GCP's TURN server
+          username: "louis",
+          credential: "12345",
         },
       ],
     });
