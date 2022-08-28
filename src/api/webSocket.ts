@@ -1,5 +1,6 @@
 export class WSConnection {
     public static instance: WebSocket;
+    public static signalingInfoQueue: any[] = [];
     token: string;
     flag: boolean = false;
     heartbeat: any;

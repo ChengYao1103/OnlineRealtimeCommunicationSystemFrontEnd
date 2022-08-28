@@ -62,8 +62,13 @@ const WSEventHandler = () => {
       case WSReceiveEvents.GetSignalingInformation:
         let info = data.data as GetSignalingInformation;
         if (WSConnection.getSignalingEvent) {
-          WSConnection.getSignalingEvent(info);
+          if (WSConnection.signalingInfoQueue.length !== 0) {
+            WSConnection.signalingInfoQueue.push(info);
+          } else {
+            WSConnection.getSignalingEvent(info);
+          }
         } else {
+          WSConnection.signalingInfoQueue.push(info);
           dispatch(getUserInformation(info.from.toString()));
           dispatch(callWebsocketEvent(CallsActionTypes.ON_CALLING));
         }

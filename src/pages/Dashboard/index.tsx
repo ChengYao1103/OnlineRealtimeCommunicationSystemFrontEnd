@@ -15,6 +15,7 @@ import Welcome from "./ConversationUser/Welcome";
 import WSEventHandler from "../../api/wsEventHandler";
 import VideoCallModal from "../../components/VideoCallModal";
 import AudioCallModal from "../../components/AudioCallModal";
+import { WSConnection } from "../../api/webSocket";
 
 interface IndexProps {}
 const Index = (props: IndexProps) => {

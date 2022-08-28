@@ -12,6 +12,7 @@ import { WSEvent, WSSendEvents } from "../repository/wsEvent";
 import { WSConnection } from "../api/webSocket";
 import { useRedux } from "../hooks";
 import { resetCallingStatus } from "../redux/actions";
+import { isConstructorDeclaration, isWhiteSpaceLike } from "typescript";
 interface AudioCallModalProps {
   isBeenCalled: boolean;
   callInfo: CallItem | null;
@@ -47,7 +48,12 @@ const AudioCallModal = ({
     var newConnection = new RTCPeerConnection({
       iceServers: [
         {
-          urls: "stun:stun.l.google.com:19302", // Google's public STUN server
+          urls: "stun:stun.beeenson.com:19302", // GCP's STUN server
+        },
+        {
+          urls: "turn:turn.beeenson.com:19302", // GCP's TURN server
+          username: "louis",
+          credential: "12345",
         },
       ],
     });
@@ -89,19 +95,25 @@ const AudioCallModal = ({
       }
     };
 
-    WSConnection.getSignalingEvent = async info => {
-      if (info.desc && !newConnection.currentRemoteDescription) {
-        console.log("desc => ", info.desc);
+    WSConnection.getSignalingEvent = async data => {
+      console.log(data);
+      if (data.info.desc && !newConnection.currentRemoteDescription) {
+        console.log("desc => ", data.info.desc);
         await newConnection.setRemoteDescription(
-          new RTCSessionDescription(info.desc)
+          new RTCSessionDescription(data.info.desc)
         );
-        var isOffer = info.desc.type === "answer";
+        var isOffer = data.info.desc.type === "answer";
         await createSignal(isOffer, newConnection);
-      } else if (info.candidate) {
-        console.log("candidate =>", info.candidate);
-        newConnection.addIceCandidate(new RTCIceCandidate(info.candidate));
+      } else if (data.info.candidate) {
+        console.log("candidate =>", data.info.candidate);
+        newConnection.addIceCandidate(new RTCIceCandidate(data.info.candidate));
       }
     };
+    
+    while (WSConnection.signalingInfoQueue.length !== 0) {
+      var info = WSConnection.signalingInfoQueue.shift();
+      WSConnection.getSignalingEvent(info);
+    }
 
     return newConnection;
   };
@@ -196,6 +208,7 @@ const AudioCallModal = ({
   /** 結束通話 */
   const finishCall = () => {
     WSConnection.getSignalingEvent = undefined;
+    WSConnection.signalingInfoQueue = [];
     currentStream.getTracks().forEach(track => {
       if (track.readyState === "live") {
         track.stop();
