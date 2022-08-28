@@ -4,6 +4,7 @@ import { CallsActionTypes, CallsState } from "./types";
 export const INIT_STATE: CallsState = {
   calls: [],
   onCalling: false,
+  endCalling: false,
 };
 
 const Calls = (state = INIT_STATE, action: any) => {
@@ -42,10 +43,26 @@ const Calls = (state = INIT_STATE, action: any) => {
       };
     }
 
+    case CallsActionTypes.RESET_CALLING_STATUS: {
+      state.onCalling = false;
+      state.endCalling = false;
+      return {
+        ...state,
+      };
+    }
+
     case CallsActionTypes.WS_EVENT: {
       switch (action.payload.actionType) {
         case CallsActionTypes.ON_CALLING: {
           state.onCalling = true;
+          state.endCalling = false;
+          return {
+            ...state,
+          };
+        }
+        case CallsActionTypes.HANGUP_CALLING: {
+          state.onCalling = false;
+          state.endCalling = true;
           return {
             ...state,
           };

@@ -69,8 +69,7 @@ const WSEventHandler = () => {
         }
         break;
       case WSReceiveEvents.HangUpPhoneCall:
-        dispatch(callWebsocketEvent(CallsActionTypes.HANGUP_CALL));
-        console.log("掛斷");
+        dispatch(callWebsocketEvent(CallsActionTypes.HANGUP_CALLING));
         break;
       case WSReceiveEvents.TokenExpired:
         console.log("token expired");

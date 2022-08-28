@@ -6,10 +6,12 @@ export enum CallsActionTypes {
 
   WS_EVENT = "@@calls/WS_EVENT",
 
+  RESET_CALLING_STATUS = "@@calls/RESET_CALLING_STATUS",
   ON_CALLING = "@@calls/ON_CALLING",
-  HANGUP_CALL = "@@calls/HANGUP_CALL",
+  HANGUP_CALLING = "@@calls/HANGUP_CALL",
 }
 export interface CallsState {
   calls: Array<any>;
   onCalling: boolean;
+  endCalling: boolean;
 }

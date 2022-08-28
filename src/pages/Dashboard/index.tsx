@@ -35,8 +35,6 @@ const Index = (props: IndexProps) => {
   useEffect(() => {
     if (onCalling && callingUserInfo) {
       setIsOpenAudioModal(true);
-    } else {
-      setIsOpenAudioModal(false);
     }
   }, [onCalling]);
 

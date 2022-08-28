@@ -15,6 +15,13 @@ export const getCalls = () => ({
   type: CallsActionTypes.GET_CALLS,
 });
 
+/**
+ * 重設是否接到來電與是否被掛電話的state
+ */
+export const resetCallingStatus = () => ({
+  type: CallsActionTypes.RESET_CALLING_STATUS,
+});
+
 // websocket event
 export const callWebsocketEvent = (actionType: string) => ({
   type: CallsActionTypes.WS_EVENT,

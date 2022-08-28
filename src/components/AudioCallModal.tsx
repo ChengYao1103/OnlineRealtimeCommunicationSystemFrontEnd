@@ -10,7 +10,8 @@ import imagePlaceholder from "../assets/images/users/profile-placeholder.png";
 import { APIClient } from "../api/apiCore";
 import { WSEvent, WSSendEvents } from "../repository/wsEvent";
 import { WSConnection } from "../api/webSocket";
-import { useProfile } from "../hooks";
+import { useRedux } from "../hooks";
+import { resetCallingStatus } from "../redux/actions";
 interface AudioCallModalProps {
   isBeenCalled: boolean;
   callInfo: CallItem | null;
@@ -26,12 +27,16 @@ const AudioCallModal = ({
   user,
   isBeenCalled,
 }: AudioCallModalProps) => {
+  const { dispatch, useAppSelector } = useRedux();
+  const { endCalling } = useAppSelector(state => ({
+    endCalling: state.Calls.endCalling,
+  }));
+
   const [isLoad, setIsLoad] = useState(false);
   const [isMute, setIsMute] = useState(false);
   const [isCloseSpeaker, setIsCloseSpeaker] = useState(false);
   const [currentStream, setCurrentStream] = useState(new MediaStream());
   const [connection, setConnection] = useState<RTCPeerConnection>();
-  const { userProfile } = useProfile();
   const api = new APIClient();
 
   /** 設定socket和RTC參數
@@ -137,6 +142,7 @@ const AudioCallModal = ({
     audioElement: HTMLAudioElement,
     stream: MediaStream
   ) => {
+    console.log(stream);
     audioElement.srcObject = stream;
   };
 
@@ -168,7 +174,6 @@ const AudioCallModal = ({
             newConnection = setRTC(stream);
             if (!isBeenCalled) {
               createSignal(true, newConnection);
-              console.log("有來電!");
             }
             setCurrentStream(stream);
             setConnection(newConnection);
@@ -181,6 +186,13 @@ const AudioCallModal = ({
     }
   }, [isOpen, isLoad]);
 
+  // 被掛電話時執行
+  useEffect(() => {
+    if (endCalling) {
+      finishCall();
+    }
+  }, [endCalling]);
+
   /** 結束通話 */
   const finishCall = () => {
     WSConnection.getSignalingEvent = undefined;
@@ -190,14 +202,20 @@ const AudioCallModal = ({
       }
     });
     console.log(currentStream.getTracks()); // readyState:"ended"(分頁的取用圖示消失)
-    // 關閉ws
-    // var data: WSEvent = {
-    //   event: WSSendEvents.EndPhoneCall,
-    //   data: {
-    //     from: userProfile.id,
-    //   },
-    // };
-    // api.WSSend(JSON.stringify(data));
+    // 透過ws發送掛斷的請求
+    if (!endCalling) {
+      var data: WSEvent = {
+        event: WSSendEvents.EndPhoneCall,
+        data: {
+          to: user.id,
+          info: {
+            desc: connection?.localDescription,
+          },
+        },
+      };
+      api.WSSend(JSON.stringify(data));
+    }
+    dispatch(resetCallingStatus());
     onClose();
   };
 
