@@ -10,6 +10,7 @@ import imagePlaceholder from "../assets/images/users/profile-placeholder.png";
 import { APIClient } from "../api/apiCore";
 import { WSEvent, WSSendEvents } from "../repository/wsEvent";
 import { WSConnection } from "../api/webSocket";
+import { useProfile } from "../hooks";
 interface AudioCallModalProps {
   isBeenCalled: boolean;
   callInfo: CallItem | null;
@@ -30,14 +31,13 @@ const AudioCallModal = ({
   const [isCloseSpeaker, setIsCloseSpeaker] = useState(false);
   const [currentStream, setCurrentStream] = useState(new MediaStream());
   const [connection, setConnection] = useState<RTCPeerConnection>();
+  const { userProfile } = useProfile();
   const api = new APIClient();
-
 
   /** 設定socket和RTC參數
    * @param stream 從使用者端取得的音訊設備
-   * @returns {Socket} 設定好的socket
    * @returns {RTCPeerConnection} 設定好的RTC物件
-   *  */
+   */
   const setRTC = (stream: MediaStream) => {
     var newConnection = new RTCPeerConnection({
       iceServers: [
@@ -56,13 +56,13 @@ const AudioCallModal = ({
         return;
       }
       console.log("onIceCandidate => ", candidate);
-      
+
       let send: WSEvent = {
         event: WSSendEvents.SendSignalingInformation,
         data: {
           to: user.id,
           info: {
-            candidate: candidate
+            candidate: candidate,
           },
         },
       };
@@ -83,53 +83,54 @@ const AudioCallModal = ({
         console.log("接收流並顯示於遠端視訊！", event);
       }
     };
-    
-    var createSignal = async (isOffer: boolean) => {
-      try {
-        if (!stream) {
-          console.log("尚未開啟視訊");
-          return;
-        }
-        var offer = await newConnection[
-          `create${isOffer ? "Offer" : "Answer"}`
-        ]({
-          offerToReceiveAudio: true,
-          offerToReceiveVideo: false,
-        });
-        await newConnection.setLocalDescription(offer);
-        console.log(newConnection.localDescription);
-        console.log(`寄出 ${isOffer ? "offer" : "answer"}`);
 
-        let send: WSEvent = {
-          event: WSSendEvents.SendSignalingInformation,
-          data: {
-            to: user.id,
-            info: {
-              desc: newConnection.localDescription
-            },
-          },
-        };
-        api.WSSend(JSON.stringify(send));
-      } catch (err) {
-        console.log(err);
-      }
-    };
-
-    WSConnection.getSignalingEvent = async (info) => {
+    WSConnection.getSignalingEvent = async info => {
       if (info.desc && !newConnection.currentRemoteDescription) {
         console.log("desc => ", info.desc);
         await newConnection.setRemoteDescription(
           new RTCSessionDescription(info.desc)
         );
         var isOffer = info.desc.type === "answer";
-        await createSignal(isOffer);
+        await createSignal(isOffer, newConnection);
       } else if (info.candidate) {
         console.log("candidate =>", info.candidate);
         newConnection.addIceCandidate(new RTCIceCandidate(info.candidate));
       }
     };
-    
+
     return newConnection;
+  };
+
+  /** 建立signal
+   * @param isOffer 是接收端還是發起端
+   * @param newConnection RTCPeerConnection設定
+   */
+  const createSignal = async (
+    isOffer: boolean,
+    newConnection: RTCPeerConnection
+  ) => {
+    try {
+      var offer = await newConnection[`create${isOffer ? "Offer" : "Answer"}`]({
+        offerToReceiveAudio: true,
+        offerToReceiveVideo: false,
+      });
+      await newConnection.setLocalDescription(offer);
+      console.log(newConnection.localDescription);
+      console.log(`寄出 ${isOffer ? "offer" : "answer"}`);
+
+      let send: WSEvent = {
+        event: WSSendEvents.SendSignalingInformation,
+        data: {
+          to: user.id,
+          info: {
+            desc: newConnection.localDescription,
+          },
+        },
+      };
+      api.WSSend(JSON.stringify(send));
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const setRemoteAudio = (
@@ -165,12 +166,12 @@ const AudioCallModal = ({
           if (stream) {
             var newConnection: RTCPeerConnection;
             newConnection = setRTC(stream);
+            if (!isBeenCalled) {
+              createSignal(true, newConnection);
+              console.log("有來電!");
+            }
             setCurrentStream(stream);
             setConnection(newConnection);
-          }
-
-          if (!isBeenCalled) {
-            // call createSignal(true)
           }
           console.log("Loaded!!");
         })
@@ -178,7 +179,6 @@ const AudioCallModal = ({
           console.log(err);
         });
     }
-
   }, [isOpen, isLoad]);
 
   /** 結束通話 */
@@ -190,6 +190,14 @@ const AudioCallModal = ({
       }
     });
     console.log(currentStream.getTracks()); // readyState:"ended"(分頁的取用圖示消失)
+    // 關閉ws
+    // var data: WSEvent = {
+    //   event: WSSendEvents.EndPhoneCall,
+    //   data: {
+    //     from: userProfile.id,
+    //   },
+    // };
+    // api.WSSend(JSON.stringify(data));
     onClose();
   };
 

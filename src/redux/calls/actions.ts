@@ -14,3 +14,9 @@ export const callsApiResponseError = (actionType: string, error: string) => ({
 export const getCalls = () => ({
   type: CallsActionTypes.GET_CALLS,
 });
+
+// websocket event
+export const callWebsocketEvent = (actionType: string) => ({
+  type: CallsActionTypes.WS_EVENT,
+  payload: { actionType },
+});

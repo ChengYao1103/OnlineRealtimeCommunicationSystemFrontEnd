@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import classnames from "classnames";
 
 // hooks
@@ -14,17 +14,31 @@ import UserProfileDetails from "./UserProfileDetails/index";
 import Welcome from "./ConversationUser/Welcome";
 import WSEventHandler from "../../api/wsEventHandler";
 import VideoCallModal from "../../components/VideoCallModal";
+import AudioCallModal from "../../components/AudioCallModal";
 
 interface IndexProps {}
 const Index = (props: IndexProps) => {
+  const [isOpenAudioModal, setIsOpenAudioModal] = useState<boolean>(false);
   // global store
   const { useAppSelector } = useRedux();
 
-  const { selectedChat } = useAppSelector(state => ({
-    selectedChat: state.Chats.selectedChat,
-  }));
+  const { selectedChat, onCalling, callingUserInfo } = useAppSelector(
+    state => ({
+      selectedChat: state.Chats.selectedChat,
+      onCalling: state.Calls.onCalling,
+      callingUserInfo: state.Auth.otherUserInfo,
+    })
+  );
 
   const { isChannel } = useConversationUserType();
+
+  useEffect(() => {
+    if (onCalling && callingUserInfo) {
+      setIsOpenAudioModal(true);
+    } else {
+      setIsOpenAudioModal(false);
+    }
+  }, [onCalling]);
 
   return (
     <>
@@ -47,6 +61,17 @@ const Index = (props: IndexProps) => {
           </div>
         ) : (
           <Welcome />
+        )}
+        {isOpenAudioModal && (
+          <AudioCallModal
+            isBeenCalled={onCalling}
+            isOpen={isOpenAudioModal}
+            onClose={() => {
+              setIsOpenAudioModal(false);
+            }}
+            callInfo={callingUserInfo}
+            user={callingUserInfo}
+          />
         )}
       </div>
     </>

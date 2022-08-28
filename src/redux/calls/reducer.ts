@@ -3,6 +3,7 @@ import { CallsActionTypes, CallsState } from "./types";
 
 export const INIT_STATE: CallsState = {
   calls: [],
+  onCalling: false,
 };
 
 const Calls = (state = INIT_STATE, action: any) => {
@@ -39,6 +40,19 @@ const Calls = (state = INIT_STATE, action: any) => {
         getCallsLoading: true,
         isCallsFetched: false,
       };
+    }
+
+    case CallsActionTypes.WS_EVENT: {
+      switch (action.payload.actionType) {
+        case CallsActionTypes.ON_CALLING: {
+          state.onCalling = true;
+          return {
+            ...state,
+          };
+        }
+        default:
+          return { ...state };
+      }
     }
 
     default:
