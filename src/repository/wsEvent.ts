@@ -73,6 +73,7 @@ export interface NewContent extends WSData {
   to: number;
   type: number;
   content: string;
+  id: number;
   time: string;
 }
 
