@@ -287,7 +287,6 @@ const Chats = persistReducer(
             );
             if (index !== -1) {
               state.recentChatUsers[index].Messages[0] = action.payload.data;
-              console.log(state.recentChatUsers[index]);
             }
             return { ...state };
           default:

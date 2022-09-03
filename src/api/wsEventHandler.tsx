@@ -16,6 +16,7 @@ import {
   WSEvent,
   WSReceiveEvents,
 } from "../repository/wsEvent";
+import { useEffect, useState } from "react";
 
 const WSEventHandler = () => {
   const dispatch = useDispatch();
@@ -24,7 +25,22 @@ const WSEventHandler = () => {
   const { SenderUser } = useAppSelector(state => ({
     SenderUser: state.Auth.otherUserInfo,
   }));
+  const [newContentInfo, setNewContentInfo] = useState<NewContent>();
   const { userProfile } = useProfile();
+
+  useEffect(() => {
+    if (newContentInfo && SenderUser && SenderUser.id === newContentInfo.from) {
+      toast.info(
+        <span>
+          {SenderUser.name} 傳送了一則訊息:
+          <br />
+          {newContentInfo.content}
+        </span>
+      );
+      dispatch(clearOtherUserInformation());
+      setNewContentInfo({} as NewContent);
+    }
+  }, [newContentInfo, SenderUser]);
 
   WSConnection.onMessageEvent = (event: any) => {
     let data: WSEvent = JSON.parse(event.data);
@@ -34,14 +50,7 @@ const WSEventHandler = () => {
         let contentInfo = data.data as NewContent;
         if (contentInfo.type === 0 && contentInfo.from !== userProfile.id) {
           dispatch(getUserInformation(contentInfo.from.toString()));
-          toast.info(
-            <span>
-              {SenderUser.name} 傳送了一則訊息:
-              <br />
-              {contentInfo.content}
-            </span>
-          );
-          dispatch(clearOtherUserInformation());
+          setNewContentInfo(contentInfo);
         }
         dispatch(
           chatWebsocketEvent(ChatsActionTypes.RECEIVE_MESSAGE, {

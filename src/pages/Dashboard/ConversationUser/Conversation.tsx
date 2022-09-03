@@ -20,6 +20,7 @@ import ForwardModal from "../../../components/ForwardModal";
 // actions
 import { forwardMessage, deleteImage } from "../../../redux/actions";
 import { messageRecordModel } from "../../../redux/chats/types";
+
 interface ConversationProps {
   chatUserConversations: Array<messageRecordModel>;
   chatUserDetails: userModel;
@@ -128,7 +129,7 @@ const Conversation = ({
           return (
             <Message
               message={message}
-              key={message.ID}
+              key={key}
               chatUserDetails={chatUserDetails}
               onDelete={onDelete}
               onSetReplyData={onSetReplyData}

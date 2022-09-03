@@ -42,7 +42,6 @@ const DirectMessages = ({
   useEffect(() => {
     let targetId = 0;
     if (!isLoadInformation && recentChatArray.length > 0) {
-      dispatch(clearOtherUserInformation()); // handle duplicate
       setIsLoadInformation(true);
       recentChatArray.forEach(element => {
         // 辨認是否為他人id
@@ -50,6 +49,7 @@ const DirectMessages = ({
           element.User1 === authUser.id ? element.User2 : element.User1;
         dispatch(getUserInformation(targetId.toString()));
       });
+      dispatch(clearOtherUserInformation()); // handle duplicate
     }
   }, [
     dispatch,
