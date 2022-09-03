@@ -13,14 +13,14 @@ import {
   getRecentChat,
 } from "../../../redux/actions";
 import { userModel } from "../../../redux/auth/types";
-import { recentChatUserTypes } from "../../../redux/chats/types";
+import { recentChatUserModel } from "../../../redux/chats/types";
 
 // actions
 import { getUserInformation } from "../../../redux/actions";
 
 interface DirectMessagesProps {
   authUser: userModel;
-  recentChatArray: Array<recentChatUserTypes>;
+  recentChatArray: Array<recentChatUserModel>;
   openAddContact: () => void;
   selectedChat: string | number;
   onSelectChat: (id: number | string, user: userModel) => void;
@@ -41,7 +41,7 @@ const DirectMessages = ({
 
   useEffect(() => {
     let targetId = 0;
-    if (!isLoadInformation && recentChatArray) {
+    if (!isLoadInformation && recentChatArray.length > 0) {
       dispatch(clearOtherUserInformation()); // handle duplicate
       setIsLoadInformation(true);
       recentChatArray.forEach(element => {
@@ -74,13 +74,7 @@ const DirectMessages = ({
       tmpChatUsers.push(otherUserInfoState);
       setChatUsers(tmpChatUsers);
     }
-  }, [
-    dispatch,
-    isLoadInformation,
-    otherUserInfoState,
-    chatUsers,
-    recentChatArray,
-  ]);
+  }, [isLoadInformation, otherUserInfoState, recentChatArray]);
 
   /*
     add contacts

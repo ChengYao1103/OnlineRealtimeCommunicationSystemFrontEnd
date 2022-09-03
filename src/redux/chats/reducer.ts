@@ -16,6 +16,7 @@ export const INIT_STATE: ChatsState = {
   isOpenUserDetails: false,
   channelDetails: {},
   archiveContacts: [],
+  recentChatUsers: [],
   selectedChatInfo: undefined,
 };
 
@@ -272,14 +273,23 @@ const Chats = persistReducer(
           case ChatsActionTypes.RECEIVE_MESSAGE:
             if (
               state.selectedChatInfo &&
-              (state.selectedChatInfo.id === action.payload.data.ReceiverID ||
-                state.selectedChatInfo?.id === action.payload.data.SenderID)
+              (state.selectedChatInfo.id === action.payload.data.SenderID ||
+                state.selectedChatInfo.id === action.payload.data.ReceiverID)
             ) {
               state.chatUserConversations.push(action.payload.data);
             }
-            return {
-              ...state,
-            };
+            var index = state.recentChatUsers.findIndex(
+              record =>
+                (record.User1 === action.payload.data.SenderID ||
+                  record.User2 === action.payload.data.SenderID) &&
+                (record.User1 === action.payload.data.ReceiverID ||
+                  record.User2 === action.payload.data.ReceiverID)
+            );
+            if (index !== -1) {
+              state.recentChatUsers[index].Messages[0] = action.payload.data;
+              console.log(state.recentChatUsers[index]);
+            }
+            return { ...state };
           default:
             return { ...state };
         }
@@ -316,6 +326,9 @@ const Chats = persistReducer(
           createChannelLoading: true,
         };
       case ChatsActionTypes.CHANGE_SELECTED_CHAT:
+        if (action.payload.selectedChat === null) {
+          state.chatUserConversations = [];
+        }
         return {
           ...state,
           selectedChat: action.payload.selectedChat,

@@ -290,6 +290,7 @@ const Message = ({
   const hasText = message.Type === 0;
   const hasImages = message.Type === 1;
   const hasAttachments = message.Type === 3;
+  const hasCallingInfo = message.Type === 4;
   const isTyping = false;
 
   const chatUserFullName = chatUserDetails.name;
@@ -397,13 +398,21 @@ const Message = ({
 
                   {/* typing start */}
                   {isTyping && <Typing />}
-
                   {/* typing end */}
+
                   {/* files message start */}
                   {hasAttachments && (
                     <Attachments attachments={message.Content} />
                   )}
                   {/* files message end */}
+
+                  {/* calling info start */}
+                  {hasCallingInfo && (
+                    <p className="mb-0 ctext-content text-secondary">
+                      {isFromMe ? "您" : "對方"}結束了一次通話
+                    </p>
+                  )}
+                  {/* calling info end */}
                 </div>
                 <Menu
                   onForward={onForwardMessage}

@@ -26,7 +26,7 @@ import ChatInputSection from "./ChatInputSection/index";
 
 // interface
 import { MessagesTypes } from "../../../data/messages";
-import { messageModel, recentChatUserTypes } from "../../../redux/chats/types";
+import { messageModel, recentChatUserModel } from "../../../redux/chats/types";
 
 // dummy data
 import { pinnedTabs } from "../../../data/index";
@@ -126,7 +126,7 @@ const Index = ({ isChannel }: IndexProps) => {
         getChatUserConversations({
           otherSideID: selectedChatInfo.id,
           lastMessageID: recentChatUsers.find(
-            (item: recentChatUserTypes) =>
+            (item: recentChatUserModel) =>
               item.User1 === selectedChatInfo.id ||
               item.User2 === selectedChatInfo.id
           ).Messages[0].ID,

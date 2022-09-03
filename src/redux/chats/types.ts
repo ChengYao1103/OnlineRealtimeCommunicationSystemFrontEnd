@@ -39,12 +39,6 @@ export interface senderModel {
   email: string | null;
   id: number | null;
 }
-export interface recentChatUserTypes {
-  Messages: object;
-  SeenMessageID: number;
-  User1: number; // smaller id
-  User2: number; // larger id
-}
 
 export interface channelModel {
   id: number;
@@ -70,6 +64,13 @@ export interface messageRecordModel {
   Time: string;
 }
 
+export interface recentChatUserModel {
+  Messages: messageRecordModel[];
+  SeenMessageID: number;
+  User1: number; // smaller id
+  User2: number; // larger id
+}
+
 export interface ChatsState {
   favourites: Array<any>;
   directMessages: Array<any>;
@@ -78,6 +79,7 @@ export interface ChatsState {
   selectedChat: string | number | null;
   chatUserDetails: object;
   chatUserConversations: Array<messageRecordModel>;
+  recentChatUsers: Array<recentChatUserModel>;
   isOpenUserDetails: boolean;
   channelDetails: object;
   archiveContacts: Array<any>;
