@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Button, Modal, ModalBody } from "reactstrap";
+import { useRedux } from "../hooks";
+import { resetCallingStatus } from "../redux/actions";
 
 // interface
 import { CallItem } from "../data/calls";
@@ -7,12 +9,12 @@ import { userModel } from "../redux/auth/types";
 
 //images
 import imagePlaceholder from "../assets/images/users/profile-placeholder.png";
+
+// apis
 import { APIClient } from "../api/apiCore";
 import { WSEvent, WSSendEvents } from "../repository/wsEvent";
 import { WSConnection } from "../api/webSocket";
-import { useRedux } from "../hooks";
-import { resetCallingStatus } from "../redux/actions";
-import { isConstructorDeclaration, isWhiteSpaceLike } from "typescript";
+
 interface AudioCallModalProps {
   isBeenCalled: boolean;
   callInfo: CallItem | null;
@@ -34,6 +36,7 @@ const AudioCallModal = ({
   }));
 
   const [isLoad, setIsLoad] = useState(false);
+  const [isAccept, setIsAccept] = useState(!isBeenCalled);
   const [isMute, setIsMute] = useState(false);
   const [isCloseSpeaker, setIsCloseSpeaker] = useState(false);
   const [currentStream, setCurrentStream] = useState(new MediaStream());
@@ -109,7 +112,7 @@ const AudioCallModal = ({
         newConnection.addIceCandidate(new RTCIceCandidate(data.info.candidate));
       }
     };
-    
+
     while (WSConnection.signalingInfoQueue.length !== 0) {
       var info = WSConnection.signalingInfoQueue.shift();
       WSConnection.getSignalingEvent(info);
@@ -176,7 +179,7 @@ const AudioCallModal = ({
 
   // 初始化麥克風 & socket和RTC相關設定
   useEffect(() => {
-    if (isOpen && !isLoad) {
+    if (isOpen && !isLoad && isAccept) {
       setIsLoad(true);
       navigator.mediaDevices
         .getUserMedia({ audio: true })
@@ -196,7 +199,7 @@ const AudioCallModal = ({
           console.log(err);
         });
     }
-  }, [isOpen, isLoad]);
+  }, [isOpen, isLoad, isAccept]);
 
   // 被掛電話時執行
   useEffect(() => {
@@ -250,67 +253,81 @@ const AudioCallModal = ({
             />
           </div>
 
-          <div className="d-flex justify-content-center align-items-center mt-4">
-            <div className="avatar-md h-auto">
-              <audio id="remoteAudio" autoPlay></audio>
-              <Button
-                type="button"
-                color={isMute ? "danger" : "light"}
-                onClick={() => setMute()}
-                className="avatar-sm rounded-circle"
-              >
-                {isMute ? (
-                  <span className="avatar-title bg-transparent text-white font-size-20">
-                    <i className="bx bx-microphone-off"></i>
-                  </span>
-                ) : (
+          {isAccept && (
+            <div className="d-flex justify-content-center align-items-center mt-4">
+              <div className="avatar-md h-auto">
+                <audio id="remoteAudio" autoPlay></audio>
+                <Button
+                  type="button"
+                  color={isMute ? "danger" : "light"}
+                  onClick={() => setMute()}
+                  className="avatar-sm rounded-circle"
+                >
+                  {isMute ? (
+                    <span className="avatar-title bg-transparent text-white font-size-20">
+                      <i className="bx bx-microphone-off"></i>
+                    </span>
+                  ) : (
+                    <span className="avatar-title bg-transparent text-muted font-size-20">
+                      <i className="bx bx-microphone"></i>
+                    </span>
+                  )}
+                </Button>
+                <h5 className="font-size-11 text-uppercase text-muted mt-2">
+                  Mute
+                </h5>
+              </div>
+              <div className="avatar-md h-auto">
+                <Button
+                  type="button"
+                  color={isCloseSpeaker ? "danger" : "light"}
+                  onClick={() => setSpeaker()}
+                  className="avatar-sm rounded-circle"
+                >
+                  {isCloseSpeaker ? (
+                    <span className="avatar-title bg-transparent text-white font-size-20">
+                      <i className="bx bx-volume-mute"></i>
+                    </span>
+                  ) : (
+                    <span className="avatar-title bg-transparent text-muted font-size-20">
+                      <i className="bx bx-volume-full"></i>
+                    </span>
+                  )}
+                </Button>
+                <h5 className="font-size-11 text-uppercase text-muted mt-2">
+                  Speaker
+                </h5>
+              </div>
+              <div className="avatar-md h-auto">
+                <Button
+                  color="light"
+                  type="button"
+                  className="avatar-sm rounded-circle"
+                >
                   <span className="avatar-title bg-transparent text-muted font-size-20">
-                    <i className="bx bx-microphone"></i>
+                    <i className="bx bx-user-plus"></i>
                   </span>
-                )}
-              </Button>
-              <h5 className="font-size-11 text-uppercase text-muted mt-2">
-                Mute
-              </h5>
+                </Button>
+                <h5 className="font-size-11 text-uppercase text-muted mt-2">
+                  Add New
+                </h5>
+              </div>
             </div>
-            <div className="avatar-md h-auto">
+          )}
+
+          <div className="mt-4 justify-content-center">
+            {isBeenCalled && !isAccept && (
               <Button
                 type="button"
-                color={isCloseSpeaker ? "danger" : "light"}
-                onClick={() => setSpeaker()}
-                className="avatar-sm rounded-circle"
+                className="me-5 btn btn-success avatar-md call-close-btn rounded-circle"
+                color="success"
+                onClick={() => setIsAccept(true)}
               >
-                {isCloseSpeaker ? (
-                  <span className="avatar-title bg-transparent text-white font-size-20">
-                    <i className="bx bx-volume-mute"></i>
-                  </span>
-                ) : (
-                  <span className="avatar-title bg-transparent text-muted font-size-20">
-                    <i className="bx bx-volume-full"></i>
-                  </span>
-                )}
-              </Button>
-              <h5 className="font-size-11 text-uppercase text-muted mt-2">
-                Speaker
-              </h5>
-            </div>
-            <div className="avatar-md h-auto">
-              <Button
-                color="light"
-                type="button"
-                className="avatar-sm rounded-circle"
-              >
-                <span className="avatar-title bg-transparent text-muted font-size-20">
-                  <i className="bx bx-user-plus"></i>
+                <span className="avatar-title bg-transparent font-size-24">
+                  <i className="mdi mdi-phone"></i>
                 </span>
               </Button>
-              <h5 className="font-size-11 text-uppercase text-muted mt-2">
-                Add New
-              </h5>
-            </div>
-          </div>
-
-          <div className="mt-4">
+            )}
             <Button
               type="button"
               className="btn btn-danger avatar-md call-close-btn rounded-circle"

@@ -16,6 +16,17 @@ export const getCalls = () => ({
 });
 
 /**
+ * 取得來電者資訊(跟auth state分開避免被通知影響)
+ * @param userId caller的id
+ */
+export const getCallerInfo = (userId: string) => {
+  return {
+    type: CallsActionTypes.GET_CALLER_INFO,
+    payload: { userId },
+  };
+};
+
+/**
  * 重設是否接到來電與是否被掛電話的state
  */
 export const resetCallingStatus = () => ({

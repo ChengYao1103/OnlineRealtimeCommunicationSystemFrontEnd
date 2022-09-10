@@ -6,6 +6,7 @@ export enum CallsActionTypes {
 
   WS_EVENT = "@@calls/WS_EVENT",
 
+  GET_CALLER_INFO = "@@calls/GET_CALLER_INFO",
   RESET_CALLING_STATUS = "@@calls/RESET_CALLING_STATUS",
   ON_CALLING = "@@calls/ON_CALLING",
   HANGUP_CALLING = "@@calls/HANGUP_CALL",

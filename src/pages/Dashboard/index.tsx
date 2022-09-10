@@ -27,7 +27,7 @@ const Index = (props: IndexProps) => {
     state => ({
       selectedChat: state.Chats.selectedChat,
       onCalling: state.Calls.onCalling,
-      callingUserInfo: state.Auth.otherUserInfo,
+      callingUserInfo: state.Calls.callingUserInfo,
     })
   );
 
@@ -37,7 +37,7 @@ const Index = (props: IndexProps) => {
     if (onCalling && callingUserInfo) {
       setIsOpenAudioModal(true);
     }
-  }, [onCalling]);
+  }, [onCalling, callingUserInfo]);
 
   return (
     <>

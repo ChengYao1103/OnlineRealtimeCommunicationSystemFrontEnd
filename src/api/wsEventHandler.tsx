@@ -6,6 +6,7 @@ import {
   callWebsocketEvent,
   chatWebsocketEvent,
   clearOtherUserInformation,
+  getCallerInfo,
   getUserInformation,
 } from "../redux/actions";
 import { ChatsActionTypes } from "../redux/chats/types";
@@ -78,7 +79,7 @@ const WSEventHandler = () => {
           }
         } else {
           WSConnection.signalingInfoQueue.push(info);
-          dispatch(getUserInformation(info.from.toString()));
+          dispatch(getCallerInfo(info.from.toString()));
           dispatch(callWebsocketEvent(CallsActionTypes.ON_CALLING));
         }
         break;
