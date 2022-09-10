@@ -155,6 +155,7 @@ const Index = ({ isChannel }: IndexProps) => {
           )}
           {isOpenVideoModal && (
             <VideoCallModal
+              isBeenCalled={false}
               isOpen={isOpenVideoModal}
               onClose={onCloseVideo}
               callInfo={chatUserDetails}

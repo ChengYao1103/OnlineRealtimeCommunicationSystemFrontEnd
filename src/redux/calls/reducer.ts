@@ -61,6 +61,7 @@ const Calls = (state = INIT_STATE, action: any) => {
       state.endCalling = false;
       return {
         ...state,
+        callingUserInfo: undefined,
       };
     }
 
@@ -78,7 +79,6 @@ const Calls = (state = INIT_STATE, action: any) => {
           state.endCalling = true;
           return {
             ...state,
-            callingUserInfo: undefined,
           };
         }
         default:

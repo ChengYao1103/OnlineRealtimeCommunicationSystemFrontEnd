@@ -426,6 +426,7 @@ const UserHead = ({
       )}
       {isOpenVideoModal && (
         <VideoCallModal
+          isBeenCalled={false}
           isOpen={isOpenVideoModal}
           onClose={onCloseVideo}
           callInfo={chatUserDetails}

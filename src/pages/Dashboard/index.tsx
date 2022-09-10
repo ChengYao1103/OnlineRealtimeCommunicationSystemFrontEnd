@@ -35,6 +35,7 @@ const Index = (props: IndexProps) => {
 
   useEffect(() => {
     if (onCalling && callingUserInfo) {
+      // TODO:區分是音訊還是視訊通話
       setIsOpenAudioModal(true);
     }
   }, [onCalling, callingUserInfo]);

@@ -27,7 +27,7 @@ export const getCallerInfo = (userId: string) => {
 };
 
 /**
- * 重設是否接到來電與是否被掛電話的state
+ * 重設是否接到來電、是否被掛電話、來電者資訊的state
  */
 export const resetCallingStatus = () => ({
   type: CallsActionTypes.RESET_CALLING_STATUS,
