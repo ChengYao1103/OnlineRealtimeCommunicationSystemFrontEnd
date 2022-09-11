@@ -1,10 +1,7 @@
 import React, { useEffect, useRef, useCallback, useState } from "react";
 
 // hooks
-import { useRedux } from "../../../hooks/index";
-
-// hooks
-import { useProfile } from "../../../hooks";
+import { useProfile, useRedux } from "../../../hooks/index";
 
 // components
 import AppSimpleBar from "../../../components/AppSimpleBar";
@@ -15,6 +12,7 @@ import Message from "./Message";
 // interface
 import { MessagesTypes } from "../../../data/messages";
 import { userModel } from "../../../redux/auth/types";
+import { messageRecordModel } from "../../../redux/chats/types";
 import ForwardModal from "../../../components/ForwardModal";
 
 // actions
@@ -23,7 +21,6 @@ import {
   deleteImage,
   getChatUserConversations,
 } from "../../../redux/actions";
-import { messageRecordModel } from "../../../redux/chats/types";
 
 interface ConversationProps {
   chatUserConversations: Array<messageRecordModel>;
@@ -41,9 +38,6 @@ const Conversation = ({
 }: ConversationProps) => {
   // global store
   const { dispatch, useAppSelector } = useRedux();
-
-  const { userProfile } = useProfile();
-
   const { getUserConversationsLoading, isMessageForwarded } = useAppSelector(
     (state: any) => ({
       getUserConversationsLoading: state.Chats.getUserConversationsLoading,
@@ -51,24 +45,30 @@ const Conversation = ({
     })
   );
 
-  const messages = chatUserConversations ? chatUserConversations : [];
+  const { userProfile } = useProfile();
+  const [requestOldConversation, setRequestOldConversation] = useState(false);
+  const [lastScrollHeight, setLastScrollHeight] = useState(0);
 
   const ref = useRef<any>();
   const scrollElement = useCallback(() => {
     if (ref && ref.current) {
       const listEle = document.getElementById("chat-conversation-list");
       const scrollElement = ref.current.getScrollElement();
-      let offsetHeight = 0;
-      if (listEle) {
+      var offsetHeight = 0;
+      if (listEle && lastScrollHeight === 0 && !requestOldConversation) {
         offsetHeight = listEle.scrollHeight - window.innerHeight + 250;
+      } else if (listEle && requestOldConversation) {
+        offsetHeight = listEle.scrollHeight - lastScrollHeight;
       }
-      if (offsetHeight) {
-        scrollElement.scrollTo({ top: offsetHeight, behavior: "smooth" });
+      if (listEle && offsetHeight) {
+        setRequestOldConversation(false);
+        setLastScrollHeight(listEle.scrollHeight);
+        scrollElement.scrollTo({ top: offsetHeight });
       }
       // 捲動到頂部時觸發取得更多(20筆)訊息
       scrollElement.onscroll = () => {
         if (scrollElement.scrollTop === 0) {
-          console.log(chatUserConversations[0]);
+          setRequestOldConversation(true);
           dispatch(
             getChatUserConversations({
               otherSideID: chatUserDetails.id,
@@ -79,7 +79,13 @@ const Conversation = ({
         }
       };
     }
-  }, [ref]);
+  }, [
+    lastScrollHeight,
+    requestOldConversation,
+    dispatch,
+    chatUserDetails,
+    chatUserConversations,
+  ]);
 
   useEffect(() => {
     if (ref && ref.current) {
@@ -140,22 +146,24 @@ const Conversation = ({
         className="list-unstyled chat-conversation-list"
         id="chat-conversation-list"
       >
-        {(messages || []).map((message: messageRecordModel, key: number) => {
-          const isFromMe = message.SenderID === userProfile.id;
-          return (
-            <Message
-              message={message}
-              key={key}
-              chatUserDetails={chatUserDetails}
-              onDelete={onDelete}
-              onSetReplyData={onSetReplyData}
-              isFromMe={isFromMe}
-              onOpenForward={onOpenForward}
-              isChannel={isChannel}
-              onDeleteImage={onDeleteImage}
-            />
-          );
-        })}
+        {(chatUserConversations || []).map(
+          (conversation: messageRecordModel, key: number) => {
+            const isFromMe = conversation.SenderID === userProfile.id;
+            return (
+              <Message
+                message={conversation}
+                key={key}
+                chatUserDetails={chatUserDetails}
+                onDelete={onDelete}
+                onSetReplyData={onSetReplyData}
+                isFromMe={isFromMe}
+                onOpenForward={onOpenForward}
+                isChannel={isChannel}
+                onDeleteImage={onDeleteImage}
+              />
+            );
+          }
+        )}
         {/*  <Day /> */}
       </ul>
       {isOpenForward && (
