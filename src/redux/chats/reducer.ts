@@ -2,8 +2,7 @@ import { persistReducer } from "redux-persist";
 import { toast } from "react-toastify";
 import storage from "redux-persist/lib/storage";
 // types
-import { ChatsActionTypes, ChatsState } from "./types";
-import { getChatUserConversations } from "./actions";
+import { messageRecordModel, ChatsActionTypes, ChatsState } from "./types";
 
 export const INIT_STATE: ChatsState = {
   favourites: [],
@@ -73,10 +72,12 @@ const Chats = persistReducer(
               getUserDetailsLoading: false,
             };
           case ChatsActionTypes.GET_CHAT_USER_CONVERSATIONS:
+            var conversations = action.payload.data.message.Messages;
+            conversations.forEach((conversation: messageRecordModel) => {
+              state.chatUserConversations.unshift(conversation);
+            });
             return {
               ...state,
-              chatUserConversations:
-                action.payload.data.message.Messages.slice().reverse(),
               isUserConversationsFetched: true,
               getUserConversationsLoading: false,
               isUserMessageSent: false,

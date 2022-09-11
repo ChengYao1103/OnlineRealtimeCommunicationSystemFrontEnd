@@ -18,7 +18,11 @@ import { userModel } from "../../../redux/auth/types";
 import ForwardModal from "../../../components/ForwardModal";
 
 // actions
-import { forwardMessage, deleteImage } from "../../../redux/actions";
+import {
+  forwardMessage,
+  deleteImage,
+  getChatUserConversations,
+} from "../../../redux/actions";
 import { messageRecordModel } from "../../../redux/chats/types";
 
 interface ConversationProps {
@@ -53,15 +57,27 @@ const Conversation = ({
   const scrollElement = useCallback(() => {
     if (ref && ref.current) {
       const listEle = document.getElementById("chat-conversation-list");
+      const scrollElement = ref.current.getScrollElement();
       let offsetHeight = 0;
       if (listEle) {
         offsetHeight = listEle.scrollHeight - window.innerHeight + 250;
       }
       if (offsetHeight) {
-        ref.current
-          .getScrollElement()
-          .scrollTo({ top: offsetHeight, behavior: "smooth" });
+        scrollElement.scrollTo({ top: offsetHeight, behavior: "smooth" });
       }
+      // 捲動到頂部時觸發取得更多(20筆)訊息
+      scrollElement.onscroll = () => {
+        if (scrollElement.scrollTop === 0) {
+          console.log(chatUserConversations[0]);
+          dispatch(
+            getChatUserConversations({
+              otherSideID: chatUserDetails.id,
+              lastMessageID: chatUserConversations[0].ID,
+              n: 20,
+            })
+          );
+        }
+      };
     }
   }, [ref]);
 

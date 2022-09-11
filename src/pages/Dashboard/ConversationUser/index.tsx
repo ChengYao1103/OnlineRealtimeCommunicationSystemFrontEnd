@@ -122,14 +122,16 @@ const Index = ({ isChannel }: IndexProps) => {
 
   useEffect(() => {
     if (selectedChatInfo) {
+      // 回傳的是不包含該筆id的紀錄，所以+1
       dispatch(
         getChatUserConversations({
           otherSideID: selectedChatInfo.id,
-          lastMessageID: recentChatUsers.find(
-            (item: recentChatUserModel) =>
-              item.User1 === selectedChatInfo.id ||
-              item.User2 === selectedChatInfo.id
-          ).Messages[0].ID,
+          lastMessageID:
+            recentChatUsers.find(
+              (item: recentChatUserModel) =>
+                item.User1 === selectedChatInfo.id ||
+                item.User2 === selectedChatInfo.id
+            ).Messages[0].ID + 1,
           n: 50,
         })
       );
