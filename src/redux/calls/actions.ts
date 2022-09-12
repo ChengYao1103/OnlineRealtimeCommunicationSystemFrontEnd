@@ -34,7 +34,7 @@ export const resetCallingStatus = () => ({
 });
 
 // websocket event
-export const callWebsocketEvent = (actionType: string) => ({
+export const callWebsocketEvent = (actionType: string, data?: any) => ({
   type: CallsActionTypes.WS_EVENT,
-  payload: { actionType },
+  payload: { actionType, data },
 });

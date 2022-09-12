@@ -20,13 +20,14 @@ import { WSConnection } from "../../api/webSocket";
 interface IndexProps {}
 const Index = (props: IndexProps) => {
   const [isOpenAudioModal, setIsOpenAudioModal] = useState<boolean>(false);
+  const [isOpenVideoModal, setIsOpenVideoModal] = useState<boolean>(false);
   // global store
   const { useAppSelector } = useRedux();
 
-  const { selectedChat, onCalling, callingUserInfo } = useAppSelector(
+  const { selectedChat, onCallingType, callingUserInfo } = useAppSelector(
     state => ({
       selectedChat: state.Chats.selectedChat,
-      onCalling: state.Calls.onCalling,
+      onCallingType: state.Calls.onCallingType,
       callingUserInfo: state.Calls.callingUserInfo,
     })
   );
@@ -34,11 +35,22 @@ const Index = (props: IndexProps) => {
   const { isChannel } = useConversationUserType();
 
   useEffect(() => {
-    if (onCalling && callingUserInfo) {
-      // TODO:區分是音訊還是視訊通話
-      setIsOpenAudioModal(true);
+    if (callingUserInfo && onCallingType !== "") {
+      switch (onCallingType) {
+        case "audio": {
+          setIsOpenAudioModal(true);
+          break;
+        }
+        case "video": {
+          setIsOpenVideoModal(true);
+          break;
+        }
+        default: {
+          break;
+        }
+      }
     }
-  }, [onCalling, callingUserInfo]);
+  }, [onCallingType, callingUserInfo]);
 
   return (
     <>
@@ -62,12 +74,25 @@ const Index = (props: IndexProps) => {
         ) : (
           <Welcome />
         )}
+        {/* Receive Audio call */}
         {isOpenAudioModal && (
           <AudioCallModal
-            isBeenCalled={onCalling}
+            isBeenCalled={true}
             isOpen={isOpenAudioModal}
             onClose={() => {
               setIsOpenAudioModal(false);
+            }}
+            callInfo={callingUserInfo}
+            user={callingUserInfo}
+          />
+        )}
+        {/* Receive Video call */}
+        {isOpenVideoModal && (
+          <VideoCallModal
+            isBeenCalled={true}
+            isOpen={isOpenVideoModal}
+            onClose={() => {
+              setIsOpenVideoModal(false);
             }}
             callInfo={callingUserInfo}
             user={callingUserInfo}

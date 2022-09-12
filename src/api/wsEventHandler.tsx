@@ -80,7 +80,7 @@ const WSEventHandler = () => {
         } else {
           WSConnection.signalingInfoQueue.push(info);
           dispatch(getCallerInfo(info.from.toString()));
-          dispatch(callWebsocketEvent(CallsActionTypes.ON_CALLING));
+          dispatch(callWebsocketEvent(CallsActionTypes.ON_CALLING, info.type));
         }
         break;
       case WSReceiveEvents.HangUpPhoneCall:

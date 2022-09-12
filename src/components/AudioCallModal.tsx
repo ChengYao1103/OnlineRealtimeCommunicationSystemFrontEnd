@@ -78,6 +78,7 @@ const AudioCallModal = ({
           info: {
             candidate: candidate,
           },
+          type: "audio",
         },
       };
       api.WSSend(JSON.stringify(send));
@@ -145,6 +146,7 @@ const AudioCallModal = ({
           info: {
             desc: newConnection.localDescription,
           },
+          type: "audio",
         },
       };
       api.WSSend(JSON.stringify(send));

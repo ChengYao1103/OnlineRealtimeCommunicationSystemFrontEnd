@@ -82,6 +82,7 @@ const VideoCallModal = ({
           info: {
             candidate: candidate,
           },
+          type: "video",
         },
       };
       api.WSSend(JSON.stringify(send));
@@ -149,6 +150,7 @@ const VideoCallModal = ({
           info: {
             desc: newConnection.localDescription,
           },
+          type: "video",
         },
       };
       api.WSSend(JSON.stringify(send));

@@ -23,9 +23,9 @@ export enum WSReceiveEvents {
   GetSignalingInformation = 23,
   HangUpPhoneCall = 24,
   BeenInviteToChannel = 31,
-  ChannelMeetingCreated	= 32,
-	BeenInviteToMeeting	= 33,
-	Error = 90,
+  ChannelMeetingCreated = 32,
+  BeenInviteToMeeting = 33,
+  Error = 90,
   TokenExpired = 91,
 }
 
@@ -55,6 +55,7 @@ export interface ResponsePhoneCall extends WSData {
 export interface SendSignalingInformation extends WSData {
   to: number;
   info: string;
+  type: string;
 }
 
 export interface EndPhoneCall extends WSData {
@@ -94,6 +95,7 @@ export interface AnswerPhoneCall extends WSData {
 export interface GetSignalingInformation extends WSData {
   from: number;
   info: any;
+  type: string;
 }
 
 export interface HangUpPhoneCall extends WSData {

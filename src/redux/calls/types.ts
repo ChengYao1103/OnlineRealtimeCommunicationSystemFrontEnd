@@ -13,6 +13,6 @@ export enum CallsActionTypes {
 }
 export interface CallsState {
   calls: Array<any>;
-  onCalling: boolean;
+  onCallingType: string;
   endCalling: boolean;
 }
