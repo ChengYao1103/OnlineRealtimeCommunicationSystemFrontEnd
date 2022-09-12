@@ -253,9 +253,10 @@ const VideoCallModal = ({
             })
             .catch(function (err) {
               console.log(err);
+              toast.error("請確認麥克風與視訊鏡頭的權限是否皆已開啟");
+              onClose();
             });
         });
-      console.log("Loaded!!");
     }
   }, [isOpen, isLoad, isAccept]);
 

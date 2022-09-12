@@ -14,6 +14,7 @@ import imagePlaceholder from "../assets/images/users/profile-placeholder.png";
 import { APIClient } from "../api/apiCore";
 import { WSEvent, WSSendEvents } from "../repository/wsEvent";
 import { WSConnection } from "../api/webSocket";
+import { toast } from "react-toastify";
 
 interface AudioCallModalProps {
   isBeenCalled: boolean;
@@ -199,6 +200,8 @@ const AudioCallModal = ({
         })
         .catch(function (err) {
           console.log(err);
+          toast.error("請確認麥克風的權限是否開啟");
+          onClose();
         });
     }
   }, [isOpen, isLoad, isAccept]);
