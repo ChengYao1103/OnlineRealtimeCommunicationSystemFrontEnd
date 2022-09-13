@@ -11,7 +11,7 @@ import Reply from "./Reply";
 // interface
 import { MessagesTypes } from "../../../../data/messages";
 import { userModel } from "../../../../redux/auth/types";
-import { messageModel } from "../../../../redux/chats/types";
+import { MessageTypeEnum } from "../../../../redux/chats/types";
 import { toast } from "react-toastify";
 import { sendMessage } from "../../../../api";
 
@@ -72,26 +72,31 @@ const Index = ({
   }, [text, images, files]);
 
   const onSubmit = () => {
-    let datas: Array<messageModel> = [];
     // text message
-    datas.push({ receiverID: selectedChatInfo.id, content: text, type: 0 });
+    if (text.length > 0) {
+      onSend({
+        receiverID: selectedChatInfo.id,
+        content: text,
+        type: MessageTypeEnum.text,
+      });
+    }
 
-    //images message ***有bug傳不出去***
-    /*for (const image of images) {
+    // images message
+    for (const image of images) {
       let reader = new FileReader();
       reader.readAsDataURL(image);
       reader.onload = () => {
-        //儲存轉換完成之圖片
+        //發送轉換完成之圖片
         const base64 = reader.result;
         if (typeof base64 === "string") {
-          datas.push({
+          onSend({
             receiverID: selectedChatInfo.id,
             content: base64,
-            type: 1,
+            type: MessageTypeEnum.image,
           });
         }
       };
-    }*/
+    }
 
     /*let data: any = {};
     if (text) {
@@ -106,6 +111,15 @@ const Index = ({
         };
       });
       data["image"] = imgs;
+    }*/
+
+    // files message
+    /*for (const file of files) {
+      onSend({
+        receiverID: selectedChatInfo.id,
+        content: ????,
+        type: MessageTypeEnum.file,
+      });
     }
 
     if (files && files.length) {
@@ -124,9 +138,6 @@ const Index = ({
     /*if (datas.length === images.length + files.length + (text === "" ? 0 : 1)) {
       
     }*/
-    for (const i in datas) {
-      onSend(datas[i]);
-    }
     setText("");
     setImages([]);
     setFiles([]);

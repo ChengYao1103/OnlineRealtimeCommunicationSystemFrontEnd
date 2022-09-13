@@ -55,6 +55,14 @@ export interface messageModel {
   type: number;
 }
 
+export enum MessageTypeEnum {
+  text = 0,
+  image = 1,
+  media = 2,
+  file = 3,
+  callRecord = 4,
+}
+
 export interface messageRecordModel {
   ID: number;
   SenderID: number;

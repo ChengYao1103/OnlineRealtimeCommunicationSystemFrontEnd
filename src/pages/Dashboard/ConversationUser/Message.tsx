@@ -21,7 +21,11 @@ import {
   AttachmentTypes,
 } from "../../../data/messages";
 import { userModel } from "../../../redux/auth/types";
-import { channelModel, messageRecordModel } from "../../../redux/chats/types";
+import {
+  channelModel,
+  messageRecordModel,
+  MessageTypeEnum,
+} from "../../../redux/chats/types";
 
 // hooks
 import { useProfile } from "../../../hooks";
@@ -287,10 +291,10 @@ const Message = ({
   onDeleteImage,
 }: MessageProps) => {
   const { userProfile } = useProfile();
-  const hasText = message.Type === 0;
-  const hasImages = message.Type === 1;
-  const hasAttachments = message.Type === 3;
-  const hasCallingInfo = message.Type === 4;
+  const hasText = message.Type === MessageTypeEnum.text;
+  const hasImages = message.Type === MessageTypeEnum.image;
+  const hasAttachments = message.Type === MessageTypeEnum.file;
+  const hasCallingInfo = message.Type === MessageTypeEnum.callRecord;
   const isTyping = false;
 
   const chatUserFullName = chatUserDetails.name;
@@ -344,13 +348,13 @@ const Message = ({
         </div>
 
         <div className="user-chat-content">
-          {hasImages && message.Content && (
+          {/*hasImages && message.Content && (
             <div className="ctext-wrap">
               <div className="ctext-wrap-content">
                 <p className="mb-0 ctext-content">{message.Content}</p>
               </div>
             </div>
-          )}
+          )*/}
           {isForwarded && (
             <span
               className={classnames(
@@ -379,7 +383,10 @@ const Message = ({
             {/* image message start */}
             {hasImages ? (
               <>
-                <Images images={message.Content!} onDeleteImg={onDeleteImg} />
+                {/* <Images images={message.Content!} onDeleteImg={onDeleteImg} />*/}
+                <div className="ctext-wrap-content">
+                  <img src={message.Content} alt="imageMessage"></img>
+                </div>
               </>
             ) : (
               <>
