@@ -326,9 +326,7 @@ const Chats = persistReducer(
           createChannelLoading: true,
         };
       case ChatsActionTypes.CHANGE_SELECTED_CHAT:
-        if (action.payload.selectedChat === null) {
-          state.chatUserConversations = [];
-        }
+        state.chatUserConversations = [];
         return {
           ...state,
           selectedChat: action.payload.selectedChat,

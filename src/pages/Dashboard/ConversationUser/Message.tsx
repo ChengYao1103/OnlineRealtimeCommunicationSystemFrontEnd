@@ -381,7 +381,7 @@ const Message = ({
             {/* text message end */}
 
             {/* image message start */}
-            {hasImages ? (
+            {hasImages && message.Content.substring(0, 10) === "data:image" ? (
               <>
                 {/* <Images images={message.Content!} onDeleteImg={onDeleteImg} />*/}
                 <div className="ctext-wrap-content">
@@ -390,7 +390,10 @@ const Message = ({
               </>
             ) : (
               <>
-                <div className="ctext-wrap-content">
+                <div
+                  className="ctext-wrap-content text-start"
+                  style={{ display: "inline-block", wordBreak: "break-word" }}
+                >
                   {/*isRepliedMessage && (
                     <RepliedMessage
                       fullName={fullName}

@@ -61,12 +61,16 @@ const Conversation = ({
         offsetHeight = listEle.scrollHeight - lastScrollHeight;
       }
       if (listEle && offsetHeight) {
+        scrollElement.scrollTo({
+          top: offsetHeight,
+          behavior: requestOldConversation ? "auto" : "smooth",
+        });
         setRequestOldConversation(false);
         setLastScrollHeight(listEle.scrollHeight);
-        scrollElement.scrollTo({ top: offsetHeight });
       }
       // 捲動到頂部時觸發取得更多(20筆)訊息
       scrollElement.onscroll = () => {
+        console.log(scrollElement.scrollTop);
         if (scrollElement.scrollTop === 0) {
           setRequestOldConversation(true);
           dispatch(
@@ -93,7 +97,7 @@ const Conversation = ({
     }
   }, []);
   useEffect(() => {
-    if (chatUserConversations) {
+    if (chatUserConversations.length > 0) {
       scrollElement();
     }
   }, [chatUserConversations, chatUserConversations.length, scrollElement]);
