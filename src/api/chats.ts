@@ -14,8 +14,8 @@ const getDirectMessages = () => {
 };
 
 const getChannels = (userId: string) => {
-  let data = { id: userId };
-  return api.get(url.GET_CHANNELS, data);
+  let destUrl = `${url.GET_CHANNELS}`;
+  return api.get(destUrl);
 };
 
 const addContacts = (contacts: Array<string | number>) => {
