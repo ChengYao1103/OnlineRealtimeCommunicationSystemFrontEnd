@@ -70,8 +70,7 @@ const Conversation = ({
       }
       // 捲動到頂部時觸發取得更多(20筆)訊息
       scrollElement.onscroll = () => {
-        console.log(scrollElement.scrollTop);
-        if (scrollElement.scrollTop === 0) {
+        if (lastScrollHeight > 0 && scrollElement.scrollTop === 0) {
           setRequestOldConversation(true);
           dispatch(
             getChatUserConversations({
@@ -101,6 +100,11 @@ const Conversation = ({
       scrollElement();
     }
   }, [chatUserConversations, chatUserConversations.length, scrollElement]);
+
+  useEffect(() => {
+    setRequestOldConversation(false);
+    setLastScrollHeight(0);
+  }, [chatUserDetails]);
 
   /*
   forward message
