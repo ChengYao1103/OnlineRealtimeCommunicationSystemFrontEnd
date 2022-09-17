@@ -150,3 +150,8 @@ export const deleteImage = (
   type: ChatsActionTypes.DELETE_IMAGE,
   payload: { userId, messageId, imageId },
 });
+
+export const uploadMessageFile = (data: any) => ({
+  type: ChatsActionTypes.UPLOAD_MESSAGE_FILE,
+  payload: data,
+});

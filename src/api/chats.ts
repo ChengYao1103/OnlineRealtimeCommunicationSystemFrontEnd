@@ -116,6 +116,11 @@ const deleteImage = (
   });
 };
 
+const uploadMessageFile = (data: object) => {
+  console.log(data)
+  return api.createWithFile(url.UPLOAD_MESSAGE_FILE, data);
+};
+
 export {
   getFavourites,
   getDirectMessages,
@@ -138,4 +143,5 @@ export {
   toggleArchiveContact,
   readConversation,
   deleteImage,
+  uploadMessageFile,
 };

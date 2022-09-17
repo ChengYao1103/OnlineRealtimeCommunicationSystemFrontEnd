@@ -216,6 +216,7 @@ interface AttachmentsProps {
   attachments: AttachmentTypes[] | undefined;
 }
 const Attachments = ({ attachments }: AttachmentsProps) => {
+  //console.log(attachments)
   return (
     <>
       {(attachments || []).map((attachment: AttachmentTypes, key: number) => (
@@ -409,7 +410,8 @@ const Message = ({
 
                   {/* files message start */}
                   {hasAttachments && (
-                    <Attachments attachments={message.Content} />
+                    //<Attachments attachments={message.Content} />
+                    <p className="mb-0 ctext-content">{message.Content}</p>
                   )}
                   {/* files message end */}
 

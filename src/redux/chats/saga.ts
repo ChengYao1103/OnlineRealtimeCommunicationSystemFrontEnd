@@ -26,6 +26,7 @@ import {
   toggleArchiveContact as toggleArchiveContactApi,
   readConversation as readConversationApi,
   deleteImage as deleteImageApi,
+  uploadMessageFile as uploadMessageFileApi,
 } from "../../api/index";
 
 import {
@@ -320,6 +321,17 @@ function* deleteImage({ payload: { userId, messageId, imageId } }: any) {
   }
 }
 
+function* uploadMessageFile({ payload: data }: any) {
+  try {
+    const response: Promise<any> = yield call(uploadMessageFileApi, data);
+    yield put(
+      chatsApiResponseSuccess(ChatsActionTypes.UPLOAD_MESSAGE_FILE, response)
+    );
+  } catch (error: any) {
+    yield put(chatsApiResponseError(ChatsActionTypes.UPLOAD_MESSAGE_FILE, error));
+  }
+}
+
 export function* watchGetFavourites() {
   yield takeEvery(ChatsActionTypes.GET_FAVOURITES, getFavourites);
 }
@@ -397,6 +409,9 @@ export function* watchDeleteImage() {
   yield takeEvery(ChatsActionTypes.DELETE_IMAGE, deleteImage);
 }
 
+export function* watchUploadMessageFile() {
+  yield takeEvery(ChatsActionTypes.UPLOAD_MESSAGE_FILE, uploadMessageFile);
+}
 function* chatsSaga() {
   yield all([
     fork(watchGetFavourites),
@@ -420,6 +435,7 @@ function* chatsSaga() {
     fork(watchToggleArchiveContact),
     fork(watchReadConversation),
     fork(watchDeleteImage),
+    fork(watchUploadMessageFile),
   ]);
 }
 

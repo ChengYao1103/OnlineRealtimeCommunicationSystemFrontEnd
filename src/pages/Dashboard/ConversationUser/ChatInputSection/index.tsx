@@ -17,12 +17,14 @@ import { sendMessage } from "../../../../api";
 
 interface IndexProps {
   onSend: (data: any) => void;
+  onUpload: (file: any) => void;
   replyData: null | MessagesTypes | undefined;
   onSetReplyData: (reply: null | MessagesTypes | undefined) => void;
   selectedChatInfo: userModel;
 }
 const Index = ({
   onSend,
+  onUpload,
   replyData,
   onSetReplyData,
   selectedChatInfo,
@@ -62,10 +64,12 @@ const Index = ({
   const [files, setFiles] = useState<Array<any>>([]);
   const onSelectFiles = (files: Array<any>) => {
     setFiles(files);
+    console.log(files);
   };
   useEffect(() => {
     if (text !== "" || images.length > 0 || files.length > 0) {
       setDisabled(false);
+      console.log(files);
     } else {
       setDisabled(true);
     }
@@ -114,15 +118,18 @@ const Index = ({
     }*/
 
     // files message
-    /*for (const file of files) {
-      onSend({
-        receiverID: selectedChatInfo.id,
-        content: ????,
-        type: MessageTypeEnum.file,
-      });
+    for (const file of files) {
+      console.log(file.name)
+      // onSend({
+      //   receiverID: selectedChatInfo.id,
+      //   content: file.name,
+      //   type: MessageTypeEnum.file,
+      // });
+      onUpload(file)
+      //console.log(file.name)
     }
 
-    if (files && files.length) {
+    /*if (files && files.length) {
       const fs = (files || []).map((f: any, key: number) => {
         const src = URL.createObjectURL(f);
         return {

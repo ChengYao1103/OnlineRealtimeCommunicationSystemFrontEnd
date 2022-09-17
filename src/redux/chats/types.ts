@@ -32,6 +32,7 @@ export enum ChatsActionTypes {
   TOGGLE_ARCHIVE_CONTACT = "@@chats/TOGGLE_ARCHIVE_CONTACT",
   READ_CONVERSATION = "@@chats/READ_CONVERSATION",
   DELETE_IMAGE = "@@chats/DELETE_IMAGE",
+  UPLOAD_MESSAGE_FILE = "@@chats/UPLOAD_MESSAGE_FILE",
 }
 
 export interface senderModel {

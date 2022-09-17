@@ -14,6 +14,7 @@ import {
   deleteMessage,
   deleteUserMessages,
   toggleArchiveContact,
+  uploadMessageFile,
 } from "../../../redux/actions";
 
 // hooks
@@ -26,7 +27,7 @@ import ChatInputSection from "./ChatInputSection/index";
 
 // interface
 import { MessagesTypes } from "../../../data/messages";
-import { messageModel, recentChatUserModel } from "../../../redux/chats/types";
+import { messageModel, MessageTypeEnum, recentChatUserModel } from "../../../redux/chats/types";
 
 // dummy data
 import { pinnedTabs } from "../../../data/index";
@@ -48,6 +49,7 @@ const Index = ({ isChannel }: IndexProps) => {
     isUserMessagesDeleted,
     isImageDeleted,
     recentChatUsers,
+    messageID,
   } = useAppSelector(state => ({
     selectedChatInfo: state.Chats.selectedChatInfo,
     chatUserDetails: state.Chats.chatUserDetails,
@@ -58,6 +60,7 @@ const Index = ({ isChannel }: IndexProps) => {
     isUserMessagesDeleted: state.Chats.isUserMessagesDeleted,
     isImageDeleted: state.Chats.isImageDeleted,
     recentChatUsers: state.Chats.recentChatUsers,
+    messageID: state.Chats.messageID,
   }));
   const onOpenUserDetails = () => {
     dispatch(toggleUserDetailsTab(true));
@@ -99,6 +102,15 @@ const Index = ({ isChannel }: IndexProps) => {
     dispatch(onSendMessage(data));
     setReplyData(null);
   };
+  
+  const onUpload = (file: any) => {
+    let data = {
+      receiverID: selectedChatInfo.id,
+      type: MessageTypeEnum.file,
+      file: file
+    }
+    dispatch(uploadMessageFile(data))
+  };
 
   useEffect(() => {
     if (
@@ -123,6 +135,7 @@ const Index = ({ isChannel }: IndexProps) => {
   useEffect(() => {
     if (selectedChatInfo) {
       // 回傳的是不包含該筆id的紀錄，所以+1
+      console.log(selectedChatInfo.id)
       dispatch(
         getChatUserConversations({
           otherSideID: selectedChatInfo.id,
@@ -171,6 +184,7 @@ const Index = ({ isChannel }: IndexProps) => {
       )}
       <ChatInputSection
         onSend={onSend}
+        onUpload={onUpload}
         replyData={replyData}
         onSetReplyData={onSetReplyData}
         selectedChatInfo={selectedChatInfo}

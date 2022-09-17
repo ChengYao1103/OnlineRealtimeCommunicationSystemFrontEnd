@@ -45,6 +45,7 @@ const WSEventHandler = () => {
 
   WSConnection.onMessageEvent = (event: any) => {
     let data: WSEvent = JSON.parse(event.data);
+    console.log(data);
     console.log(data.event);
     switch (data.event) {
       case WSReceiveEvents.NewContent:

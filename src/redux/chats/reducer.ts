@@ -93,6 +93,7 @@ const Chats = persistReducer(
           case ChatsActionTypes.ON_SEND_MESSAGE:
             return {
               ...state,
+              messageID: action.payload.data.id,
               isUserMessageSent: true,
             };
           case ChatsActionTypes.RECEIVE_MESSAGE:
