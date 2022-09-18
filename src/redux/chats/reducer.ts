@@ -23,7 +23,7 @@ const Chats = persistReducer(
   {
     storage,
     key: "orcsChat",
-    whitelist: ["channels", "directMessages"],
+    whitelist: [],
   },
   (state: ChatsState = INIT_STATE, action: any) => {
     switch (action.type) {
