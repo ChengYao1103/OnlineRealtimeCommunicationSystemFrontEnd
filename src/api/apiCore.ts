@@ -1,5 +1,6 @@
 import axios from "axios";
 import config from "../config";
+import { LOGOUT_URL } from "./urls";
 import { WSConnection } from "./webSocket";
 
 let ws: WSConnection;
@@ -44,9 +45,9 @@ axios.interceptors.response.use(
 let authInit = (token: string) => {
   axios.defaults.headers.common["Authorization"] = token;
   ws = new WSConnection(WS_URL, token);
-}
+};
 
-if (localStorage.getItem("token")) {
+if (localStorage.getItem("token") && window.location.pathname !== LOGOUT_URL) {
   authInit(localStorage.getItem("token") ?? "");
 }
 
@@ -132,7 +133,7 @@ class APIClient {
 
   WSSend = (data: string) => {
     ws.send(data);
-  }
+  };
 }
 
 const getLoggedinUser = () => {

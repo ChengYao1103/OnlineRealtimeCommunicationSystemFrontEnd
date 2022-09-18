@@ -1,3 +1,5 @@
+import { LOGOUT_URL } from "./urls";
+
 export class WSConnection {
   public static instance: WebSocket;
   public static signalingInfoQueue: any[] = [];
@@ -71,7 +73,7 @@ export class WSConnection {
     if (WSConnection.onCloseEvent) {
       WSConnection.onCloseEvent(event);
     } else {
-      window.location.href = "/logout";
+      window.location.href = LOGOUT_URL;
     }
   };
 }

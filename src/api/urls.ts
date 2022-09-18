@@ -53,3 +53,6 @@ export const UPLOAD_MESSAGE_FILE = "/message/upload";
 export const GET_CHANNELS = "/user/allChannel";
 export const CREATE_CHANNEL = "/channel/create";
 export const GET_CHANNEL_DETAILS = "/channel";
+
+/** 不會向伺服器打請求，純在本地端執行的url */
+export const LOGOUT_URL = "/logout";
