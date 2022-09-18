@@ -1,6 +1,5 @@
 import axios from "axios";
 import config from "../config";
-import { LOGOUT_URL } from "./urls";
 import { WSConnection } from "./webSocket";
 
 let ws: WSConnection;
@@ -47,7 +46,7 @@ let authInit = (token: string) => {
   ws = new WSConnection(WS_URL, token);
 };
 
-if (localStorage.getItem("token") && window.location.pathname !== LOGOUT_URL) {
+if (localStorage.getItem("token")) {
   authInit(localStorage.getItem("token") ?? "");
 }
 
