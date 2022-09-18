@@ -27,10 +27,15 @@ import ChatInputSection from "./ChatInputSection/index";
 
 // interface
 import { MessagesTypes } from "../../../data/messages";
-import { messageModel, MessageTypeEnum, recentChatUserModel } from "../../../redux/chats/types";
+import {
+  messageModel,
+  MessageTypeEnum,
+  recentChatUserModel,
+} from "../../../redux/chats/types";
 
 // dummy data
 import { pinnedTabs } from "../../../data/index";
+import is from "date-fns/esm/locale/is/index.js";
 
 interface IndexProps {
   isChannel: boolean;
@@ -102,14 +107,14 @@ const Index = ({ isChannel }: IndexProps) => {
     dispatch(onSendMessage(data));
     setReplyData(null);
   };
-  
+
   const onUpload = (file: any) => {
     let data = {
       receiverID: selectedChatInfo.id,
       type: MessageTypeEnum.file,
-      file: file
-    }
-    dispatch(uploadMessageFile(data))
+      file: file,
+    };
+    dispatch(uploadMessageFile(data));
   };
 
   useEffect(() => {
@@ -133,9 +138,9 @@ const Index = ({ isChannel }: IndexProps) => {
   ]);
 
   useEffect(() => {
-    if (selectedChatInfo) {
+    if (selectedChatInfo && !isChannel) {
       // 回傳的是不包含該筆id的紀錄，所以+1
-      console.log(selectedChatInfo.id)
+      console.log(selectedChatInfo.id);
       dispatch(
         getChatUserConversations({
           otherSideID: selectedChatInfo.id,
@@ -149,7 +154,7 @@ const Index = ({ isChannel }: IndexProps) => {
         })
       );
     }
-  }, [dispatch, selectedChatInfo, userProfile]);
+  }, [isChannel, recentChatUsers, dispatch, selectedChatInfo, userProfile]);
 
   const onDeleteMessage = (messageId: string | number) => {
     dispatch(deleteMessage(chatUserDetails.id, messageId));
