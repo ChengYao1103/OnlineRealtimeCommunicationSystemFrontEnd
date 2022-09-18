@@ -5,6 +5,7 @@ export const INIT_STATE: CallsState = {
   calls: [],
   onCallingType: "",
   endCalling: false,
+  hasAnswered: false,
 };
 
 const Calls = (state = INIT_STATE, action: any) => {
@@ -59,6 +60,7 @@ const Calls = (state = INIT_STATE, action: any) => {
     case CallsActionTypes.RESET_CALLING_STATUS: {
       state.onCallingType = "";
       state.endCalling = false;
+      state.hasAnswered = false;
       return {
         ...state,
         callingUserInfo: undefined,
@@ -80,6 +82,10 @@ const Calls = (state = INIT_STATE, action: any) => {
           return {
             ...state,
           };
+        }
+        case CallsActionTypes.ANSWERED_CALLING: {
+          state.hasAnswered = true;
+          return { ...state };
         }
         default:
           return { ...state };

@@ -9,10 +9,12 @@ export enum CallsActionTypes {
   GET_CALLER_INFO = "@@calls/GET_CALLER_INFO",
   RESET_CALLING_STATUS = "@@calls/RESET_CALLING_STATUS",
   ON_CALLING = "@@calls/ON_CALLING",
+  ANSWERED_CALLING = "@@calls/ANSWERED_CALLING",
   HANGUP_CALLING = "@@calls/HANGUP_CALL",
 }
 export interface CallsState {
   calls: Array<any>;
   onCallingType: string;
   endCalling: boolean;
+  hasAnswered: boolean;
 }
