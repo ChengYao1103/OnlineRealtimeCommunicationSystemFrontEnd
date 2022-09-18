@@ -9,29 +9,29 @@ import classnames from "classnames";
 import { Link } from "react-router-dom";
 
 // components
-import LightBox from "../../../components/LightBox";
+import LightBox from "../../../../components/LightBox";
 
 //images
-import imagePlaceholder from "../../../assets/images/users/profile-placeholder.png";
+import imagePlaceholder from "../../../../assets/images/users/profile-placeholder.png";
 
 // interface
 import {
   MessagesTypes,
   ImageTypes,
   AttachmentTypes,
-} from "../../../data/messages";
-import { userModel } from "../../../redux/auth/types";
+} from "../../../../data/messages";
+import { userModel } from "../../../../redux/auth/types";
 import {
   channelModel,
   messageRecordModel,
   MessageTypeEnum,
-} from "../../../redux/chats/types";
+} from "../../../../redux/chats/types";
 
 // hooks
-import { useProfile } from "../../../hooks";
+import { useProfile } from "../../../../hooks";
 
 // utils
-import { getDateTime } from "../../../utils";
+import { getDateTime } from "../../../../utils";
 import RepliedMessage from "./RepliedMessage";
 
 interface MenuProps {

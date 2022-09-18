@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 // hooks
-import { useRedux } from "../../../hooks/index";
+import { useRedux } from "../../../../hooks/index";
 
 // actions
 import {
@@ -15,27 +15,30 @@ import {
   deleteUserMessages,
   toggleArchiveContact,
   uploadMessageFile,
-} from "../../../redux/actions";
+} from "../../../../redux/actions";
 
 // hooks
-import { useProfile } from "../../../hooks";
+import { useProfile } from "../../../../hooks";
 
 // components
-import UserHead from "./UserHead";
-import Conversation from "./Conversation";
-import ChatInputSection from "./ChatInputSection/index";
+import UserHead from "../Shared/UserHead";
+import Conversation from "../Shared/Conversation";
+import ChatInputSection from "../Shared/ChatInputSection/index";
 
 // interface
-import { MessagesTypes } from "../../../data/messages";
-import { messageModel, MessageTypeEnum, recentChatUserModel } from "../../../redux/chats/types";
+import { MessagesTypes } from "../../../../data/messages";
+import {
+  messageModel,
+  MessageTypeEnum,
+  channelModel,
+} from "../../../../redux/chats/types";
 
 // dummy data
-import { pinnedTabs } from "../../../data/index";
+import { pinnedTabs } from "../../../../data/index";
 
-interface IndexProps {
-  isChannel: boolean;
-}
-const Index = ({ isChannel }: IndexProps) => {
+interface IndexProps {}
+
+const Index = () => {
   // global store
   const { dispatch, useAppSelector } = useRedux();
 
@@ -48,7 +51,7 @@ const Index = ({ isChannel }: IndexProps) => {
     isMessageForwarded,
     isUserMessagesDeleted,
     isImageDeleted,
-    recentChatUsers,
+    recentChatChannels,
     messageID,
   } = useAppSelector(state => ({
     selectedChatInfo: state.Chats.selectedChatInfo,
@@ -59,7 +62,7 @@ const Index = ({ isChannel }: IndexProps) => {
     isMessageForwarded: state.Chats.isMessageForwarded,
     isUserMessagesDeleted: state.Chats.isUserMessagesDeleted,
     isImageDeleted: state.Chats.isImageDeleted,
-    recentChatUsers: state.Chats.recentChatUsers,
+    recentChatChannels: state.Chats.channels,
     messageID: state.Chats.messageID,
   }));
   const onOpenUserDetails = () => {
@@ -102,14 +105,14 @@ const Index = ({ isChannel }: IndexProps) => {
     dispatch(onSendMessage(data));
     setReplyData(null);
   };
-  
+
   const onUpload = (file: any) => {
     let data = {
       receiverID: selectedChatInfo.id,
       type: MessageTypeEnum.file,
-      file: file
-    }
-    dispatch(uploadMessageFile(data))
+      file: file,
+    };
+    dispatch(uploadMessageFile(data));
   };
 
   useEffect(() => {
@@ -133,18 +136,18 @@ const Index = ({ isChannel }: IndexProps) => {
   ]);
 
   useEffect(() => {
+    console.log("群組", selectedChatInfo);
     if (selectedChatInfo) {
       // 回傳的是不包含該筆id的紀錄，所以+1
-      console.log(selectedChatInfo.id)
+      console.log(selectedChatInfo.id);
       dispatch(
         getChatUserConversations({
           otherSideID: selectedChatInfo.id,
-          lastMessageID:
-            recentChatUsers.find(
-              (item: recentChatUserModel) =>
-                item.User1 === selectedChatInfo.id ||
-                item.User2 === selectedChatInfo.id
-            ).Messages[0].ID + 1,
+          lastMessageID: 0,
+          // recentChatChannels.find(
+          //   (item: channelModel) =>
+          //     item.id === selectedChatInfo.id
+          // ).Messages[0].ID + 1,
           n: 50,
         })
       );
@@ -170,7 +173,7 @@ const Index = ({ isChannel }: IndexProps) => {
         pinnedTabs={pinnedTabs}
         onOpenUserDetails={onOpenUserDetails}
         onDelete={onDeleteUserMessages}
-        isChannel={isChannel}
+        isChannel={true}
         onToggleArchive={onToggleArchive}
       />
       <Conversation
@@ -178,7 +181,7 @@ const Index = ({ isChannel }: IndexProps) => {
         chatUserDetails={selectedChatInfo}
         onDelete={onDeleteMessage}
         onSetReplyData={onSetReplyData}
-        isChannel={isChannel}
+        isChannel={true}
       />
       <ChatInputSection
         onSend={onSend}
