@@ -181,10 +181,6 @@ const ProfileDropdownMenu = ({
           className="d-flex align-items-center justify-content-between"
           tag="a"
           href="/logout"
-          onClick={() => {
-            localStorage.removeItem("authUser");
-            localStorage.removeItem("token");
-          }}
         >
           Log out <i className="bx bx-log-out-circle text-muted ms-1"></i>
         </DropdownItem>

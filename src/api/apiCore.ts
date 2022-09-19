@@ -4,6 +4,7 @@ import { WSConnection } from "./webSocket";
 
 let ws: WSConnection;
 const WS_URL = config.WS_URL ?? "";
+const LOGOUT_URL = "/logout";
 
 // default
 axios.defaults.baseURL = config.API_URL;
@@ -46,7 +47,10 @@ let authInit = (token: string) => {
   ws = new WSConnection(WS_URL, token);
 };
 
-if (localStorage.getItem("token")) {
+if (window.location.pathname === LOGOUT_URL) {
+  localStorage.removeItem("authUser");
+  localStorage.removeItem("token");
+} else if (localStorage.getItem("token")) {
   authInit(localStorage.getItem("token") ?? "");
 }
 
@@ -144,4 +148,4 @@ const getLoggedinUser = () => {
   }
 };
 
-export { APIClient, setAuthorization, getLoggedinUser };
+export { APIClient, setAuthorization, getLoggedinUser, LOGOUT_URL };

@@ -1,3 +1,5 @@
+import { LOGOUT_URL } from "./apiCore";
+
 export class WSConnection {
   public static instance: WebSocket;
   public static signalingInfoQueue: any[] = [];
@@ -71,9 +73,7 @@ export class WSConnection {
     if (WSConnection.onCloseEvent) {
       WSConnection.onCloseEvent(event);
     } else {
-      localStorage.removeItem("authUser");
-      localStorage.removeItem("token");
-      window.location.href = "/logout";
+      window.location.href = LOGOUT_URL;
     }
   };
 }
