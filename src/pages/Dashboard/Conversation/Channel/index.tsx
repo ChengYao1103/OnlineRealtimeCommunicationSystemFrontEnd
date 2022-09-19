@@ -136,7 +136,6 @@ const Index = () => {
   ]);
 
   useEffect(() => {
-    console.log("群組", selectedChatInfo);
     if (selectedChatInfo) {
       // 回傳的是不包含該筆id的紀錄，所以+1
       console.log(selectedChatInfo.id);

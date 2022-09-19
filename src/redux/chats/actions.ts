@@ -73,7 +73,7 @@ export const getChatUserConversations = (data: any) => ({
 export const receiveNewMessage = (message: messageRecordModel) => ({
   type: ChatsActionTypes.RECEIVE_MESSAGE,
   payload: message,
-})
+});
 
 export const toggleUserDetailsTab = (value: boolean) => ({
   type: ChatsActionTypes.TOGGLE_USER_DETAILS_TAB,
@@ -120,6 +120,11 @@ export const deleteUserMessages = (userId: number | string) => ({
 
 export const getChannelDetails = (id: number | string) => ({
   type: ChatsActionTypes.GET_CHANNEL_DETAILS,
+  payload: id,
+});
+
+export const getChannelMembers = (id: number | string) => ({
+  type: ChatsActionTypes.GET_CHANNEL_MEMBERS,
   payload: id,
 });
 

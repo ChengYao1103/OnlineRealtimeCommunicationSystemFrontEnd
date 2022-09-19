@@ -30,6 +30,7 @@ import { changeSelectedChat } from "../../../../redux/actions";
 
 // constants
 import { STATUS_TYPES } from "../../../../constants";
+import Loader from "../../../../components/Loader";
 interface ProfileImageProps {
   chatUserDetails: any;
   onCloseConversation: () => any;
@@ -42,6 +43,12 @@ const ProfileImage = ({
   onOpenUserDetails,
   isChannel,
 }: ProfileImageProps) => {
+  const { useAppSelector } = useRedux();
+
+  const { channelMembers } = useAppSelector(state => ({
+    channelMembers: state.Chats.channelMembers,
+  }));
+
   const fullName = chatUserDetails.name;
   /*const shortName = !isChannel
     ? chatUserDetails.firstName
@@ -65,7 +72,6 @@ const ProfileImage = ({
   const isOnline = true;
   //chatUserDetails.status && chatUserDetails.status === STATUS_TYPES.ACTIVE;
 
-  const members = (chatUserDetails.members || []).length;
   return (
     <div className="d-flex align-items-center">
       <div className="flex-shrink-0 d-block d-lg-none me-2">
@@ -141,13 +147,21 @@ const ProfileImage = ({
                 {fullName}
               </Link>
             </h6>
-            <p className="text-truncate text-muted mb-0">
-              {isChannel ? (
-                <small>{members} Members</small>
+            {isChannel ? (
+              channelMembers ? (
+                <p className="text-truncate text-muted mb-0">
+                  <small>{channelMembers.length} Members</small>
+                </p>
               ) : (
+                <>
+                  <Loader />
+                </>
+              )
+            ) : (
+              <p className="text-truncate text-muted mb-0">
                 <small>{chatUserDetails.status}</small>
-              )}
-            </p>
+              </p>
+            )}
           </div>
         </div>
       </div>

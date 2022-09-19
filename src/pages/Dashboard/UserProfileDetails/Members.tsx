@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import classnames from "classnames";
 import { Badge } from "reactstrap";
 
 // hooks
-import { useRedux } from "../../../hooks/index";
+import { useProfile, useRedux } from "../../../hooks/index";
 
 // actions
 import {
@@ -12,17 +12,34 @@ import {
   getChatUserDetails,
   getChatUserConversations,
   changeSelectedChat,
+  getChannelMembers,
 } from "../../../redux/actions";
+import { channelModel } from "../../../redux/chats/types";
+import { userModel } from "../../../redux/auth/types";
 
-interface GroupProps {
-  member: any;
+interface MemberProps {
+  member: userModel;
 }
-const Member = ({ member }: GroupProps) => {
+const Member = ({ member }: MemberProps) => {
   // global store
   const { dispatch } = useRedux();
+  const { userProfile } = useProfile();
 
-  const fullName = `${member.firstName} ${member.lastName}`;
-  const shortName = `${member.firstName.charAt(0)}${member.lastName.charAt(0)}`;
+  // const fullName = `${member.firstName} ${member.lastName}`;
+  // const shortName = `${member.firstName.charAt(0)}${member.lastName.charAt(0)}`;
+  const onSelectChat = (id: string | number, isChannel?: boolean) => {
+    if (id === userProfile.id) {
+      return;
+    }
+
+    if (isChannel) {
+      dispatch(getChannelDetails(id));
+    } else {
+      dispatch(getChatUserDetails(id));
+    }
+    //dispatch(getChatUserConversations(id));
+    dispatch(changeSelectedChat(id, member));
+  };
 
   const colors = [
     "bg-primary",
@@ -35,22 +52,12 @@ const Member = ({ member }: GroupProps) => {
   ];
   const [color] = useState(Math.floor(Math.random() * colors.length));
 
-  const onSelectChat = (id: string | number, isChannel?: boolean) => {
-    if (isChannel) {
-      dispatch(getChannelDetails(id));
-    } else {
-      dispatch(getChatUserDetails(id));
-    }
-    //dispatch(getChatUserConversations(id));
-    dispatch(changeSelectedChat(id));
-  };
-
   return (
     <li>
       <Link to="#" onClick={() => onSelectChat(member.id)}>
         <div className="d-flex align-items-center">
           <div className="flex-shrink-0 avatar-xs me-2">
-            {member.profileImage ? (
+            {member.photo ? (
               <div
                 className={classnames(
                   "chat-user-img",
@@ -60,7 +67,7 @@ const Member = ({ member }: GroupProps) => {
                 )}
               >
                 <img
-                  src={member.profileImage}
+                  src={member.photo}
                   className="rounded-circle avatar-xs"
                   alt=""
                 />
@@ -75,33 +82,40 @@ const Member = ({ member }: GroupProps) => {
                   colors[color]
                 )}
               >
-                {shortName}
+                {member.name.substring(0, 1)}
               </span>
             )}
           </div>
           <div className="flex-grow-1 overflow-hidden">
-            <p className="text-truncate mb-0">{fullName}</p>
+            <p className="text-truncate mb-0">{member.name}</p>
           </div>
-          {member.isAdmin && (
+          {/*member.isAdmin && (
             <div className="ms-auto">
               <Badge className="badge badge-soft-primary rounded p-1">
                 Admin
               </Badge>
             </div>
-          )}
+          )*/}
         </div>
       </Link>
     </li>
   );
 };
+
 interface GroupsProps {
-  chatUserDetails: any;
+  selectedChatInfo: channelModel;
 }
-const Members = ({ chatUserDetails }: GroupsProps) => {
-  const groups =
-    chatUserDetails.members &&
-    chatUserDetails.members.length &&
-    chatUserDetails.members;
+const Members = ({ selectedChatInfo }: GroupsProps) => {
+  const { dispatch, useAppSelector } = useRedux();
+
+  const { channelMembers } = useAppSelector(state => ({
+    channelMembers: state.Chats.channelMembers,
+  }));
+
+  useEffect(() => {
+    dispatch(getChannelMembers(selectedChatInfo.id));
+  }, [selectedChatInfo]);
+
   return (
     <div>
       <div className="d-flex">
@@ -110,14 +124,14 @@ const Members = ({ chatUserDetails }: GroupsProps) => {
         </div>
       </div>
 
-      {groups ? (
+      {channelMembers ? (
         <ul className="list-unstyled chat-list mx-n4">
-          {(groups || []).map((member: any, key: number) => (
+          {(channelMembers || []).map((member: userModel, key: number) => (
             <Member member={member} key={key} />
           ))}
         </ul>
       ) : (
-        <p>No Groups</p>
+        <p>No Members</p>
       )}
     </div>
   );

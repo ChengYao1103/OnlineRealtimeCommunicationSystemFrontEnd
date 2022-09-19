@@ -21,6 +21,7 @@ import {
   forwardMessage as forwardMessageApi,
   deleteUserMessages as deleteUserMessagesApi,
   getChannelDetails as getChannelDetailsApi,
+  getChannelMembers as getChannelMembersApi,
   toggleFavouriteContact as toggleFavouriteContactApi,
   getArchiveContact as getArchiveContactApi,
   toggleArchiveContact as toggleArchiveContactApi,
@@ -130,7 +131,6 @@ function* getChatUserConversations({ payload: data }: any) {
       getChatUserConversationsApi,
       data
     );
-    console.log(response);
     yield put(
       chatsApiResponseSuccess(
         ChatsActionTypes.GET_CHAT_USER_CONVERSATIONS,
@@ -247,6 +247,19 @@ function* getChannelDetails({ payload: id }: any) {
   }
 }
 
+function* getChannelMembers({ payload: id }: any) {
+  try {
+    const response: Promise<any> = yield call(getChannelMembersApi, id);
+    yield put(
+      chatsApiResponseSuccess(ChatsActionTypes.GET_CHANNEL_MEMBERS, response)
+    );
+  } catch (error: any) {
+    yield put(
+      chatsApiResponseError(ChatsActionTypes.GET_CHANNEL_MEMBERS, error)
+    );
+  }
+}
+
 function* toggleFavouriteContact({ payload: id }: any) {
   try {
     const response: Promise<any> = yield call(toggleFavouriteContactApi, id);
@@ -328,7 +341,9 @@ function* uploadMessageFile({ payload: data }: any) {
       chatsApiResponseSuccess(ChatsActionTypes.UPLOAD_MESSAGE_FILE, response)
     );
   } catch (error: any) {
-    yield put(chatsApiResponseError(ChatsActionTypes.UPLOAD_MESSAGE_FILE, error));
+    yield put(
+      chatsApiResponseError(ChatsActionTypes.UPLOAD_MESSAGE_FILE, error)
+    );
   }
 }
 
@@ -387,6 +402,9 @@ export function* watchDeleteUserMessages() {
 export function* watchGetChannelDetails() {
   yield takeEvery(ChatsActionTypes.GET_CHANNEL_DETAILS, getChannelDetails);
 }
+export function* watchGetChannelMembers() {
+  yield takeEvery(ChatsActionTypes.GET_CHANNEL_MEMBERS, getChannelMembers);
+}
 export function* watchToggleFavouriteContact() {
   yield takeEvery(
     ChatsActionTypes.TOGGLE_FAVOURITE_CONTACT,
@@ -430,6 +448,7 @@ function* chatsSaga() {
     fork(watchForwardMessage),
     fork(watchDeleteUserMessages),
     fork(watchGetChannelDetails),
+    fork(watchGetChannelMembers),
     fork(watchToggleFavouriteContact),
     fork(watchGetArchiveContact),
     fork(watchToggleArchiveContact),

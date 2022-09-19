@@ -53,3 +53,4 @@ export const UPLOAD_MESSAGE_FILE = "/message/upload";
 export const GET_CHANNELS = "/user/allChannel";
 export const CREATE_CHANNEL = "/channel/create";
 export const GET_CHANNEL_DETAILS = "/channel";
+export const GET_CHANNEL_MEMBERS = "/channel/allUser";

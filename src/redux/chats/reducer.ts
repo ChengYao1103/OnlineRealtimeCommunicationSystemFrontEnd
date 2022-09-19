@@ -130,6 +130,11 @@ const Chats = persistReducer(
               isChannelDetailsFetched: true,
               getUserDetailsLoading: false,
             };
+          case ChatsActionTypes.GET_CHANNEL_MEMBERS:
+            return {
+              ...state,
+              channelMembers: action.payload.data.users,
+            };
           case ChatsActionTypes.TOGGLE_FAVOURITE_CONTACT:
             return {
               ...state,
@@ -330,6 +335,7 @@ const Chats = persistReducer(
         state.chatUserConversations = [];
         return {
           ...state,
+          channelMembers: undefined,
           selectedChat: action.payload.selectedChat,
           selectedChatInfo: action.payload.selectedChatInfo,
         };
