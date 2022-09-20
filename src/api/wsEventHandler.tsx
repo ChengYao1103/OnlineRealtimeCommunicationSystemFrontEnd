@@ -52,6 +52,7 @@ const WSEventHandler = () => {
     console.log(data);
     console.log(data.event);
     switch (data.event) {
+      // Message
       case WSReceiveEvents.NewContent:
         let contentInfo = data.data as NewContent;
         if (contentInfo.type === 0 && contentInfo.from !== userProfile.id) {
@@ -70,6 +71,9 @@ const WSEventHandler = () => {
         break;
       case WSReceiveEvents.ContentBeenRead:
         break;
+      case WSReceiveEvents.NewFileFromUser:
+        break;
+      // Calls
       case WSReceiveEvents.AskPhoneCall:
         break;
       case WSReceiveEvents.AnswerPhoneCall:
@@ -92,7 +96,20 @@ const WSEventHandler = () => {
       case WSReceiveEvents.HangUpPhoneCall:
         dispatch(callWebsocketEvent(CallsActionTypes.HANGUP_CALLING));
         break;
-      case WSReceiveEvents.TokenExpired:
+      // Channel
+      case WSReceiveEvents.BeenInvitedIntoChannel:
+        break;
+      case WSReceiveEvents.BeenKickedOutChannel:
+        break;
+      case WSReceiveEvents.PostCreated:
+        break;
+      case WSReceiveEvents.NewCommentOnPost:
+        break;
+      case WSReceiveEvents.RollCallCreated:
+        break;
+      // WS service
+      case WSReceiveEvents.TokenExpired: // rarely triggered
+        // timeout wont trigger this event
         console.log("token expired");
         break;
       default:

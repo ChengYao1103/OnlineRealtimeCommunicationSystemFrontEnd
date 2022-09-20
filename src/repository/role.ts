@@ -1,23 +1,5 @@
-interface RoleTypes {
-  value: number;
-  label: string;
+export enum RoleTypes {
+  Teacher = 0,
+  TA = 1,
+  Student = 2,
 }
-
-const Roles: RoleTypes[] = [
-  {
-    value: 0,
-    label: "老師 (Teacher)",
-  },
-  {
-    value: 1,
-    label: "助教 (TA)",
-  },
-  {
-    value: 2,
-    label: "學生 (Student)",
-  },
-];
-
-const DefaultRoleTypeId = 2;
-
-export { Roles, DefaultRoleTypeId };
