@@ -416,9 +416,14 @@ const Message = ({
                   {/* files message start */}
                   {hasAttachments && (
                     //<Attachments attachments={message.Content} />
-                    <a href="#" onClick={()=> onDownload(message.ID, message.Content)}>
-                    <p className="mb-0 ctext-content">{message.Content}</p>
-
+                    <a
+                      href="#"
+                      onClick={() => onDownload(message.ID, message.Content)}
+                    >
+                      <p className="mb-0 ctext-content">
+                        <i className="mdi mdi-download"> </i>
+                        {message.Content}
+                      </p>
                     </a>
                   )}
                   {/* files message end */}
