@@ -60,6 +60,7 @@ const Index = (props: IndexProps) => {
     isContactsAdded,
     isChannelCreated,
     selectedChat,
+    selectedChatInfo,
     isFavouriteContactToggled,
     archiveContacts,
     isContactArchiveToggled,
@@ -73,6 +74,7 @@ const Index = (props: IndexProps) => {
     isContactsAdded: state.Chats.isContactsAdded,
     isChannelCreated: state.Chats.isChannelCreated,
     selectedChat: state.Chats.selectedChat,
+    selectedChatInfo: state.Chats.selectedChatInfo,
     isFavouriteContactToggled: state.Chats.isFavouriteContactToggled,
     archiveContacts: state.Chats.archiveContacts,
     isContactArchiveToggled: state.Chats.isContactArchiveToggled,
@@ -228,6 +230,9 @@ const Index = (props: IndexProps) => {
     info: userModel | channelModel,
     isChannel?: boolean
   ) => {
+    if (selectedChatInfo === info) {
+      return;
+    }
     if (isChannel) {
       dispatch(getChannelDetails(id));
     } else {

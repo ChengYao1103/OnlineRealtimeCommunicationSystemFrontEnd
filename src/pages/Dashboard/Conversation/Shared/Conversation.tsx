@@ -57,12 +57,20 @@ const Conversation = ({
       const listEle = document.getElementById("chat-conversation-list");
       const scrollElement = ref.current.getScrollElement();
       var offsetHeight = 0;
-      if (listEle && lastScrollHeight === 0 && !requestOldConversation) {
+      // 打開聊天室、傳送訊息 => 捲動到底部
+      if (listEle && !requestOldConversation) {
         offsetHeight = listEle.scrollHeight - window.innerHeight + 250;
-      } else if (listEle && requestOldConversation) {
+      }
+      // 取得舊訊息 => (相對位置)停留原位
+      else if (listEle && requestOldConversation) {
         offsetHeight = listEle.scrollHeight - lastScrollHeight;
       }
-      if (listEle && offsetHeight) {
+
+      if (
+        listEle &&
+        offsetHeight &&
+        lastScrollHeight !== listEle.scrollHeight
+      ) {
         scrollElement.scrollTo({
           top: offsetHeight,
           behavior: requestOldConversation ? "auto" : "smooth",
