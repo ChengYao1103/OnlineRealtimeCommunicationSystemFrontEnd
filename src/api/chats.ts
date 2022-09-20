@@ -13,17 +13,8 @@ const getDirectMessages = () => {
   return api.get(url.GET_DIRECT_MESSAGES);
 };
 
-const getChannels = (userId: string) => {
-  let destUrl = `${url.GET_CHANNELS}`;
-  return api.get(destUrl);
-};
-
 const addContacts = (contacts: Array<string | number>) => {
   return api.create(url.ADD_CONTACTS, contacts);
-};
-
-const createChannel = (data: object) => {
-  return api.create(url.CREATE_CHANNEL, data);
 };
 
 const getChatUserDetails = (id: string | number) => {
@@ -81,14 +72,30 @@ const deleteUserMessages = (userId: number | string) => {
   });
 };
 
-const getChannelDetails = (id: string | number) => {
-  return api.get(url.GET_CHANNEL_DETAILS + "/" + id, { params: { id } });
-};
-
 const toggleFavouriteContact = (id: string | number) => {
   return api.update(url.TOGGLE_FAVOURITE_CONTACT + "/" + id, {
     params: { id },
   });
+};
+
+/*
+channel
+*/
+const createChannel = (data: object) => {
+  return api.create(url.CREATE_CHANNEL, data);
+};
+
+const getChannels = (userId: string) => {
+  let destUrl = `${url.GET_CHANNELS}`;
+  return api.get(destUrl);
+};
+
+const getChannelDetails = (id: string | number) => {
+  return api.get(`${url.GET_CHANNEL_DETAILS}/${id}`);
+};
+
+const getChannelMembers = (id: string | number) => {
+  return api.get(`${url.GET_CHANNEL_MEMBERS}/${id}`);
 };
 
 /*
@@ -127,9 +134,7 @@ const downloadMessageFile = (data: object, filename: string) => {
 export {
   getFavourites,
   getDirectMessages,
-  getChannels,
   addContacts,
-  createChannel,
   getChatUserDetails,
   getChatUserConversations,
   getRecentChat,
@@ -140,7 +145,10 @@ export {
   deleteMessage,
   forwardMessage,
   deleteUserMessages,
+  createChannel,
+  getChannels,
   getChannelDetails,
+  getChannelMembers,
   toggleFavouriteContact,
   getArchiveContact,
   toggleArchiveContact,

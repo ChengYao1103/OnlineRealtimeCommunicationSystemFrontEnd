@@ -32,8 +32,9 @@ const AudioCallModal = ({
   isBeenCalled,
 }: AudioCallModalProps) => {
   const { dispatch, useAppSelector } = useRedux();
-  const { endCalling } = useAppSelector(state => ({
+  const { endCalling, hasAnsweredCalling } = useAppSelector(state => ({
     endCalling: state.Calls.endCalling,
+    hasAnsweredCalling: state.Calls.hasAnswered,
   }));
 
   const [isLoad, setIsLoad] = useState(false);
@@ -204,6 +205,7 @@ const AudioCallModal = ({
           onClose();
         });
     }
+    console.log(isOpen);
   }, [isOpen, isLoad, isAccept]);
 
   // 被掛電話時執行
@@ -239,6 +241,32 @@ const AudioCallModal = ({
     dispatch(resetCallingStatus());
     onClose();
   };
+
+  /**
+   * 回應來電
+   * @param isAcceptPhoneCall 是否接聽
+   */
+  const answerPhoneCall = (isAcceptPhoneCall: boolean) => {
+    if (isAcceptPhoneCall) {
+      setIsAccept(true);
+    } else {
+      finishCall();
+    }
+    var data: WSEvent = {
+      event: WSSendEvents.ResponsePhoneCall,
+      data: {
+        accept: isAcceptPhoneCall,
+      },
+    };
+    api.WSSend(JSON.stringify(data));
+  };
+
+  /** 多處登入時，其中一處對來電做出回應，其他處就關閉modal */
+  useEffect(() => {
+    if (!isAccept && hasAnsweredCalling) {
+      onClose();
+    }
+  }, [isAccept, hasAnsweredCalling, onClose]);
 
   return (
     <Modal
@@ -321,28 +349,41 @@ const AudioCallModal = ({
           )}
 
           <div className="mt-4 justify-content-center">
-            {isBeenCalled && !isAccept && (
+            {isBeenCalled && !isAccept ? (
+              <>
+                <Button
+                  type="button"
+                  className="me-5 btn btn-success avatar-md call-close-btn rounded-circle"
+                  color="success"
+                  onClick={() => answerPhoneCall(true)}
+                >
+                  <span className="avatar-title bg-transparent font-size-24">
+                    <i className="mdi mdi-phone"></i>
+                  </span>
+                </Button>
+                <Button
+                  type="button"
+                  className="btn btn-danger avatar-md call-close-btn rounded-circle"
+                  color="danger"
+                  onClick={() => answerPhoneCall(false)}
+                >
+                  <span className="avatar-title bg-transparent font-size-24">
+                    <i className="mdi mdi-phone-hangup"></i>
+                  </span>
+                </Button>
+              </>
+            ) : (
               <Button
                 type="button"
-                className="me-5 btn btn-success avatar-md call-close-btn rounded-circle"
-                color="success"
-                onClick={() => setIsAccept(true)}
+                className="btn btn-danger avatar-md call-close-btn rounded-circle"
+                color="danger"
+                onClick={() => finishCall()}
               >
                 <span className="avatar-title bg-transparent font-size-24">
-                  <i className="mdi mdi-phone"></i>
+                  <i className="mdi mdi-phone-hangup"></i>
                 </span>
               </Button>
             )}
-            <Button
-              type="button"
-              className="btn btn-danger avatar-md call-close-btn rounded-circle"
-              color="danger"
-              onClick={() => finishCall()}
-            >
-              <span className="avatar-title bg-transparent font-size-24">
-                <i className="mdi mdi-phone-hangup"></i>
-              </span>
-            </Button>
           </div>
         </div>
 

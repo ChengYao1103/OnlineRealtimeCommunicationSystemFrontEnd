@@ -4,6 +4,7 @@ import { WSConnection } from "./webSocket";
 
 let ws: WSConnection;
 const WS_URL = config.WS_URL ?? "";
+const LOGOUT_URL = "/logout";
 
 // default
 axios.defaults.baseURL = config.API_URL;
@@ -44,9 +45,12 @@ axios.interceptors.response.use(
 let authInit = (token: string) => {
   axios.defaults.headers.common["Authorization"] = token;
   ws = new WSConnection(WS_URL, token);
-}
+};
 
-if (localStorage.getItem("token")) {
+if (window.location.pathname === LOGOUT_URL) {
+  localStorage.removeItem("authUser");
+  localStorage.removeItem("token");
+} else if (localStorage.getItem("token")) {
   authInit(localStorage.getItem("token") ?? "");
 }
 
@@ -158,7 +162,7 @@ class APIClient {
 
   WSSend = (data: string) => {
     ws.send(data);
-  }
+  };
 }
 
 const getLoggedinUser = () => {
@@ -170,8 +174,4 @@ const getLoggedinUser = () => {
   }
 };
 
-export { APIClient, setAuthorization, getLoggedinUser };
-  function saveAs(data: any, arg1: string) {
-    throw new Error("Function not implemented.");
-  }
-
+export { APIClient, setAuthorization, getLoggedinUser, LOGOUT_URL };

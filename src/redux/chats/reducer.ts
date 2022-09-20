@@ -23,7 +23,7 @@ const Chats = persistReducer(
   {
     storage,
     key: "orcsChat",
-    whitelist: ["channels", "directMessages"],
+    whitelist: [],
   },
   (state: ChatsState = INIT_STATE, action: any) => {
     switch (action.type) {
@@ -93,7 +93,7 @@ const Chats = persistReducer(
           case ChatsActionTypes.ON_SEND_MESSAGE:
             return {
               ...state,
-              messageID: action.payload.data.id,
+              // messageID: action.payload.data.id,
               isUserMessageSent: true,
             };
           case ChatsActionTypes.RECEIVE_MESSAGE:
@@ -129,6 +129,11 @@ const Chats = persistReducer(
               chatUserDetails: { ...action.payload.data, isChannel: true },
               isChannelDetailsFetched: true,
               getUserDetailsLoading: false,
+            };
+          case ChatsActionTypes.GET_CHANNEL_MEMBERS:
+            return {
+              ...state,
+              channelMembers: action.payload.data.users,
             };
           case ChatsActionTypes.TOGGLE_FAVOURITE_CONTACT:
             return {
@@ -330,6 +335,7 @@ const Chats = persistReducer(
         state.chatUserConversations = [];
         return {
           ...state,
+          channelMembers: undefined,
           selectedChat: action.payload.selectedChat,
           selectedChatInfo: action.payload.selectedChatInfo,
         };

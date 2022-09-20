@@ -9,11 +9,11 @@ import MoreMenu from "./MoreMenu";
 import Reply from "./Reply";
 
 // interface
-import { MessagesTypes } from "../../../../data/messages";
-import { userModel } from "../../../../redux/auth/types";
-import { MessageTypeEnum } from "../../../../redux/chats/types";
+import { MessagesTypes } from "../../../../../data/messages";
+import { userModel } from "../../../../../redux/auth/types";
+import { MessageTypeEnum } from "../../../../../redux/chats/types";
 import { toast } from "react-toastify";
-import { sendMessage } from "../../../../api";
+import { sendMessage } from "../../../../../api";
 
 interface IndexProps {
   onSend: (data: any) => void;
@@ -119,13 +119,13 @@ const Index = ({
 
     // files message
     for (const file of files) {
-      console.log(file.name)
+      console.log(file.name);
       // onSend({
       //   receiverID: selectedChatInfo.id,
       //   content: file.name,
       //   type: MessageTypeEnum.file,
       // });
-      onUpload(file)
+      onUpload(file);
       //console.log(file.name)
     }
 

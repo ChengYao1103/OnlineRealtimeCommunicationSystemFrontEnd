@@ -84,8 +84,6 @@ function* socialLogin({ payload: { data, type } }: any) {
 
 function* logoutUser() {
   try {
-    localStorage.removeItem("authUser");
-    localStorage.removeItem("token");
     if (process.env.REACT_APP_DEFAULTAUTH === "firebase") {
       const response: Promise<any> = yield call(fireBaseBackend.logout);
       yield put(authApiResponseSuccess(AuthActionTypes.LOGOUT_USER, response));

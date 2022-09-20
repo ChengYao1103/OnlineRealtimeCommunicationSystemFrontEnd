@@ -1,7 +1,16 @@
+import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import { WSConnection } from "./webSocket";
 import { useProfile, useRedux } from "../hooks";
+import {
+  GetSignalingInformation,
+  NewContent,
+  WSEvent,
+  WSReceiveEvents,
+} from "../repository/wsEvent";
+
+// actions
 import {
   callWebsocketEvent,
   chatWebsocketEvent,
@@ -9,15 +18,10 @@ import {
   getCallerInfo,
   getUserInformation,
 } from "../redux/actions";
+
+// interfaces
 import { ChatsActionTypes } from "../redux/chats/types";
 import { CallsActionTypes } from "../redux/calls/types";
-import {
-  GetSignalingInformation,
-  NewContent,
-  WSEvent,
-  WSReceiveEvents,
-} from "../repository/wsEvent";
-import { useEffect, useState } from "react";
 
 const WSEventHandler = () => {
   const dispatch = useDispatch();
@@ -69,6 +73,7 @@ const WSEventHandler = () => {
       case WSReceiveEvents.AskPhoneCall:
         break;
       case WSReceiveEvents.AnswerPhoneCall:
+        dispatch(callWebsocketEvent(CallsActionTypes.ANSWERED_CALLING));
         break;
       case WSReceiveEvents.GetSignalingInformation:
         let info = data.data as GetSignalingInformation;

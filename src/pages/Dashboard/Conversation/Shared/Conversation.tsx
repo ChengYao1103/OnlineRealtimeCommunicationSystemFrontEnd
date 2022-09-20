@@ -1,26 +1,26 @@
 import React, { useEffect, useRef, useCallback, useState } from "react";
 
 // hooks
-import { useProfile, useRedux } from "../../../hooks/index";
+import { useProfile, useRedux } from "../../../../hooks/index";
 
 // components
-import AppSimpleBar from "../../../components/AppSimpleBar";
-import Loader from "../../../components/Loader";
+import AppSimpleBar from "../../../../components/AppSimpleBar";
+import Loader from "../../../../components/Loader";
 import Message from "./Message";
 // import Day from "./Day";
 
 // interface
-import { MessagesTypes } from "../../../data/messages";
-import { userModel } from "../../../redux/auth/types";
-import { messageRecordModel } from "../../../redux/chats/types";
-import ForwardModal from "../../../components/ForwardModal";
+import { MessagesTypes } from "../../../../data/messages";
+import { userModel } from "../../../../redux/auth/types";
+import { messageRecordModel } from "../../../../redux/chats/types";
+import ForwardModal from "../../../../components/ForwardModal";
 
 // actions
 import {
   forwardMessage,
   deleteImage,
   getChatUserConversations,
-} from "../../../redux/actions";
+} from "../../../../redux/actions";
 
 interface ConversationProps {
   chatUserConversations: Array<messageRecordModel>;
