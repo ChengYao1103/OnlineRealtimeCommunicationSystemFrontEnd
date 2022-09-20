@@ -117,8 +117,11 @@ const deleteImage = (
 };
 
 const uploadMessageFile = (data: object) => {
-  console.log(data)
   return api.createWithFile(url.UPLOAD_MESSAGE_FILE, data);
+};
+
+const downloadMessageFile = (data: object, filename: string) => {
+  return api.getFile(url.DOWNLOAD_MESSAGE_FILE, filename, data);
 };
 
 export {
@@ -144,4 +147,5 @@ export {
   readConversation,
   deleteImage,
   uploadMessageFile,
+  downloadMessageFile,
 };

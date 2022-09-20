@@ -276,6 +276,7 @@ interface MessageProps {
   chatUserDetails: userModel;
   onDelete: (messageId: string | number) => any;
   onSetReplyData: (reply: null | MessagesTypes | undefined) => void;
+  onDownload: (messageID: string | number, filename: string) => any;
   isFromMe: boolean;
   onOpenForward: (message: MessagesTypes) => void;
   isChannel: boolean;
@@ -290,6 +291,7 @@ const Message = ({
   onOpenForward,
   isChannel,
   onDeleteImage,
+  onDownload,
 }: MessageProps) => {
   const { userProfile } = useProfile();
   const hasText = message.Type === MessageTypeEnum.text;
@@ -414,7 +416,10 @@ const Message = ({
                   {/* files message start */}
                   {hasAttachments && (
                     //<Attachments attachments={message.Content} />
+                    <a href="#" onClick={()=> onDownload(message.ID, message.Content)}>
                     <p className="mb-0 ctext-content">{message.Content}</p>
+
+                    </a>
                   )}
                   {/* files message end */}
 

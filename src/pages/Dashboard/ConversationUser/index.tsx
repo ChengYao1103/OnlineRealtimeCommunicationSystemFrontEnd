@@ -15,6 +15,7 @@ import {
   deleteUserMessages,
   toggleArchiveContact,
   uploadMessageFile,
+  downloadMessageFile,
 } from "../../../redux/actions";
 
 // hooks
@@ -111,6 +112,13 @@ const Index = ({ isChannel }: IndexProps) => {
     }
     dispatch(uploadMessageFile(data))
   };
+  
+  const onDownload = (messageID: string | number, filename: string) => {
+    let data = {
+      messageID: messageID
+    }
+    dispatch(downloadMessageFile(filename, data))
+  };
 
   useEffect(() => {
     if (
@@ -135,7 +143,6 @@ const Index = ({ isChannel }: IndexProps) => {
   useEffect(() => {
     if (selectedChatInfo) {
       // 回傳的是不包含該筆id的紀錄，所以+1
-      console.log(selectedChatInfo.id)
       dispatch(
         getChatUserConversations({
           otherSideID: selectedChatInfo.id,
@@ -178,6 +185,7 @@ const Index = ({ isChannel }: IndexProps) => {
         chatUserDetails={selectedChatInfo}
         onDelete={onDeleteMessage}
         onSetReplyData={onSetReplyData}
+        onDownload={onDownload}
         isChannel={isChannel}
       />
       <ChatInputSection

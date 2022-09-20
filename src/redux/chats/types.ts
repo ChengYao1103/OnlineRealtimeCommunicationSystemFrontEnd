@@ -33,6 +33,7 @@ export enum ChatsActionTypes {
   READ_CONVERSATION = "@@chats/READ_CONVERSATION",
   DELETE_IMAGE = "@@chats/DELETE_IMAGE",
   UPLOAD_MESSAGE_FILE = "@@chats/UPLOAD_MESSAGE_FILE",
+  DOWNLOAD_MESSAGE_FILE = "@@chats/DOWNLOAD_MESSAGE_FILE",
 }
 
 export interface senderModel {

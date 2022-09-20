@@ -48,6 +48,7 @@ export const TOGGLE_ARCHIVE_CONTACT = "/toggle-archive-contact";
 export const READ_CONVERSATION = "/read-conversation";
 export const DELETE_IMAGE = "/user-delete-img";
 export const UPLOAD_MESSAGE_FILE = "/message/upload";
+export const DOWNLOAD_MESSAGE_FILE = "/message/download";
 
 // channels
 export const GET_CHANNELS = "/user/allChannel";

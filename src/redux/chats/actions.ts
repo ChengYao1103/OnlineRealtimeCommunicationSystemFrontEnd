@@ -155,3 +155,8 @@ export const uploadMessageFile = (data: any) => ({
   type: ChatsActionTypes.UPLOAD_MESSAGE_FILE,
   payload: data,
 });
+
+export const downloadMessageFile = (filename: string, data: any) => ({
+  type: ChatsActionTypes.DOWNLOAD_MESSAGE_FILE,
+  payload: { data, filename },
+});

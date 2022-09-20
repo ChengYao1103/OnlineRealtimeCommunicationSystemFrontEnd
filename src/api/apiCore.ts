@@ -69,6 +69,32 @@ class APIClient {
   };
 
   /**
+   * Download file from given url
+   */
+  getFile = (apiUrl: string, filename: string, data?: {}) => {
+    const token = localStorage.getItem("token")
+    return fetch("https://orcs-dev-api.beeenson.com/api" + apiUrl, {
+      method: 'POST',
+            headers: {
+            Authorization: token ? token : "",
+            "Content-Type": "application/json; charset=utf-8",
+          },
+      body: JSON.stringify(data),
+    }).then(response => {
+      return response.blob()
+    })
+    .then(blob => {
+      var url = window.URL.createObjectURL(blob);
+                var a = document.createElement('a');
+                a.href = url;
+                a.download = filename;
+                document.body.appendChild(a);
+                a.click();    
+                a.remove();  
+    })
+  }
+
+  /**
    * post given data to url
    */
   create = (url: string, data?: {}) => {
@@ -145,3 +171,7 @@ const getLoggedinUser = () => {
 };
 
 export { APIClient, setAuthorization, getLoggedinUser };
+  function saveAs(data: any, arg1: string) {
+    throw new Error("Function not implemented.");
+  }
+

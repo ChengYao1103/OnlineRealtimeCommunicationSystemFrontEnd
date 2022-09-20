@@ -27,6 +27,7 @@ import {
   readConversation as readConversationApi,
   deleteImage as deleteImageApi,
   uploadMessageFile as uploadMessageFileApi,
+  downloadMessageFile as downloadMessageFileApi,
 } from "../../api/index";
 
 import {
@@ -332,6 +333,17 @@ function* uploadMessageFile({ payload: data }: any) {
   }
 }
 
+function* downloadMessageFile({ payload: {data, filename} }: any) {
+  try {
+    const response: Promise<any> = yield call(downloadMessageFileApi, data, filename);
+    yield put(
+      chatsApiResponseSuccess(ChatsActionTypes.DOWNLOAD_MESSAGE_FILE, response)
+    );
+  } catch (error: any) {
+    yield put(chatsApiResponseError(ChatsActionTypes.DOWNLOAD_MESSAGE_FILE, error));
+  }
+}
+
 export function* watchGetFavourites() {
   yield takeEvery(ChatsActionTypes.GET_FAVOURITES, getFavourites);
 }
@@ -412,6 +424,11 @@ export function* watchDeleteImage() {
 export function* watchUploadMessageFile() {
   yield takeEvery(ChatsActionTypes.UPLOAD_MESSAGE_FILE, uploadMessageFile);
 }
+
+export function* watchDownloadMessageFile() {
+  yield takeEvery(ChatsActionTypes.DOWNLOAD_MESSAGE_FILE, downloadMessageFile);
+}
+
 function* chatsSaga() {
   yield all([
     fork(watchGetFavourites),
@@ -436,6 +453,7 @@ function* chatsSaga() {
     fork(watchReadConversation),
     fork(watchDeleteImage),
     fork(watchUploadMessageFile),
+    fork(watchDownloadMessageFile),
   ]);
 }
 

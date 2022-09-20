@@ -27,6 +27,7 @@ interface ConversationProps {
   chatUserDetails: userModel;
   onDelete: (messageId: string | number) => any;
   onSetReplyData: (reply: null | MessagesTypes | undefined) => void;
+  onDownload: (messageID: string | number, filename: string) => any;
   isChannel: boolean;
 }
 const Conversation = ({
@@ -34,6 +35,7 @@ const Conversation = ({
   chatUserConversations,
   onDelete,
   onSetReplyData,
+  onDownload,
   isChannel,
 }: ConversationProps) => {
   // global store
@@ -164,6 +166,7 @@ const Conversation = ({
                 chatUserDetails={chatUserDetails}
                 onDelete={onDelete}
                 onSetReplyData={onSetReplyData}
+                onDownload={onDownload}
                 isFromMe={isFromMe}
                 onOpenForward={onOpenForward}
                 isChannel={isChannel}
