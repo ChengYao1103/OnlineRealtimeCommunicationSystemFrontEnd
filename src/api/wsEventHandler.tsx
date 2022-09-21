@@ -28,16 +28,19 @@ import {
   clearOtherUserInformation,
   getCallerInfo,
   getChannels,
+  getRecentChat,
   getUserInformation,
 } from "../redux/actions";
+import { userModel } from "../redux/auth/types";
 
 const WSEventHandler = () => {
   const dispatch = useDispatch();
   const { useAppSelector } = useRedux();
 
-  const { SenderUser, channels } = useAppSelector(state => ({
+  const { SenderUser, channels, recentChatUsers } = useAppSelector(state => ({
     SenderUser: state.Auth.otherUserInfo,
     channels: state.Chats.channels as channelModel[],
+    recentChatUsers: state.Chats.recentChatUsers as userModel[],
   }));
   const [newContentInfo, setNewContentInfo] = useState<NewContent>();
   const [invitedID, setInvitedID] = useState(-1);
@@ -89,6 +92,14 @@ const WSEventHandler = () => {
         if (contentInfo.type === 0 && contentInfo.from !== userProfile.id) {
           dispatch(getUserInformation(contentInfo.from.toString()));
           setNewContentInfo(contentInfo);
+        }
+        if (
+          !recentChatUsers ||
+          (recentChatUsers &&
+            recentChatUsers.findIndex(user => user.id === contentInfo.from) ===
+              -1)
+        ) {
+          dispatch(getRecentChat(10, 1));
         }
         dispatch(
           chatWebsocketEvent(ChatsActionTypes.RECEIVE_MESSAGE, {

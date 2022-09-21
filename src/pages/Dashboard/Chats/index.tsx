@@ -29,7 +29,11 @@ import {
 // interfaces
 import { CreateChannelPostData } from "../../../redux/actions";
 import { userModel } from "../../../redux/auth/types";
-import { channelModel, messageModel } from "../../../redux/chats/types";
+import {
+  channelModel,
+  messageModel,
+  recentChatUserModel,
+} from "../../../redux/chats/types";
 import { DataTypes as newMessageTypes } from "../../../components/StartNewMessageModal";
 
 // components
@@ -176,6 +180,7 @@ const Index = (props: IndexProps) => {
     if (newMessageData.receiverID !== 0 && isWaitingSend) {
       setIsWaitingSend(false);
       dispatch(onSendMessage(newMessageData));
+      dispatch(getRecentChat(10, 1));
 
       setContacts({ email: null, content: null });
       setNewMessageData({
@@ -322,7 +327,9 @@ const Index = (props: IndexProps) => {
               {/* direct messages */}
               <DirectMessages
                 authUser={userProfile}
-                recentChatArray={recentChatUsers}
+                recentChatArray={
+                  recentChatUsers || ([] as recentChatUserModel[])
+                }
                 openAddContact={openNewMessageModal}
                 selectedChat={selectedChat}
                 onSelectChat={onSelectChat}
