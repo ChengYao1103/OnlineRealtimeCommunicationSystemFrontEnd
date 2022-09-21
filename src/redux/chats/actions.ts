@@ -1,3 +1,4 @@
+import { RoleTypes } from "../../repository/role";
 import { userModel } from "../auth/types";
 import { channelModel, ChatsActionTypes, messageRecordModel } from "./types";
 
@@ -26,11 +27,6 @@ export const getDirectMessages = () => ({
   type: ChatsActionTypes.GET_DIRECT_MESSAGES,
 });
 
-export const getChannels = (userId: string) => ({
-  type: ChatsActionTypes.GET_CHANNELS,
-  payload: { userId },
-});
-
 export const getRecentChat = (userAmount: number, messageAmount: number) => ({
   type: ChatsActionTypes.GET_RECENT_CHAT,
   payload: { userAmount, messageAmount },
@@ -41,15 +37,9 @@ export const addContacts = (contacts: Array<string | number>) => ({
   payload: contacts,
 });
 
-export interface CreateChannelPostData {
-  founderId: number;
-  name: string;
-  //members: Array<string | number>;
-  //description?: string;
-}
-export const createChannel = (channelData: CreateChannelPostData) => ({
-  type: ChatsActionTypes.CREATE_CHANNEL,
-  payload: channelData,
+export const getChannels = (userId: string) => ({
+  type: ChatsActionTypes.GET_CHANNELS,
+  payload: { userId },
 });
 
 export const changeSelectedChat = (
@@ -118,6 +108,20 @@ export const deleteUserMessages = (userId: number | string) => ({
   payload: userId,
 });
 
+/*
+channels
+*/
+export interface CreateChannelPostData {
+  founderId: number;
+  name: string;
+  //members: Array<string | number>;
+  //description?: string;
+}
+export const createChannel = (channelData: CreateChannelPostData) => ({
+  type: ChatsActionTypes.CREATE_CHANNEL,
+  payload: channelData,
+});
+
 export const getChannelDetails = (id: number | string) => ({
   type: ChatsActionTypes.GET_CHANNEL_DETAILS,
   payload: id,
@@ -126,6 +130,15 @@ export const getChannelDetails = (id: number | string) => ({
 export const getChannelMembers = (id: number | string) => ({
   type: ChatsActionTypes.GET_CHANNEL_MEMBERS,
   payload: id,
+});
+
+export const inviteChannelMembers = (
+  channelID: number,
+  emailArray: string[],
+  roleArray: RoleTypes[]
+) => ({
+  type: ChatsActionTypes.INVITE_CHANNEL_MEMBERS,
+  payload: { channelID, emailArray, roleArray },
 });
 
 export const toggleFavouriteContact = (id: number | string) => ({

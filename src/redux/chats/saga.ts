@@ -2,7 +2,11 @@ import { takeEvery, fork, put, all, call } from "redux-saga/effects";
 
 // Login Redux States
 import { ChatsActionTypes } from "./types";
-import { chatsApiResponseSuccess, chatsApiResponseError } from "./actions";
+import {
+  getChannelMembers as refreshChannelMembers,
+  chatsApiResponseSuccess,
+  chatsApiResponseError,
+} from "./actions";
 
 import {
   getFavourites as getFavouritesApi,
@@ -22,6 +26,7 @@ import {
   deleteUserMessages as deleteUserMessagesApi,
   getChannelDetails as getChannelDetailsApi,
   getChannelMembers as getChannelMembersApi,
+  inviteChannelMembers as inviteChannelMembersApi,
   toggleFavouriteContact as toggleFavouriteContactApi,
   getArchiveContact as getArchiveContactApi,
   toggleArchiveContact as toggleArchiveContactApi,
@@ -67,15 +72,6 @@ function* getDirectMessages() {
   }
 }
 
-function* getChannels({ payload: data }: any) {
-  try {
-    const response: Promise<any> = yield call(getChannelsApi, data.userId);
-    yield put(chatsApiResponseSuccess(ChatsActionTypes.GET_CHANNELS, response));
-  } catch (error: any) {
-    yield put(chatsApiResponseError(ChatsActionTypes.GET_CHANNELS, error));
-  }
-}
-
 function* getRecentChat({ payload: data }: any) {
   try {
     const response: Promise<any> = yield call(getRecentChatApi, {
@@ -98,18 +94,6 @@ function* addContacts({ payload: contacts }: any) {
   } catch (error: any) {
     yield call(showErrorNotification, error);
     yield put(chatsApiResponseError(ChatsActionTypes.ADD_CONTACTS, error));
-  }
-}
-function* createChannel({ payload: channelData }: any) {
-  try {
-    const response: Promise<any> = yield call(createChannelApi, channelData);
-    yield put(
-      chatsApiResponseSuccess(ChatsActionTypes.CREATE_CHANNEL, response)
-    );
-    yield call(showSuccessNotification, response + "");
-  } catch (error: any) {
-    yield call(showErrorNotification, error.data.message);
-    yield put(chatsApiResponseError(ChatsActionTypes.CREATE_CHANNEL, error));
   }
 }
 
@@ -235,6 +219,28 @@ function* deleteUserMessages({ payload: userId }: any) {
   }
 }
 
+function* createChannel({ payload: channelData }: any) {
+  try {
+    const response: Promise<any> = yield call(createChannelApi, channelData);
+    yield put(
+      chatsApiResponseSuccess(ChatsActionTypes.CREATE_CHANNEL, response)
+    );
+    yield call(showSuccessNotification, "Success!");
+  } catch (error: any) {
+    yield call(showErrorNotification, error.data.message);
+    yield put(chatsApiResponseError(ChatsActionTypes.CREATE_CHANNEL, error));
+  }
+}
+
+function* getChannels({ payload: data }: any) {
+  try {
+    const response: Promise<any> = yield call(getChannelsApi, data.userId);
+    yield put(chatsApiResponseSuccess(ChatsActionTypes.GET_CHANNELS, response));
+  } catch (error: any) {
+    yield put(chatsApiResponseError(ChatsActionTypes.GET_CHANNELS, error));
+  }
+}
+
 function* getChannelDetails({ payload: id }: any) {
   try {
     const response: Promise<any> = yield call(getChannelDetailsApi, id);
@@ -257,6 +263,30 @@ function* getChannelMembers({ payload: id }: any) {
   } catch (error: any) {
     yield put(
       chatsApiResponseError(ChatsActionTypes.GET_CHANNEL_MEMBERS, error)
+    );
+  }
+}
+
+function* inviteChannelMembers({ payload: data }: any) {
+  try {
+    const response: Promise<any> = yield call(inviteChannelMembersApi, data);
+    yield put(
+      chatsApiResponseSuccess(ChatsActionTypes.INVITE_CHANNEL_MEMBERS, response)
+    );
+    yield call(showSuccessNotification, "Success!");
+    yield put(refreshChannelMembers(data.channelID));
+  } catch (error: any) {
+    switch (error.data.message) {
+      case "record not found": {
+        yield call(showErrorNotification, "The user doesn't exist");
+        break;
+      }
+      default: {
+        yield call(showErrorNotification, "Unknown error");
+      }
+    }
+    yield put(
+      chatsApiResponseError(ChatsActionTypes.INVITE_CHANNEL_MEMBERS, error)
     );
   }
 }
@@ -348,14 +378,20 @@ function* uploadMessageFile({ payload: data }: any) {
   }
 }
 
-function* downloadMessageFile({ payload: {data, filename} }: any) {
+function* downloadMessageFile({ payload: { data, filename } }: any) {
   try {
-    const response: Promise<any> = yield call(downloadMessageFileApi, data, filename);
+    const response: Promise<any> = yield call(
+      downloadMessageFileApi,
+      data,
+      filename
+    );
     yield put(
       chatsApiResponseSuccess(ChatsActionTypes.DOWNLOAD_MESSAGE_FILE, response)
     );
   } catch (error: any) {
-    yield put(chatsApiResponseError(ChatsActionTypes.DOWNLOAD_MESSAGE_FILE, error));
+    yield put(
+      chatsApiResponseError(ChatsActionTypes.DOWNLOAD_MESSAGE_FILE, error)
+    );
   }
 }
 
@@ -366,14 +402,8 @@ export function* watchGetFavourites() {
 export function* watchGetDirectMessages() {
   yield takeEvery(ChatsActionTypes.GET_DIRECT_MESSAGES, getDirectMessages);
 }
-export function* watchGetChannels() {
-  yield takeEvery(ChatsActionTypes.GET_CHANNELS, getChannels);
-}
 export function* watchAddContacts() {
   yield takeEvery(ChatsActionTypes.ADD_CONTACTS, addContacts);
-}
-export function* watchCreateChannel() {
-  yield takeEvery(ChatsActionTypes.CREATE_CHANNEL, createChannel);
 }
 export function* watchGetChatUserDetails() {
   yield takeEvery(ChatsActionTypes.GET_CHAT_USER_DETAILS, getChatUserDetails);
@@ -411,11 +441,23 @@ export function* watchForwardMessage() {
 export function* watchDeleteUserMessages() {
   yield takeEvery(ChatsActionTypes.DELETE_USER_MESSAGES, deleteUserMessages);
 }
+export function* watchCreateChannel() {
+  yield takeEvery(ChatsActionTypes.CREATE_CHANNEL, createChannel);
+}
+export function* watchGetChannels() {
+  yield takeEvery(ChatsActionTypes.GET_CHANNELS, getChannels);
+}
 export function* watchGetChannelDetails() {
   yield takeEvery(ChatsActionTypes.GET_CHANNEL_DETAILS, getChannelDetails);
 }
 export function* watchGetChannelMembers() {
   yield takeEvery(ChatsActionTypes.GET_CHANNEL_MEMBERS, getChannelMembers);
+}
+export function* watchInviteChannelMembers() {
+  yield takeEvery(
+    ChatsActionTypes.INVITE_CHANNEL_MEMBERS,
+    inviteChannelMembers
+  );
 }
 export function* watchToggleFavouriteContact() {
   yield takeEvery(
@@ -451,9 +493,7 @@ function* chatsSaga() {
   yield all([
     fork(watchGetFavourites),
     fork(watchGetDirectMessages),
-    fork(watchGetChannels),
     fork(watchAddContacts),
-    fork(watchCreateChannel),
     fork(watchGetChatUserDetails),
     fork(watchGetChatUserConversations),
     fork(watchGetRecentChat),
@@ -464,8 +504,11 @@ function* chatsSaga() {
     fork(watchDeleteMessage),
     fork(watchForwardMessage),
     fork(watchDeleteUserMessages),
+    fork(watchCreateChannel),
+    fork(watchGetChannels),
     fork(watchGetChannelDetails),
     fork(watchGetChannelMembers),
+    fork(watchInviteChannelMembers),
     fork(watchToggleFavouriteContact),
     fork(watchGetArchiveContact),
     fork(watchToggleArchiveContact),

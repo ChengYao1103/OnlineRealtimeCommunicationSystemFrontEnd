@@ -10,12 +10,19 @@ import {
   Input,
 } from "reactstrap";
 import { RoleTypes } from "../../src/repository/role";
+import { useRedux } from "../hooks";
+import { inviteChannelMembers } from "../redux/actions";
 
 interface InviteContactModalProps {
   isOpen: boolean;
   onClose: () => void;
 }
 const InviteChannelModal = ({ isOpen, onClose }: InviteContactModalProps) => {
+  const { dispatch, useAppSelector } = useRedux();
+  const { channelInfo } = useAppSelector(state => ({
+    channelInfo: state.Chats.selectedChatInfo,
+  }));
+
   const [emails, setEmails] = useState([""]);
   const [roles, setRoles] = useState([RoleTypes.Student]);
   const [valid, setValid] = useState<boolean>(false);
@@ -24,7 +31,8 @@ const InviteChannelModal = ({ isOpen, onClose }: InviteContactModalProps) => {
   const roleOption = Object.keys(RoleTypes).slice(roleTypeAmout);
 
   const onInvite = () => {
-    console.log(roles, emails);
+    dispatch(inviteChannelMembers(channelInfo.id, emails, roles));
+    onClose();
   };
 
   const onChangeEmails = (value: string, index: number) => {
