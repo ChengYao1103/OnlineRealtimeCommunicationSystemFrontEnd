@@ -54,7 +54,7 @@ export interface ReadUserContent extends WSData {
   contentId: number;
 }
 
-export interface SendFileToUser extends WSData{
+export interface SendFileToUser extends WSData {
   to: number;
   messageID: number;
 }
@@ -78,28 +78,28 @@ export interface EndPhoneCall extends WSData {
   to: number;
 }
 
-export interface InviteUserIntoChannel extends WSData{
+export interface InviteUserIntoChannel extends WSData {
   channelID: number;
   emailArray: string[];
   roleArray: RoleTypes[];
 }
 
-export interface KickUserOutChannel extends WSData{
+export interface KickUserOutChannel extends WSData {
   channelID: number;
   userID: number;
 }
 
-export interface MakeNewPost extends WSData{
+export interface MakeNewPost extends WSData {
   channelID: number;
   content: string;
 }
 
-export interface CommentOnPost extends WSData{
+export interface CommentOnPost extends WSData {
   postID: number;
   content: string;
 }
 
-export interface CreateRollCall extends WSData{
+export interface CreateRollCall extends WSData {
   channelID: number;
   startTime: string;
   endTime: string;
@@ -126,7 +126,7 @@ export interface ContentBeenRead extends WSData {
   contentId: number;
 }
 
-export interface NewFileFromUser extends WSData{
+export interface NewFileFromUser extends WSData {
   from: number;
   to: number;
   filename: string;
@@ -153,16 +153,16 @@ export interface HangUpPhoneCall extends WSData {
   from: number;
 }
 
-export interface BeenInvitedIntoChannel extends WSData{
+export interface BeenInvitedIntoChannel extends WSData {
   channelID: number;
   role: RoleTypes;
 }
 
-export interface BeenKickedOutChannel extends WSData{
+export interface BeenKickedOutChannel extends WSData {
   channelID: number;
 }
 
-export interface PostCreated extends WSData{
+export interface PostCreated extends WSData {
   channelID: number;
   content: string;
   createUser: number;
@@ -170,7 +170,7 @@ export interface PostCreated extends WSData{
   postID: string;
 }
 
-export interface NewCommentOnPost  extends WSData{
+export interface NewCommentOnPost extends WSData {
   channelID: number;
   postID: number;
   content: string;
@@ -178,10 +178,14 @@ export interface NewCommentOnPost  extends WSData{
   createTime: string;
 }
 
-export interface RollCallCreated extends WSData{
+export interface RollCallCreated extends WSData {
   channelID: number;
   rollCallID: number;
   createTime: string;
   startTime: string;
   endTime: string;
+}
+
+export interface WSReceiveError extends WSData {
+  error: string;
 }

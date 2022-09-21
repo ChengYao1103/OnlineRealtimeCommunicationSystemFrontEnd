@@ -4,11 +4,21 @@ import { toast } from "react-toastify";
 import { WSConnection } from "./webSocket";
 import { useProfile, useRedux } from "../hooks";
 import {
+  showErrorNotification,
+  showInfoNotification,
+} from "../helpers/notifications";
+
+// interfaces
+import {
   GetSignalingInformation,
   NewContent,
+  BeenInvitedIntoChannel,
   WSEvent,
   WSReceiveEvents,
+  WSReceiveError,
 } from "../repository/wsEvent";
+import { channelModel, ChatsActionTypes } from "../redux/chats/types";
+import { CallsActionTypes } from "../redux/calls/types";
 
 // actions
 import {
@@ -16,26 +26,26 @@ import {
   chatWebsocketEvent,
   clearOtherUserInformation,
   getCallerInfo,
+  getChannels,
   getUserInformation,
 } from "../redux/actions";
-
-// interfaces
-import { ChatsActionTypes } from "../redux/chats/types";
-import { CallsActionTypes } from "../redux/calls/types";
 
 const WSEventHandler = () => {
   const dispatch = useDispatch();
   const { useAppSelector } = useRedux();
 
-  const { SenderUser } = useAppSelector(state => ({
+  const { SenderUser, channels } = useAppSelector(state => ({
     SenderUser: state.Auth.otherUserInfo,
+    channels: state.Chats.channels as channelModel[],
   }));
   const [newContentInfo, setNewContentInfo] = useState<NewContent>();
+  const [invitedID, setInvitedID] = useState(-1);
   const { userProfile } = useProfile();
 
+  /** 新訊息的提醒 */
   useEffect(() => {
     if (newContentInfo && SenderUser && SenderUser.id === newContentInfo.from) {
-      toast.info(
+      showInfoNotification(
         <span>
           {SenderUser.name} 傳送了一則訊息:
           <br />
@@ -47,10 +57,30 @@ const WSEventHandler = () => {
     }
   }, [newContentInfo, SenderUser]);
 
+  /** 邀請群組的提醒 */
+  useEffect(() => {
+    if (invitedID === -1) {
+      return;
+    }
+    if (channels && channels.length > 0) {
+      channels.forEach(channel => {
+        if (channel.id === invitedID) {
+          showInfoNotification(
+            <span>
+              您已被邀請加入群組:
+              <br />
+              {channel.name}
+            </span>
+          );
+          setInvitedID(-1);
+        }
+      });
+    }
+  }, [invitedID, channels]);
+
   WSConnection.onMessageEvent = (event: any) => {
     let data: WSEvent = JSON.parse(event.data);
-    console.log(data);
-    console.log(data.event);
+    console.log(data, data.event);
     switch (data.event) {
       // Message
       case WSReceiveEvents.NewContent:
@@ -98,6 +128,9 @@ const WSEventHandler = () => {
         break;
       // Channel
       case WSReceiveEvents.BeenInvitedIntoChannel:
+        dispatch(getChannels(userProfile.id.toString()));
+        let invitedData = data.data as BeenInvitedIntoChannel;
+        setInvitedID(invitedData.channelID);
         break;
       case WSReceiveEvents.BeenKickedOutChannel:
         break;
@@ -106,6 +139,10 @@ const WSEventHandler = () => {
       case WSReceiveEvents.NewCommentOnPost:
         break;
       case WSReceiveEvents.RollCallCreated:
+        break;
+      case WSReceiveEvents.Error:
+        let ErrorData = data.data as WSReceiveError;
+        showErrorNotification(ErrorData.error);
         break;
       // WS service
       case WSReceiveEvents.TokenExpired: // rarely triggered
@@ -116,6 +153,10 @@ const WSEventHandler = () => {
         console.log("unknown ws event");
         break;
     }
+  };
+
+  WSConnection.onErrorEvent = (event: any) => {
+    console.log(event);
   };
 
   return <></>;

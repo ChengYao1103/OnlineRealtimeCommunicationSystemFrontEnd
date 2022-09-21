@@ -99,7 +99,12 @@ const getChannelMembers = (id: string | number) => {
 };
 
 const inviteChannelMembers = (data: any) => {
-  return api.create(url.INVITE_CHANNEL_MEMBERS, data);
+  let send: WSEvent = {
+    event: WSSendEvents.InviteUserIntoChannel,
+    data: data,
+  };
+
+  return api.WSSend(JSON.stringify(send));
 };
 
 /*

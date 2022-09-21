@@ -8,4 +8,8 @@ const showErrorNotification = (error: string) => {
   toast.error(error);
 };
 
-export { showSuccessNotification, showErrorNotification };
+const showInfoNotification = (info: JSX.Element | string) => {
+  toast.info(info);
+};
+
+export { showSuccessNotification, showErrorNotification, showInfoNotification };
