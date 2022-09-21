@@ -1,4 +1,4 @@
-import { RoleTypes } from "../../repository/role";
+import { RoleTypes } from "../../repository/Enum";
 import { userModel } from "../auth/types";
 import { channelModel, ChatsActionTypes, messageRecordModel } from "./types";
 

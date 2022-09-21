@@ -29,6 +29,7 @@ import {
   getUserInfo as getUserInfoApi,
   getUserIdByEmail as getUserIdByEmailApi,
 } from "../../api/index";
+import { showErrorNotification } from "../../helpers/notifications";
 
 const fireBaseBackend = getFirebaseBackend();
 //////////Login & Logout
@@ -168,7 +169,8 @@ function* getAuthInformation() {
       authApiResponseSuccess(AuthActionTypes.GET_AUTH_INFOMATION, response)
     );
   } catch (error: any) {
-    toast.error(error.data.message ? error.data.message : error.data.msg);
+    let message = error.data.message ? error.data.message : error.data.msg;
+    yield call(showErrorNotification, message);
     yield put(authApiResponseError(AuthActionTypes.GET_AUTH_INFOMATION, error));
   }
 }
@@ -181,7 +183,8 @@ function* getUserInformation({ payload: data }: any) {
       authApiResponseSuccess(AuthActionTypes.GET_USER_INFOMATION, response)
     );
   } catch (error: any) {
-    toast.error(error.data.message ? error.data.message : error.data.msg);
+    let message = error.data.message ? error.data.message : error.data.msg;
+    yield call(showErrorNotification, message);
     yield put(authApiResponseError(AuthActionTypes.GET_USER_INFOMATION, error));
   }
 }
@@ -194,7 +197,8 @@ function* getUserId({ payload: data }: any) {
       authApiResponseSuccess(AuthActionTypes.GET_USER_ID_BY_EMAIL, response)
     );
   } catch (error: any) {
-    toast.error(error.data.message ? error.data.message : error.data.msg);
+    let message = error.data.message ? error.data.message : error.data.msg;
+    yield call(showErrorNotification, message);
     yield put(
       authApiResponseError(AuthActionTypes.GET_USER_ID_BY_EMAIL, error)
     );

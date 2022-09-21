@@ -1,5 +1,5 @@
 import { StringLiteral } from "typescript";
-import { RoleTypes } from "./role";
+import { RoleTypes } from "./Enum";
 
 export interface WSEvent {
   event: WSSendEvents | WSReceiveEvents;

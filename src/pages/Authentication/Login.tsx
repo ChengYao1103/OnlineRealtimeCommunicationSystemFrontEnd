@@ -35,6 +35,7 @@ import NonAuthLayoutWrapper from "../../components/NonAutnLayoutWrapper";
 import AuthHeader from "../../components/AuthHeader";
 import FormInput from "../../components/FormInput";
 import Loader from "../../components/Loader";
+import { ErrorMessages, ErrorMessagesKey } from "../../repository/Enum";
 
 interface LocationTypes {
   from?: Location;
@@ -137,7 +138,11 @@ const Login = (props: LoginProps) => {
               subtitle="Sign in to continue."
             />
 
-            {error && <Alert color="danger">{error}</Alert>}
+            {error && (
+              <Alert color="danger">
+                {ErrorMessages[error as ErrorMessagesKey]}
+              </Alert>
+            )}
 
             <Form
               onSubmit={handleSubmit(onSubmitForm)}

@@ -15,6 +15,10 @@ import { APIClient } from "../api/apiCore";
 import { WSEvent, WSSendEvents } from "../repository/wsEvent";
 import { WSConnection } from "../api/webSocket";
 import { resetCallingStatus } from "../redux/actions";
+import {
+  showErrorNotification,
+  showSuccessNotification,
+} from "../helpers/notifications";
 
 interface VideoCallModalProps {
   isBeenCalled: boolean;
@@ -196,7 +200,7 @@ const VideoCallModal = ({
     cameraList.forEach(element => {
       mes += "裝置名稱：" + element.label + "\n";
     });
-    toast.success(mes);
+    showSuccessNotification(mes);
   };
 
   // 初始化麥克風和相機 & socket和RTC相關設定
@@ -254,7 +258,7 @@ const VideoCallModal = ({
             })
             .catch(function (err) {
               console.log(err);
-              toast.error("請確認麥克風與視訊鏡頭的權限是否皆已開啟");
+              showErrorNotification("請確認麥克風與視訊鏡頭的權限是否皆已開啟");
               onClose();
             });
         });

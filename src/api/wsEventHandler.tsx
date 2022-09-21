@@ -19,6 +19,7 @@ import {
 } from "../repository/wsEvent";
 import { channelModel, ChatsActionTypes } from "../redux/chats/types";
 import { CallsActionTypes } from "../redux/calls/types";
+import { ErrorMessages, ErrorMessagesKey } from "../repository/Enum";
 
 // actions
 import {
@@ -142,7 +143,9 @@ const WSEventHandler = () => {
         break;
       case WSReceiveEvents.Error:
         let ErrorData = data.data as WSReceiveError;
-        showErrorNotification(ErrorData.error);
+        showErrorNotification(
+          ErrorMessages[ErrorData.error as ErrorMessagesKey]
+        );
         break;
       // WS service
       case WSReceiveEvents.TokenExpired: // rarely triggered

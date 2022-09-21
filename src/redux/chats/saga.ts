@@ -82,6 +82,8 @@ function* getRecentChat({ payload: data }: any) {
       chatsApiResponseSuccess(ChatsActionTypes.GET_RECENT_CHAT, response)
     );
   } catch (error: any) {
+    let message = error.data.message ? error.data.message : error.data.msg;
+    yield call(showErrorNotification, message);
     yield put(chatsApiResponseError(ChatsActionTypes.GET_RECENT_CHAT, error));
   }
 }
@@ -136,6 +138,8 @@ function* onSendMessage({ payload: data }: any) {
       chatsApiResponseSuccess(ChatsActionTypes.ON_SEND_MESSAGE, response)
     );
   } catch (error: any) {
+    let message = error.data.message ? error.data.message : error.data.msg;
+    yield call(showErrorNotification, message);
     yield put(chatsApiResponseError(ChatsActionTypes.ON_SEND_MESSAGE, error));
   }
 }
@@ -276,15 +280,6 @@ function* inviteChannelMembers({ payload: data }: any) {
     yield call(showSuccessNotification, "Success!");
     yield put(refreshChannelMembers(data.channelID));
   } catch (error: any) {
-    switch (error.data.message) {
-      case "record not found": {
-        yield call(showErrorNotification, "The user doesn't exist");
-        break;
-      }
-      default: {
-        yield call(showErrorNotification, "Unknown error");
-      }
-    }
     yield put(
       chatsApiResponseError(ChatsActionTypes.INVITE_CHANNEL_MEMBERS, error)
     );
