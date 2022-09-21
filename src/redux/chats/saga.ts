@@ -277,7 +277,7 @@ function* inviteChannelMembers({ payload: data }: any) {
     yield put(
       chatsApiResponseSuccess(ChatsActionTypes.INVITE_CHANNEL_MEMBERS, response)
     );
-    yield call(showSuccessNotification, "Success!");
+    yield call(showSuccessNotification, "Invite successfully sent!");
     yield put(refreshChannelMembers(data.channelID));
   } catch (error: any) {
     yield put(
