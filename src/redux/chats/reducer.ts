@@ -44,25 +44,11 @@ const Chats = persistReducer(
               getDirectMessagesLoading: false,
               isContactsAdded: false,
             };
-          case ChatsActionTypes.GET_CHANNELS:
-            return {
-              ...state,
-              channels: action.payload.data.channel,
-              isChannelsFetched: true,
-              getChannelsLoading: false,
-              isChannelCreated: false,
-            };
           case ChatsActionTypes.ADD_CONTACTS:
             return {
               ...state,
               isContactsAdded: true,
               addContactsLoading: false,
-            };
-          case ChatsActionTypes.CREATE_CHANNEL:
-            return {
-              ...state,
-              isChannelCreated: true,
-              createChannelLoading: false,
             };
           case ChatsActionTypes.GET_CHAT_USER_DETAILS:
             return {
@@ -123,6 +109,20 @@ const Chats = persistReducer(
               ...state,
               isUserMessagesDeleted: true,
             };
+          case ChatsActionTypes.CREATE_CHANNEL:
+            return {
+              ...state,
+              isChannelCreated: true,
+              createChannelLoading: false,
+            };
+          case ChatsActionTypes.GET_CHANNELS:
+            return {
+              ...state,
+              channels: action.payload.data.channel,
+              isChannelsFetched: true,
+              getChannelsLoading: false,
+              isChannelCreated: false,
+            };
           case ChatsActionTypes.GET_CHANNEL_DETAILS:
             return {
               ...state,
@@ -175,24 +175,11 @@ const Chats = persistReducer(
               isDirectMessagesFetched: false,
               getDirectMessagesLoading: false,
             };
-          case ChatsActionTypes.GET_CHANNELS:
-            return {
-              ...state,
-              getChannelsError: action.payload.data,
-              isChannelsFetched: false,
-              getChannelsLoading: false,
-            };
           case ChatsActionTypes.ADD_CONTACTS:
             return {
               ...state,
               isContactsAdded: false,
               addContactsLoading: false,
-            };
-          case ChatsActionTypes.CREATE_CHANNEL:
-            return {
-              ...state,
-              isChannelCreated: false,
-              createChannelLoading: false,
             };
           case ChatsActionTypes.GET_CHAT_USER_DETAILS:
             return {
@@ -239,6 +226,19 @@ const Chats = persistReducer(
             return {
               ...state,
               isUserMessagesDeleted: false,
+            };
+          case ChatsActionTypes.CREATE_CHANNEL:
+            return {
+              ...state,
+              isChannelCreated: false,
+              createChannelLoading: false,
+            };
+          case ChatsActionTypes.GET_CHANNELS:
+            return {
+              ...state,
+              getChannelsError: action.payload.data,
+              isChannelsFetched: false,
+              getChannelsLoading: false,
             };
           case ChatsActionTypes.GET_CHANNEL_DETAILS:
             return {
@@ -313,23 +313,11 @@ const Chats = persistReducer(
           isDirectMessagesFetched: false,
           getDirectMessagesLoading: true,
         };
-      case ChatsActionTypes.GET_CHANNELS:
-        return {
-          ...state,
-          isChannelsFetched: false,
-          getChannelsLoading: true,
-        };
       case ChatsActionTypes.ADD_CONTACTS:
         return {
           ...state,
           isContactsAdded: false,
           addContactsLoading: true,
-        };
-      case ChatsActionTypes.CREATE_CHANNEL:
-        return {
-          ...state,
-          isChannelCreated: false,
-          createChannelLoading: true,
         };
       case ChatsActionTypes.CHANGE_SELECTED_CHAT:
         state.chatUserConversations = [];
@@ -376,6 +364,18 @@ const Chats = persistReducer(
         return {
           ...state,
           isUserMessagesDeleted: false,
+        };
+      case ChatsActionTypes.CREATE_CHANNEL:
+        return {
+          ...state,
+          isChannelCreated: false,
+          createChannelLoading: true,
+        };
+      case ChatsActionTypes.GET_CHANNELS:
+        return {
+          ...state,
+          isChannelsFetched: false,
+          getChannelsLoading: true,
         };
       case ChatsActionTypes.GET_CHANNEL_DETAILS:
         return {
