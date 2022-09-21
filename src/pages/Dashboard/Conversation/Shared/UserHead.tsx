@@ -31,6 +31,7 @@ import { changeSelectedChat } from "../../../../redux/actions";
 // constants
 import { STATUS_TYPES } from "../../../../constants";
 import Loader from "../../../../components/Loader";
+import InviteChannelModal from "../../../../components/InviteChannelModal";
 interface ProfileImageProps {
   chatUserDetails: any;
   onCloseConversation: () => any;
@@ -197,6 +198,8 @@ interface MoreProps {
   onDelete: () => void;
   isArchive: boolean;
   onToggleArchive: () => void;
+  isChannel: boolean;
+  onOpenInvite: () => void;
 }
 const More = ({
   onOpenUserDetails,
@@ -205,6 +208,8 @@ const More = ({
   onDelete,
   isArchive,
   onToggleArchive,
+  isChannel,
+  onOpenInvite,
 }: MoreProps) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const toggle = () => setDropdownOpen(!dropdownOpen);
@@ -222,6 +227,17 @@ const More = ({
         >
           View Profile <i className="bx bx-user text-muted"></i>
         </DropdownItem>
+
+        {isChannel ? (
+          <DropdownItem
+            className="d-flex justify-content-between align-items-center user-profile-show"
+            to="#"
+            onClick={onOpenInvite}
+          >
+            Invite <i className="bx bx-user-plus text-muted"></i>
+          </DropdownItem>
+        ) : null}
+
         <DropdownItem
           className="d-flex justify-content-between align-items-center d-xxl-none"
           to="#"
@@ -322,8 +338,8 @@ const UserHead = ({
   // global store
   const { dispatch } = useRedux();
   /*
-    video call modal
-    */
+  video call modal
+  */
   const [isOpenVideoModal, setIsOpenVideoModal] = useState<boolean>(false);
   const onOpenVideo = () => {
     setIsOpenVideoModal(true);
@@ -333,8 +349,8 @@ const UserHead = ({
   };
 
   /*
-        audio call modal
-    */
+  audio call modal
+  */
   const [isOpenAudioModal, setIsOpenAudioModal] = useState<boolean>(false);
   const onOpenAudio = () => {
     setIsOpenAudioModal(true);
@@ -353,6 +369,17 @@ const UserHead = ({
   };
   const onClosePinnedTab = () => {
     setIsOpenPinnedTabModal(false);
+  };
+
+  /*
+  invite user modal
+  */
+  const [isOpenInviteModal, setIsOpenInviteModal] = useState<boolean>(false);
+  const onOpenInvite = () => {
+    setIsOpenInviteModal(true);
+  };
+  const onCloseInvite = () => {
+    setIsOpenInviteModal(false);
   };
 
   /*
@@ -423,6 +450,8 @@ const UserHead = ({
                 onDelete={onDelete}
                 isArchive={chatUserDetails.isArchived}
                 onToggleArchive={onToggleArchive}
+                isChannel={isChannel}
+                onOpenInvite={onOpenInvite}
               />
             </li>
           </ul>
@@ -452,6 +481,12 @@ const UserHead = ({
           isOpen={isOpenPinnedTabModal}
           onClose={onClosePinnedTab}
           pinnedTabs={pinnedTabs}
+        />
+      )}
+      {isOpenInviteModal && (
+        <InviteChannelModal
+          isOpen={isOpenInviteModal}
+          onClose={onCloseInvite}
         />
       )}
     </div>

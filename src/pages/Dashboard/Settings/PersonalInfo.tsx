@@ -23,7 +23,6 @@ import { userChangeInformation } from "../../../redux/actions";
 // interface
 import { BasicDetailsTypes } from "../../../data/settings";
 import { userModel } from "../../../redux/auth/types";
-import { Roles } from "../../../repository/role";
 
 interface PersonalInfoProps {
   basicDetails: BasicDetailsTypes;

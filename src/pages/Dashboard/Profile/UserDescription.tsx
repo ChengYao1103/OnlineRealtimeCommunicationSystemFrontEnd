@@ -1,6 +1,5 @@
 import React from "react";
 import { userModel } from "../../../redux/auth/types";
-import { Roles } from "../../../repository/role";
 
 // interface
 interface UserDescriptionProps {
