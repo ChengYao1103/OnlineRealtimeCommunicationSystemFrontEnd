@@ -23,7 +23,7 @@ import {
 import { useProfile } from "../../../../hooks";
 
 // components
-import UserHead from "../Shared/UserHead";
+import UserHead from "./UserHead";
 import Home from "./Home";
 import ChatInputSection from "../Shared/ChatInputSection/index";
 
@@ -149,7 +149,6 @@ const Index = () => {
   useEffect(() => {
     if (selectedChatInfo) {
       // 回傳的是不包含該筆id的紀錄，所以+1
-      console.log(selectedChatInfo.id);
       dispatch(
         getChannelPosts({
           ID: selectedChatInfo.id,
@@ -157,9 +156,6 @@ const Index = () => {
       );
     }
   }, [dispatch, selectedChatInfo, userProfile]);
-  useEffect(() => {
-      console.log(channelPosts)
-  }, [dispatch, channelPosts]);
 
   const onDeleteMessage = (messageId: string | number) => {
     dispatch(deleteMessage(chatUserDetails.id, messageId));
