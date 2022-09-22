@@ -102,6 +102,9 @@ const inviteChannelMembers = (data: any) => {
   return api.create(url.INVITE_CHANNEL_MEMBERS, data);
 };
 
+const getChannelPosts = (data: any) => {
+  return api.get(`${url.GET_CHANNEL_POSTS}/${data.ID}`);
+};
 /*
 archive
 */
@@ -154,6 +157,7 @@ export {
   getChannelDetails,
   getChannelMembers,
   inviteChannelMembers,
+  getChannelPosts,
   toggleFavouriteContact,
   getArchiveContact,
   toggleArchiveContact,

@@ -141,6 +141,11 @@ export const inviteChannelMembers = (
   payload: { channelID, emailArray, roleArray },
 });
 
+export const getChannelPosts =  (data: any) => ({
+  type: ChatsActionTypes.GET_CHANNEL_POSTS,
+  payload: data,
+});
+
 export const toggleFavouriteContact = (id: number | string) => ({
   type: ChatsActionTypes.TOGGLE_FAVOURITE_CONTACT,
   payload: id,

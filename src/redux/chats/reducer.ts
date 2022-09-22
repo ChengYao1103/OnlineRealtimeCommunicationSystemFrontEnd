@@ -2,7 +2,8 @@ import { persistReducer } from "redux-persist";
 import { toast } from "react-toastify";
 import storage from "redux-persist/lib/storage";
 // types
-import { messageRecordModel, ChatsActionTypes, ChatsState } from "./types";
+import { messageRecordModel, ChatsActionTypes, ChatsState, channelPostModel } from "./types";
+import { getChannelPosts } from "./actions";
 
 export const INIT_STATE: ChatsState = {
   favourites: [],
@@ -12,6 +13,7 @@ export const INIT_STATE: ChatsState = {
   selectedChat: null,
   chatUserDetails: {},
   chatUserConversations: [],
+  channelPosts: [],
   isOpenUserDetails: false,
   channelDetails: {},
   archiveContacts: [],
@@ -135,6 +137,11 @@ const Chats = persistReducer(
               ...state,
               channelMembers: action.payload.data.users,
             };
+          case ChatsActionTypes.GET_CHANNEL_POSTS:
+             return {
+               ...state,
+               channelPosts: action.payload.data.post,
+             };            
           case ChatsActionTypes.TOGGLE_FAVOURITE_CONTACT:
             return {
               ...state,

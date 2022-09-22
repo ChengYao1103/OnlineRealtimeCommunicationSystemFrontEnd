@@ -27,6 +27,7 @@ import {
   getChannelDetails as getChannelDetailsApi,
   getChannelMembers as getChannelMembersApi,
   inviteChannelMembers as inviteChannelMembersApi,
+  getChannelPosts as getChannelPostsApi,
   toggleFavouriteContact as toggleFavouriteContactApi,
   getArchiveContact as getArchiveContactApi,
   toggleArchiveContact as toggleArchiveContactApi,
@@ -291,6 +292,19 @@ function* inviteChannelMembers({ payload: data }: any) {
   }
 }
 
+function* getChannelPosts({ payload: id }: any) {
+  try {
+    const response: Promise<any> = yield call(getChannelPostsApi, id);
+    yield put(
+      chatsApiResponseSuccess(ChatsActionTypes.GET_CHANNEL_POSTS, response)
+    );
+  } catch (error: any) {
+    yield put(
+      chatsApiResponseError(ChatsActionTypes.GET_CHANNEL_POSTS, error)
+    );
+  }
+}
+
 function* toggleFavouriteContact({ payload: id }: any) {
   try {
     const response: Promise<any> = yield call(toggleFavouriteContactApi, id);
@@ -459,6 +473,9 @@ export function* watchInviteChannelMembers() {
     inviteChannelMembers
   );
 }
+export function* watchGetChannelPosts() {
+  yield takeEvery(ChatsActionTypes.GET_CHANNEL_POSTS, getChannelPosts);
+}
 export function* watchToggleFavouriteContact() {
   yield takeEvery(
     ChatsActionTypes.TOGGLE_FAVOURITE_CONTACT,
@@ -509,6 +526,7 @@ function* chatsSaga() {
     fork(watchGetChannelDetails),
     fork(watchGetChannelMembers),
     fork(watchInviteChannelMembers),
+    fork(watchGetChannelPosts),
     fork(watchToggleFavouriteContact),
     fork(watchGetArchiveContact),
     fork(watchToggleArchiveContact),

@@ -11,6 +11,7 @@ export enum ChatsActionTypes {
   GET_CHANNELS = "@@chats/GET_CHANNELS",
   GET_CHANNEL_MEMBERS = "@@chats/GET_CHANNEL_MEMBERS",
   INVITE_CHANNEL_MEMBERS = "@@chats/INVITE_CHANNEL_MEMBERS",
+  GET_CHANNEL_POSTS = "@@chats/GET_CHANNEL_POSTS",
 
   ADD_CONTACTS = "@@chats/ADD_CONTACTS",
   CREATE_CHANNEL = "@@chats/CREATE_CHANNEL",
@@ -83,6 +84,14 @@ export interface recentChatUserModel {
   User2: number; // larger id
 }
 
+export interface channelPostModel {
+  id: number;
+  userID: number;
+  content: string;
+  deleted: boolean;
+  timestamp: string;
+}
+
 export interface ChatsState {
   favourites: Array<any>;
   directMessages: Array<any>;
@@ -91,6 +100,7 @@ export interface ChatsState {
   selectedChat: string | number | null;
   chatUserDetails: object;
   chatUserConversations: Array<messageRecordModel>;
+  channelPosts: Array<channelPostModel>;
   recentChatUsers: Array<recentChatUserModel>;
   isOpenUserDetails: boolean;
   channelDetails: object;

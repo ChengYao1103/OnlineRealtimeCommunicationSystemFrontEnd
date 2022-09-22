@@ -7,6 +7,7 @@ import { useRedux } from "../../../../hooks/index";
 import {
   toggleUserDetailsTab,
   getChatUserConversations,
+  getChannelPosts,
   onSendMessage,
   receiveMessage,
   readMessage,
@@ -23,7 +24,7 @@ import { useProfile } from "../../../../hooks";
 
 // components
 import UserHead from "../Shared/UserHead";
-import Conversation from "../Shared/Conversation";
+import Home from "./Home";
 import ChatInputSection from "../Shared/ChatInputSection/index";
 
 // interface
@@ -47,6 +48,7 @@ const Index = () => {
     selectedChatInfo, // 用途可能跟chatUserDetails重複
     chatUserDetails,
     chatUserConversations,
+    channelPosts,
     isUserMessageSent,
     isMessageDeleted,
     isMessageForwarded,
@@ -58,6 +60,7 @@ const Index = () => {
     selectedChatInfo: state.Chats.selectedChatInfo,
     chatUserDetails: state.Chats.chatUserDetails,
     chatUserConversations: state.Chats.chatUserConversations,
+    channelPosts: state.Chats.channelPosts,
     isUserMessageSent: state.Chats.isUserMessageSent,
     isMessageDeleted: state.Chats.isMessageDeleted,
     isMessageForwarded: state.Chats.isMessageForwarded,
@@ -148,18 +151,15 @@ const Index = () => {
       // 回傳的是不包含該筆id的紀錄，所以+1
       console.log(selectedChatInfo.id);
       dispatch(
-        getChatUserConversations({
-          otherSideID: selectedChatInfo.id,
-          lastMessageID: 0,
-          // recentChatChannels.find(
-          //   (item: channelModel) =>
-          //     item.id === selectedChatInfo.id
-          // ).Messages[0].ID + 1,
-          n: 50,
+        getChannelPosts({
+          ID: selectedChatInfo.id,
         })
       );
     }
   }, [dispatch, selectedChatInfo, userProfile]);
+  useEffect(() => {
+      console.log(channelPosts)
+  }, [dispatch, channelPosts]);
 
   const onDeleteMessage = (messageId: string | number) => {
     dispatch(deleteMessage(chatUserDetails.id, messageId));
@@ -183,20 +183,21 @@ const Index = () => {
         isChannel={true}
         onToggleArchive={onToggleArchive}
       />
-      <Conversation
-        chatUserConversations={chatUserConversations}
-        chatUserDetails={selectedChatInfo}
-        onDelete={onDeleteMessage}
-        onSetReplyData={onSetReplyData}
-        onDownload={onDownload}
-        isChannel={true}
-      />
       <ChatInputSection
         onSend={onSend}
         onUpload={onUpload}
         replyData={replyData}
         onSetReplyData={onSetReplyData}
         selectedChatInfo={selectedChatInfo}
+      />
+      <Home
+        chatUserConversations={chatUserConversations}
+        chatUserDetails={selectedChatInfo}
+        channelPosts={channelPosts}
+        onDelete={onDeleteMessage}
+        onSetReplyData={onSetReplyData}
+        onDownload={onDownload}
+        isChannel={true}
       />
     </>
   );
