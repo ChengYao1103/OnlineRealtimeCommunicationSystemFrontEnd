@@ -15,6 +15,7 @@ import { APIClient } from "../api/apiCore";
 import { WSEvent, WSSendEvents } from "../repository/wsEvent";
 import { WSConnection } from "../api/webSocket";
 import { toast } from "react-toastify";
+import { showErrorNotification } from "../helpers/notifications";
 
 interface AudioCallModalProps {
   isBeenCalled: boolean;
@@ -201,7 +202,7 @@ const AudioCallModal = ({
         })
         .catch(function (err) {
           console.log(err);
-          toast.error("請確認麥克風的權限是否開啟");
+          showErrorNotification("請確認麥克風的權限是否開啟");
           onClose();
         });
     }

@@ -203,18 +203,8 @@ const Chats = persistReducer(
               isUserMessageSent: false,
             };
           case ChatsActionTypes.GET_RECENT_CHAT:
-            toast.error(
-              action.payload.error.data.msg
-                ? action.payload.error.data.msg
-                : action.payload.error.data.message
-            );
             return { ...state };
           case ChatsActionTypes.ON_SEND_MESSAGE:
-            toast.error(
-              action.payload.error.data.msg
-                ? action.payload.error.data.msg
-                : action.payload.error.data.message
-            );
             return {
               ...state,
               isUserMessageSent: false,
@@ -292,13 +282,15 @@ const Chats = persistReducer(
             ) {
               state.chatUserConversations.push(action.payload.data);
             }
-            var index = state.recentChatUsers.findIndex(
-              record =>
-                (record.User1 === action.payload.data.SenderID ||
-                  record.User2 === action.payload.data.SenderID) &&
-                (record.User1 === action.payload.data.ReceiverID ||
-                  record.User2 === action.payload.data.ReceiverID)
-            );
+            var index = state.recentChatUsers
+              ? state.recentChatUsers.findIndex(
+                  record =>
+                    (record.User1 === action.payload.data.SenderID ||
+                      record.User2 === action.payload.data.SenderID) &&
+                    (record.User1 === action.payload.data.ReceiverID ||
+                      record.User2 === action.payload.data.ReceiverID)
+                )
+              : -1;
             if (index !== -1) {
               state.recentChatUsers[index].Messages[0] = action.payload.data;
             }

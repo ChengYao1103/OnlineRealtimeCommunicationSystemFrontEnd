@@ -4,11 +4,22 @@ import { toast } from "react-toastify";
 import { WSConnection } from "./webSocket";
 import { useProfile, useRedux } from "../hooks";
 import {
+  showErrorNotification,
+  showInfoNotification,
+} from "../helpers/notifications";
+
+// interfaces
+import {
   GetSignalingInformation,
   NewContent,
+  BeenInvitedIntoChannel,
   WSEvent,
   WSReceiveEvents,
+  WSReceiveError,
 } from "../repository/wsEvent";
+import { channelModel, ChatsActionTypes } from "../redux/chats/types";
+import { CallsActionTypes } from "../redux/calls/types";
+import { ErrorMessages, ErrorMessagesKey } from "../repository/Enum";
 
 // actions
 import {
@@ -16,26 +27,29 @@ import {
   chatWebsocketEvent,
   clearOtherUserInformation,
   getCallerInfo,
+  getChannels,
+  getRecentChat,
   getUserInformation,
 } from "../redux/actions";
-
-// interfaces
-import { ChatsActionTypes } from "../redux/chats/types";
-import { CallsActionTypes } from "../redux/calls/types";
+import { userModel } from "../redux/auth/types";
 
 const WSEventHandler = () => {
   const dispatch = useDispatch();
   const { useAppSelector } = useRedux();
 
-  const { SenderUser } = useAppSelector(state => ({
+  const { SenderUser, channels, recentChatUsers } = useAppSelector(state => ({
     SenderUser: state.Auth.otherUserInfo,
+    channels: state.Chats.channels as channelModel[],
+    recentChatUsers: state.Chats.recentChatUsers as userModel[],
   }));
   const [newContentInfo, setNewContentInfo] = useState<NewContent>();
+  const [invitedID, setInvitedID] = useState(-1);
   const { userProfile } = useProfile();
 
+  /** 新訊息的提醒 */
   useEffect(() => {
     if (newContentInfo && SenderUser && SenderUser.id === newContentInfo.from) {
-      toast.info(
+      showInfoNotification(
         <span>
           {SenderUser.name} 傳送了一則訊息:
           <br />
@@ -47,10 +61,30 @@ const WSEventHandler = () => {
     }
   }, [newContentInfo, SenderUser]);
 
+  /** 邀請群組的提醒 */
+  useEffect(() => {
+    if (invitedID === -1) {
+      return;
+    }
+    if (channels && channels.length > 0) {
+      channels.forEach(channel => {
+        if (channel.id === invitedID) {
+          showInfoNotification(
+            <span>
+              您已被邀請加入群組:
+              <br />
+              {channel.name}
+            </span>
+          );
+          setInvitedID(-1);
+        }
+      });
+    }
+  }, [invitedID, channels]);
+
   WSConnection.onMessageEvent = (event: any) => {
     let data: WSEvent = JSON.parse(event.data);
-    console.log(data);
-    console.log(data.event);
+    console.log(data, data.event);
     switch (data.event) {
       // Message
       case WSReceiveEvents.NewContent:
@@ -58,6 +92,14 @@ const WSEventHandler = () => {
         if (contentInfo.type === 0 && contentInfo.from !== userProfile.id) {
           dispatch(getUserInformation(contentInfo.from.toString()));
           setNewContentInfo(contentInfo);
+        }
+        if (
+          !recentChatUsers ||
+          (recentChatUsers &&
+            recentChatUsers.findIndex(user => user.id === contentInfo.from) ===
+              -1)
+        ) {
+          dispatch(getRecentChat(10, 1));
         }
         dispatch(
           chatWebsocketEvent(ChatsActionTypes.RECEIVE_MESSAGE, {
@@ -98,6 +140,9 @@ const WSEventHandler = () => {
         break;
       // Channel
       case WSReceiveEvents.BeenInvitedIntoChannel:
+        dispatch(getChannels(userProfile.id.toString()));
+        let invitedData = data.data as BeenInvitedIntoChannel;
+        setInvitedID(invitedData.channelID);
         break;
       case WSReceiveEvents.BeenKickedOutChannel:
         break;
@@ -106,6 +151,12 @@ const WSEventHandler = () => {
       case WSReceiveEvents.NewCommentOnPost:
         break;
       case WSReceiveEvents.RollCallCreated:
+        break;
+      case WSReceiveEvents.Error:
+        let ErrorData = data.data as WSReceiveError;
+        showErrorNotification(
+          ErrorMessages[ErrorData.error as ErrorMessagesKey]
+        );
         break;
       // WS service
       case WSReceiveEvents.TokenExpired: // rarely triggered
@@ -116,6 +167,10 @@ const WSEventHandler = () => {
         console.log("unknown ws event");
         break;
     }
+  };
+
+  WSConnection.onErrorEvent = (event: any) => {
+    console.log(event);
   };
 
   return <></>;

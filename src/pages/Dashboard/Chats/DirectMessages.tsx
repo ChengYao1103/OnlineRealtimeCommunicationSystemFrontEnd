@@ -41,7 +41,7 @@ const DirectMessages = ({
 
   useEffect(() => {
     let targetId = 0;
-    if (!isLoadInformation && recentChatArray.length > 0) {
+    if (!isLoadInformation && recentChatArray && recentChatArray.length > 0) {
       setIsLoadInformation(true);
       recentChatArray.forEach(element => {
         // 辨認是否為他人id

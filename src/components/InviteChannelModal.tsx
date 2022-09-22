@@ -9,7 +9,7 @@ import {
   Label,
   Input,
 } from "reactstrap";
-import { RoleTypes } from "../../src/repository/role";
+import { RoleTypes } from "../repository/Enum";
 import { useRedux } from "../hooks";
 import { inviteChannelMembers } from "../redux/actions";
 

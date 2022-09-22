@@ -29,7 +29,11 @@ import {
 // interfaces
 import { CreateChannelPostData } from "../../../redux/actions";
 import { userModel } from "../../../redux/auth/types";
-import { channelModel, messageModel } from "../../../redux/chats/types";
+import {
+  channelModel,
+  messageModel,
+  recentChatUserModel,
+} from "../../../redux/chats/types";
 import { DataTypes as newMessageTypes } from "../../../components/StartNewMessageModal";
 
 // components
@@ -45,6 +49,7 @@ import DirectMessages from "./DirectMessages";
 import Chanels from "./Chanels";
 import Archive from "./Archive";
 import { CHATS_TABS } from "../../../constants";
+import { showErrorNotification } from "../../../helpers/notifications";
 
 interface IndexProps {}
 const Index = (props: IndexProps) => {
@@ -156,7 +161,7 @@ const Index = (props: IndexProps) => {
     if (AuthState.otherUserId && !isGetReceicerId) {
       setIsGetReceicerId(true);
       if (AuthState.otherUserId === userProfile.id) {
-        toast.error("Can't send message to self.");
+        showErrorNotification("Can't send message to self.");
       } else if (AuthState.otherUserId !== 0) {
         setNewMessageData({
           receiverID: AuthState.otherUserId,
@@ -164,7 +169,9 @@ const Index = (props: IndexProps) => {
           type: 0,
         });
       } else {
-        toast.error("No corresponding user, please check email again.");
+        showErrorNotification(
+          "No corresponding user, please check email again."
+        );
       }
     }
     if (AuthState.otherUserId && isGetReceicerId) {
@@ -173,6 +180,7 @@ const Index = (props: IndexProps) => {
     if (newMessageData.receiverID !== 0 && isWaitingSend) {
       setIsWaitingSend(false);
       dispatch(onSendMessage(newMessageData));
+      dispatch(getRecentChat(10, 1));
 
       setContacts({ email: null, content: null });
       setNewMessageData({
@@ -319,7 +327,9 @@ const Index = (props: IndexProps) => {
               {/* direct messages */}
               <DirectMessages
                 authUser={userProfile}
-                recentChatArray={recentChatUsers}
+                recentChatArray={
+                  recentChatUsers || ([] as recentChatUserModel[])
+                }
                 openAddContact={openNewMessageModal}
                 selectedChat={selectedChat}
                 onSelectChat={onSelectChat}
