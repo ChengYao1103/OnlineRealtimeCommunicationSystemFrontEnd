@@ -77,7 +77,7 @@ class APIClient {
    */
   getFile = (apiUrl: string, filename: string, data?: {}) => {
     const token = localStorage.getItem("token")
-    return fetch("https://orcs-dev-api.beeenson.com/api" + apiUrl, {
+    return fetch(axios.defaults.baseURL + apiUrl, {
       method: 'POST',
             headers: {
             Authorization: token ? token : "",
