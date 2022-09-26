@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { Button, Modal, ModalBody } from "reactstrap";
-import { toast } from "react-toastify";
 import { useRedux } from "../hooks";
 
 // interface
@@ -65,11 +64,9 @@ const VideoCallModal = ({
     navigator.mediaDevices
       .getDisplayMedia(constraints)
       .then(function (stream) {
-        console.log("success!!");
         if (connection) {
           stream.getTracks().forEach(track => {
             connection.addTrack(track, stream);
-            console.log(track, stream);
           });
         }
         //document.querySelector("#testVideo").srcObject = stream;
@@ -103,6 +100,38 @@ const VideoCallModal = ({
       newConnection.addTrack(track, stream);
     });
 
+    var negotiating = false;
+
+    newConnection.onnegotiationneeded = e => {
+      if (negotiating) {
+        return;
+      }
+      newConnection
+        .createOffer()
+        .then(desc => newConnection.setLocalDescription(desc))
+        .then(() => {
+          let send: WSEvent = {
+            event: WSSendEvents.SendSignalingInformation,
+            data: {
+              to: user.id,
+              info: {
+                desc: newConnection.localDescription,
+              },
+              type: "screenShare",
+            },
+          };
+          api.WSSend(JSON.stringify(send));
+          console.log("send => ", send);
+        })
+        .catch(err => showErrorNotification(err));
+      // createSignal(true, newConnection);
+    };
+
+    newConnection.onsignalingstatechange = () => {
+      console.log("onSignalingStateChange => ", newConnection.signalingState);
+      negotiating = newConnection.signalingState !== "stable";
+    };
+
     newConnection.onicecandidate = ({ candidate }) => {
       if (!candidate) {
         return;
@@ -131,8 +160,7 @@ const VideoCallModal = ({
 
     newConnection.ontrack = event => {
       var videoRef = document.getElementById("remoteVideo") as HTMLVideoElement;
-      console.log(event.streams);
-      if (videoRef && !videoRef.srcObject && event.streams) {
+      if (videoRef && event.streams) {
         event.streams.forEach(stream => setRemoteVideo(videoRef, stream));
         //setRemoteVideo(videoRef, event.streams[0]);
         console.log("接收流並顯示於遠端視訊！", event);
@@ -141,7 +169,7 @@ const VideoCallModal = ({
 
     WSConnection.getSignalingEvent = async data => {
       console.log(data);
-      if (data.info.desc && !newConnection.currentRemoteDescription) {
+      if (data.info.desc && negotiating) {
         console.log("desc => ", data.info.desc);
         await newConnection.setRemoteDescription(
           new RTCSessionDescription(data.info.desc)
