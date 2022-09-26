@@ -22,14 +22,14 @@ interface DirectMessagesProps {
   authUser: userModel;
   recentChatArray: Array<recentChatUserModel>;
   openAddContact: () => void;
-  selectedChat: string | number;
+  selectedChatInfo: userModel;
   onSelectChat: (id: number | string, user: userModel) => void;
 }
 const DirectMessages = ({
   authUser,
   recentChatArray,
   openAddContact,
-  selectedChat,
+  selectedChatInfo,
   onSelectChat,
 }: DirectMessagesProps) => {
   const { dispatch, useAppSelector } = useRedux();
@@ -124,7 +124,7 @@ const DirectMessages = ({
             <ChatUser
               user={user}
               key={user.id}
-              selectedChat={selectedChat}
+              selectedChatInfo={selectedChatInfo}
               onSelectChat={onSelectChat}
             />
           ))}

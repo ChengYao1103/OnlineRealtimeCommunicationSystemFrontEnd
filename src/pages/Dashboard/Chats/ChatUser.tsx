@@ -8,11 +8,11 @@ import { userModel } from "../../../redux/auth/types";
 
 interface ChatUserProps {
   user: userModel;
-  selectedChat: string | number;
+  selectedChatInfo: userModel;
   onSelectChat: (id: number | string, user: userModel) => void;
 }
 
-const ChatUser = ({ user, selectedChat, onSelectChat }: ChatUserProps) => {
+const ChatUser = ({ user, selectedChatInfo, onSelectChat }: ChatUserProps) => {
   const fullName = user.name;
 
   const colors = [
@@ -31,7 +31,9 @@ const ChatUser = ({ user, selectedChat, onSelectChat }: ChatUserProps) => {
   const unRead = 0;
 
   const isSelectedChat: boolean =
-    selectedChat && selectedChat === user.id ? true : false;
+    selectedChatInfo &&
+    selectedChatInfo.id === user.id &&
+    selectedChatInfo.name === user.name;
   const onClick = () => {
     onSelectChat(user.id, user);
   };

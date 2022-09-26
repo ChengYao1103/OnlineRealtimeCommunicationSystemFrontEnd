@@ -12,7 +12,7 @@ import ChatChannel from "./ChatChannel";
 interface ChanelsProps {
   channels: Array<channelModel>;
   openCreateChannel: () => void;
-  selectedChat: string | number;
+  selectedChatInfo: channelModel;
   onSelectChat: (
     id: number | string,
     info: channelModel,
@@ -22,7 +22,7 @@ interface ChanelsProps {
 const Chanels = ({
   channels,
   openCreateChannel,
-  selectedChat,
+  selectedChatInfo,
   onSelectChat,
 }: ChanelsProps) => {
   return (
@@ -51,7 +51,7 @@ const Chanels = ({
             <ChatChannel
               channel={channel}
               key={channel.id}
-              selectedChat={selectedChat}
+              selectedChatInfo={selectedChatInfo}
               onSelectChat={onSelectChat}
             />
           ))}

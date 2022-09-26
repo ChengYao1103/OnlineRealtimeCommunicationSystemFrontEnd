@@ -331,7 +331,7 @@ const Index = (props: IndexProps) => {
                   recentChatUsers || ([] as recentChatUserModel[])
                 }
                 openAddContact={openNewMessageModal}
-                selectedChat={selectedChat}
+                selectedChatInfo={selectedChatInfo}
                 onSelectChat={onSelectChat}
               />
 
@@ -339,7 +339,7 @@ const Index = (props: IndexProps) => {
               <Chanels
                 channels={channels}
                 openCreateChannel={openCreateChannelModal}
-                selectedChat={selectedChat}
+                selectedChatInfo={selectedChatInfo}
                 onSelectChat={onSelectChat}
               />
               <h5 className="text-center mb-2">
@@ -358,7 +358,7 @@ const Index = (props: IndexProps) => {
             <>
               <Archive
                 archiveContacts={archiveContacts}
-                selectedChat={selectedChat}
+                selectedChatInfo={selectedChatInfo}
                 onSelectChat={onSelectChat}
               />
               <h5 className="text-center mb-2">

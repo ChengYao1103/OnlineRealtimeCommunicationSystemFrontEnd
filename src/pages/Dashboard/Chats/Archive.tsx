@@ -8,12 +8,12 @@ import { channelModel } from "../../../redux/chats/types";
 
 interface ArchiveProps {
   archiveContacts: any;
-  selectedChat: string | number;
+  selectedChatInfo: any;
   onSelectChat: (id: number | string, info: userModel | channelModel) => void;
 }
 const Archive = ({
   archiveContacts,
-  selectedChat,
+  selectedChatInfo,
   onSelectChat,
 }: ArchiveProps) => {
   return (
@@ -30,7 +30,7 @@ const Archive = ({
                 <ChatChannel
                   channel={chat}
                   key={key}
-                  selectedChat={selectedChat}
+                  selectedChatInfo={selectedChatInfo}
                   onSelectChat={onSelectChat}
                 />
               );
@@ -39,7 +39,7 @@ const Archive = ({
                 <ChatUser
                   user={chat}
                   key={key}
-                  selectedChat={selectedChat}
+                  selectedChatInfo={selectedChatInfo}
                   onSelectChat={onSelectChat}
                 />
               );

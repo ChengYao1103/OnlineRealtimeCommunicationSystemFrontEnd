@@ -33,6 +33,7 @@ import { useProfile } from "../../../../hooks";
 // utils
 import { getDateTime } from "../../../../utils";
 import RepliedMessage from "./RepliedMessage";
+import { url } from "inspector";
 
 interface MenuProps {
   onDelete: () => any;
@@ -298,6 +299,13 @@ const Message = ({
   const hasImages = message.Type === MessageTypeEnum.image;
   const hasAttachments = message.Type === MessageTypeEnum.file;
   const hasCallingInfo = message.Type === MessageTypeEnum.callRecord;
+  const urlContents = message.Content.split(
+    /(\s?)(((https?:\/\/)|www)?[\w-]+(\.[\w-]+)+\.?(:\d+)?(\/([a-z]|[A-Z]|\.)*)?)/gi
+  )
+    .filter(Boolean)
+    .filter((x: string) => {
+      return x.indexOf(".") > 0;
+    });
   const isTyping = false;
 
   const chatUserFullName = chatUserDetails.name;
@@ -406,7 +414,23 @@ const Message = ({
                   )*/}
 
                   {hasText && (
-                    <p className="mb-0 ctext-content">{message.Content}</p>
+                    <>
+                      {urlContents &&
+                        urlContents.map((url: string, key: number) => {
+                          return (
+                            <p className="mb-0" key={key}>
+                              <a
+                                href={url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                              >
+                                {url}
+                              </a>
+                            </p>
+                          );
+                        })}
+                      <p className="mb-0 ctext-content">{message.Content}</p>
+                    </>
                   )}
 
                   {/* typing start */}
