@@ -52,6 +52,35 @@ const VideoCallModal = ({
   const [connection, setConnection] = useState<RTCPeerConnection>();
   const api = new APIClient();
 
+  /**
+   * 設定螢幕共享畫面
+   */
+  const setScreenShare = () => {
+    let constraints = {
+      audio: true,
+      video: {
+        frameRate: { ideal: 60, max: 120 },
+      },
+    };
+    navigator.mediaDevices
+      .getDisplayMedia(constraints)
+      .then(function (stream) {
+        console.log("success!!");
+        if (connection) {
+          stream.getTracks().forEach(track => {
+            connection.addTrack(track, stream);
+            console.log(track, stream);
+          });
+        }
+        //document.querySelector("#testVideo").srcObject = stream;
+        // 取得成功，stream 可以翻作流，可以當作取到的影像聲音
+      })
+      .catch(function (err) {
+        console.log(err);
+        // 取得失敗
+      });
+  };
+
   /** 設定socket和RTC參數
    * @param stream 從使用者端取得的音訊設備
    * @returns {RTCPeerConnection} 設定好的RTC物件
@@ -102,8 +131,10 @@ const VideoCallModal = ({
 
     newConnection.ontrack = event => {
       var videoRef = document.getElementById("remoteVideo") as HTMLVideoElement;
+      console.log(event.streams);
       if (videoRef && !videoRef.srcObject && event.streams) {
-        setRemoteVideo(videoRef, event.streams[0]);
+        event.streams.forEach(stream => setRemoteVideo(videoRef, stream));
+        //setRemoteVideo(videoRef, event.streams[0]);
         console.log("接收流並顯示於遠端視訊！", event);
       }
     };
@@ -422,6 +453,18 @@ const VideoCallModal = ({
                   >
                     <span className="avatar-title bg-transparent text-muted font-size-20">
                       <i className="bx bx-refresh"></i>
+                    </span>
+                  </Button>
+                </div>
+                <div className="avatar-md h-auto">
+                  <Button
+                    color="light"
+                    type="button"
+                    onClick={() => setScreenShare()}
+                    className="avatar-sm rounded-circle"
+                  >
+                    <span className="avatar-title bg-transparent text-muted font-size-20">
+                      <i className="mdi mdi-desktop-mac"></i>
                     </span>
                   </Button>
                 </div>
