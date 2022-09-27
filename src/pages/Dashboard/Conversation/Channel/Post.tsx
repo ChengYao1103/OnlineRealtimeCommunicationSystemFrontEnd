@@ -6,6 +6,7 @@ import {
   ListGroup,
   Card,
   ListGroupItem,
+  Input,
 } from "reactstrap";
 import classnames from "classnames";
 
@@ -33,6 +34,7 @@ import {
   getPostComments
 } from "../../../../redux/actions";
 import Loader from "../../../../components/Loader";
+import { createComment } from "../../../../api";
 
 interface MessageProps {
   message: channelPostModel;
@@ -79,6 +81,7 @@ const Post = ({
     postComments: state.Chats.postComments
   }))
   const [comments, setComments] = useState([])
+  const [inputText, setInputText] = useState("")
   const channeluserProfile = imagePlaceholder;
   const chatUserprofile = chatUserDetails.photo
     ? chatUserDetails.photo
@@ -117,27 +120,43 @@ const Post = ({
             <CardTitle tag="h5">
               <div className="chat-avatar">
                 <img src={profile} alt="" />
-                <small className={classnames("text-muted", "mb-0", "me-2")}>
-                  {date}
-                </small>
               </div>   
             </CardTitle>
             <CardText>
               {channelPost.content}
             </CardText>
+            <small className={classnames("text-muted", "mb-0", "me-2")}>
+              {date}
+            </small>
           </CardBody>
           <ListGroup flush>
             {(comments || []).map(
               (comment: postCommentModel, key: number) => {
                 if (channelPost.id == comment.postID) {
-                return (
-                  <ListGroupItem key={key}>
-                    {comment.content}
-                  </ListGroupItem>
-                );
+                  return (
+                    <ListGroupItem key={key}>
+                      <div  className="chat-avatar">
+                        <img src={profile} alt="" />
+                      </div>
+                      <CardText>                    
+                        {comment.content}
+                      </CardText>
+                      <small className={classnames("text-muted", "mb-0", "me-2")}>
+                        {getDateTime(comment.timestamp)}
+                      </small>
+                    </ListGroupItem>
+                  );
                 }
               })
             }
+            <ListGroupItem>
+              <Input placeholder="Enter comment here" onChange={(e) => setInputText(e.target.value)}>
+                {/* {dispatch(createComment({postID: channelPost.id, content}))} */}
+              </Input>
+              <button onClick={() => {dispatch(createComment({postID: channelPost.id, content: inputText}))}}>
+                enter
+              </button>
+            </ListGroupItem>
           </ListGroup>
         </Card>
       </div>
