@@ -25,7 +25,7 @@ import { useProfile } from "../../../../hooks";
 // components
 import UserHead from "./UserHead";
 import Home from "./Home";
-import ChatInputSection from "../Shared/ChatInputSection/index";
+import PostInputSection from "./PostInputSection";
 
 // interface
 import { MessagesTypes } from "../../../../data/messages";
@@ -179,7 +179,7 @@ const Index = () => {
         isChannel={true}
         onToggleArchive={onToggleArchive}
       />
-      <ChatInputSection
+      <PostInputSection
         onSend={onSend}
         onUpload={onUpload}
         replyData={replyData}

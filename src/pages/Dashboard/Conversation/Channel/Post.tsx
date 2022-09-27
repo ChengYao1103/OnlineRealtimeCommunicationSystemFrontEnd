@@ -134,7 +134,7 @@ const Post = ({
               (comment: postCommentModel, key: number) => {
                 if (channelPost.id == comment.postID) {
                   return (
-                    <ListGroupItem key={key}>
+                    <ListGroupItem key={key} color="primary">
                       <div  className="chat-avatar">
                         <img src={profile} alt="" />
                       </div>
@@ -150,9 +150,7 @@ const Post = ({
               })
             }
             <ListGroupItem>
-              <Input placeholder="Enter comment here" onChange={(e) => setInputText(e.target.value)}>
-                {/* {dispatch(createComment({postID: channelPost.id, content}))} */}
-              </Input>
+              <Input placeholder="Enter comment here" onChange={(e) => setInputText(e.target.value)}></Input>
               <button onClick={() => {dispatch(createComment({postID: channelPost.id, content: inputText}))}}>
                 enter
               </button>
