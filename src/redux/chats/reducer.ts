@@ -2,8 +2,7 @@ import { persistReducer } from "redux-persist";
 import { toast } from "react-toastify";
 import storage from "redux-persist/lib/storage";
 // types
-import { messageRecordModel, ChatsActionTypes, ChatsState, channelPostModel } from "./types";
-import { getChannelPosts } from "./actions";
+import { messageRecordModel, ChatsActionTypes, ChatsState } from "./types";
 
 export const INIT_STATE: ChatsState = {
   favourites: [],
@@ -14,6 +13,7 @@ export const INIT_STATE: ChatsState = {
   chatUserDetails: {},
   chatUserConversations: [],
   channelPosts: [],
+  postComments: [],
   isOpenUserDetails: false,
   channelDetails: {},
   archiveContacts: [],
@@ -140,6 +140,7 @@ const Chats = persistReducer(
           case ChatsActionTypes.GET_CHANNEL_POSTS:
              return {
                ...state,
+               getChannelPostsLoading: false,
                channelPosts: action.payload.data.post,
              };            
           case ChatsActionTypes.TOGGLE_FAVOURITE_CONTACT:
@@ -164,6 +165,12 @@ const Chats = persistReducer(
               ...state,
               isImageDeleted: true,
             };
+          case ChatsActionTypes.GET_POST_COMMENTS:
+            return {
+              ...state,
+              getPostCommentsLoading: false,
+              postComments: action.payload.data.comment,
+            };            
           default:
             return { ...state };
         }
@@ -401,6 +408,16 @@ const Chats = persistReducer(
         return {
           ...state,
           isImageDeleted: false,
+        };
+      case ChatsActionTypes.GET_CHANNEL_POSTS:
+        return {
+          ...state,
+          getChannelPostsLoading: true,
+        }; 
+      case ChatsActionTypes.GET_POST_COMMENTS:
+        return {
+          ...state,
+          getPostCommentsLoading: true,
         };
       default:
         return { ...state };

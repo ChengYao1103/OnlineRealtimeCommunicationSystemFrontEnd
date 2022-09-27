@@ -35,6 +35,11 @@ import {
   deleteImage as deleteImageApi,
   uploadMessageFile as uploadMessageFileApi,
   downloadMessageFile as downloadMessageFileApi,
+  createPost as createPostApi,
+  createComment as createCommentApi,
+  deletePost as deletePostApi,
+  deleteComment as deleteCommentApi,
+  getPostComments as getPostCommentsApi,
 } from "../../api/index";
 
 import {
@@ -404,6 +409,73 @@ function* downloadMessageFile({ payload: { data, filename } }: any) {
   }
 }
 
+function* createPost({ payload: postData }: any) {
+  try {
+    const response: Promise<any> = yield call(createPostApi, postData);
+    yield put(
+      chatsApiResponseSuccess(ChatsActionTypes.CREATE_POST, response)
+    );
+    yield call(showSuccessNotification, "Success!");
+  } catch (error: any) {
+    yield call(showErrorNotification, error.data.message);
+    yield put(chatsApiResponseError(ChatsActionTypes.CREATE_POST, error));
+  }
+}
+
+function* createComment({ payload: commentData }: any) {
+  try {
+    const response: Promise<any> = yield call(createCommentApi, commentData);
+    yield put(
+      chatsApiResponseSuccess(ChatsActionTypes.CREATE_COMMENT, response)
+    );
+    yield call(showSuccessNotification, "Success!");
+  } catch (error: any) {
+    yield call(showErrorNotification, error.data.message);
+    yield put(chatsApiResponseError(ChatsActionTypes.CREATE_COMMENT, error));
+  }
+}
+
+function* deletePost({ payload: postId }: any) {
+  try {
+    const response: Promise<any> = yield call(
+      deletePostApi,
+      postId
+    );
+    yield put(
+      chatsApiResponseSuccess(ChatsActionTypes.DELETE_POST, response)
+    );
+  } catch (error: any) {
+    yield put(chatsApiResponseError(ChatsActionTypes.DELETE_POST, error));
+  }
+}
+
+function* deleteComment({ payload: commentId }: any) {
+  try {
+    const response: Promise<any> = yield call(
+      deleteCommentApi,
+      commentId
+    );
+    yield put(
+      chatsApiResponseSuccess(ChatsActionTypes.DELETE_COMMENT, response)
+    );
+  } catch (error: any) {
+    yield put(chatsApiResponseError(ChatsActionTypes.DELETE_COMMENT, error));
+  }
+}
+
+function* getPostComments({ payload: id }: any) {
+  try {
+    const response: Promise<any> = yield call(getPostCommentsApi, id);
+    yield put(
+      chatsApiResponseSuccess(ChatsActionTypes.GET_POST_COMMENTS, response)
+    );
+  } catch (error: any) {
+    yield put(
+      chatsApiResponseError(ChatsActionTypes.GET_POST_COMMENTS, error)
+    );
+  }
+}
+
 export function* watchGetFavourites() {
   yield takeEvery(ChatsActionTypes.GET_FAVOURITES, getFavourites);
 }
@@ -501,6 +573,25 @@ export function* watchDownloadMessageFile() {
   yield takeEvery(ChatsActionTypes.DOWNLOAD_MESSAGE_FILE, downloadMessageFile);
 }
 
+export function* watchCreatePost() {
+  yield takeEvery(ChatsActionTypes.CREATE_POST, createPost);
+}
+
+export function* watchCreateComment() {
+  yield takeEvery(ChatsActionTypes.CREATE_COMMENT, createComment);
+}
+export function* watchDeletePost() {
+  yield takeEvery(ChatsActionTypes.DELETE_POST, deletePost);
+}
+
+export function* watchDeleteComment() {
+  yield takeEvery(ChatsActionTypes.DELETE_COMMENT, deleteComment);
+}
+
+export function* watchGetPostComments() {
+  yield takeEvery(ChatsActionTypes.GET_POST_COMMENTS, getPostComments);
+}
+
 function* chatsSaga() {
   yield all([
     fork(watchGetFavourites),
@@ -529,6 +620,11 @@ function* chatsSaga() {
     fork(watchDeleteImage),
     fork(watchUploadMessageFile),
     fork(watchDownloadMessageFile),
+    fork(watchCreatePost),
+    fork(watchCreateComment),
+    fork(watchDeletePost),
+    fork(watchDeleteComment),
+    fork(watchGetPostComments),
   ]);
 }
 

@@ -43,9 +43,9 @@ const Conversation = ({
 }: ConversationProps) => {
   // global store
   const { dispatch, useAppSelector } = useRedux();
-  const { getUserConversationsLoading, isMessageForwarded } = useAppSelector(
+  const { getChannelPostsLoading, isMessageForwarded } = useAppSelector(
     (state: any) => ({
-      getUserConversationsLoading: state.Chats.getUserConversationsLoading,
+      getChannelPostsLoading: state.Chats.getChannelPostsLoading,
       isMessageForwarded: state.Chats.isMessageForwarded,
     })
   );
@@ -162,7 +162,7 @@ const Conversation = ({
       scrollRef={ref}
       className="chat-conversation p-3 p-lg-4 positin-relative"
     >
-      {getUserConversationsLoading && <Loader />}
+    {getChannelPostsLoading && <Loader />}
       <ul
         className="list-unstyled chat-conversation-list"
         id="chat-conversation-list"

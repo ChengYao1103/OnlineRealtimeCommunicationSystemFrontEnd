@@ -37,6 +37,13 @@ export enum ChatsActionTypes {
   DELETE_IMAGE = "@@chats/DELETE_IMAGE",
   UPLOAD_MESSAGE_FILE = "@@chats/UPLOAD_MESSAGE_FILE",
   DOWNLOAD_MESSAGE_FILE = "@@chats/DOWNLOAD_MESSAGE_FILE",
+
+  //POST
+  CREATE_POST = "@@chats/CREATE_POST",
+  CREATE_COMMENT = "@@chats/CREATE_COMMENT",
+  DELETE_POST = "@@chats/DELETE_POST",
+  DELETE_COMMENT = "@@chats/DELETE_COMMENT",
+  GET_POST_COMMENTS = "@@chats/GET_POST_COMMENTS",
 }
 
 export interface senderModel {
@@ -92,6 +99,15 @@ export interface channelPostModel {
   timestamp: string;
 }
 
+export interface postCommentModel {
+  postID: number;
+  id: number;
+  userID: number;
+  content: string;
+  deleted: boolean;
+  timestamp: string;
+}
+
 export interface ChatsState {
   favourites: Array<any>;
   directMessages: Array<any>;
@@ -101,6 +117,7 @@ export interface ChatsState {
   chatUserDetails: object;
   chatUserConversations: Array<messageRecordModel>;
   channelPosts: Array<channelPostModel>;
+  postComments: Array<postCommentModel>;
   recentChatUsers: Array<recentChatUserModel>;
   isOpenUserDetails: boolean;
   channelDetails: object;

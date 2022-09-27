@@ -57,3 +57,10 @@ export const GET_CHANNEL_DETAILS = "/channel";
 export const GET_CHANNEL_MEMBERS = "/channel/allUser";
 export const INVITE_CHANNEL_MEMBERS = "/channel/invite";
 export const GET_CHANNEL_POSTS = "/channel/allPost";
+
+// posts
+export const CREATE_POST = "/post/create";
+export const CREATE_COMMENT = "/post/comment";
+export const DELETE_POST = "/post/delete";
+export const DELETE_COMMENT = "/post/deleteComment";
+export const GET_POST_COMMENTS = "/post/allComment";

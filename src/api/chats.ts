@@ -143,6 +143,29 @@ const downloadMessageFile = (data: object, filename: string) => {
   return api.getFile(url.DOWNLOAD_MESSAGE_FILE, filename, data);
 };
 
+/* 
+post 
+*/
+const createPost = (data: object) => {
+  return api.create(url.CREATE_POST, data);
+};
+
+const createComment = (data: object) => {
+  return api.create(url.CREATE_COMMENT, data);
+};
+
+const deletePost = (id: string | number) => {
+  return api.update(url.DELETE_POST, id);
+};
+
+const deleteComment = (id: string | number) => {
+  return api.update(url.DELETE_COMMENT, id);
+};
+
+const getPostComments = (id: string | number) => {
+  return api.get(`${url.GET_POST_COMMENTS}/${id}`);
+};
+
 export {
   getFavourites,
   getDirectMessages,
@@ -170,4 +193,9 @@ export {
   deleteImage,
   uploadMessageFile,
   downloadMessageFile,
+  createPost,
+  createComment,
+  deletePost,
+  deleteComment,
+  getPostComments,
 };

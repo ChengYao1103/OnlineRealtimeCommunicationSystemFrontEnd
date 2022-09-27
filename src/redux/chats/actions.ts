@@ -183,3 +183,28 @@ export const downloadMessageFile = (filename: string, data: any) => ({
   type: ChatsActionTypes.DOWNLOAD_MESSAGE_FILE,
   payload: { data, filename },
 });
+
+export const createPost = (data: any) => ({
+  type: ChatsActionTypes.CREATE_POST,
+  payload: data,
+});
+
+export const createComment = (data: any) => ({
+  type: ChatsActionTypes.CREATE_COMMENT,
+  payload: data,
+});
+
+export const deletePost = (id: number | string) => ({
+  type: ChatsActionTypes.DELETE_POST,
+  payload: id,
+});
+
+export const deleteComment = (id: number | string) => ({
+  type: ChatsActionTypes.DELETE_COMMENT,
+  payload: id,
+});
+
+export const getPostComments = (id: number | string) => ({
+  type: ChatsActionTypes.GET_POST_COMMENTS,
+  payload: id,
+});
