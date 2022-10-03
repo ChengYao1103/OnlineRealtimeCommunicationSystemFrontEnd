@@ -468,13 +468,24 @@ const UserHead = ({
         />
       )}
       {isOpenVideoModal && (
-        <VideoCallModal
-          isBeenCalled={false}
-          isOpen={isOpenVideoModal}
-          onClose={onCloseVideo}
-          callInfo={chatUserDetails}
-          user={chatUserDetails}
-        />
+        <>
+          <iframe
+            src={`https://meet.beeenson.com:8443?name=louis&roomName=1234`}
+            width="800px"
+            height="600px"
+            title="meeting table"
+            allow="camera;microphone"
+          ></iframe>
+          <button>leave room</button>
+        </>
+
+        // <VideoCallModal
+        // isBeenCalled={false}
+        // isOpen={isOpenVideoModal}
+        // onClose={onCloseVideo}
+        // callInfo={chatUserDetails}
+        // user={chatUserDetails}
+        // />
       )}
       {isOpenPinnedTabModal && (
         <AddPinnedTabModal
