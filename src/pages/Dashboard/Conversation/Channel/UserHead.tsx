@@ -195,23 +195,23 @@ const Search = () => {
 };
 interface MoreProps {
   onOpenUserDetails: () => void;
-  onOpenAudio: () => void;
   onOpenVideo: () => void;
   onDelete: () => void;
   isArchive: boolean;
   onToggleArchive: () => void;
   isChannel: boolean;
   onOpenInvite: () => void;
+  onOpenRollCall: () => void;
 }
 const More = ({
   onOpenUserDetails,
-  onOpenAudio,
   onOpenVideo,
   onDelete,
   isArchive,
   onToggleArchive,
   isChannel,
   onOpenInvite,
+  onOpenRollCall,
 }: MoreProps) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const toggle = () => setDropdownOpen(!dropdownOpen);
@@ -243,7 +243,7 @@ const More = ({
         <DropdownItem
           className="d-flex justify-content-between align-items-center"
           to="#"
-          onClick={onOpenAudio}
+          onClick={onOpenRollCall}
         >
           RollCall <i className="bx bxs-phone-call text-muted"></i>
         </DropdownItem>
@@ -351,17 +351,6 @@ const UserHead = ({
   };
 
   /*
-  audio call modal
-  */
-  const [isOpenAudioModal, setIsOpenAudioModal] = useState<boolean>(false);
-  const onOpenAudio = () => {
-    setIsOpenAudioModal(true);
-  };
-  const onCloseAudio = () => {
-    setIsOpenAudioModal(false);
-  };
-
-  /*
   pinned tab modal
   */
   const [isOpenPinnedTabModal, setIsOpenPinnedTabModal] =
@@ -382,6 +371,17 @@ const UserHead = ({
   };
   const onCloseInvite = () => {
     setIsOpenInviteModal(false);
+  };
+
+  /*
+  roll call modal
+  */
+  const [isOpenRollCallModal, setIsOpenRollCallModal] = useState<boolean>(false);
+  const onOpenRollCall = () => {
+    setIsOpenRollCallModal(true);
+  };
+  const onCloseRollCall = () => {
+    setIsOpenRollCallModal(false);
   };
 
   /*
@@ -412,7 +412,7 @@ const UserHead = ({
                 type="button"
                 color="none"
                 className="btn nav-btn"
-                onClick={onOpenAudio}
+                onClick={onOpenRollCall}
               >
                 <i className="bx bxs-phone-call"></i>
               </Button>
@@ -441,25 +441,19 @@ const UserHead = ({
             <li className="list-inline-item">
               <More
                 onOpenUserDetails={onOpenUserDetails}
-                onOpenAudio={onOpenAudio}
                 onOpenVideo={onOpenVideo}
                 onDelete={onDelete}
                 isArchive={chatUserDetails.isArchived}
                 onToggleArchive={onToggleArchive}
                 isChannel={isChannel}
                 onOpenInvite={onOpenInvite}
+                onOpenRollCall={onOpenRollCall}
               />
             </li>
           </ul>
         </Col>
       </Row>
       {/*<PinnedAlert onOpenPinnedTab={onOpenPinnedTab} />*/}
-      {isOpenAudioModal && (
-        <RollCallModal
-          isOpen={isOpenAudioModal}
-          onClose={onCloseAudio}
-        />
-      )}
       {isOpenVideoModal && (
         <GroupMeetingModal
           isOpen={isOpenVideoModal}
@@ -486,6 +480,12 @@ const UserHead = ({
         <InviteChannelModal
           isOpen={isOpenInviteModal}
           onClose={onCloseInvite}
+        />
+      )}
+      {isOpenRollCallModal && (
+        <RollCallModal
+          isOpen={isOpenRollCallModal}
+          onClose={onCloseRollCall}
         />
       )}
     </div>
