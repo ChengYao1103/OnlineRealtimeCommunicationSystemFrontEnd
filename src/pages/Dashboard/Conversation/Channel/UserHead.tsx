@@ -32,6 +32,7 @@ import { changeSelectedChat } from "../../../../redux/actions";
 import { STATUS_TYPES } from "../../../../constants";
 import Loader from "../../../../components/Loader";
 import InviteChannelModal from "../../../../components/InviteChannelModal";
+import GroupMeetingModal from "../../../../components/GroupMeetingModal";
 interface ProfileImageProps {
   chatUserDetails: any;
   onCloseConversation: () => any;
@@ -405,32 +406,26 @@ const UserHead = ({
             <li className="list-inline-item">
               <Search />
             </li>
-
-            {!isChannel && (
-              <>
-                <li className="list-inline-item d-none d-xxl-inline-block me-2 ms-0">
-                  <Button
-                    type="button"
-                    color="none"
-                    className="btn nav-btn"
-                    onClick={onOpenAudio}
-                  >
-                    <i className="bx bxs-phone-call"></i>
-                  </Button>
-                </li>
-
-                <li className="list-inline-item d-none d-xxl-inline-block me-2 ms-0">
-                  <Button
-                    type="button"
-                    color="none"
-                    className="btn nav-btn"
-                    onClick={onOpenVideo}
-                  >
-                    <i className="bx bx-video"></i>
-                  </Button>
-                </li>
-              </>
-            )}
+            <li className="list-inline-item d-none d-xxl-inline-block me-2 ms-0">
+              <Button
+                type="button"
+                color="none"
+                className="btn nav-btn"
+                onClick={onOpenAudio}
+              >
+                <i className="bx bxs-phone-call"></i>
+              </Button>
+            </li>
+            <li className="list-inline-item d-none d-xxl-inline-block me-2 ms-0">
+              <Button
+                type="button"
+                color="none"
+                className="btn nav-btn"
+                onClick={onOpenVideo}
+              >
+                <i className="bx bx-video"></i>
+              </Button>
+            </li>
 
             <li className="list-inline-item d-none me-2 ms-0">
               <button
@@ -468,16 +463,11 @@ const UserHead = ({
         />
       )}
       {isOpenVideoModal && (
-        <>
-          <iframe
-            src={`https://meet.beeenson.com:8443?name=louis&roomName=1234`}
-            width="800px"
-            height="600px"
-            title="meeting table"
-            allow="camera;microphone"
-          ></iframe>
-          <button>leave room</button>
-        </>
+        <GroupMeetingModal
+          isOpen={isOpenVideoModal}
+          meetingId={0}
+          onClose={onCloseVideo}
+        />
 
         // <VideoCallModal
         // isBeenCalled={false}
