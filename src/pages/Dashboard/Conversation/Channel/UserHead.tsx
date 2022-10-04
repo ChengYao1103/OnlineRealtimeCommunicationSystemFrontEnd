@@ -241,14 +241,14 @@ const More = ({
         ) : null}
 
         <DropdownItem
-          className="d-flex justify-content-between align-items-center d-xxl-none"
+          className="d-flex justify-content-between align-items-center"
           to="#"
           onClick={onOpenAudio}
         >
           RollCall <i className="bx bxs-phone-call text-muted"></i>
         </DropdownItem>
         <DropdownItem
-          className="d-flex justify-content-between align-items-center d-xxl-none"
+          className="d-flex justify-content-between align-items-center"
           to="#"
           onClick={onOpenVideo}
         >
