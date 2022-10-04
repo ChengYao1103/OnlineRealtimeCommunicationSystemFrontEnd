@@ -33,6 +33,7 @@ import { STATUS_TYPES } from "../../../../constants";
 import Loader from "../../../../components/Loader";
 import InviteChannelModal from "../../../../components/InviteChannelModal";
 import RollCallModal from "../../../../components/RollCallModal";
+import GroupMeetingModal from "../../../../components/GroupMeetingModal";
 interface ProfileImageProps {
   chatUserDetails: any;
   onCloseConversation: () => any;
@@ -406,32 +407,26 @@ const UserHead = ({
             <li className="list-inline-item">
               <Search />
             </li>
-
-            {!isChannel && (
-              <>
-                <li className="list-inline-item d-none d-xxl-inline-block me-2 ms-0">
-                  <Button
-                    type="button"
-                    color="none"
-                    className="btn nav-btn"
-                    onClick={onOpenAudio}
-                  >
-                    <i className="bx bxs-phone-call"></i>
-                  </Button>
-                </li>
-
-                <li className="list-inline-item d-none d-xxl-inline-block me-2 ms-0">
-                  <Button
-                    type="button"
-                    color="none"
-                    className="btn nav-btn"
-                    onClick={onOpenVideo}
-                  >
-                    <i className="bx bx-video"></i>
-                  </Button>
-                </li>
-              </>
-            )}
+            <li className="list-inline-item d-none d-xxl-inline-block me-2 ms-0">
+              <Button
+                type="button"
+                color="none"
+                className="btn nav-btn"
+                onClick={onOpenAudio}
+              >
+                <i className="bx bxs-phone-call"></i>
+              </Button>
+            </li>
+            <li className="list-inline-item d-none d-xxl-inline-block me-2 ms-0">
+              <Button
+                type="button"
+                color="none"
+                className="btn nav-btn"
+                onClick={onOpenVideo}
+              >
+                <i className="bx bx-video"></i>
+              </Button>
+            </li>
 
             <li className="list-inline-item d-none me-2 ms-0">
               <button
@@ -466,13 +461,19 @@ const UserHead = ({
         />
       )}
       {isOpenVideoModal && (
-        <VideoCallModal
-          isBeenCalled={false}
+        <GroupMeetingModal
           isOpen={isOpenVideoModal}
+          meetingId={0}
           onClose={onCloseVideo}
-          callInfo={chatUserDetails}
-          user={chatUserDetails}
         />
+
+        // <VideoCallModal
+        // isBeenCalled={false}
+        // isOpen={isOpenVideoModal}
+        // onClose={onCloseVideo}
+        // callInfo={chatUserDetails}
+        // user={chatUserDetails}
+        // />
       )}
       {isOpenPinnedTabModal && (
         <AddPinnedTabModal
