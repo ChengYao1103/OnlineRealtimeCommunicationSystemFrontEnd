@@ -33,7 +33,7 @@ import { STATUS_TYPES } from "../../../../constants";
 import Loader from "../../../../components/Loader";
 import InviteChannelModal from "../../../../components/InviteChannelModal";
 import RollCallModal from "../../../../components/RollCallModal";
-import GroupMeetingModal from "../../../../components/GroupMeetingModal";
+import ChannelMeetingModal from "../../../../components/ChannelMeetingModal";
 interface ProfileImageProps {
   chatUserDetails: any;
   onCloseConversation: () => any;
@@ -376,7 +376,8 @@ const UserHead = ({
   /*
   roll call modal
   */
-  const [isOpenRollCallModal, setIsOpenRollCallModal] = useState<boolean>(false);
+  const [isOpenRollCallModal, setIsOpenRollCallModal] =
+    useState<boolean>(false);
   const onOpenRollCall = () => {
     setIsOpenRollCallModal(true);
   };
@@ -455,7 +456,7 @@ const UserHead = ({
       </Row>
       {/*<PinnedAlert onOpenPinnedTab={onOpenPinnedTab} />*/}
       {isOpenVideoModal && (
-        <GroupMeetingModal
+        <ChannelMeetingModal
           isOpen={isOpenVideoModal}
           meetingId={0}
           onClose={onCloseVideo}
@@ -483,10 +484,7 @@ const UserHead = ({
         />
       )}
       {isOpenRollCallModal && (
-        <RollCallModal
-          isOpen={isOpenRollCallModal}
-          onClose={onCloseRollCall}
-        />
+        <RollCallModal isOpen={isOpenRollCallModal} onClose={onCloseRollCall} />
       )}
     </div>
   );

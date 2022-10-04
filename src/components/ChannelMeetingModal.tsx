@@ -8,7 +8,7 @@ interface MeetingModalProps {
   onClose: () => void;
 }
 
-const GroupMeetingModal = ({
+const ChannelMeetingModal = ({
   isOpen,
   meetingId,
   onClose,
@@ -26,26 +26,29 @@ const GroupMeetingModal = ({
       isOpen={isOpen}
       tabIndex={-1}
       centered
-      className="videocallModal"
+      className="channelMeetingModal"
       contentClassName="shadow-lg border-0"
     >
-      <ModalBody className="p-0">
-        <div>
+      <ModalBody className="d-flex align-items-stretch">
+        <div style={{ width: "100%" }}>
           <iframe
             id="meetingIframe"
             src={`https://meet.beeenson.com:8443?name=${userProfile.name}&roomName=${meetingId}`}
             width="100%"
             title="group meeting"
             allow="camera;microphone"
-            style={{ overflow: "hidden" }}
+            scrolling="no"
+            style={{ borderRadius: "5px", height: "100%" }}
           ></iframe>
         </div>
       </ModalBody>
       <ModalFooter>
-        <button onClick={leaveMeeting}>leave room</button>
+        <Button type="button" className="btn btn-danger" onClick={leaveMeeting}>
+          離開會議
+        </Button>
       </ModalFooter>
     </Modal>
   );
 };
 
-export default GroupMeetingModal;
+export default ChannelMeetingModal;
