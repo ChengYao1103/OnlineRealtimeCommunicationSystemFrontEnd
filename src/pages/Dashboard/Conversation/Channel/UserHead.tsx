@@ -32,6 +32,7 @@ import { changeSelectedChat } from "../../../../redux/actions";
 import { STATUS_TYPES } from "../../../../constants";
 import Loader from "../../../../components/Loader";
 import InviteChannelModal from "../../../../components/InviteChannelModal";
+import RollCallModal from "../../../../components/RollCallModal";
 interface ProfileImageProps {
   chatUserDetails: any;
   onCloseConversation: () => any;
@@ -243,7 +244,7 @@ const More = ({
           to="#"
           onClick={onOpenAudio}
         >
-          Team <i className="bx bxs-phone-call text-muted"></i>
+          RollCall <i className="bx bxs-phone-call text-muted"></i>
         </DropdownItem>
         <DropdownItem
           className="d-flex justify-content-between align-items-center d-xxl-none"
@@ -271,7 +272,7 @@ const More = ({
           className="d-flex justify-content-between align-items-center"
           to="#"
         >
-          RollCall <i className="bx bx-microphone-off text-muted"></i>
+          Team <i className="bx bx-microphone-off text-muted"></i>
         </DropdownItem>
         <DropdownItem
           className="d-flex justify-content-between align-items-center"
@@ -459,12 +460,9 @@ const UserHead = ({
       </Row>
       {/*<PinnedAlert onOpenPinnedTab={onOpenPinnedTab} />*/}
       {isOpenAudioModal && (
-        <AudioCallModal
-          isBeenCalled={false}
+        <RollCallModal
           isOpen={isOpenAudioModal}
           onClose={onCloseAudio}
-          callInfo={chatUserDetails}
-          user={chatUserDetails}
         />
       )}
       {isOpenVideoModal && (
