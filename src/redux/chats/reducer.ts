@@ -19,6 +19,7 @@ export const INIT_STATE: ChatsState = {
   archiveContacts: [],
   recentChatUsers: [],
   selectedChatInfo: undefined,
+  rollCall: undefined,
 };
 
 const Chats = persistReducer(
@@ -170,7 +171,18 @@ const Chats = persistReducer(
               ...state,
               getPostCommentsLoading: false,
               postComments: action.payload.data.comment,
-            };            
+            };    
+          case ChatsActionTypes.GET_ROLLCALL:
+            console.log(action.payload.data.rollCall)
+            return {
+              ...state,
+              rollCall: action.payload.data.rollCall,
+            }     
+          // case ChatsActionTypes.GET_ROLLCALL:
+          //   return {
+          //     ...state,
+          //     rollCall: action.payload.data.rollCall,
+          //   }     
           default:
             return { ...state };
         }

@@ -166,6 +166,33 @@ const getPostComments = (id: string | number) => {
   return api.get(`${url.GET_POST_COMMENTS}/${id}`);
 };
 
+/* 
+roll call 
+*/
+const createRollCall = (data: object) => {
+  return api.create(url.CREATE_ROLLCALL, data);
+};
+
+const doRollCall = (data: object) => {
+  return api.create(url.DO_ROLLCALL, data);
+};
+
+const closeRollCall = (id: string | number) => {
+  return api.update(url.CLOSE_ROLLCALL, id);
+};
+
+const updateRollCall = (data: object) => {
+  return api.update(url.UPDATE_ROLLCALL, data);
+};
+
+const getRollCallRecords = (id: string | number) => {
+  return api.create(url.GET_ROLLCALL_RECORDS, id);
+};
+
+const getRollCall = (id: string | number) => {
+  return api.get(`${url.GET_ROLLCALL}/${id}`);
+};
+
 export {
   getFavourites,
   getDirectMessages,
@@ -198,4 +225,10 @@ export {
   deletePost,
   deleteComment,
   getPostComments,
+  createRollCall,
+  doRollCall,
+  closeRollCall,
+  updateRollCall,
+  getRollCallRecords,
+  getRollCall,
 };

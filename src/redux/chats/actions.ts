@@ -208,3 +208,33 @@ export const getPostComments = (id: number | string) => ({
   type: ChatsActionTypes.GET_POST_COMMENTS,
   payload: id,
 });
+
+export const createRollCall = (data: any) => ({
+  type: ChatsActionTypes.CREATE_ROLLCALL,
+  payload: data,
+});
+
+export const doRollCall = (data: any) => ({
+  type: ChatsActionTypes.DO_ROLLCALL,
+  payload: data,
+});
+
+export const closeRollCall = (id: number | string) => ({
+  type: ChatsActionTypes.CLOSE_ROLLCALL,
+  payload: id,
+});
+
+export const updateRollCall = (data: any) => ({
+  type: ChatsActionTypes.UPDATE_ROLLCALL,
+  payload: data,
+});
+
+export const getRollCallRecords = (id: number | string) => ({
+  type: ChatsActionTypes.GET_ROLLCALL_RECORDS,
+  payload: id,
+});
+
+export const getRollCall = (id: number | string) => ({
+  type: ChatsActionTypes.GET_ROLLCALL,
+  payload: id,
+});

@@ -57,6 +57,7 @@ export const GET_CHANNEL_DETAILS = "/channel";
 export const GET_CHANNEL_MEMBERS = "/channel/allUser";
 export const INVITE_CHANNEL_MEMBERS = "/channel/invite";
 export const GET_CHANNEL_POSTS = "/channel/allPost";
+export const GET_ROLLCALL = "/channel/getRollCall";
 
 // posts
 export const CREATE_POST = "/post/create";
@@ -64,3 +65,10 @@ export const CREATE_COMMENT = "/post/comment";
 export const DELETE_POST = "/post/delete";
 export const DELETE_COMMENT = "/post/deleteComment";
 export const GET_POST_COMMENTS = "/post/allComment";
+
+// roll calls
+export const CREATE_ROLLCALL = "/rollCall/create";
+export const DO_ROLLCALL = "/rollCall/do";
+export const CLOSE_ROLLCALL = "/rollCall/close";
+export const UPDATE_ROLLCALL = "/rollCall/update";
+export const GET_ROLLCALL_RECORDS = "/rollCall/record";

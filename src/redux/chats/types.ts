@@ -44,6 +44,14 @@ export enum ChatsActionTypes {
   DELETE_POST = "@@chats/DELETE_POST",
   DELETE_COMMENT = "@@chats/DELETE_COMMENT",
   GET_POST_COMMENTS = "@@chats/GET_POST_COMMENTS",
+
+  //ROLLCALL
+  CREATE_ROLLCALL = "@@chats/CREATE_ROLLCALL",
+  DO_ROLLCALL = "@@chats/DO_ROLLCALL",
+  CLOSE_ROLLCALL = "@@chats/CLOSE_ROLLCALL",
+  UPDATE_ROLLCALL = "@@chats/UPDATE_ROLLCALL",
+  GET_ROLLCALL_RECORDS = "@@chats/GET_ROLLCALL_RECORDS",
+  GET_ROLLCALL = "@@chats/GET_ROLLCALL",
 }
 
 export interface senderModel {
@@ -108,6 +116,13 @@ export interface postCommentModel {
   timestamp: string;
 }
 
+export interface rollCallModel {
+  id: number;
+  createTime: string;
+  startTime: string;
+  endTime: string;
+}
+
 export interface ChatsState {
   favourites: Array<any>;
   directMessages: Array<any>;
@@ -123,4 +138,5 @@ export interface ChatsState {
   channelDetails: object;
   archiveContacts: Array<any>;
   selectedChatInfo?: userModel | channelModel;
+  rollCall?: rollCallModel;
 }

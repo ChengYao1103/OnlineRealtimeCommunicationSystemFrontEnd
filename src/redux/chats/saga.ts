@@ -40,6 +40,7 @@ import {
   deletePost as deletePostApi,
   deleteComment as deleteCommentApi,
   getPostComments as getPostCommentsApi,
+  getRollCall as getRollCallApi,
 } from "../../api/index";
 
 import {
@@ -476,6 +477,19 @@ function* getPostComments({ payload: id }: any) {
   }
 }
 
+function* getRollCall({ payload: id }: any) {
+  try {
+    const response: Promise<any> = yield call(getRollCallApi, id);
+    yield put(
+      chatsApiResponseSuccess(ChatsActionTypes.GET_ROLLCALL, response)
+    );
+  } catch (error: any) {
+    yield put(
+      chatsApiResponseError(ChatsActionTypes.GET_ROLLCALL, error)
+    );
+  }
+}
+
 export function* watchGetFavourites() {
   yield takeEvery(ChatsActionTypes.GET_FAVOURITES, getFavourites);
 }
@@ -592,6 +606,10 @@ export function* watchGetPostComments() {
   yield takeEvery(ChatsActionTypes.GET_POST_COMMENTS, getPostComments);
 }
 
+export function* watchGetRollCall() {
+  yield takeEvery(ChatsActionTypes.GET_ROLLCALL, getRollCall);
+}
+
 function* chatsSaga() {
   yield all([
     fork(watchGetFavourites),
@@ -625,6 +643,7 @@ function* chatsSaga() {
     fork(watchDeletePost),
     fork(watchDeleteComment),
     fork(watchGetPostComments),
+    fork(watchGetRollCall),
   ]);
 }
 
