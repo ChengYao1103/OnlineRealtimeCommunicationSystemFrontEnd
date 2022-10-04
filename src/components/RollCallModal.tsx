@@ -32,9 +32,12 @@ const RollCallModal = ({ isOpen, onClose }: InviteContactModalProps) => {
 
   useEffect(() => {
     if (rollCall) {
-      setStartTime(rollCall.startTime)
-      if (!Date.parse(rollCall.endTime))
-        setEndTime(rollCall.endTime)
+      if (new Date(rollCall.startTime).toISOString() != "Invalid Date")
+        setStartTime((new Date(rollCall.startTime)).toLocaleString())
+      else
+        setStartTime(" ")
+      if (new Date(rollCall.end).toLocaleString() != "Invalid Date")
+        setEndTime(new Date(rollCall.end).toLocaleString())
       else
         setEndTime(" ")
     }
