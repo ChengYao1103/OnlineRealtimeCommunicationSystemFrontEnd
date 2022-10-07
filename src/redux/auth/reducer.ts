@@ -12,7 +12,6 @@ export const INIT_STATE: AuthState = {
   forgetError: "",
   emailSended: undefined,
   passwordChanged: undefined,
-  changepasswordSuccess: undefined,
   changepasswordError: undefined,
   registrationError: "",
   isUserRegistered: undefined,
@@ -52,7 +51,6 @@ const Auth = persistReducer(
             return { ...state };
           case AuthActionTypes.CHANGE_PASSWORD:
             state.loading = false;
-            state.changepasswordSuccess = action.payload.data;
             state.passwordChanged = true;
             return { ...state };
           case AuthActionTypes.REGISTER_USER:
@@ -102,7 +100,7 @@ const Auth = persistReducer(
             return { ...state };
           case AuthActionTypes.CHANGE_PASSWORD:
             state.loading = false;
-            state.changepasswordError = action.payload.error.data.msg;
+            state.changepasswordError = action.payload.error.data.message;
             state.passwordChanged = false;
             return { ...state };
           case AuthActionTypes.REGISTER_USER:
@@ -153,7 +151,6 @@ const Auth = persistReducer(
       case AuthActionTypes.CLEAR_CHANGE_PASSWORD_STATE:
         state.loading = false;
         state.passwordChanged = false;
-        state.changepasswordSuccess = undefined;
         state.changepasswordError = undefined;
         return { ...state };
 

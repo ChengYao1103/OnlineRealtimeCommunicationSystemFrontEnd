@@ -86,7 +86,7 @@ const SelectInput: React.FunctionComponent<SelectInputProps> = ({
   className,
   options,
   defaultValue,
-}) => {  
+}) => {
   return (
     <>
       <div className="position-relative auth-pass-inputgroup mb-3">
@@ -103,9 +103,9 @@ const SelectInput: React.FunctionComponent<SelectInputProps> = ({
           autoComplete={name}
           defaultValue={defaultValue}
         >
-          {options?.map((option) => 
+          {options?.map(option => (
             <option value={option.value}>{option.label}</option>
-          )}
+          ))}
         </select>
         {errors && errors[name] ? (
           <FormFeedback type="invalid"> {errors[name]["message"]}</FormFeedback>
@@ -171,7 +171,7 @@ const FormInput: React.FunctionComponent<FormInputProps> = ({
                   {!withoutLabel && (
                     <div className="float-end">
                       <a href="auth-recoverpw" className="text-muted">
-                        Forgot password?
+                        忘記密碼?
                       </a>
                     </div>
                   )}

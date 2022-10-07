@@ -26,6 +26,7 @@ import Loader from "../../components/Loader";
 
 //images
 import avatarPlaceHolder from "../../assets/images/users/profile-placeholder.png";
+import { ErrorMessages } from "../../repository/Enum";
 
 interface ChangePasswordProps {}
 
@@ -40,26 +41,21 @@ const ChangePassword = (prop: ChangePasswordProps) => {
   const { dispatch, useAppSelector } = useRedux();
   const { userProfile } = useProfile();
 
-  const {
-    changepasswordError,
-    changepasswordSuccess,
-    passwordChanged,
-    changePassLoading,
-  } = useAppSelector(state => ({
-    passwordChanged: state.Auth.passwordChanged,
-    changepasswordSuccess: state.Auth.changepasswordSuccess,
-    changepasswordError: state.Auth.changepasswordError,
-    changePassLoading: state.Auth.loading,
-  }));
+  const { changepasswordError, passwordChanged, changePassLoading } =
+    useAppSelector(state => ({
+      passwordChanged: state.Auth.passwordChanged,
+      changepasswordError: state.Auth.changepasswordError,
+      changePassLoading: state.Auth.loading,
+    }));
 
   const resolver = yupResolver(
     yup.object().shape({
-      oldPassword: yup.string().required("Please Enter Old Password."),
-      newPassword: yup.string().required("Please Enter New Password."),
+      oldPassword: yup.string().required(ErrorMessages["required"]),
+      newPassword: yup.string().required(ErrorMessages["required"]),
       confirmPassword: yup
         .string()
-        .oneOf([yup.ref("newPassword"), null], "Passwords don't match")
-        .required("This value is required."),
+        .oneOf([yup.ref("newPassword"), null], "與新密碼不相符")
+        .required(ErrorMessages["required"]),
     })
   );
 
@@ -95,7 +91,7 @@ const ChangePassword = (prop: ChangePasswordProps) => {
       <Row className=" justify-content-center my-auto">
         <Col sm={8} lg={6} xl={5} className="col-xxl-4">
           <div className="py-md-5 py-4">
-            <AuthHeader title="Change Password" />
+            <AuthHeader title="變更密碼" />
             <div className="user-thumb text-center mb-4">
               <img
                 src={userProfile.photo ? userProfile.photo : avatarPlaceHolder}
@@ -104,12 +100,10 @@ const ChangePassword = (prop: ChangePasswordProps) => {
               />
               <h5 className="font-size-15 mt-3">{userProfile.name}</h5>
             </div>
-            {changepasswordError && changepasswordError ? (
-              <Alert color="danger">{changepasswordError}</Alert>
-            ) : null}
-            {passwordChanged ? (
-              <Alert color="success">{changepasswordSuccess}</Alert>
-            ) : null}
+            {changepasswordError && !passwordChanged && (
+              <Alert color="danger">舊密碼錯誤</Alert>
+            )}
+            {passwordChanged && <Alert color="success">密碼變更成功</Alert>}
 
             <Form
               onSubmit={handleSubmit(onSubmitForm)}
@@ -118,7 +112,7 @@ const ChangePassword = (prop: ChangePasswordProps) => {
               {changePassLoading && <Loader />}
               <div className="mb-3">
                 <FormInput
-                  label="Old Password"
+                  label="舊密碼"
                   type="password"
                   name="oldPassword"
                   register={register}
@@ -133,7 +127,7 @@ const ChangePassword = (prop: ChangePasswordProps) => {
               </div>
               <div className="mb-3">
                 <FormInput
-                  label="New Password"
+                  label="新密碼"
                   type="password"
                   name="newPassword"
                   register={register}
@@ -148,7 +142,7 @@ const ChangePassword = (prop: ChangePasswordProps) => {
               </div>
               <div className="mb-3">
                 <FormInput
-                  label="Confirm New Password"
+                  label="確認新密碼"
                   type="password"
                   name="confirmPassword"
                   register={register}
@@ -166,7 +160,7 @@ const ChangePassword = (prop: ChangePasswordProps) => {
                 <div className="row">
                   <div className="col-6">
                     <button className="btn btn-primary w-100" type="submit">
-                      Save
+                      變更密碼
                     </button>
                   </div>
                   <div className="col-6">
@@ -177,7 +171,7 @@ const ChangePassword = (prop: ChangePasswordProps) => {
                         goBack();
                       }}
                     >
-                      Cancel
+                      返回
                     </button>
                   </div>
                 </div>

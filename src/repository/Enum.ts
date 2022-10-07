@@ -5,7 +5,8 @@ export enum RoleTypes {
 }
 
 export enum ErrorMessages {
-  "record not found" = "The user with input doesn't exist",
+  "record not found" = "您所輸入的使用者不存在",
+  "required" = "不可空白",
 }
 
 export type ErrorMessagesKey = keyof typeof ErrorMessages;

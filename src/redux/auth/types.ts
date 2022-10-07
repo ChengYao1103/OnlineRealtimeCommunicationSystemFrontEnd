@@ -47,7 +47,6 @@ export interface AuthState {
   forgetError?: string;
   emailSended?: boolean;
   passwordChanged?: boolean;
-  changepasswordSuccess?: string;
   changepasswordError?: string;
   registrationError?: string;
   isUserRegistered?: boolean;

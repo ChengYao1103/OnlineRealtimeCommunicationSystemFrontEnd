@@ -43,9 +43,8 @@ const NonAuthLayoutWrapper = (props: NonAuthLayoutWrapperProps) => {
                     <Col xl={12}>
                       <div className="text-center text-muted p-4">
                         <p className="mb-0">
-                          {new Date().getFullYear()} &copy; {/*Doot.*/} Crafted
-                          with <i className="mdi mdi-heart text-danger"></i> by
-                          何秉育 陳琴蓮 廖酉詳 劉程耀
+                          {new Date().getFullYear()} &copy; Crafted by 何秉育
+                          陳琴蓮 廖酉詳 劉程耀
                         </p>
                       </div>
                     </Col>

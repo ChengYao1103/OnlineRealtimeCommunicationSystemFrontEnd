@@ -122,12 +122,7 @@ function* changePassword({ payload: { data } }: any) {
       oldPassword: data.oldPassword,
       newPassword: data.newPassword,
     });
-    yield put(
-      authApiResponseSuccess(
-        AuthActionTypes.CHANGE_PASSWORD,
-        "Your Password is Changed, will go back in 0.5 sec"
-      )
-    );
+    yield put(authApiResponseSuccess(AuthActionTypes.CHANGE_PASSWORD, {}));
   } catch (error: any) {
     yield put(authApiResponseError(AuthActionTypes.CHANGE_PASSWORD, error));
   }

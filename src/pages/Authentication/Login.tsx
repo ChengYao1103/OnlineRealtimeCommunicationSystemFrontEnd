@@ -72,8 +72,8 @@ const Login = (props: LoginProps) => {
 
   const resolver = yupResolver(
     yup.object().shape({
-      email: yup.string().required("Please Enter E-mail."),
-      password: yup.string().required("Please Enter Password."),
+      email: yup.string().required(ErrorMessages["required"]),
+      password: yup.string().required(ErrorMessages["required"]),
     })
   );
 
@@ -133,10 +133,7 @@ const Login = (props: LoginProps) => {
       <Row className=" justify-content-center my-auto">
         <Col sm={8} lg={6} xl={5} className="col-xxl-4">
           <div className="py-md-5 py-4">
-            <AuthHeader
-              title="Welcome Back !"
-              subtitle="Sign in to continue."
-            />
+            <AuthHeader title="歡迎使用！" subtitle="登入以繼續" />
 
             {error && (
               <Alert color="danger">
@@ -165,7 +162,7 @@ const Login = (props: LoginProps) => {
 
               <div className="mb-3">
                 <FormInput
-                  label="Password"
+                  label="密碼"
                   type="password"
                   name="password"
                   register={register}
@@ -187,19 +184,19 @@ const Login = (props: LoginProps) => {
                   className="form-check-label font-size-14"
                   htmlFor="remember-check"
                 >
-                  Remember me
+                  記住我
                 </Label>
               </div>
 
               <div className="text-center mt-4">
                 <Button color="primary" className="w-100" type="submit">
-                  Sign In
+                  登入
                 </Button>
               </div>
 
               <div className="mt-4 text-center">
                 <div className="signin-other-title">
-                  <h5 className="font-size-14 mb-4 title">Sign in with</h5>
+                  <h5 className="font-size-14 mb-4 title">使用以下方式登入</h5>
                 </div>
                 <Row className="">
                   <div className="col-4">
@@ -268,13 +265,13 @@ const Login = (props: LoginProps) => {
 
             <div className="mt-5 text-center text-muted">
               <p>
-                Don't have an account ?{" "}
+                沒有帳號嗎 ?{" "}
                 <Link
                   to="/auth-register"
                   className="fw-medium text-decoration-underline"
                 >
                   {" "}
-                  Register
+                  註冊
                 </Link>
               </p>
             </div>
