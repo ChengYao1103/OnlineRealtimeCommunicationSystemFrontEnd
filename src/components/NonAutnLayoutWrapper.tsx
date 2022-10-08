@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 
 // images
 import authImage from "../assets/images/auth-img.png";
-import icon from "../assets/images//icon.png";
+import icon from "../assets/images/icon.png";
 
 interface NonAuthLayoutWrapperProps {
   children: any;
