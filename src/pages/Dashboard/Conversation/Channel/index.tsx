@@ -118,12 +118,12 @@ const Index = () => {
     };
     dispatch(uploadMessageFile(data));
   };
-  
+
   const onDownload = (messageID: string | number, filename: string) => {
     let data = {
-      messageID: messageID
-    }
-    dispatch(downloadMessageFile(filename, data))
+      messageID: messageID,
+    };
+    dispatch(downloadMessageFile(filename, data));
   };
 
   useEffect(() => {
@@ -179,13 +179,6 @@ const Index = () => {
         isChannel={true}
         onToggleArchive={onToggleArchive}
       />
-      <PostInputSection
-        onSend={onSend}
-        onUpload={onUpload}
-        replyData={replyData}
-        onSetReplyData={onSetReplyData}
-        selectedChatInfo={selectedChatInfo}
-      />
       <Home
         chatUserConversations={chatUserConversations}
         chatUserDetails={selectedChatInfo}
@@ -194,6 +187,13 @@ const Index = () => {
         onSetReplyData={onSetReplyData}
         onDownload={onDownload}
         isChannel={true}
+      />
+      <PostInputSection
+        onSend={onSend}
+        onUpload={onUpload}
+        replyData={replyData}
+        onSetReplyData={onSetReplyData}
+        selectedChatInfo={selectedChatInfo}
       />
     </>
   );

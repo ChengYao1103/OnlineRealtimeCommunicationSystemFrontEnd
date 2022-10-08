@@ -1,8 +1,10 @@
 export enum RoleTypes {
-  Teacher = 0,
-  TA = 1,
-  Student = 2,
+  "老師" = 0,
+  "TA" = 1,
+  "學生" = 2,
 }
+
+export type RoleTypesKey = keyof typeof RoleTypes;
 
 export enum ErrorMessages {
   "record not found" = "您所輸入的使用者不存在",

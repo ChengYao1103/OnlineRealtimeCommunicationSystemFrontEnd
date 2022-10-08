@@ -9,7 +9,7 @@ import {
   Label,
   Input,
 } from "reactstrap";
-import { RoleTypes } from "../repository/Enum";
+import { RoleTypes, RoleTypesKey } from "../repository/Enum";
 import { useRedux } from "../hooks";
 import { inviteChannelMembers } from "../redux/actions";
 
@@ -24,7 +24,7 @@ const InviteChannelModal = ({ isOpen, onClose }: InviteContactModalProps) => {
   }));
 
   const [emails, setEmails] = useState([""]);
-  const [roles, setRoles] = useState([RoleTypes.Student]);
+  const [roles, setRoles] = useState([RoleTypes["Student" as RoleTypesKey]]);
   const [valid, setValid] = useState<boolean>(false);
 
   const roleTypeAmout = Object.keys(RoleTypes).length / 2;

@@ -139,11 +139,11 @@ const Chats = persistReducer(
               channelMembers: action.payload.data.users,
             };
           case ChatsActionTypes.GET_CHANNEL_POSTS:
-             return {
-               ...state,
-               getChannelPostsLoading: false,
-               channelPosts: action.payload.data.post,
-             };            
+            return {
+              ...state,
+              getChannelPostsLoading: false,
+              channelPosts: action.payload.data.post,
+            };
           case ChatsActionTypes.TOGGLE_FAVOURITE_CONTACT:
             return {
               ...state,
@@ -171,18 +171,18 @@ const Chats = persistReducer(
               ...state,
               getPostCommentsLoading: false,
               postComments: action.payload.data.comment,
-            };    
+            };
           case ChatsActionTypes.GET_ROLLCALL:
-            console.log(action.payload.data.rollCall)
+            console.log(action.payload.data.rollCall);
             return {
               ...state,
               rollCall: action.payload.data.rollCall,
-            }     
+            };
           // case ChatsActionTypes.GET_ROLLCALL:
           //   return {
           //     ...state,
           //     rollCall: action.payload.data.rollCall,
-          //   }     
+          //   }
           default:
             return { ...state };
         }
@@ -339,6 +339,7 @@ const Chats = persistReducer(
         };
       case ChatsActionTypes.CHANGE_SELECTED_CHAT:
         state.chatUserConversations = [];
+        state.channelPosts = [];
         return {
           ...state,
           channelMembers: undefined,
@@ -425,7 +426,7 @@ const Chats = persistReducer(
         return {
           ...state,
           getChannelPostsLoading: true,
-        }; 
+        };
       case ChatsActionTypes.GET_POST_COMMENTS:
         return {
           ...state,

@@ -12,7 +12,10 @@ import Post from "./Post";
 // interface
 import { MessagesTypes } from "../../../../data/messages";
 import { userModel } from "../../../../redux/auth/types";
-import { messageRecordModel, channelPostModel } from "../../../../redux/chats/types";
+import {
+  messageRecordModel,
+  channelPostModel,
+} from "../../../../redux/chats/types";
 import ForwardModal from "../../../../components/ForwardModal";
 
 // actions
@@ -57,7 +60,7 @@ const Conversation = ({
   const ref = useRef<any>();
   const scrollElement = useCallback(() => {
     if (ref && ref.current) {
-      const listEle = document.getElementById("chat-conversation-list");
+      const listEle = document.getElementById("channel-post-list");
       const scrollElement = ref.current.getScrollElement();
       var offsetHeight = 0;
       // 打開聊天室、傳送訊息 => 捲動到底部
@@ -68,7 +71,6 @@ const Conversation = ({
       else if (listEle && requestOldConversation) {
         offsetHeight = listEle.scrollHeight - lastScrollHeight;
       }
-
       if (
         listEle &&
         offsetHeight &&
@@ -82,18 +84,18 @@ const Conversation = ({
         setLastScrollHeight(listEle.scrollHeight);
       }
       // 捲動到頂部時觸發取得更多(20筆)訊息
-      scrollElement.onscroll = () => {
-        if (lastScrollHeight > 0 && scrollElement.scrollTop === 0) {
-          setRequestOldConversation(true);
-          dispatch(
-            getChatUserConversations({
-              otherSideID: chatUserDetails.id,
-              lastMessageID: chatUserConversations[0].ID,
-              n: 20,
-            })
-          );
-        }
-      };
+      // scrollElement.onscroll = () => {
+      //   if (lastScrollHeight > 0 && scrollElement.scrollTop === 0) {
+      //     setRequestOldConversation(true);
+      //     dispatch(
+      //       getChatUserConversations({
+      //         otherSideID: chatUserDetails.id,
+      //         lastMessageID: chatUserConversations[0].ID,
+      //         n: 20,
+      //       })
+      //     );
+      //   }
+      // };
     }
   }, [
     lastScrollHeight,
@@ -109,10 +111,10 @@ const Conversation = ({
     }
   }, []);
   useEffect(() => {
-    if (chatUserConversations.length > 0) {
+    if (!getChannelPostsLoading && channelPosts.length > 0) {
       scrollElement();
     }
-  }, [chatUserConversations, chatUserConversations.length, scrollElement]);
+  }, [getChannelPostsLoading, channelPosts.length, scrollElement]);
 
   useEffect(() => {
     setRequestOldConversation(false);
@@ -162,30 +164,28 @@ const Conversation = ({
       scrollRef={ref}
       className="chat-conversation p-3 p-lg-4 positin-relative"
     >
-    {getChannelPostsLoading && <Loader />}
+      {getChannelPostsLoading && <Loader />}
       <ul
         className="list-unstyled chat-conversation-list"
-        id="chat-conversation-list"
+        id="channel-post-list"
       >
-        {(channelPosts || []).map(
-          (post: channelPostModel, key: number) => {
-            //const isFromMe = conversation.SenderID === userProfile.id;
-            return (
-              <Post
-                message={post}
-                key={key}
-                chatUserDetails={chatUserDetails}
-                channelPost={post}
-                onDelete={onDelete}
-                onSetReplyData={onSetReplyData}
-                onDownload={onDownload}
-                onOpenForward={onOpenForward}
-                isChannel={isChannel}
-                onDeleteImage={onDeleteImage}
-              />
-            );
-          }
-        )}
+        {(channelPosts || []).map((post: channelPostModel, key: number) => {
+          //const isFromMe = conversation.SenderID === userProfile.id;
+          return (
+            <Post
+              message={post}
+              key={key}
+              chatUserDetails={chatUserDetails}
+              channelPost={post}
+              onDelete={onDelete}
+              onSetReplyData={onSetReplyData}
+              onDownload={onDownload}
+              onOpenForward={onOpenForward}
+              isChannel={isChannel}
+              onDeleteImage={onDeleteImage}
+            />
+          );
+        })}
         {/*  <Day /> */}
       </ul>
       {isOpenForward && (
