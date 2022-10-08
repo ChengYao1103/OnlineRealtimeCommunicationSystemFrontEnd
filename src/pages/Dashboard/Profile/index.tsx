@@ -36,7 +36,7 @@ const Index = (props: IndexProps) => {
   return (
     <div className="position-relative">
       {getProfileLoading && !isProfileFetched && <Loader />}
-      <MyProfile user={user} basicDetails={profileDetails.basicDetails} />
+      <MyProfile user={user} />
 
       <AppSimpleBar className="p-4 profile-desc">
         <UserDescription user={user} location={"location"} />

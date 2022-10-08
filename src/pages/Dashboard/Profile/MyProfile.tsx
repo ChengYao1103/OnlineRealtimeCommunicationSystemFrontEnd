@@ -25,10 +25,9 @@ import { BasicDetailsTypes } from "../../../data/myProfile";
 
 interface MyProfileProps {
   user: userModel;
-  basicDetails: BasicDetailsTypes;
 }
 
-const MyProfile = ({ user, basicDetails }: MyProfileProps) => {
+const MyProfile = ({ user }: MyProfileProps) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const toggle = () => setDropdownOpen(!dropdownOpen);
@@ -67,7 +66,7 @@ const MyProfile = ({ user, basicDetails }: MyProfileProps) => {
             <div className="user-chat-nav p-2 ps-3">
               <div className="d-flex w-100 align-items-center">
                 <div className="flex-grow-1">
-                  <h5 className="text-white mb-0">My Profile</h5>
+                  <h5 className="text-white mb-0">個人資料</h5>
                 </div>
                 <div className="flex-shrink-0">
                   <Dropdown isOpen={dropdownOpen} toggle={toggle}>
@@ -84,21 +83,21 @@ const MyProfile = ({ user, basicDetails }: MyProfileProps) => {
                         href="#"
                         onClick={() => GetAuthInfo()}
                       >
-                        Info{" "}
+                        個人資料{" "}
                         <i className="bx bx-info-circle ms-2 text-muted"></i>
                       </DropdownItem>
                       <DropdownItem
                         className="d-flex align-items-center justify-content-between"
                         onClick={() => onChangeTab()}
                       >
-                        Setting <i className="bx bx-cog text-muted ms-2"></i>
+                        設定 <i className="bx bx-cog text-muted ms-2"></i>
                       </DropdownItem>
                       <DropdownItem divider />
                       <DropdownItem
                         className="d-flex align-items-center justify-content-between"
                         href="#"
                       >
-                        Help{" "}
+                        協助{" "}
                         <i className="bx bx-help-circle ms-2 text-muted"></i>
                       </DropdownItem>
                     </DropdownMenu>

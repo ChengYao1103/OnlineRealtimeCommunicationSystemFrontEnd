@@ -35,11 +35,11 @@ const Media = ({ media, limit }: MediaProps) => {
     <div>
       <div className="d-flex">
         <div className="flex-grow-1">
-          <h5 className="font-size-11 text-muted text-uppercase">Media</h5>
+          <h5 className="font-size-11 text-muted text-uppercase">媒體</h5>
         </div>
         <div className="flex-shrink-0">
           <Link to="#" className="font-size-12 d-block mb-2">
-            Show all
+            顯示全部
           </Link>
         </div>
       </div>
@@ -61,7 +61,7 @@ const Media = ({ media, limit }: MediaProps) => {
                 } else return null;
               }
             )
-          : "No Media Files."}
+          : "無媒體資料"}
       </div>
     </div>
   );
