@@ -5,6 +5,7 @@ import { useRedux } from "../../../hooks/index";
 //components
 import AddButton from "../../../components/AddButton";
 import ChatUser from "./ChatUser";
+import Loader from "../../../components/Loader";
 
 // interface
 import { UserTypes } from "../../../data/chat";
@@ -120,14 +121,20 @@ const DirectMessages = ({
 
       <div className="chat-message-list">
         <ul className="list-unstyled chat-list chat-user-list">
-          {chatUsers.map((user: userModel) => (
-            <ChatUser
-              user={user}
-              key={user.id}
-              selectedChatInfo={selectedChatInfo}
-              onSelectChat={onSelectChat}
-            />
-          ))}
+          {chatUsers.length === recentChatArray.length ? (
+            chatUsers.map((user: userModel) => (
+              <ChatUser
+                user={user}
+                key={user.id}
+                selectedChatInfo={selectedChatInfo}
+                onSelectChat={onSelectChat}
+              />
+            ))
+          ) : (
+            <div className="position-relative" style={{ height: "100%" }}>
+              <Loader />
+            </div>
+          )}
         </ul>
       </div>
     </>
