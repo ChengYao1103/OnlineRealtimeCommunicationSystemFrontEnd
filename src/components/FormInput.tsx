@@ -4,6 +4,7 @@ import { Input, Label, FormFeedback } from "reactstrap";
 import classNames from "classnames";
 
 import { FieldErrors } from "react-hook-form";
+import { Link } from "react-router-dom";
 
 interface PasswordInputProps {
   name: string;
@@ -170,9 +171,9 @@ const FormInput: React.FunctionComponent<FormInputProps> = ({
                 <>
                   {!withoutLabel && (
                     <div className="float-end">
-                      <a href="auth-recoverpw" className="text-muted">
+                      <Link to="/auth-recoverpw" className="text-muted">
                         忘記密碼?
-                      </a>
+                      </Link>
                     </div>
                   )}
 

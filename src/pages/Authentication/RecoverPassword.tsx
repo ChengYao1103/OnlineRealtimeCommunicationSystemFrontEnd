@@ -23,6 +23,7 @@ import NonAuthLayoutWrapper from "../../components/NonAutnLayoutWrapper";
 import AuthHeader from "../../components/AuthHeader";
 import FormInput from "../../components/FormInput";
 import Loader from "../../components/Loader";
+import { ErrorMessages } from "../../repository/Enum";
 
 interface RecoverPasswordProps {}
 const RecoverPassword = (props: RecoverPasswordProps) => {
@@ -41,8 +42,8 @@ const RecoverPassword = (props: RecoverPasswordProps) => {
     yup.object().shape({
       email: yup
         .string()
-        .email("This value should be a valid email.")
-        .required("Please Enter E-mail."),
+        .email(ErrorMessages["email format wrong"])
+        .required(ErrorMessages["required"]),
     })
   );
 
@@ -70,20 +71,15 @@ const RecoverPassword = (props: RecoverPasswordProps) => {
       <Row className=" justify-content-center my-auto">
         <Col sm={8} lg={6} xl={5} className="col-xxl-4">
           <div className="py-md-5 py-4">
-            <AuthHeader
-              title="Reset Password"
-              subtitle="Reset Password with Email."
-            />
+            <AuthHeader title="重設密碼" />
 
-            {forgetError && forgetError ? (
-              <Alert color="danger">{forgetError}</Alert>
-            ) : null}
-            {forgetSuccessMsg ? (
+            {forgetError && <Alert color="danger">{forgetError}</Alert>}
+            {forgetSuccessMsg && (
               <Alert color="success">{forgetSuccessMsg}</Alert>
-            ) : null}
+            )}
             {!forgetError && !forgetSuccessMsg && (
               <Alert color="info" className="text-center my-4">
-                Enter your Email and instructions will be sent to you!
+                輸入Email以重設密碼
               </Alert>
             )}
 
@@ -107,19 +103,19 @@ const RecoverPassword = (props: RecoverPasswordProps) => {
               </div>
               <div className="text-center mt-4">
                 <Button color="primary" className="w-100" type="submit">
-                  Reset
+                  發送
                 </Button>
               </div>
             </Form>
             <div className="mt-5 text-center text-muted">
               <p>
-                Remember It ?{" "}
+                想起密碼了嗎?{" "}
                 <Link
                   to="/auth-login"
                   className="fw-medium text-decoration-underline"
                 >
                   {" "}
-                  Login
+                  登入
                 </Link>
               </p>
             </div>

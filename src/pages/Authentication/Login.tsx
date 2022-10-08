@@ -265,7 +265,7 @@ const Login = (props: LoginProps) => {
 
             <div className="mt-5 text-center text-muted">
               <p>
-                沒有帳號嗎 ?{" "}
+                沒有帳號嗎?{" "}
                 <Link
                   to="/auth-register"
                   className="fw-medium text-decoration-underline"
