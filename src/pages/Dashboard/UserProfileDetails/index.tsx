@@ -130,7 +130,7 @@ const Index = ({ isChannel }: IndexProps) => {
               <>
                 <BasicDetails selectedChatInfo={selectedChatInfo} />
                 <hr className="my-4" />
-                <Groups chatUserDetails={chatUserDetails} />
+                <Groups selectedChatInfo={selectedChatInfo} />
                 <hr className="my-4" />
               </>
             ) : (

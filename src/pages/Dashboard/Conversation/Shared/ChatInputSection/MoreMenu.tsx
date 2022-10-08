@@ -82,7 +82,7 @@ const MoreMenu = ({
                   </Label>
                 </div>
                 <h5 className="font-size-11 text-uppercase mt-3 mb-0 text-body text-truncate">
-                  Attached
+                  附件
                 </h5>
               </div>
             </SwiperSlide>
@@ -95,7 +95,7 @@ const MoreMenu = ({
                 </div>
                 <h5 className="font-size-11 text-uppercase text-truncate mt-3 mb-0">
                   <Link to="#" className="text-body stretched-link">
-                    Camera
+                    開啟相機
                   </Link>
                 </h5>
               </div>
@@ -134,7 +134,7 @@ const MoreMenu = ({
                   </Label>
                 </div>
                 <h5 className="font-size-11 text-uppercase mt-3 mb-0 text-body text-truncate">
-                  Gallery
+                  圖片
                 </h5>
               </div>
             </SwiperSlide>
@@ -148,7 +148,7 @@ const MoreMenu = ({
 
                 <h5 className="font-size-11 text-uppercase text-truncate mt-3 mb-0">
                   <Link to="#" className="text-body stretched-link">
-                    Audio
+                    音訊
                   </Link>
                 </h5>
               </div>
@@ -163,7 +163,7 @@ const MoreMenu = ({
 
                 <h5 className="font-size-11 text-uppercase text-truncate mt-3 mb-0">
                   <Link to="#" className="text-body stretched-link">
-                    Location
+                    地點
                   </Link>
                 </h5>
               </div>
@@ -182,7 +182,7 @@ const MoreMenu = ({
                     data-bs-toggle="modal"
                     data-bs-target=".contactModal"
                   >
-                    Contacts
+                    聯絡人
                   </Link>
                 </h5>
               </div>
@@ -197,7 +197,7 @@ const MoreMenu = ({
                 </div>
                 <h5 className="font-size-11 text-uppercase text-truncate mt-3 mb-0">
                   <Link to="#" className="text-body stretched-link">
-                    Audio
+                    音訊
                   </Link>
                 </h5>
               </div>

@@ -4,6 +4,7 @@ import {
   DropdownMenu,
   DropdownItem,
   UncontrolledDropdown,
+  Button,
 } from "reactstrap";
 import classnames from "classnames";
 import { Link } from "react-router-dom";
@@ -439,16 +440,17 @@ const Message = ({
 
                   {/* files message start */}
                   {hasAttachments && (
-                    //<Attachments attachments={message.Content} />
-                    <a
-                      href="#"
+                    <Button
+                      type="button"
+                      color="link"
+                      className="btn"
                       onClick={() => onDownload(message.ID, message.Content)}
                     >
                       <p className="mb-0 ctext-content">
                         <i className="mdi mdi-download"> </i>
                         {message.Content}
                       </p>
-                    </a>
+                    </Button>
                   )}
                   {/* files message end */}
 
@@ -489,13 +491,13 @@ const Message = ({
                   ></i>
                 </span>
                 <small className={classnames("text-muted", "mb-0", "me-2")}>
-                  {date}
+                  {`${date}  `}
                 </small>
-                You
+                {userProfile.name}
               </>
             ) : (
               <>
-                {ChatUserfullName}
+                {`${ChatUserfullName}  `}
                 <small className={classnames("text-muted", "mb-0", "ms-2")}>
                   {date}
                 </small>

@@ -30,34 +30,20 @@ import { changeSelectedChat } from "../../../../redux/actions";
 
 // constants
 import { STATUS_TYPES } from "../../../../constants";
-import Loader from "../../../../components/Loader";
-import InviteChannelModal from "../../../../components/InviteChannelModal";
+
 interface ProfileImageProps {
   chatUserDetails: any;
   onCloseConversation: () => any;
   onOpenUserDetails: () => any;
-  isChannel: boolean;
 }
 const ProfileImage = ({
   chatUserDetails,
   onCloseConversation,
   onOpenUserDetails,
-  isChannel,
 }: ProfileImageProps) => {
   const { useAppSelector } = useRedux();
 
-  const { channelMembers } = useAppSelector(state => ({
-    channelMembers: state.Chats.channelMembers,
-  }));
-
   const fullName = chatUserDetails.name;
-  /*const shortName = !isChannel
-    ? chatUserDetails.firstName
-      ? `${chatUserDetails.firstName.charAt(
-          0
-        )}${chatUserDetails.lastName.charAt(0)}`
-      : "-"
-    : "#";*/
 
   const colors = [
     "bg-primary",
@@ -148,21 +134,10 @@ const ProfileImage = ({
                 {fullName}
               </Link>
             </h6>
-            {isChannel ? (
-              channelMembers ? (
-                <p className="text-truncate text-muted mb-0">
-                  <small>{channelMembers.length} Members</small>
-                </p>
-              ) : (
-                <>
-                  <Loader />
-                </>
-              )
-            ) : (
-              <p className="text-truncate text-muted mb-0">
-                <small>{chatUserDetails.status}</small>
-              </p>
-            )}
+
+            <p className="text-truncate text-muted mb-0">
+              <small>{chatUserDetails.status}</small>
+            </p>
           </div>
         </div>
       </div>
@@ -185,7 +160,7 @@ const Search = () => {
       </DropdownToggle>
       <DropdownMenu className="dropdown-menu p-0 dropdown-menu-end dropdown-menu-lg">
         <div className="search-box p-2">
-          <Input type="text" className="form-control" placeholder="Search.." />
+          <Input type="text" className="form-control" placeholder="搜尋..." />
         </div>
       </DropdownMenu>
     </Dropdown>
@@ -198,8 +173,6 @@ interface MoreProps {
   onDelete: () => void;
   isArchive: boolean;
   onToggleArchive: () => void;
-  isChannel: boolean;
-  onOpenInvite: () => void;
 }
 const More = ({
   onOpenUserDetails,
@@ -208,8 +181,6 @@ const More = ({
   onDelete,
   isArchive,
   onToggleArchive,
-  isChannel,
-  onOpenInvite,
 }: MoreProps) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const toggle = () => setDropdownOpen(!dropdownOpen);
@@ -225,32 +196,22 @@ const More = ({
           to="#"
           onClick={onOpenUserDetails}
         >
-          View Profile <i className="bx bx-user text-muted"></i>
+          查看個人資料 <i className="bx bx-user text-muted"></i>
         </DropdownItem>
-
-        {isChannel ? (
-          <DropdownItem
-            className="d-flex justify-content-between align-items-center user-profile-show"
-            to="#"
-            onClick={onOpenInvite}
-          >
-            Invite <i className="bx bx-user-plus text-muted"></i>
-          </DropdownItem>
-        ) : null}
 
         <DropdownItem
           className="d-flex justify-content-between align-items-center d-xxl-none"
           to="#"
           onClick={onOpenAudio}
         >
-          Audio <i className="bx bxs-phone-call text-muted"></i>
+          語音通話 <i className="bx bxs-phone-call text-muted"></i>
         </DropdownItem>
         <DropdownItem
           className="d-flex justify-content-between align-items-center d-xxl-none"
           to="#"
           onClick={onOpenVideo}
         >
-          Video <i className="bx bx-video text-muted"></i>
+          視訊通話 <i className="bx bx-video text-muted"></i>
         </DropdownItem>
         <DropdownItem
           className="d-flex justify-content-between align-items-center"
@@ -259,11 +220,11 @@ const More = ({
         >
           {isArchive ? (
             <>
-              Un-Archive <i className="bx bx-archive-out text-muted"></i>
+              取消封存 <i className="bx bx-archive-out text-muted"></i>
             </>
           ) : (
             <>
-              Archive <i className="bx bx-archive text-muted"></i>
+              封存 <i className="bx bx-archive text-muted"></i>
             </>
           )}
         </DropdownItem>
@@ -271,14 +232,14 @@ const More = ({
           className="d-flex justify-content-between align-items-center"
           to="#"
         >
-          Muted <i className="bx bx-microphone-off text-muted"></i>
+          關閉提醒 <i className="bx bx-microphone-off text-muted"></i>
         </DropdownItem>
         <DropdownItem
           className="d-flex justify-content-between align-items-center"
           to="#"
           onClick={onDelete}
         >
-          Delete <i className="bx bx-trash text-muted"></i>
+          刪除對話 <i className="bx bx-trash text-muted"></i>
         </DropdownItem>
       </DropdownMenu>
     </Dropdown>
@@ -313,7 +274,7 @@ const PinnedAlert = ({ onOpenPinnedTab }: PinnedAlertProps) => {
           </Link>
         </div>
         <UncontrolledTooltip target="add-bookmark" placement="bottom">
-          Add Bookmark
+          加入書籤
         </UncontrolledTooltip>
       </div>
     </Alert>
@@ -324,7 +285,6 @@ interface UserHeadProps {
   pinnedTabs: Array<PinTypes>;
   onOpenUserDetails: () => void;
   onDelete: () => void;
-  isChannel: boolean;
   onToggleArchive: () => void;
 }
 const UserHead = ({
@@ -332,7 +292,6 @@ const UserHead = ({
   pinnedTabs,
   onOpenUserDetails,
   onDelete,
-  isChannel,
   onToggleArchive,
 }: UserHeadProps) => {
   // global store
@@ -372,17 +331,6 @@ const UserHead = ({
   };
 
   /*
-  invite user modal
-  */
-  const [isOpenInviteModal, setIsOpenInviteModal] = useState<boolean>(false);
-  const onOpenInvite = () => {
-    setIsOpenInviteModal(true);
-  };
-  const onCloseInvite = () => {
-    setIsOpenInviteModal(false);
-  };
-
-  /*
   mobile menu chat conversation close
   */
   const onCloseConversation = () => {
@@ -397,7 +345,6 @@ const UserHead = ({
             chatUserDetails={chatUserDetails}
             onCloseConversation={onCloseConversation}
             onOpenUserDetails={onOpenUserDetails}
-            isChannel={isChannel}
           />
         </Col>
         <Col className="col-3">
@@ -406,31 +353,27 @@ const UserHead = ({
               <Search />
             </li>
 
-            {!isChannel && (
-              <>
-                <li className="list-inline-item d-none d-xxl-inline-block me-2 ms-0">
-                  <Button
-                    type="button"
-                    color="none"
-                    className="btn nav-btn"
-                    onClick={onOpenAudio}
-                  >
-                    <i className="bx bxs-phone-call"></i>
-                  </Button>
-                </li>
+            <li className="list-inline-item d-none d-xxl-inline-block me-2 ms-0">
+              <Button
+                type="button"
+                color="none"
+                className="btn nav-btn"
+                onClick={onOpenAudio}
+              >
+                <i className="bx bxs-phone-call"></i>
+              </Button>
+            </li>
 
-                <li className="list-inline-item d-none d-xxl-inline-block me-2 ms-0">
-                  <Button
-                    type="button"
-                    color="none"
-                    className="btn nav-btn"
-                    onClick={onOpenVideo}
-                  >
-                    <i className="bx bx-video"></i>
-                  </Button>
-                </li>
-              </>
-            )}
+            <li className="list-inline-item d-none d-xxl-inline-block me-2 ms-0">
+              <Button
+                type="button"
+                color="none"
+                className="btn nav-btn"
+                onClick={onOpenVideo}
+              >
+                <i className="bx bx-video"></i>
+              </Button>
+            </li>
 
             <li className="list-inline-item d-none me-2 ms-0">
               <button
@@ -450,8 +393,6 @@ const UserHead = ({
                 onDelete={onDelete}
                 isArchive={chatUserDetails.isArchived}
                 onToggleArchive={onToggleArchive}
-                isChannel={isChannel}
-                onOpenInvite={onOpenInvite}
               />
             </li>
           </ul>
@@ -481,12 +422,6 @@ const UserHead = ({
           isOpen={isOpenPinnedTabModal}
           onClose={onClosePinnedTab}
           pinnedTabs={pinnedTabs}
-        />
-      )}
-      {isOpenInviteModal && (
-        <InviteChannelModal
-          isOpen={isOpenInviteModal}
-          onClose={onCloseInvite}
         />
       )}
     </div>

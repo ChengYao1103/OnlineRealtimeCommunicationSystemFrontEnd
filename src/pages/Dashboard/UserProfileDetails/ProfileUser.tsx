@@ -76,39 +76,40 @@ const ProfileUser = ({
                       className="d-flex justify-content-between align-items-center d-lg-none user-profile-show"
                       to="#"
                     >
-                      View Profile <i className="bx bx-user text-muted"></i>
+                      查看個人資料 <i className="bx bx-user text-muted"></i>
                     </DropdownItem>
                     <DropdownItem
                       className="d-flex justify-content-between align-items-center d-lg-none"
                       to="#"
                       onClick={onOpenAudio}
                     >
-                      Audio <i className="bx bxs-phone-call text-muted"></i>
+                      語音通話 <i className="bx bxs-phone-call text-muted"></i>
                     </DropdownItem>
                     <DropdownItem
                       className="d-flex justify-content-between align-items-center d-lg-none"
                       to="#"
                       onClick={onOpenVideo}
                     >
-                      Video <i className="bx bx-video text-muted"></i>
+                      視訊通話 <i className="bx bx-video text-muted"></i>
                     </DropdownItem>
                     <DropdownItem
                       className="d-flex justify-content-between align-items-center"
                       to="#"
                     >
-                      Archive <i className="bx bx-archive text-muted"></i>
+                      封存 <i className="bx bx-archive text-muted"></i>
                     </DropdownItem>
                     <DropdownItem
                       className="d-flex justify-content-between align-items-center"
                       to="#"
                     >
-                      Muted <i className="bx bx-microphone-off text-muted"></i>
+                      關閉提醒{" "}
+                      <i className="bx bx-microphone-off text-muted"></i>
                     </DropdownItem>
                     <DropdownItem
                       className="d-flex justify-content-between align-items-center"
                       to="#"
                     >
-                      Delete <i className="bx bx-trash text-muted"></i>
+                      刪除 <i className="bx bx-trash text-muted"></i>
                     </DropdownItem>
                   </DropdownMenu>
                 </Dropdown>

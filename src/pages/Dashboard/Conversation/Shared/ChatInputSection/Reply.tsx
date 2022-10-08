@@ -41,7 +41,7 @@ const Reply = ({ reply, onSetReplyData, chatUserDetails }: ReplyProps) => {
           <div className="replymessage-block mb-0 d-flex align-items-start">
             <div className="flex-grow-1">
               <h5 className="conversation-name">
-                {isReplyFromMe ? "You" : replyUserName}
+                {isReplyFromMe ? userProfile.name : replyUserName}
               </h5>
               {reply?.text && <p className="mb-0">{reply?.text}</p>}
 

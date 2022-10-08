@@ -22,7 +22,7 @@ import {
 import { useProfile } from "../../../../hooks";
 
 // components
-import UserHead from "../Shared/UserHead";
+import UserHead from "./UserHead";
 import Conversation from "../Shared/Conversation";
 import ChatInputSection from "../Shared/ChatInputSection/index";
 
@@ -115,12 +115,12 @@ const Index = () => {
     };
     dispatch(uploadMessageFile(data));
   };
-  
+
   const onDownload = (messageID: string | number, filename: string) => {
     let data = {
-      messageID: messageID
-    }
-    dispatch(downloadMessageFile(filename, data))
+      messageID: messageID,
+    };
+    dispatch(downloadMessageFile(filename, data));
   };
 
   useEffect(() => {
@@ -180,7 +180,6 @@ const Index = () => {
         pinnedTabs={pinnedTabs}
         onOpenUserDetails={onOpenUserDetails}
         onDelete={onDeleteUserMessages}
-        isChannel={false}
         onToggleArchive={onToggleArchive}
       />
       <Conversation

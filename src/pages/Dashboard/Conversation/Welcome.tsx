@@ -14,14 +14,7 @@ const Welcome = () => {
                   <img src={icon} width="90%" alt="ORCS"></img>
                 </div>
               </div>
-              <h4>Welcome to Online Realtime Communication System！</h4>
-              {/*<p className="text-muted mb-4">
-                Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean
-                commodo ligula eget dolor. cum sociis natoque penatibus et
-              </p>
-              <Button type="button" className="btn btn-primary w-lg">
-                Get Started
-  </Button>*/}
+              <h4>歡迎使用網路即時通訊系統！</h4>
             </div>
           </Col>
         </Row>

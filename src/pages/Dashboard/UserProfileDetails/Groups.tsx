@@ -47,20 +47,18 @@ const Group = ({ group }: GroupProps) => {
   );
 };
 interface GroupsProps {
-  chatUserDetails: any;
+  selectedChatInfo: any;
 }
-const Groups = ({ chatUserDetails }: GroupsProps) => {
+const Groups = ({ selectedChatInfo }: GroupsProps) => {
   const groups =
-    chatUserDetails.channels &&
-    chatUserDetails.channels.length &&
-    chatUserDetails.channels;
+    selectedChatInfo.channels &&
+    selectedChatInfo.channels.length &&
+    selectedChatInfo.channels;
   return (
     <div>
       <div className="d-flex">
         <div className="flex-grow-1">
-          <h5 className="font-size-11 text-muted text-uppercase">
-            Group in common
-          </h5>
+          <h5 className="font-size-11 text-muted text-uppercase">共同頻道</h5>
         </div>
       </div>
 
@@ -71,7 +69,7 @@ const Groups = ({ chatUserDetails }: GroupsProps) => {
           ))}
         </ul>
       ) : (
-        <p>No Groups</p>
+        <p>無共同頻道</p>
       )}
     </div>
   );

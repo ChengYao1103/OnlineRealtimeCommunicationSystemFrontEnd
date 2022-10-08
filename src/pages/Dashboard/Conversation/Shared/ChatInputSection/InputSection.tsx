@@ -13,7 +13,7 @@ const InputSection = ({ value, onChange }: InputSectionProps) => {
         type="text"
         className="form-control form-control-lg chat-input"
         id="chat-input"
-        placeholder="Type your message..."
+        placeholder="輸入..."
         value={value || ""}
         onChange={(e: any) => {
           onChange(e.target.value);

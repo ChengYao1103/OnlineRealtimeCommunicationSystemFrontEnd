@@ -192,13 +192,13 @@ const Index = ({
           <p className="me-2 mb-0">
             {images.length > 0 &&
               files.length === 0 &&
-              ` You have selected ${images.length} images`}
+              ` 選擇了 ${images.length} 張圖片`}
             {files.length > 0 &&
               images.length === 0 &&
-              ` You have selected ${files.length} files`}
+              ` 選擇了 ${files.length} 個檔案`}
             {files.length > 0 &&
               images.length > 0 &&
-              ` You have selected ${files.length} files & ${images.length} images.`}
+              ` 選擇了 ${files.length} 個檔案 & ${images.length} 張圖片`}
           </p>
         </Alert>
       ) : null}

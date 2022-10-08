@@ -9,11 +9,10 @@ const BasicDetails = ({ selectedChatInfo }: BasicDetailsProps) => {
 
   return (
     <div className="mt-3">
-      <h5 className="font-size-11 text-muted text-uppercase">Info</h5>
       <div>
         <div className="d-flex align-items-end">
           <div className="flex-grow-1">
-            <p className="text-muted font-size-14 mb-1">Name</p>
+            <p className="text-muted font-size-14 mb-1">名稱</p>
           </div>
           {/*<div className="flex-shrink-0">
             <button type="button" className="btn btn-sm btn-soft-primary">
