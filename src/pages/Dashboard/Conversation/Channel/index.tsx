@@ -148,7 +148,6 @@ const Index = () => {
 
   useEffect(() => {
     if (selectedChatInfo) {
-      // 回傳的是不包含該筆id的紀錄，所以+1
       dispatch(
         getChannelPosts({
           ID: selectedChatInfo.id,

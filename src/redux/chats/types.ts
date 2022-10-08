@@ -101,7 +101,7 @@ export interface recentChatUserModel {
 
 export interface channelPostModel {
   id: number;
-  userID: number;
+  user: userModel;
   content: string;
   deleted: boolean;
   timestamp: string;
@@ -110,7 +110,7 @@ export interface channelPostModel {
 export interface postCommentModel {
   postID: number;
   id: number;
-  userID: number;
+  user: userModel;
   content: string;
   deleted: boolean;
   timestamp: string;
