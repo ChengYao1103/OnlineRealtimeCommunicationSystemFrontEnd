@@ -23,12 +23,12 @@ import { userChangeInformation } from "../../../redux/actions";
 // interface
 import { BasicDetailsTypes } from "../../../data/settings";
 import { userModel } from "../../../redux/auth/types";
+import { ErrorMessages } from "../../../repository/Enum";
 
 interface PersonalInfoProps {
-  basicDetails: BasicDetailsTypes;
   user: userModel;
 }
-const PersonalInfo = ({ basicDetails, user }: PersonalInfoProps) => {
+const PersonalInfo = ({ user }: PersonalInfoProps) => {
   const { dispatch, useAppSelector } = useRedux();
   const fullName = user && user.name ? user.name : "-";
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -49,7 +49,7 @@ const PersonalInfo = ({ basicDetails, user }: PersonalInfoProps) => {
   // form setting
   const resolver = yupResolver(
     yup.object().shape({
-      newName: yup.string().required("Please Enter New Name."),
+      newName: yup.string().required(ErrorMessages["required"]),
     })
   );
 
@@ -74,11 +74,8 @@ const PersonalInfo = ({ basicDetails, user }: PersonalInfoProps) => {
   return (
     <div className="accordion-body">
       <div>
-        {informationChanged ? (
-          <Alert color="success">Change Name Successfully</Alert>
-        ) : changeInfomationError ? (
-          <Alert color="danger">{changeInfomationError}</Alert>
-        ) : null}
+        {informationChanged && <Alert color="success">更改名稱成功</Alert>}
+        {changeInfomationError && <Alert color="danger">更改名稱失敗</Alert>}
       </div>
       <div className="float-end">
         <Button
@@ -92,7 +89,7 @@ const PersonalInfo = ({ basicDetails, user }: PersonalInfoProps) => {
       </div>
 
       <div>
-        <p className="text-muted mb-1">Name</p>
+        <p className="text-muted mb-1">名稱</p>
         <h5 className="font-size-14">{fullName}</h5>
       </div>
 
@@ -115,11 +112,11 @@ const PersonalInfo = ({ basicDetails, user }: PersonalInfoProps) => {
           onSubmit={handleSubmit(onSubmitForm)}
           className="position-relative"
         >
-          <ModalHeader className="w-100">Edit User Name</ModalHeader>
+          <ModalHeader className="w-100">修改使用者名稱</ModalHeader>
 
           <div className="m-3">
             <FormInput
-              label="Name"
+              label="新名稱"
               type="text"
               name="newName"
               register={register}
@@ -136,10 +133,10 @@ const PersonalInfo = ({ basicDetails, user }: PersonalInfoProps) => {
               type="reset"
               onClick={() => setIsModalOpen(false)}
             >
-              Cancel
+              取消
             </Button>
             <Button color="primary" type="submit">
-              Save
+              儲存
             </Button>
           </ModalFooter>
         </Form>

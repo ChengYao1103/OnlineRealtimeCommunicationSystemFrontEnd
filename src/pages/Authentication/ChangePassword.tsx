@@ -160,7 +160,7 @@ const ChangePassword = (prop: ChangePasswordProps) => {
                 <div className="row">
                   <div className="col-6">
                     <button className="btn btn-primary w-100" type="submit">
-                      變更密碼
+                      變更
                     </button>
                   </div>
                   <div className="col-6">

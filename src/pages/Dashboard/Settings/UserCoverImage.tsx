@@ -47,7 +47,7 @@ const UserCoverImage = ({ user }: UserCoverImageProps) => {
           <div className="user-chat-nav p-3">
             <div className="d-flex w-100 align-items-center">
               <div className="flex-grow-1">
-                <h5 className="text-white mb-0">Settings</h5>
+                <h5 className="text-white mb-0">個人資料設定</h5>
               </div>
               <div className="flex-shrink-0">
                 <div
@@ -71,7 +71,7 @@ const UserCoverImage = ({ user }: UserCoverImageProps) => {
                   </Label>
                 </div>
                 <UncontrolledTooltip target="change-cover" placement="bottom">
-                  Change Background
+                  更換封面照片
                 </UncontrolledTooltip>
               </div>
             </div>

@@ -119,7 +119,7 @@ const ThemeColor = ({ theme, onChangeData }: ThemeColorProps) => {
   return (
     <div>
       <h5 className="mb-3 font-size-11 text-muted text-uppercase">
-        Choose Theme Color :
+        選擇主題顏色 :
       </h5>
       <div className="d-flex align-items-center flex-wrap gap-2 theme-btn-list theme-color-list">
         {(themeColors || []).map((color: ThemeColorTypes, key: number) => (

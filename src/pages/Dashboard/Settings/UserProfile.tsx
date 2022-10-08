@@ -18,11 +18,10 @@ import { userModel } from "../../../redux/auth/types";
 // CONSTANTS
 import { STATUS_TYPES } from "../../../constants";
 interface UserProfileProps {
-  basicDetails: BasicDetailsTypes;
   user: userModel;
   status: STATUS_TYPES;
 }
-const UserProfile = ({ basicDetails, user, status }: UserProfileProps) => {
+const UserProfile = ({ user, status }: UserProfileProps) => {
   const { dispatch } = useRedux();
   const fullName = user ? user.name : "-";
 
@@ -123,17 +122,17 @@ const UserProfile = ({ basicDetails, user, status }: UserProfileProps) => {
         <DropdownMenu>
           <DropdownItem onClick={() => onChangeStatus(STATUS_TYPES.ACTIVE)}>
             <i className="bx bxs-circle text-success font-size-10 me-1 align-middle"></i>{" "}
-            Active
+            線上
           </DropdownItem>
           <DropdownItem onClick={() => onChangeStatus(STATUS_TYPES.AWAY)}>
             <i className="bx bxs-circle text-warning font-size-10 me-1 align-middle"></i>{" "}
-            Away
+            閒置
           </DropdownItem>
           <DropdownItem
             onClick={() => onChangeStatus(STATUS_TYPES.DO_NOT_DISTURB)}
           >
             <i className="bx bxs-circle text-danger font-size-10 me-1 align-middle"></i>{" "}
-            Do not disturb
+            請勿打擾
           </DropdownItem>
         </DropdownMenu>
       </Dropdown>

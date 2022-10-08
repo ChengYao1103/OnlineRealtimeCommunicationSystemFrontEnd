@@ -161,19 +161,19 @@ const ProfileDropdownMenu = ({
           className="d-flex align-items-center justify-content-between"
           onClick={() => onChangeTab(TABS.USERS)}
         >
-          Profile <i className="bx bx-user-circle text-muted ms-1"></i>
+          個人資料 <i className="bx bx-user-circle text-muted ms-1"></i>
         </DropdownItem>
         <DropdownItem
           className="d-flex align-items-center justify-content-between"
           onClick={() => onChangeTab(TABS.SETTINGS)}
         >
-          Setting <i className="bx bx-cog text-muted ms-1"></i>
+          個人資料設定 <i className="bx bx-cog text-muted ms-1"></i>
         </DropdownItem>
         <DropdownItem
           className="d-flex align-items-center justify-content-between"
           onClick={() => redirect("/auth-changepassword")}
         >
-          Change Password <i className="bx bx-lock-open text-muted ms-1" />
+          變更密碼 <i className="bx bx-lock-open text-muted ms-1" />
         </DropdownItem>
 
         <DropdownItem />
@@ -182,7 +182,7 @@ const ProfileDropdownMenu = ({
           tag="a"
           href="/logout"
         >
-          Log out <i className="bx bx-log-out-circle text-muted ms-1"></i>
+          登出 <i className="bx bx-log-out-circle text-muted ms-1"></i>
         </DropdownItem>
       </DropdownMenu>
     </Dropdown>

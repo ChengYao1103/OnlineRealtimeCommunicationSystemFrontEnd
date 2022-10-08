@@ -23,7 +23,7 @@ export const DisplayTypes: Array<DisplayOpt> = [
 ];
 
 export enum STATUS_TYPES {
-  ACTIVE = "Active",
-  AWAY = "Away",
-  DO_NOT_DISTURB = "Do not disturb",
+  ACTIVE = "線上",
+  AWAY = "閒置",
+  DO_NOT_DISTURB = "請勿打擾",
 }

@@ -112,7 +112,7 @@ const Index = (props: IndexProps) => {
     getSettingsLoading: state.Profile.getSettingsLoading,
     isSettingsFetched: state.Profile.isSettingsFetched,
   }));
-  const user: userModel = useProfile().userProfile;
+  const { userProfile } = useProfile();
 
   // get user settings
   useEffect(() => {
@@ -146,15 +146,13 @@ const Index = (props: IndexProps) => {
   const collapseItems: CollapseItemTypes[] = [
     {
       value: SETTINGS_COLLAPSES.PROFILE,
-      label: "Personal Info",
+      label: "個人資料",
       icon: "bx bxs-user",
-      component: (
-        <PersonalInfo basicDetails={settings.basicDetails} user={user} />
-      ),
+      component: <PersonalInfo user={userProfile} />,
     },
     {
       value: SETTINGS_COLLAPSES.THEME,
-      label: "Themes",
+      label: "主題",
       icon: "bx bxs-adjust-alt",
       component: (
         <ThemeSettings theme={settings.theme} onChangeData={onChangeData} />
@@ -202,13 +200,9 @@ const Index = (props: IndexProps) => {
   return (
     <div className="position-relative">
       {getSettingsLoading && <Loader />}
-      <UserCoverImage user={user} />
+      <UserCoverImage user={userProfile} />
 
-      <UserProfile
-        basicDetails={settings.basicDetails}
-        user={user}
-        status={settings.status}
-      />
+      <UserProfile user={userProfile} status={settings.status} />
       {/* Start User profile description */}
       <AppSimpleBar className="user-setting">
         <div id="settingprofile" className="accordion accordion-flush">
