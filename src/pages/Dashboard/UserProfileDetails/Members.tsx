@@ -19,11 +19,14 @@ import { userModel } from "../../../redux/auth/types";
 
 interface MemberProps {
   member: userModel;
+  channelInfo: channelModel;
 }
-const Member = ({ member }: MemberProps) => {
+const Member = ({ member, channelInfo }: MemberProps) => {
   // global store
   const { dispatch } = useRedux();
   const { userProfile } = useProfile();
+
+  const isFounder = member.id === channelInfo.founderID;
 
   // const fullName = `${member.firstName} ${member.lastName}`;
   // const shortName = `${member.firstName.charAt(0)}${member.lastName.charAt(0)}`;
@@ -89,13 +92,13 @@ const Member = ({ member }: MemberProps) => {
           <div className="flex-grow-1 overflow-hidden">
             <p className="text-truncate mb-0">{member.name}</p>
           </div>
-          {/*member.isAdmin && (
+          {isFounder && (
             <div className="ms-auto">
               <Badge className="badge badge-soft-primary rounded p-1">
-                Admin
+                擁有者
               </Badge>
             </div>
-          )*/}
+          )}
         </div>
       </Link>
     </li>
@@ -120,18 +123,18 @@ const Members = ({ selectedChatInfo }: GroupsProps) => {
     <div>
       <div className="d-flex">
         <div className="flex-grow-1">
-          <h5 className="font-size-11 text-muted text-uppercase">Members</h5>
+          <h5 className="font-size-11 text-muted text-uppercase">頻道成員</h5>
         </div>
       </div>
 
       {channelMembers ? (
         <ul className="list-unstyled chat-list mx-n4">
           {(channelMembers || []).map((member: userModel, key: number) => (
-            <Member member={member} key={key} />
+            <Member key={key} member={member} channelInfo={selectedChatInfo} />
           ))}
         </ul>
       ) : (
-        <p>No Members</p>
+        <p>無成員</p>
       )}
     </div>
   );

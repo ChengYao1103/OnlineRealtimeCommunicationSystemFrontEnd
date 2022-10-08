@@ -27,36 +27,41 @@ const RollCallModal = ({ isOpen, onClose }: InviteContactModalProps) => {
   const [endTime, setEndTime] = useState("");
 
   const onLoad = () => {
-    dispatch(getRollCall(channelInfo.id))
-  }
+    dispatch(getRollCall(channelInfo.id));
+  };
 
   useEffect(() => {
     if (rollCall) {
       if (new Date(rollCall.startTime).toISOString() != "Invalid Date")
-        setStartTime((new Date(rollCall.startTime)).toLocaleString())
-      else
-        setStartTime(" ")
+        setStartTime(new Date(rollCall.startTime).toLocaleString());
+      else setStartTime(" ");
       if (new Date(rollCall.end).toLocaleString() != "Invalid Date")
-        setEndTime(new Date(rollCall.end).toLocaleString())
-      else
-        setEndTime(" ")
+        setEndTime(new Date(rollCall.end).toLocaleString());
+      else setEndTime(" ");
     }
-  }, [rollCall])
+  }, [rollCall]);
 
   return (
-    <Modal isOpen={isOpen} toggle={onClose} onOpened={onLoad} tabIndex={-1} centered scrollable>
+    <Modal
+      isOpen={isOpen}
+      toggle={onClose}
+      onOpened={onLoad}
+      tabIndex={-1}
+      centered
+      scrollable
+    >
       <ModalHeader className="modal-title-custom" toggle={onClose}>
-        Roll Call
+        建立點名
       </ModalHeader>
       <ModalBody className="p-4">
         <Form>
           <div className="mb-3">
             <Label htmlFor="RollCallStartTime-input" className="form-label">
-              Start Time:
+              開始時間:
             </Label>
             <Input
               type="datetime"
-              className="form-control"
+              className="form-control mb-3"
               id="RollCallStartTime-input"
               placeholder="Choose start time"
               value={startTime}
@@ -66,39 +71,27 @@ const RollCallModal = ({ isOpen, onClose }: InviteContactModalProps) => {
               }}
             />
             <Label htmlFor="RollCallEndTime-input" className="form-label">
-              End Time: 
+              結束時間(選填):
             </Label>
             <Input
               type="datetime"
-              className="form-control"
+              className="form-control mb-3"
               id="RollCallEndTime-input"
               placeholder="Choose end time (optional)"
               value={endTime}
               disabled={true}
               onChange={(e: any) => {
-                console.log(e.target.value)
-                if (!Date.parse(e.target.value))
-                  setEndTime("")
-                else
-                  setEndTime(e.target.value);
+                console.log(e.target.value);
+                if (!Date.parse(e.target.value)) setEndTime("");
+                else setEndTime(e.target.value);
               }}
-            >
-            </Input>
+            ></Input>
           </div>
         </Form>
       </ModalBody>
-            <Button>Sign In</Button>
-      <ModalFooter>
-        <Button type="button" color="link" className="btn" onClick={onClose}>
-          Close
-        </Button>
-        <Button
-          type="button"
-          color="primary"
-        >
-          Invite
-        </Button>
-      </ModalFooter>
+      <Button color="primary" className="m-3">
+        開始點名
+      </Button>
     </Modal>
   );
 };

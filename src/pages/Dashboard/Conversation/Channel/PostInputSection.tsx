@@ -31,7 +31,6 @@ const PostInputSection = ({
   onSetReplyData,
   selectedChatInfo,
 }: IndexProps) => {
-    
   // global store
   const { dispatch, useAppSelector } = useRedux();
   /*
@@ -83,10 +82,12 @@ const PostInputSection = ({
   const onSubmit = () => {
     // text message
     if (text.length > 0) {
-      dispatch(createPost({
-        channelID: selectedChatInfo.id,
-        content: text
-      }));
+      dispatch(
+        createPost({
+          channelID: selectedChatInfo.id,
+          content: text,
+        })
+      );
     }
 
     // images message

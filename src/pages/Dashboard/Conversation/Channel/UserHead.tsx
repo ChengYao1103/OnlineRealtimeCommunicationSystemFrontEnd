@@ -153,7 +153,7 @@ const ProfileImage = ({
             {isChannel ? (
               channelMembers ? (
                 <p className="text-truncate text-muted mb-0">
-                  <small>{channelMembers.length} Members</small>
+                  <small>{channelMembers.length} 個成員</small>
                 </p>
               ) : (
                 <>
@@ -227,32 +227,30 @@ const More = ({
           to="#"
           onClick={onOpenUserDetails}
         >
-          View Profile <i className="bx bx-user text-muted"></i>
+          查看群組資料 <i className="bx bx-user text-muted"></i>
         </DropdownItem>
 
-        {isChannel ? (
-          <DropdownItem
-            className="d-flex justify-content-between align-items-center user-profile-show"
-            to="#"
-            onClick={onOpenInvite}
-          >
-            Invite <i className="bx bx-user-plus text-muted"></i>
-          </DropdownItem>
-        ) : null}
+        <DropdownItem
+          className="d-flex justify-content-between align-items-center user-profile-show"
+          to="#"
+          onClick={onOpenInvite}
+        >
+          邀請成員 <i className="bx bx-user-plus text-muted"></i>
+        </DropdownItem>
 
         <DropdownItem
           className="d-flex justify-content-between align-items-center"
           to="#"
           onClick={onOpenRollCall}
         >
-          RollCall <i className="bx bxs-phone-call text-muted"></i>
+          建立點名 <i className="bx bxs-phone-call text-muted"></i>
         </DropdownItem>
         <DropdownItem
           className="d-flex justify-content-between align-items-center"
           to="#"
           onClick={onOpenVideo}
         >
-          Meeting <i className="bx bx-video text-muted"></i>
+          開始會議 <i className="bx bx-video text-muted"></i>
         </DropdownItem>
         <DropdownItem
           className="d-flex justify-content-between align-items-center"
@@ -261,11 +259,11 @@ const More = ({
         >
           {isArchive ? (
             <>
-              Un-Archive <i className="bx bx-archive-out text-muted"></i>
+              解除封存 <i className="bx bx-archive-out text-muted"></i>
             </>
           ) : (
             <>
-              Archive <i className="bx bx-archive text-muted"></i>
+              封存 <i className="bx bx-archive text-muted"></i>
             </>
           )}
         </DropdownItem>
@@ -273,14 +271,14 @@ const More = ({
           className="d-flex justify-content-between align-items-center"
           to="#"
         >
-          Team <i className="bx bx-microphone-off text-muted"></i>
+          小組 <i className="bx bx-microphone-off text-muted"></i>
         </DropdownItem>
         <DropdownItem
           className="d-flex justify-content-between align-items-center"
           to="#"
           onClick={onDelete}
         >
-          Homework <i className="bx bx-trash text-muted"></i>
+          作業 <i className="bx bx-trash text-muted"></i>
         </DropdownItem>
       </DropdownMenu>
     </Dropdown>
@@ -315,7 +313,7 @@ const PinnedAlert = ({ onOpenPinnedTab }: PinnedAlertProps) => {
           </Link>
         </div>
         <UncontrolledTooltip target="add-bookmark" placement="bottom">
-          Add Bookmark
+          建立書籤
         </UncontrolledTooltip>
       </div>
     </Alert>

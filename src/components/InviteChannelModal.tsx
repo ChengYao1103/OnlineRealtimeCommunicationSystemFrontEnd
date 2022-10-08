@@ -65,7 +65,7 @@ const InviteChannelModal = ({ isOpen, onClose }: InviteContactModalProps) => {
   return (
     <Modal isOpen={isOpen} toggle={onClose} tabIndex={-1} centered scrollable>
       <ModalHeader className="modal-title-custom" toggle={onClose}>
-        Invite User
+        邀請成員
       </ModalHeader>
       <ModalBody className="p-4">
         <Form>
@@ -75,7 +75,7 @@ const InviteChannelModal = ({ isOpen, onClose }: InviteContactModalProps) => {
             </Label>
             <Input
               type="email"
-              className="form-control"
+              className="form-control mb-3"
               id="AddContactModalemail-input"
               placeholder="Enter Email"
               value={emails[0]}
@@ -84,11 +84,11 @@ const InviteChannelModal = ({ isOpen, onClose }: InviteContactModalProps) => {
               }}
             />
             <Label htmlFor="AddContactModalemail-input" className="form-label">
-              Role
+              身分
             </Label>
             <Input
               type="select"
-              className="form-control"
+              className="form-control mb-3"
               id="AddContactModalrole-input"
               value={roles[0]}
               onChange={(e: any) => {
@@ -108,7 +108,7 @@ const InviteChannelModal = ({ isOpen, onClose }: InviteContactModalProps) => {
       </ModalBody>
       <ModalFooter>
         <Button type="button" color="link" className="btn" onClick={onClose}>
-          Close
+          取消
         </Button>
         <Button
           type="button"
@@ -116,7 +116,7 @@ const InviteChannelModal = ({ isOpen, onClose }: InviteContactModalProps) => {
           disabled={!valid}
           onClick={() => onInvite()}
         >
-          Invite
+          邀請
         </Button>
       </ModalFooter>
     </Modal>
