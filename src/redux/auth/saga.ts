@@ -30,6 +30,7 @@ import {
   getUserIdByEmail as getUserIdByEmailApi,
 } from "../../api/index";
 import { showErrorNotification } from "../../helpers/notifications";
+import { ErrorMessages, ErrorMessagesKey } from "../../repository/Enum";
 
 const fireBaseBackend = getFirebaseBackend();
 //////////Login & Logout
@@ -179,7 +180,10 @@ function* getUserInformation({ payload: data }: any) {
     );
   } catch (error: any) {
     let message = error.data.message ? error.data.message : error.data.msg;
-    yield call(showErrorNotification, message);
+    yield call(
+      showErrorNotification,
+      ErrorMessages[message as ErrorMessagesKey]
+    );
     yield put(authApiResponseError(AuthActionTypes.GET_USER_INFOMATION, error));
   }
 }
@@ -193,7 +197,10 @@ function* getUserId({ payload: data }: any) {
     );
   } catch (error: any) {
     let message = error.data.message ? error.data.message : error.data.msg;
-    yield call(showErrorNotification, message);
+    yield call(
+      showErrorNotification,
+      ErrorMessages[message as ErrorMessagesKey]
+    );
     yield put(
       authApiResponseError(AuthActionTypes.GET_USER_ID_BY_EMAIL, error)
     );

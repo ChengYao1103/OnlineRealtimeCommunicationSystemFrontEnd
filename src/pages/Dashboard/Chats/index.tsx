@@ -50,6 +50,7 @@ import Chanels from "./Chanels";
 import Archive from "./Archive";
 import { CHATS_TABS } from "../../../constants";
 import { showErrorNotification } from "../../../helpers/notifications";
+import { ErrorMessages } from "../../../repository/Enum";
 
 interface IndexProps {}
 const Index = (props: IndexProps) => {
@@ -161,17 +162,13 @@ const Index = (props: IndexProps) => {
     if (AuthState.otherUserId && !isGetReceicerId) {
       setIsGetReceicerId(true);
       if (AuthState.otherUserId === userProfile.id) {
-        showErrorNotification("Can't send message to self.");
+        showErrorNotification("無法傳訊給自己");
       } else if (AuthState.otherUserId !== 0) {
         setNewMessageData({
           receiverID: AuthState.otherUserId,
           content: contacts.content,
           type: 0,
         });
-      } else {
-        showErrorNotification(
-          "No corresponding user, please check email again."
-        );
       }
     }
     if (AuthState.otherUserId && isGetReceicerId) {
@@ -281,7 +278,7 @@ const Index = (props: IndexProps) => {
         <div className="px-4 pt-4">
           <div className="d-flex align-items-start">
             <div className="flex-grow-1">
-              <h4 className="mb-4">Chats</h4>
+              <h4 className="mb-4">聊天</h4>
             </div>
             <div className="flex-shrink-0">
               <div id="add-contact">
@@ -289,7 +286,7 @@ const Index = (props: IndexProps) => {
                 <AddButton onClick={openModal} />
               </div>
               <UncontrolledTooltip target="add-contact" placement="bottom">
-                Add Contact
+                新增聯絡人
               </UncontrolledTooltip>
             </div>
           </div>
@@ -298,7 +295,7 @@ const Index = (props: IndexProps) => {
               <input
                 type="text"
                 className="form-control bg-light border-0 pe-0"
-                placeholder="Search here.."
+                placeholder="搜尋..."
                 aria-label="Example text with button addon"
                 aria-describedby="searchbtn-addon"
               />
@@ -348,8 +345,7 @@ const Index = (props: IndexProps) => {
                   className="mb-3 px-4 mt-4 font-size-11 text-primary"
                   onClick={() => onChangeTab(CHATS_TABS.ARCHIVE)}
                 >
-                  Archived Contacts{" "}
-                  <i className="bx bxs-archive-in align-middle" />
+                  已封存 <i className="bx bxs-archive-in align-middle" />
                 </Link>
               </h5>
             </>
@@ -367,7 +363,7 @@ const Index = (props: IndexProps) => {
                   className="mb-3 px-4 mt-4 font-size-11 text-primary"
                   onClick={() => onChangeTab(CHATS_TABS.DEFAULT)}
                 >
-                  Chats <i className="bx bxs-archive-out align-middle" />
+                  聊天 <i className="bx bxs-archive-out align-middle" />
                 </Link>
               </h5>
             </>

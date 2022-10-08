@@ -65,7 +65,7 @@ const InviteContactModal = ({
   return (
     <Modal isOpen={isOpen} toggle={onClose} tabIndex={-1} centered scrollable>
       <ModalHeader className="modal-title-custom" toggle={onClose}>
-        Add Contact
+        新增聯絡人
       </ModalHeader>
       <ModalBody className="p-4">
         <Form>
@@ -86,7 +86,7 @@ const InviteContactModal = ({
           </div>
           <div className="mb-3">
             <Label htmlFor="AddContactModalname-input" className="form-label">
-              Name
+              名稱
             </Label>
             <Input
               type="text"
@@ -104,7 +104,7 @@ const InviteContactModal = ({
               htmlFor="AddContactModal-invitemessage-input"
               className="form-label"
             >
-              Invatation Message
+              邀請訊息
             </Label>
             <textarea
               value={data["message"] || ""}
@@ -121,7 +121,7 @@ const InviteContactModal = ({
       </ModalBody>
       <ModalFooter>
         <Button type="button" color="link" className="btn" onClick={onClose}>
-          Close
+          取消
         </Button>
         <Button
           type="button"
@@ -129,7 +129,7 @@ const InviteContactModal = ({
           disabled={!valid}
           onClick={() => onInvite(data)}
         >
-          Invite
+          送出
         </Button>
       </ModalFooter>
     </Modal>

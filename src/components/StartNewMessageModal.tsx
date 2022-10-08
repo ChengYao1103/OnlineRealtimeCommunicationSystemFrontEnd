@@ -64,13 +64,13 @@ const StartNewMessageModal = ({
   return (
     <Modal isOpen={isOpen} toggle={onClose} tabIndex={-1} centered scrollable>
       <ModalHeader className="modal-title-custom" toggle={onClose}>
-        Start a new chat
+        傳送新訊息
       </ModalHeader>
       <ModalBody className="p-4">
         <Form>
           <div className="mb-3">
             <Label htmlFor="AddContactModalemail-input" className="form-label">
-              Email
+              收訊人Email
             </Label>
             <Input
               type="email"
@@ -88,7 +88,7 @@ const StartNewMessageModal = ({
               htmlFor="AddContactModal-invitemessage-input"
               className="form-label"
             >
-              Message
+              訊息
             </Label>
             <textarea
               value={data["content"] || ""}
@@ -105,7 +105,7 @@ const StartNewMessageModal = ({
       </ModalBody>
       <ModalFooter>
         <Button type="button" color="link" className="btn" onClick={onClose}>
-          Close
+          取消
         </Button>
         <Button
           type="button"
@@ -113,7 +113,7 @@ const StartNewMessageModal = ({
           disabled={!valid}
           onClick={() => onInvite(data)}
         >
-          Invite
+          送出
         </Button>
       </ModalFooter>
     </Modal>

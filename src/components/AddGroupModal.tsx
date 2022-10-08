@@ -194,14 +194,14 @@ const AddGroupModal = ({
       role="dialog"
     >
       <ModalHeader className="modal-title-custom" toggle={onClose}>
-        Create New Channel
+        建立頻道
       </ModalHeader>
 
       <ModalBody className="p-4">
         <Form>
           <div className="mb-4">
             <Label htmlFor="addgroupname-input" className="form-label">
-              Channel Name
+              頻道名稱
             </Label>
             <input
               type="text"
@@ -271,7 +271,7 @@ const AddGroupModal = ({
       </ModalBody>
       <ModalFooter>
         <Button color="link" type="button" onClick={onClose}>
-          Close
+          取消
         </Button>
         <Button
           type="button"
@@ -279,7 +279,7 @@ const AddGroupModal = ({
           onClick={onSubmit}
           disabled={!valid}
         >
-          Create Channel
+          建立
         </Button>
       </ModalFooter>
     </Modal>

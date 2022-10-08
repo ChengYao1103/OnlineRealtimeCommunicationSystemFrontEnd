@@ -84,7 +84,7 @@ const DirectMessages = ({
       <div className="d-flex align-items-center px-4 mt-5 mb-2">
         <div className="flex-grow-1">
           <h4 className="mb-0 font-size-11 text-muted text-uppercase">
-            Direct Messages
+            私人訊息
           </h4>
         </div>
         {/* Refresh Recent Chat list */}
@@ -103,7 +103,7 @@ const DirectMessages = ({
             </button>
           </div>
           <UncontrolledTooltip target="refresh-message" placement="bottom">
-            Refresh Message
+            重新整理
           </UncontrolledTooltip>
         </div>
         {/* Start a new message */}
@@ -113,7 +113,7 @@ const DirectMessages = ({
             <AddButton onClick={openAddContact} /> {/* contactModal */}
           </div>
           <UncontrolledTooltip target="new-message" placement="bottom">
-            New Message
+            傳送新訊息
           </UncontrolledTooltip>
         </div>
       </div>

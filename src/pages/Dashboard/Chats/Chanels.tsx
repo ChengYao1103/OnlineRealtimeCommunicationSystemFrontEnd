@@ -30,7 +30,7 @@ const Chanels = ({
       <div className="d-flex align-items-center px-4 mt-5 mb-2">
         <div className="flex-grow-1">
           <h4 className="mb-0 font-size-11 text-muted text-uppercase">
-            Channels
+            多人頻道
           </h4>
         </div>
         <div className="flex-shrink-0">
@@ -40,7 +40,7 @@ const Chanels = ({
             {/* addgroup-exampleModal */}
           </div>
           <UncontrolledTooltip target="create-group" placement="bottom">
-            Create group
+            建立頻道
           </UncontrolledTooltip>
         </div>
       </div>
