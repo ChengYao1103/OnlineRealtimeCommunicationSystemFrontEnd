@@ -160,9 +160,20 @@ const VideoCallModal = ({
 
     newConnection.ontrack = event => {
       var videoRef = document.getElementById("remoteVideo") as HTMLVideoElement;
-      if (videoRef && event.streams) {
-        event.streams.forEach(stream => setRemoteVideo(videoRef, stream));
-        //setRemoteVideo(videoRef, event.streams[0]);
+      if (videoRef && !videoRef.srcObject && event.streams) {
+        setRemoteVideo(videoRef, event.streams[0]);
+        console.log("接收流並顯示於遠端視訊！", event);
+      } else if (videoRef.srcObject && event.streams) {
+        if (videoRef.srcObject === event.streams[0]) {
+          return;
+        }
+        var shareRef = document.getElementById(
+          "remoteVideo2"
+        ) as HTMLVideoElement;
+        shareRef.srcObject = videoRef.srcObject;
+        shareRef.classList.remove("d-none");
+
+        setRemoteVideo(videoRef, event.streams[0]);
         console.log("接收流並顯示於遠端視訊！", event);
       }
     };
@@ -405,6 +416,12 @@ const VideoCallModal = ({
             autoPlay
             id="remoteVideo"
             className="videocallModal-bg"
+          ></video>
+          <video
+            autoPlay
+            id="remoteVideo2"
+            className="d-none position-absolute w-25 start-0 top-50 rounded-3"
+            style={{ margin: "20px" }}
           ></video>
           <video
             autoPlay
