@@ -27,6 +27,7 @@ import {
   getChannelDetails as getChannelDetailsApi,
   getChannelMembers as getChannelMembersApi,
   inviteChannelMembers as inviteChannelMembersApi,
+  kickOutMember as kickOutMemberApi,
   getChannelPosts as getChannelPostsApi,
   toggleFavouriteContact as toggleFavouriteContactApi,
   getArchiveContact as getArchiveContactApi,
@@ -300,9 +301,16 @@ function* getChannelPosts({ payload: id }: any) {
       chatsApiResponseSuccess(ChatsActionTypes.GET_CHANNEL_POSTS, response)
     );
   } catch (error: any) {
-    yield put(
-      chatsApiResponseError(ChatsActionTypes.GET_CHANNEL_POSTS, error)
-    );
+    yield put(chatsApiResponseError(ChatsActionTypes.GET_CHANNEL_POSTS, error));
+  }
+}
+
+function* kickOutMember({ payload: data }: any) {
+  try {
+    const response: Promise<any> = yield call(kickOutMemberApi, data);
+    yield call(showSuccessNotification, "成功");
+  } catch (error: any) {
+    yield call(showErrorNotification, "發生問題");
   }
 }
 
@@ -413,9 +421,7 @@ function* downloadMessageFile({ payload: { data, filename } }: any) {
 function* createPost({ payload: postData }: any) {
   try {
     const response: Promise<any> = yield call(createPostApi, postData);
-    yield put(
-      chatsApiResponseSuccess(ChatsActionTypes.CREATE_POST, response)
-    );
+    yield put(chatsApiResponseSuccess(ChatsActionTypes.CREATE_POST, response));
     yield call(showSuccessNotification, "Success!");
   } catch (error: any) {
     yield call(showErrorNotification, error.data.message);
@@ -438,13 +444,8 @@ function* createComment({ payload: commentData }: any) {
 
 function* deletePost({ payload: postId }: any) {
   try {
-    const response: Promise<any> = yield call(
-      deletePostApi,
-      postId
-    );
-    yield put(
-      chatsApiResponseSuccess(ChatsActionTypes.DELETE_POST, response)
-    );
+    const response: Promise<any> = yield call(deletePostApi, postId);
+    yield put(chatsApiResponseSuccess(ChatsActionTypes.DELETE_POST, response));
   } catch (error: any) {
     yield put(chatsApiResponseError(ChatsActionTypes.DELETE_POST, error));
   }
@@ -452,10 +453,7 @@ function* deletePost({ payload: postId }: any) {
 
 function* deleteComment({ payload: commentId }: any) {
   try {
-    const response: Promise<any> = yield call(
-      deleteCommentApi,
-      commentId
-    );
+    const response: Promise<any> = yield call(deleteCommentApi, commentId);
     yield put(
       chatsApiResponseSuccess(ChatsActionTypes.DELETE_COMMENT, response)
     );
@@ -471,22 +469,16 @@ function* getPostComments({ payload: id }: any) {
       chatsApiResponseSuccess(ChatsActionTypes.GET_POST_COMMENTS, response)
     );
   } catch (error: any) {
-    yield put(
-      chatsApiResponseError(ChatsActionTypes.GET_POST_COMMENTS, error)
-    );
+    yield put(chatsApiResponseError(ChatsActionTypes.GET_POST_COMMENTS, error));
   }
 }
 
 function* getRollCall({ payload: id }: any) {
   try {
     const response: Promise<any> = yield call(getRollCallApi, id);
-    yield put(
-      chatsApiResponseSuccess(ChatsActionTypes.GET_ROLLCALL, response)
-    );
+    yield put(chatsApiResponseSuccess(ChatsActionTypes.GET_ROLLCALL, response));
   } catch (error: any) {
-    yield put(
-      chatsApiResponseError(ChatsActionTypes.GET_ROLLCALL, error)
-    );
+    yield put(chatsApiResponseError(ChatsActionTypes.GET_ROLLCALL, error));
   }
 }
 
@@ -553,6 +545,9 @@ export function* watchInviteChannelMembers() {
     ChatsActionTypes.INVITE_CHANNEL_MEMBERS,
     inviteChannelMembers
   );
+}
+export function* watchKickOutMember() {
+  yield takeEvery(ChatsActionTypes.KICK_OUT_MEMBER, kickOutMember);
 }
 export function* watchGetChannelPosts() {
   yield takeEvery(ChatsActionTypes.GET_CHANNEL_POSTS, getChannelPosts);
@@ -630,6 +625,7 @@ function* chatsSaga() {
     fork(watchGetChannelDetails),
     fork(watchGetChannelMembers),
     fork(watchInviteChannelMembers),
+    fork(watchKickOutMember),
     fork(watchGetChannelPosts),
     fork(watchToggleFavouriteContact),
     fork(watchGetArchiveContact),

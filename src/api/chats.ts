@@ -107,6 +107,10 @@ const inviteChannelMembers = (data: any) => {
   return api.WSSend(JSON.stringify(send));
 };
 
+const kickOutMember = (data: object) => {
+  return api.delete(url.KICK_OUT, data);
+};
+
 const getChannelPosts = (data: any) => {
   return api.get(`${url.GET_CHANNEL_POSTS}/${data.ID}`);
 };
@@ -212,6 +216,7 @@ export {
   getChannelDetails,
   getChannelMembers,
   inviteChannelMembers,
+  kickOutMember,
   getChannelPosts,
   toggleFavouriteContact,
   getArchiveContact,

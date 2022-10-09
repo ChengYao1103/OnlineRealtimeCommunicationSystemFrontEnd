@@ -141,7 +141,7 @@ export const inviteChannelMembers = (
   payload: { channelID, emailArray, roleArray },
 });
 
-export const getChannelPosts =  (data: any) => ({
+export const getChannelPosts = (data: any) => ({
   type: ChatsActionTypes.GET_CHANNEL_POSTS,
   payload: data,
 });
@@ -237,4 +237,9 @@ export const getRollCallRecords = (id: number | string) => ({
 export const getRollCall = (id: number | string) => ({
   type: ChatsActionTypes.GET_ROLLCALL,
   payload: id,
+});
+
+export const kickOutMember = (channelId: number, userId: number) => ({
+  type: ChatsActionTypes.KICK_OUT_MEMBER,
+  payload: { channelId, userId },
 });
