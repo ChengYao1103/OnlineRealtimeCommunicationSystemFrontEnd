@@ -108,7 +108,6 @@ const Post = ({
         setComments(postComments);
       }
     }
-    console.log(channelPost.user.name);
   }, [postComments]);
 
   return (
@@ -147,7 +146,14 @@ const Post = ({
               >
                 <div className="d-flex align-items-center">
                   <div className="chat-avatar me-2">
-                    <img src={postAuthor.photo ?? imagePlaceholder} alt="" />
+                    <img
+                      src={
+                        postAuthor.photo !== ""
+                          ? postAuthor.photo
+                          : imagePlaceholder
+                      }
+                      alt=""
+                    />
                   </div>
                   <h6 className="m-0">{channelPost.user.name}</h6>
                 </div>
@@ -174,11 +180,15 @@ const Post = ({
                       <div className="d-flex align-items-center">
                         <div className="chat-avatar me-2">
                           <img
-                            src={commentAuthor.photo ?? imagePlaceholder}
+                            src={
+                              commentAuthor.photo !== ""
+                                ? commentAuthor.photo
+                                : imagePlaceholder
+                            }
                             alt=""
                           />
                         </div>
-                        <h6 className="m-0">{channelPost.user.name}</h6>
+                        <h6 className="m-0">{commentAuthor.name}</h6>
                       </div>
                     </Link>
                     <CardText className="my-3">{comment.content}</CardText>
