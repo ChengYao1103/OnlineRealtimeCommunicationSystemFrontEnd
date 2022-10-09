@@ -14,6 +14,7 @@ export const INIT_STATE: ChatsState = {
   chatUserDetails: {},
   chatUserConversations: [],
   channelPosts: [],
+  channelRole: -1,
   postComments: [],
   isOpenUserDetails: false,
   channelDetails: {},
@@ -21,7 +22,6 @@ export const INIT_STATE: ChatsState = {
   recentChatUsers: [],
   selectedChatInfo: undefined,
   rollCall: undefined,
-  role: null,
 };
 
 const Chats = persistReducer(
@@ -135,6 +135,12 @@ const Chats = persistReducer(
               isChannelDetailsFetched: true,
               getUserDetailsLoading: false,
             };
+
+          case ChatsActionTypes.GET_ROLE:
+            return {
+              ...state,
+              channelRole: action.payload.data.role,
+            };
           case ChatsActionTypes.GET_CHANNEL_MEMBERS:
             return {
               ...state,
@@ -178,11 +184,6 @@ const Chats = persistReducer(
             return {
               ...state,
               rollCall: action.payload.data.rollCall,
-            };
-          case ChatsActionTypes.GET_ROLE:
-            return {
-              ...state,
-              role: action.payload.data.role,
             };
           default:
             return { ...state };
@@ -347,6 +348,7 @@ const Chats = persistReducer(
         state.chatUserConversations = [];
         state.channelPosts = [];
         state.rollCall = undefined;
+        state.channelRole = -1;
         return {
           ...state,
           channelMembers: undefined,

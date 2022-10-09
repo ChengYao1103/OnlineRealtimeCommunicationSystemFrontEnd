@@ -122,6 +122,11 @@ export const createChannel = (channelData: CreateChannelPostData) => ({
   payload: channelData,
 });
 
+export const getRole = (id: number) => ({
+  type: ChatsActionTypes.GET_ROLE,
+  payload: id,
+});
+
 export const getChannelDetails = (id: number | string) => ({
   type: ChatsActionTypes.GET_CHANNEL_DETAILS,
   payload: id,
@@ -141,14 +146,14 @@ export const inviteChannelMembers = (
   payload: { channelID, emailArray, roleArray },
 });
 
-export const getChannelPosts =  (data: any) => ({
-  type: ChatsActionTypes.GET_CHANNEL_POSTS,
-  payload: data,
+export const kickOutMember = (channelID: number, userID: number) => ({
+  type: ChatsActionTypes.KICK_OUT_MEMBER,
+  payload: { channelID, userID },
 });
 
-export const getRole =  (id: number | string) => ({
-  type: ChatsActionTypes.GET_ROLE,
-  payload: id,
+export const getChannelPosts = (data: any) => ({
+  type: ChatsActionTypes.GET_CHANNEL_POSTS,
+  payload: data,
 });
 
 export const toggleFavouriteContact = (id: number | string) => ({

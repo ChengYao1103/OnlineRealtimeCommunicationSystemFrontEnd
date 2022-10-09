@@ -57,7 +57,7 @@ const Index = () => {
     isImageDeleted,
     recentChatChannels,
     messageID,
-    role,
+    channelRole,
   } = useAppSelector(state => ({
     selectedChatInfo: state.Chats.selectedChatInfo,
     chatUserDetails: state.Chats.chatUserDetails,
@@ -70,7 +70,7 @@ const Index = () => {
     isImageDeleted: state.Chats.isImageDeleted,
     recentChatChannels: state.Chats.channels,
     messageID: state.Chats.messageID,
-    role: state.Chats.role,
+    channelRole: state.Chats.channelRole,
   }));
   const onOpenUserDetails = () => {
     dispatch(toggleUserDetailsTab(true));
@@ -157,7 +157,6 @@ const Index = () => {
         })
       );
       dispatch(getRole(selectedChatInfo.id))
-      console.log(role)
     }
   }, [dispatch, selectedChatInfo, userProfile]);
 
@@ -176,13 +175,13 @@ const Index = () => {
   return (
     <>
       <UserHead
-        chatUserDetails={selectedChatInfo}
+        selectedChatInfo={selectedChatInfo}
         pinnedTabs={pinnedTabs}
         onOpenUserDetails={onOpenUserDetails}
         onDelete={onDeleteUserMessages}
         isChannel={true}
         onToggleArchive={onToggleArchive}
-        role={role}
+        role={channelRole}
       />
       <Home
         chatUserConversations={chatUserConversations}

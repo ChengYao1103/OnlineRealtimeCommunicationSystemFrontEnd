@@ -118,13 +118,13 @@ const Index = ({ isChannel }: IndexProps) => {
           <AppSimpleBar className="p-4 user-profile-desc">
             {" "}
             {/* simplebar */}
-            <Actions
+            {/* <Actions
               chatUserDetails={chatUserDetails}
               onOpenVideo={onOpenVideo}
               onOpenAudio={onOpenAudio}
               onToggleFavourite={onToggleFavourite}
               onToggleArchive={onToggleArchive}
-            />
+            /> */}
             {/*<Status about={chatUserDetails.about} />*/}
             {!isChannel ? (
               <>

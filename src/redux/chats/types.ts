@@ -9,9 +9,11 @@ export enum ChatsActionTypes {
   GET_FAVOURITES = "@@chats/GET_FAVOURITES",
   GET_DIRECT_MESSAGES = "@@chats/GET_DIRECT_MESSAGES",
   GET_CHANNELS = "@@chats/GET_CHANNELS",
+  GET_ROLE = "@@chats/GET_ROLE",
   GET_CHANNEL_MEMBERS = "@@chats/GET_CHANNEL_MEMBERS",
   INVITE_CHANNEL_MEMBERS = "@@chats/INVITE_CHANNEL_MEMBERS",
   GET_CHANNEL_POSTS = "@@chats/GET_CHANNEL_POSTS",
+  KICK_OUT_MEMBER = "@@chats/KICK_OUT_MEMBER",
 
   ADD_CONTACTS = "@@chats/ADD_CONTACTS",
   CREATE_CHANNEL = "@@chats/CREATE_CHANNEL",
@@ -20,7 +22,6 @@ export enum ChatsActionTypes {
   GET_CHAT_USER_CONVERSATIONS = "@@chats/GET_CHAT_USER_CONVERSATIONS",
   GET_RECENT_CHAT = "@@chats/GET_RECENT_CHAT",
   TOGGLE_USER_DETAILS_TAB = "@@chats/TOGGLE_USER_DETAILS_TAB",
-  GET_ROLE = "@@chats/GET_ROLE",
 
   // MESSAGE
   ON_SEND_MESSAGE = "@@chats/ON_SEND_MESSAGE",
@@ -133,6 +134,7 @@ export interface ChatsState {
   chatUserDetails: object;
   chatUserConversations: Array<messageRecordModel>;
   channelPosts: Array<channelPostModel>;
+  channelRole: number;
   postComments: Array<postCommentModel>;
   recentChatUsers: Array<recentChatUserModel>;
   isOpenUserDetails: boolean;

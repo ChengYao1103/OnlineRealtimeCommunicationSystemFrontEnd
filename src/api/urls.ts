@@ -52,13 +52,14 @@ export const DOWNLOAD_MESSAGE_FILE = "/message/download";
 
 // channels
 export const GET_CHANNELS = "/user/allChannel";
+export const GET_ROLE = "/channel/getRole";
 export const CREATE_CHANNEL = "/channel/create";
 export const GET_CHANNEL_DETAILS = "/channel";
 export const GET_CHANNEL_MEMBERS = "/channel/allUser";
 export const INVITE_CHANNEL_MEMBERS = "/channel/invite";
 export const GET_CHANNEL_POSTS = "/channel/allPost";
 export const GET_ROLLCALL = "/channel/getRollCall";
-export const GET_ROLE = "/channel/getRole";
+export const KICK_OUT = "/channel/kickOut";
 
 // posts
 export const CREATE_POST = "/post/create";

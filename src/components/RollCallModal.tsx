@@ -61,8 +61,6 @@ const RollCallModal = ({ isOpen, onClose, role }: RollCallModalProps) => {
 
   useEffect(() => {
     if (rollCall) {
-      console.log(channelInfo)
-      console.log(rollCall)
       if (new Date(rollCall.startTime).toISOString() !== "Invalid Date")
         setStartDateTime(new Date(rollCall.startTime).toLocaleString());
       if (new Date(rollCall.end).toLocaleString() !== "Invalid Date")
@@ -190,7 +188,6 @@ const RollCallModal = ({ isOpen, onClose, role }: RollCallModalProps) => {
               value={endDateTime}
               disabled={true}
               onChange={(e: any) => {
-                console.log(e.target.value);
                 if (!Date.parse(e.target.value)) setEndDateTime("");
                 else setEndDateTime(e.target.value);
               }}
@@ -206,13 +203,11 @@ const RollCallModal = ({ isOpen, onClose, role }: RollCallModalProps) => {
       className="m-3"
       disabled={mode === 0 && !rollCall}
       onClick={() => {
-          //console.log(rollCall)
           if (role === 0) {
             if (mode === 0) {
               dispatch(closeRollCall(rollCall.id))
             }
             else if (mode === 1) {
-              console.log({id: rollCall.id, startTime: startDate + " " + startTime, endTime: endDate ? endDate + " " + endTime : null})
               dispatch(updateRollCall({id: rollCall.id, startTime: startDate + " " + startTime, endTime: endDate ? endDate + " " + endTime : null}))
             }
             else if (mode === 2) {

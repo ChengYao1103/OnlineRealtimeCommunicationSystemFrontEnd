@@ -90,6 +90,11 @@ const getChannels = (userId: string) => {
   return api.get(destUrl);
 };
 
+const getRole = (channelId: string) => {
+  let destUrl = `${url.GET_ROLE}/${channelId}`;
+  return api.get(destUrl);
+};
+
 const getChannelDetails = (id: string | number) => {
   return api.get(`${url.GET_CHANNEL_DETAILS}/${id}`);
 };
@@ -105,6 +110,10 @@ const inviteChannelMembers = (data: any) => {
   };
 
   return api.WSSend(JSON.stringify(send));
+};
+
+const kickOutMember = (data: object) => {
+  return api.delete(url.KICK_OUT, { data });
 };
 
 const getChannelPosts = (data: any) => {
@@ -193,10 +202,6 @@ const getRollCall = (id: string | number) => {
   return api.get(`${url.GET_ROLLCALL}/${id}`);
 };
 
-const getRole = (id: string | number) => {
-  return api.get(`${url.GET_ROLE}/${id}`);
-};
-
 export {
   getFavourites,
   getDirectMessages,
@@ -213,9 +218,11 @@ export {
   deleteUserMessages,
   createChannel,
   getChannels,
+  getRole,
   getChannelDetails,
   getChannelMembers,
   inviteChannelMembers,
+  kickOutMember,
   getChannelPosts,
   toggleFavouriteContact,
   getArchiveContact,
@@ -235,5 +242,4 @@ export {
   updateRollCall,
   getRollCallRecords,
   getRollCall,
-  getRole,
 };

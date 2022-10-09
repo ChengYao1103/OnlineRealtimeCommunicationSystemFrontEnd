@@ -15,7 +15,7 @@ import { Link } from "react-router-dom";
 import classnames from "classnames";
 
 // hooks
-import { useRedux } from "../../../../hooks/index";
+import { useProfile, useRedux } from "../../../../hooks/index";
 
 // components
 import AudioCallModal from "../../../../components/AudioCallModal";
@@ -26,7 +26,11 @@ import AddPinnedTabModal from "../../../../components/AddPinnedTabModal";
 import { PinTypes } from "../../../../data/chat";
 
 // actions
-import { changeSelectedChat } from "../../../../redux/actions";
+import {
+  changeSelectedChat,
+  getChannels,
+  kickOutMember,
+} from "../../../../redux/actions";
 
 // constants
 import { STATUS_TYPES } from "../../../../constants";
@@ -35,13 +39,13 @@ import InviteChannelModal from "../../../../components/InviteChannelModal";
 import RollCallModal from "../../../../components/RollCallModal";
 import ChannelMeetingModal from "../../../../components/ChannelMeetingModal";
 interface ProfileImageProps {
-  chatUserDetails: any;
+  selectedChatInfo: any;
   onCloseConversation: () => any;
   onOpenUserDetails: () => any;
   isChannel: boolean;
 }
 const ProfileImage = ({
-  chatUserDetails,
+  selectedChatInfo,
   onCloseConversation,
   onOpenUserDetails,
   isChannel,
@@ -52,7 +56,7 @@ const ProfileImage = ({
     channelMembers: state.Chats.channelMembers,
   }));
 
-  const fullName = chatUserDetails.name;
+  const fullName = selectedChatInfo.name;
   /*const shortName = !isChannel
     ? chatUserDetails.firstName
       ? `${chatUserDetails.firstName.charAt(
@@ -98,30 +102,30 @@ const ProfileImage = ({
               { online: isOnline }
             )}
           >
-            {chatUserDetails.photo ? (
+            {selectedChatInfo.photo ? (
               <>
                 <img
-                  src={chatUserDetails.photo}
+                  src={selectedChatInfo.photo}
                   className="rounded-circle avatar-sm"
                   alt=""
                 />
-                <span
+                {/* <span
                   className={classnames(
                     "user-status",
                     {
                       "bg-success":
-                        chatUserDetails.status === STATUS_TYPES.ACTIVE,
+                        selectedChatInfo.status === STATUS_TYPES.ACTIVE,
                     },
                     {
                       "bg-warning":
-                        chatUserDetails.status === STATUS_TYPES.AWAY,
+                        selectedChatInfo.status === STATUS_TYPES.AWAY,
                     },
                     {
                       "bg-danger":
-                        chatUserDetails.status === STATUS_TYPES.DO_NOT_DISTURB,
+                        selectedChatInfo.status === STATUS_TYPES.DO_NOT_DISTURB,
                     }
                   )}
-                ></span>
+                ></span> */}
               </>
             ) : (
               <div className="avatar-sm align-self-center">
@@ -135,7 +139,7 @@ const ProfileImage = ({
                   )}
                 >
                   <span className="username"> {fullName.substring(0, 1)}</span>
-                  <span className="user-status"></span>
+                  {/* <span className="user-status"></span> */}
                 </span>
               </div>
             )}
@@ -162,7 +166,7 @@ const ProfileImage = ({
               )
             ) : (
               <p className="text-truncate text-muted mb-0">
-                <small>{chatUserDetails.status}</small>
+                <small>{selectedChatInfo.status}</small>
               </p>
             )}
           </div>
@@ -197,6 +201,7 @@ interface MoreProps {
   onOpenUserDetails: () => void;
   onOpenVideo: () => void;
   onDelete: () => void;
+  onLeave: () => void;
   isArchive: boolean;
   onToggleArchive: () => void;
   isChannel: boolean;
@@ -208,6 +213,7 @@ const More = ({
   onOpenUserDetails,
   onOpenVideo,
   onDelete,
+  onLeave,
   isArchive,
   onToggleArchive,
   isChannel,
@@ -254,7 +260,7 @@ const More = ({
         >
           開始會議 <i className="bx bx-video text-muted"></i>
         </DropdownItem>
-        <DropdownItem
+        {/* <DropdownItem
           className="d-flex justify-content-between align-items-center"
           to="#"
           onClick={onToggleArchive}
@@ -268,7 +274,7 @@ const More = ({
               封存 <i className="bx bx-archive text-muted"></i>
             </>
           )}
-        </DropdownItem>
+        </DropdownItem> */}
         <DropdownItem
           className="d-flex justify-content-between align-items-center"
           to="#"
@@ -281,6 +287,13 @@ const More = ({
           onClick={onDelete}
         >
           作業 <i className="bx bx-trash text-muted"></i>
+        </DropdownItem>
+        <DropdownItem
+          className="d-flex text-danger justify-content-between align-items-center"
+          to="#"
+          onClick={onLeave}
+        >
+          退出群組 <i className="bx bx-trash text-danger"></i>
         </DropdownItem>
       </DropdownMenu>
     </Dropdown>
@@ -322,7 +335,7 @@ const PinnedAlert = ({ onOpenPinnedTab }: PinnedAlertProps) => {
   );
 };
 interface UserHeadProps {
-  chatUserDetails: any;
+  selectedChatInfo: any;
   pinnedTabs: Array<PinTypes>;
   onOpenUserDetails: () => void;
   onDelete: () => void;
@@ -331,7 +344,7 @@ interface UserHeadProps {
   role: number;
 }
 const UserHead = ({
-  chatUserDetails,
+  selectedChatInfo,
   pinnedTabs,
   onOpenUserDetails,
   onDelete,
@@ -341,6 +354,7 @@ const UserHead = ({
 }: UserHeadProps) => {
   // global store
   const { dispatch } = useRedux();
+  const { userProfile } = useProfile();
   /*
   video call modal
   */
@@ -394,12 +408,18 @@ const UserHead = ({
     dispatch(changeSelectedChat(null));
   };
 
+  /** 離開群組 */
+  const onLeave = () => {
+    dispatch(kickOutMember(selectedChatInfo.id, userProfile.id));
+    dispatch(getChannels(userProfile.id.toString()));
+  };
+
   return (
     <div className="p-3 p-lg-4 user-chat-topbar">
       <Row className="align-items-center">
         <Col className="col-9">
           <ProfileImage
-            chatUserDetails={chatUserDetails}
+            selectedChatInfo={selectedChatInfo}
             onCloseConversation={onCloseConversation}
             onOpenUserDetails={onOpenUserDetails}
             isChannel={isChannel}
@@ -446,7 +466,8 @@ const UserHead = ({
                 onOpenUserDetails={onOpenUserDetails}
                 onOpenVideo={onOpenVideo}
                 onDelete={onDelete}
-                isArchive={chatUserDetails.isArchived}
+                onLeave={onLeave}
+                isArchive={selectedChatInfo.isArchived}
                 onToggleArchive={onToggleArchive}
                 isChannel={isChannel}
                 onOpenInvite={onOpenInvite}
