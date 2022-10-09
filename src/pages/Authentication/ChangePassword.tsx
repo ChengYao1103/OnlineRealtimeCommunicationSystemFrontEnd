@@ -84,6 +84,10 @@ const ChangePassword = (prop: ChangePasswordProps) => {
     setTimeout(() => goBack(), 1000);
   }
 
+  if (userProfile.email === "") {
+    history.push("/");
+  }
+
   // const { userProfile, loading } = useProfile();
 
   return (
