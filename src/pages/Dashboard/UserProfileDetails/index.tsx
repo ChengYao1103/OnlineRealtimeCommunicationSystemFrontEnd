@@ -43,12 +43,14 @@ const Index = ({ isChannel }: IndexProps) => {
     getUserDetailsLoading,
     isOpenUserDetails,
     isFavouriteContactToggled,
+    channelRole,
   } = useAppSelector(state => ({
     selectedChatInfo: state.Chats.selectedChatInfo,
     chatUserDetails: state.Chats.chatUserDetails,
     getUserDetailsLoading: state.Chats.getUserDetailsLoading,
     isOpenUserDetails: state.Chats.isOpenUserDetails,
     isFavouriteContactToggled: state.Chats.isFavouriteContactToggled,
+    channelRole: state.Chats.channelRole,
   }));
 
   useEffect(() => {
@@ -209,6 +211,7 @@ const Index = ({ isChannel }: IndexProps) => {
             <RollCallModal
               isOpen={isOpenRollCallModal}
               onClose={onCloseRollCall}
+              role={channelRole}
             />
           )}
         </div>
