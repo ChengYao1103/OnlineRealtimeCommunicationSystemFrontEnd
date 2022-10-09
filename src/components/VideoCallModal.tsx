@@ -405,23 +405,16 @@ const VideoCallModal = ({
     >
       <ModalBody className="p-0">
         <div className="videocallModal-bg">
-          {!isAccept && (
-            <img
-              src={user.photo ? user.photo : imagePlaceholder}
-              alt=""
-              className="videocallModal-bg"
-            />
-          )}
           <video
             autoPlay
             id="remoteVideo"
-            className="videocallModal-bg"
+            className="videocallModal-bg w-100"
           ></video>
           <video
             autoPlay
             id="remoteVideo2"
-            className="d-none position-absolute w-25 start-0 top-50 rounded-3"
-            style={{ margin: "20px" }}
+            className="d-none position-absolute w-25 start-0 rounded-3"
+            style={{ margin: "20px", top: "30%" }}
           ></video>
           <video
             autoPlay
@@ -433,6 +426,13 @@ const VideoCallModal = ({
 
         <div className="position-absolute start-0 end-0 bottom-0">
           <div className="text-center">
+            {!isAccept && (
+              <img
+                src={user.photo ? user.photo : imagePlaceholder}
+                alt=""
+                className="img-thumbnail rounded-circle"
+              />
+            )}
             {isAccept && (
               <div className="d-flex justify-content-center align-items-center text-center">
                 <div className="avatar-md h-auto">
