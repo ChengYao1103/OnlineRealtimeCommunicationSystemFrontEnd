@@ -4,7 +4,6 @@ import { Container, Row, Col } from "reactstrap";
 import { Link } from "react-router-dom";
 
 // images
-import authImage from "../assets/images/auth-img.png";
 import icon from "../assets/images/icon.png";
 
 interface NonAuthLayoutWrapperProps {
@@ -27,9 +26,6 @@ const NonAuthLayoutWrapper = (props: NonAuthLayoutWrapperProps) => {
                   <p className="font-size-16">
                     Online Realtime Communication System
                   </p>
-                </div>
-                <div className="mt-auto">
-                  <img src={authImage} alt="auth" className="auth-img" />
                 </div>
               </div>
             </Col>
