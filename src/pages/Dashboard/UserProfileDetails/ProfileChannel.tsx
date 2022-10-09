@@ -16,39 +16,45 @@ import { STATUS_TYPES } from "../../../constants";
 
 //interfaces
 import { userModel } from "../../../redux/auth/types";
+import { useProfile, useRedux } from "../../../hooks";
+import { getChannels, kickOutMember } from "../../../redux/actions";
 
-interface ProfileUserProps {
+interface ProfileChannelProps {
   onCloseUserDetails: () => any;
   selectedChatInfo: userModel;
-  onOpenVideo: () => void;
-  onOpenAudio: () => void;
+  onOpenInvite: () => void;
+  onOpenRollCall: () => void;
 }
-const ProfileUser = ({
+const ProfileChannel = ({
   onCloseUserDetails,
   selectedChatInfo,
-  onOpenAudio,
-  onOpenVideo,
-}: ProfileUserProps) => {
+  onOpenInvite,
+  onOpenRollCall,
+}: ProfileChannelProps) => {
+  const { dispatch } = useRedux();
+  const { userProfile } = useProfile();
+
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const toggle = () => setDropdownOpen(!dropdownOpen);
 
-  const profile = selectedChatInfo.cover
-    ? selectedChatInfo.cover
-    : imagePlaceholder;
+  const onLeave = () => {
+    dispatch(kickOutMember(selectedChatInfo.id, userProfile.id));
+    dispatch(getChannels(userProfile.id.toString()));
+  };
+
   const fullName = selectedChatInfo.name;
 
   return (
     <div className="p-3 border-bottom">
-      <div className="user-profile-img">
-        <img src={profile} className="profile-img rounded" alt="" />
-        <div className="overlay-content rounded">
-          <div className="user-chat-nav p-2">
+      <div className="">
+        <div>
+          <div className="user-chat-nav p-2" style={{ height: "100%" }}>
             <div className="d-flex w-100">
               <div className="flex-grow-1">
                 <Button
                   color="none"
                   type="button"
-                  className="btn nav-btn text-white user-profile-show d-none d-lg-block"
+                  className="btn nav-btn user-profile-show d-none d-lg-block"
                   onClick={onCloseUserDetails}
                 >
                   <i className="bx bx-x"></i>
@@ -56,7 +62,7 @@ const ProfileUser = ({
                 <Button
                   type="button"
                   color="none"
-                  className="btn nav-btn text-white user-profile-show d-block d-lg-none"
+                  className="btn nav-btn user-profile-show d-block d-lg-none"
                   onClick={onCloseUserDetails}
                 >
                   <i className="bx bx-left-arrow-alt"></i>
@@ -66,58 +72,70 @@ const ProfileUser = ({
                 <Dropdown isOpen={dropdownOpen} toggle={toggle}>
                   <DropdownToggle
                     color="none"
-                    className="btn nav-btn text-white"
+                    className="btn nav-btn"
                     type="button"
                   >
                     <i className="bx bx-dots-vertical-rounded"></i>
                   </DropdownToggle>
                   <DropdownMenu className="dropdown-menu-end">
-                    {/* <DropdownItem
-                      className="d-flex justify-content-between align-items-center d-lg-none user-profile-show"
-                      to="#"
-                    >
-                      查看個人資料 <i className="bx bx-user text-muted"></i>
-                    </DropdownItem> */}
                     <DropdownItem
-                      className="d-flex justify-content-between align-items-center d-lg-none"
+                      className="d-flex justify-content-between align-items-center user-profile-show"
                       to="#"
-                      onClick={onOpenAudio}
+                      onClick={onOpenInvite}
                     >
-                      語音通話 <i className="bx bxs-phone-call text-muted"></i>
+                      邀請成員 <i className="bx bx-user-plus text-muted"></i>
                     </DropdownItem>
+
                     <DropdownItem
-                      className="d-flex justify-content-between align-items-center d-lg-none"
+                      className="d-flex justify-content-between align-items-center"
                       to="#"
-                      onClick={onOpenVideo}
+                      onClick={onOpenRollCall}
                     >
-                      視訊通話 <i className="bx bx-video text-muted"></i>
+                      建立點名 <i className="bx bxs-phone-call text-muted"></i>
                     </DropdownItem>
                     {/* <DropdownItem
-                      className="d-flex justify-content-between align-items-center"
-                      to="#"
-                    >
-                      封存 <i className="bx bx-archive text-muted"></i>
-                    </DropdownItem>
+                        className="d-flex justify-content-between align-items-center"
+                        to="#"
+                        onClick={onToggleArchive}
+                      >
+                        {isArchive ? (
+                          <>
+                            解除封存 <i className="bx bx-archive-out text-muted"></i>
+                          </>
+                        ) : (
+                          <>
+                            封存 <i className="bx bx-archive text-muted"></i>
+                          </>
+                        )}
+                      </DropdownItem> */}
                     <DropdownItem
                       className="d-flex justify-content-between align-items-center"
                       to="#"
                     >
-                      關閉提醒{" "}
-                      <i className="bx bx-microphone-off text-muted"></i>
+                      小組 <i className="bx bx-microphone-off text-muted"></i>
                     </DropdownItem>
                     <DropdownItem
                       className="d-flex justify-content-between align-items-center"
                       to="#"
+                      //onClick={onDelete}
                     >
-                      刪除 <i className="bx bx-trash text-muted"></i>
-                    </DropdownItem> */}
+                      作業 <i className="bx bx-trash text-muted"></i>
+                    </DropdownItem>
+                    <DropdownItem
+                      className="d-flex text-danger justify-content-between align-items-center"
+                      to="#"
+                      onClick={onLeave}
+                    >
+                      退出群組 <i className="bx bx-trash text-danger"></i>
+                    </DropdownItem>
                   </DropdownMenu>
                 </Dropdown>
               </div>
             </div>
           </div>
           <div className="mt-auto p-3">
-            <h5 className="user-name mb-1 text-truncate">{fullName}</h5>
+            <small className="text-muted">頻道名稱</small>
+            <h5 className="user-name mt-3 mx-3 text-truncate">{fullName}</h5>
             {/*chatUserDetails.status && (
               <p className="font-size-14 text-truncate mb-0">
                 <i
@@ -151,4 +169,4 @@ const ProfileUser = ({
   );
 };
 
-export default ProfileUser;
+export default ProfileChannel;
