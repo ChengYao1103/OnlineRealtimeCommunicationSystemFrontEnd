@@ -26,7 +26,11 @@ import AddPinnedTabModal from "../../../../components/AddPinnedTabModal";
 import { PinTypes } from "../../../../data/chat";
 
 // actions
-import { changeSelectedChat, kickOutMember } from "../../../../redux/actions";
+import {
+  changeSelectedChat,
+  getChannels,
+  kickOutMember,
+} from "../../../../redux/actions";
 
 // constants
 import { STATUS_TYPES } from "../../../../constants";
@@ -105,7 +109,7 @@ const ProfileImage = ({
                   className="rounded-circle avatar-sm"
                   alt=""
                 />
-                <span
+                {/* <span
                   className={classnames(
                     "user-status",
                     {
@@ -121,7 +125,7 @@ const ProfileImage = ({
                         selectedChatInfo.status === STATUS_TYPES.DO_NOT_DISTURB,
                     }
                   )}
-                ></span>
+                ></span> */}
               </>
             ) : (
               <div className="avatar-sm align-self-center">
@@ -135,7 +139,7 @@ const ProfileImage = ({
                   )}
                 >
                   <span className="username"> {fullName.substring(0, 1)}</span>
-                  <span className="user-status"></span>
+                  {/* <span className="user-status"></span> */}
                 </span>
               </div>
             )}
@@ -203,6 +207,7 @@ interface MoreProps {
   isChannel: boolean;
   onOpenInvite: () => void;
   onOpenRollCall: () => void;
+  role: number;
 }
 const More = ({
   onOpenUserDetails,
@@ -214,6 +219,7 @@ const More = ({
   isChannel,
   onOpenInvite,
   onOpenRollCall,
+  role,
 }: MoreProps) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const toggle = () => setDropdownOpen(!dropdownOpen);
@@ -254,7 +260,7 @@ const More = ({
         >
           開始會議 <i className="bx bx-video text-muted"></i>
         </DropdownItem>
-        <DropdownItem
+        {/* <DropdownItem
           className="d-flex justify-content-between align-items-center"
           to="#"
           onClick={onToggleArchive}
@@ -268,7 +274,7 @@ const More = ({
               封存 <i className="bx bx-archive text-muted"></i>
             </>
           )}
-        </DropdownItem>
+        </DropdownItem> */}
         <DropdownItem
           className="d-flex justify-content-between align-items-center"
           to="#"
@@ -335,6 +341,7 @@ interface UserHeadProps {
   onDelete: () => void;
   isChannel: boolean;
   onToggleArchive: () => void;
+  role: number;
 }
 const UserHead = ({
   selectedChatInfo,
@@ -343,6 +350,7 @@ const UserHead = ({
   onDelete,
   isChannel,
   onToggleArchive,
+  role,
 }: UserHeadProps) => {
   // global store
   const { dispatch } = useRedux();
@@ -400,10 +408,10 @@ const UserHead = ({
     dispatch(changeSelectedChat(null));
   };
 
-  /* 離開群組 */
+  /** 離開群組 */
   const onLeave = () => {
-    console.log(selectedChatInfo.id);
     dispatch(kickOutMember(selectedChatInfo.id, userProfile.id));
+    dispatch(getChannels(userProfile.id.toString()));
   };
 
   return (
@@ -464,6 +472,7 @@ const UserHead = ({
                 isChannel={isChannel}
                 onOpenInvite={onOpenInvite}
                 onOpenRollCall={onOpenRollCall}
+                role={role}
               />
             </li>
           </ul>
@@ -499,7 +508,7 @@ const UserHead = ({
         />
       )}
       {isOpenRollCallModal && (
-        <RollCallModal isOpen={isOpenRollCallModal} onClose={onCloseRollCall} />
+        <RollCallModal isOpen={isOpenRollCallModal} onClose={onCloseRollCall} role={role} />
       )}
     </div>
   );

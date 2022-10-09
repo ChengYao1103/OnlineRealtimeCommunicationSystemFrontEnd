@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import classnames from "classnames";
-import { Badge } from "reactstrap";
+import { Badge, Button } from "reactstrap";
 
 // hooks
 import { useProfile, useRedux } from "../../../hooks/index";
@@ -13,9 +13,12 @@ import {
   getChatUserConversations,
   changeSelectedChat,
   getChannelMembers,
+  getRole,
+  kickOutMember,
 } from "../../../redux/actions";
 import { channelModel } from "../../../redux/chats/types";
 import { userModel } from "../../../redux/auth/types";
+import { RoleTypes } from "../../../repository/Enum";
 
 interface MemberProps {
   member: userModel;
@@ -23,13 +26,28 @@ interface MemberProps {
 }
 const Member = ({ member, channelInfo }: MemberProps) => {
   // global store
-  const { dispatch } = useRedux();
+  const { dispatch, useAppSelector } = useRedux();
+  const { channelRole } = useAppSelector(state => ({
+    channelRole: state.Chats.channelRole,
+  }));
   const { userProfile } = useProfile();
+
+  useEffect(() => {
+    dispatch(getRole(channelInfo.id));
+  }, [dispatch, channelInfo.id]);
 
   const isFounder = member.id === channelInfo.founderID;
 
-  // const fullName = `${member.firstName} ${member.lastName}`;
-  // const shortName = `${member.firstName.charAt(0)}${member.lastName.charAt(0)}`;
+  /** 如果為頻道創立者或身分為老師/TA才可以踢人 */
+  const canKickOut =
+    userProfile === channelInfo.founderID ||
+    channelRole === RoleTypes["老師"] ||
+    channelRole === RoleTypes["TA"];
+
+  const onKickOut = () => {
+    dispatch(kickOutMember(channelInfo.id, member.id));
+  };
+
   const onSelectChat = (id: string | number, isChannel?: boolean) => {
     if (id === userProfile.id) {
       return;
@@ -57,50 +75,58 @@ const Member = ({ member, channelInfo }: MemberProps) => {
 
   return (
     <li>
-      <Link to="#" onClick={() => onSelectChat(member.id)}>
-        <div className="d-flex align-items-center">
-          <div className="flex-shrink-0 avatar-xs me-2">
-            {member.photo ? (
-              <div
-                className={classnames(
-                  "chat-user-img",
-                  "align-self-center",
-                  "me-2",
-                  "ms-0"
-                )}
-              >
-                <img
-                  src={member.photo}
-                  className="rounded-circle avatar-xs"
-                  alt=""
-                />
-              </div>
-            ) : (
-              <span
-                className={classnames(
-                  "avatar-title",
-                  "rounded-circle",
-                  "text-uppercase",
-                  "text-white",
-                  colors[color]
-                )}
-              >
-                {member.name.substring(0, 1)}
-              </span>
-            )}
-          </div>
-          <div className="flex-grow-1 overflow-hidden">
-            <p className="text-truncate mb-0">{member.name}</p>
-          </div>
-          {isFounder && (
-            <div className="ms-auto">
-              <Badge className="badge badge-soft-primary rounded p-1">
-                擁有者
-              </Badge>
+      <div className="d-flex me-3">
+        <Link to="#" onClick={() => onSelectChat(member.id)}>
+          <div className="d-flex align-items-center">
+            <div className="flex-shrink-0 avatar-xs me-2">
+              {member.photo ? (
+                <div
+                  className={classnames(
+                    "chat-user-img",
+                    "align-self-center",
+                    "me-2",
+                    "ms-0"
+                  )}
+                >
+                  <img
+                    src={member.photo}
+                    className="rounded-circle avatar-xs"
+                    alt=""
+                  />
+                </div>
+              ) : (
+                <span
+                  className={classnames(
+                    "avatar-title",
+                    "rounded-circle",
+                    "text-uppercase",
+                    "text-white",
+                    colors[color]
+                  )}
+                >
+                  {member.name.substring(0, 1)}
+                </span>
+              )}
             </div>
-          )}
-        </div>
-      </Link>
+            <div className="flex-grow-1 overflow-hidden">
+              <p className="text-truncate mb-0">{member.name}</p>
+            </div>
+          </div>
+        </Link>
+        {isFounder ? (
+          <div className="ms-auto">
+            <Badge className="badge badge-soft-primary rounded p-1">
+              擁有者
+            </Badge>
+          </div>
+        ) : canKickOut ? (
+          <div className="ms-auto">
+            <Badge className="btn btn-danger" onClick={onKickOut}>
+              踢除
+            </Badge>
+          </div>
+        ) : null}
+      </div>
     </li>
   );
 };

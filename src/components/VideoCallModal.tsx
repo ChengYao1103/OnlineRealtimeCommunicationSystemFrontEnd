@@ -160,9 +160,20 @@ const VideoCallModal = ({
 
     newConnection.ontrack = event => {
       var videoRef = document.getElementById("remoteVideo") as HTMLVideoElement;
-      if (videoRef && event.streams) {
-        event.streams.forEach(stream => setRemoteVideo(videoRef, stream));
-        //setRemoteVideo(videoRef, event.streams[0]);
+      if (videoRef && !videoRef.srcObject && event.streams) {
+        setRemoteVideo(videoRef, event.streams[0]);
+        console.log("接收流並顯示於遠端視訊！", event);
+      } else if (videoRef.srcObject && event.streams) {
+        if (videoRef.srcObject === event.streams[0]) {
+          return;
+        }
+        var shareRef = document.getElementById(
+          "remoteVideo2"
+        ) as HTMLVideoElement;
+        shareRef.srcObject = videoRef.srcObject;
+        shareRef.classList.remove("d-none");
+
+        setRemoteVideo(videoRef, event.streams[0]);
         console.log("接收流並顯示於遠端視訊！", event);
       }
     };
@@ -394,17 +405,16 @@ const VideoCallModal = ({
     >
       <ModalBody className="p-0">
         <div className="videocallModal-bg">
-          {!isAccept && (
-            <img
-              src={user.photo ? user.photo : imagePlaceholder}
-              alt=""
-              className="videocallModal-bg"
-            />
-          )}
           <video
             autoPlay
             id="remoteVideo"
-            className="videocallModal-bg"
+            className="videocallModal-bg w-100"
+          ></video>
+          <video
+            autoPlay
+            id="remoteVideo2"
+            className="d-none position-absolute w-25 start-0 rounded-3"
+            style={{ margin: "20px", top: "30%" }}
           ></video>
           <video
             autoPlay
@@ -416,6 +426,13 @@ const VideoCallModal = ({
 
         <div className="position-absolute start-0 end-0 bottom-0">
           <div className="text-center">
+            {!isAccept && (
+              <img
+                src={user.photo ? user.photo : imagePlaceholder}
+                alt=""
+                className="img-thumbnail rounded-circle"
+              />
+            )}
             {isAccept && (
               <div className="d-flex justify-content-center align-items-center text-center">
                 <div className="avatar-md h-auto">
@@ -470,18 +487,6 @@ const VideoCallModal = ({
                         <i className="bx bx-video"></i>
                       </span>
                     )}
-                  </Button>
-                </div>
-                <div className="avatar-md h-auto">
-                  <Button
-                    color="light"
-                    type="button"
-                    onClick={() => changeCamera()}
-                    className="avatar-sm rounded-circle"
-                  >
-                    <span className="avatar-title bg-transparent text-muted font-size-20">
-                      <i className="bx bx-refresh"></i>
-                    </span>
                   </Button>
                 </div>
                 <div className="avatar-md h-auto">

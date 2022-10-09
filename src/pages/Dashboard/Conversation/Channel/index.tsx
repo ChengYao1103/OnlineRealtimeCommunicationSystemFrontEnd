@@ -17,6 +17,7 @@ import {
   toggleArchiveContact,
   uploadMessageFile,
   downloadMessageFile,
+  getRole,
 } from "../../../../redux/actions";
 
 // hooks
@@ -56,6 +57,7 @@ const Index = () => {
     isImageDeleted,
     recentChatChannels,
     messageID,
+    channelRole,
   } = useAppSelector(state => ({
     selectedChatInfo: state.Chats.selectedChatInfo,
     chatUserDetails: state.Chats.chatUserDetails,
@@ -68,6 +70,7 @@ const Index = () => {
     isImageDeleted: state.Chats.isImageDeleted,
     recentChatChannels: state.Chats.channels,
     messageID: state.Chats.messageID,
+    channelRole: state.Chats.channelRole,
   }));
   const onOpenUserDetails = () => {
     dispatch(toggleUserDetailsTab(true));
@@ -148,12 +151,12 @@ const Index = () => {
 
   useEffect(() => {
     if (selectedChatInfo) {
-      // 回傳的是不包含該筆id的紀錄，所以+1
       dispatch(
         getChannelPosts({
           ID: selectedChatInfo.id,
         })
       );
+      dispatch(getRole(selectedChatInfo.id))
     }
   }, [dispatch, selectedChatInfo, userProfile]);
 
@@ -178,6 +181,7 @@ const Index = () => {
         onDelete={onDeleteUserMessages}
         isChannel={true}
         onToggleArchive={onToggleArchive}
+        role={channelRole}
       />
       <Home
         chatUserConversations={chatUserConversations}

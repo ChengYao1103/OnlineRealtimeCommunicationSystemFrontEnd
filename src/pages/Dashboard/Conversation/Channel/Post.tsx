@@ -23,15 +23,20 @@ import {
 } from "../../../../redux/chats/types";
 
 // hooks
-import { useRedux } from "../../../../hooks";
+import { useProfile, useRedux } from "../../../../hooks";
 
 // utils
 import { getDateTime } from "../../../../utils";
 
 // actions
-import { createComment, getPostComments } from "../../../../redux/actions";
+import {
+  changeSelectedChat,
+  createComment,
+  getPostComments,
+} from "../../../../redux/actions";
 import Loader from "../../../../components/Loader";
 import EndButtons from "../Shared/ChatInputSection/EndButtons";
+import { Link } from "react-router-dom";
 
 interface MessageProps {
   message: channelPostModel;
@@ -72,23 +77,29 @@ const Post = ({
 }: MessageProps) => {
   // global store
   const { dispatch, useAppSelector } = useRedux();
+  const { userProfile } = useProfile();
   const { getPostCommentsLoading, postComments } = useAppSelector(state => ({
     getPostCommentsLoading: state.Chats.getPostCommentsLoading,
     postComments: state.Chats.postComments,
   }));
   const [comments, setComments] = useState([]);
   const [inputText, setInputText] = useState("");
-  const channeluserProfile = imagePlaceholder;
-  const chatUserprofile = chatUserDetails.photo
-    ? chatUserDetails.photo
-    : imagePlaceholder;
-  const profile = isChannel ? channeluserProfile : chatUserprofile;
+
+  const postAuthor = channelPost.user;
+
   const date = getDateTime(message.timestamp);
 
   const onLoadComment = () => {
     if (channelPost.id) {
       dispatch(getPostComments(channelPost.id));
     }
+  };
+
+  const onSelectChat = (id: string | number, user: userModel) => {
+    if (id === userProfile.id) {
+      return;
+    }
+    dispatch(changeSelectedChat(id, user));
   };
 
   useEffect(() => {
@@ -128,9 +139,25 @@ const Post = ({
           {getPostCommentsLoading && <Loader />}
           <CardBody style={{ backgroundColor: "#c1c4c9" }}>
             <CardTitle tag="h5">
-              <div className="chat-avatar">
-                <img src={profile} alt="" />
-              </div>
+              <Link
+                to="#"
+                className="p-0"
+                onClick={() => onSelectChat(postAuthor.id, postAuthor)}
+              >
+                <div className="d-flex align-items-center">
+                  <div className="chat-avatar me-2">
+                    <img
+                      src={
+                        postAuthor.photo !== ""
+                          ? postAuthor.photo
+                          : imagePlaceholder
+                      }
+                      alt=""
+                    />
+                  </div>
+                  <h6 className="m-0">{channelPost.user.name}</h6>
+                </div>
+              </Link>
             </CardTitle>
             <CardText>{channelPost.content}</CardText>
             <small className={classnames("text-muted", "mb-0", "me-2")}>
@@ -140,12 +167,31 @@ const Post = ({
           <ListGroup flush>
             {(comments || []).map((comment: postCommentModel, key: number) => {
               if (channelPost.id === comment.postID) {
+                var commentAuthor = comment.user;
                 return (
                   <ListGroupItem key={key}>
-                    <div className="chat-avatar">
-                      <img src={profile} alt="" />
-                    </div>
-                    <CardText>{comment.content}</CardText>
+                    <Link
+                      to="#"
+                      className="p-0"
+                      onClick={() =>
+                        onSelectChat(commentAuthor.id, commentAuthor)
+                      }
+                    >
+                      <div className="d-flex align-items-center">
+                        <div className="chat-avatar me-2">
+                          <img
+                            src={
+                              commentAuthor.photo !== ""
+                                ? commentAuthor.photo
+                                : imagePlaceholder
+                            }
+                            alt=""
+                          />
+                        </div>
+                        <h6 className="m-0">{commentAuthor.name}</h6>
+                      </div>
+                    </Link>
+                    <CardText className="my-3">{comment.content}</CardText>
                     <small className={classnames("text-muted", "mb-0", "me-2")}>
                       {getDateTime(comment.timestamp)}
                     </small>

@@ -99,7 +99,7 @@ const UserProfile = ({ user, status }: UserProfileProps) => {
 
       <h5 className="font-size-16 mb-1 text-truncate">{fullName}</h5>
 
-      <Dropdown
+      {/* <Dropdown
         className="d-inline-block"
         isOpen={dropdownOpen}
         toggle={toggle}
@@ -135,7 +135,7 @@ const UserProfile = ({ user, status }: UserProfileProps) => {
             請勿打擾
           </DropdownItem>
         </DropdownMenu>
-      </Dropdown>
+      </Dropdown> */}
     </div>
   );
 };

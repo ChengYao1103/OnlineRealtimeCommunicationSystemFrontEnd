@@ -462,11 +462,11 @@ const Message = ({
                   )}
                   {/* calling info end */}
                 </div>
-                <Menu
+                {/* <Menu
                   onForward={onForwardMessage}
                   onDelete={onDeleteMessage}
                   onReply={onClickReply}
-                />
+                /> */}
               </>
             )}
 

@@ -19,23 +19,23 @@ import { userModel } from "../../../redux/auth/types";
 
 interface ProfileUserProps {
   onCloseUserDetails: () => any;
-  chatUserDetails: userModel;
+  selectedChatInfo: userModel;
   onOpenVideo: () => void;
   onOpenAudio: () => void;
 }
 const ProfileUser = ({
   onCloseUserDetails,
-  chatUserDetails,
+  selectedChatInfo,
   onOpenAudio,
   onOpenVideo,
 }: ProfileUserProps) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const toggle = () => setDropdownOpen(!dropdownOpen);
 
-  const profile = chatUserDetails.cover
-    ? chatUserDetails.cover
+  const profile = selectedChatInfo.cover
+    ? selectedChatInfo.cover
     : imagePlaceholder;
-  const fullName = chatUserDetails.name;
+  const fullName = selectedChatInfo.name;
 
   return (
     <div className="p-3 border-bottom">
@@ -72,12 +72,12 @@ const ProfileUser = ({
                     <i className="bx bx-dots-vertical-rounded"></i>
                   </DropdownToggle>
                   <DropdownMenu className="dropdown-menu-end">
-                    <DropdownItem
+                    {/* <DropdownItem
                       className="d-flex justify-content-between align-items-center d-lg-none user-profile-show"
                       to="#"
                     >
                       查看個人資料 <i className="bx bx-user text-muted"></i>
-                    </DropdownItem>
+                    </DropdownItem> */}
                     <DropdownItem
                       className="d-flex justify-content-between align-items-center d-lg-none"
                       to="#"
@@ -92,7 +92,7 @@ const ProfileUser = ({
                     >
                       視訊通話 <i className="bx bx-video text-muted"></i>
                     </DropdownItem>
-                    <DropdownItem
+                    {/* <DropdownItem
                       className="d-flex justify-content-between align-items-center"
                       to="#"
                     >
@@ -110,7 +110,7 @@ const ProfileUser = ({
                       to="#"
                     >
                       刪除 <i className="bx bx-trash text-muted"></i>
-                    </DropdownItem>
+                    </DropdownItem> */}
                   </DropdownMenu>
                 </Dropdown>
               </div>

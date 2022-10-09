@@ -89,7 +89,7 @@ const ProfileImage = ({
                   className="rounded-circle avatar-sm"
                   alt=""
                 />
-                <span
+                {/* <span
                   className={classnames(
                     "user-status",
                     {
@@ -105,7 +105,7 @@ const ProfileImage = ({
                         chatUserDetails.status === STATUS_TYPES.DO_NOT_DISTURB,
                     }
                   )}
-                ></span>
+                ></span> */}
               </>
             ) : (
               <div className="avatar-sm align-self-center">
@@ -119,7 +119,7 @@ const ProfileImage = ({
                   )}
                 >
                   <span className="username"> {fullName.substring(0, 1)}</span>
-                  <span className="user-status"></span>
+                  {/* <span className="user-status"></span> */}
                 </span>
               </div>
             )}
@@ -151,13 +151,13 @@ const Search = () => {
 
   return (
     <Dropdown isOpen={dropdownOpen} toggle={toggle}>
-      <DropdownToggle
+      {/* <DropdownToggle
         color="none"
         className="btn nav-btn dropdown-toggle"
         type="button"
       >
         <i className="bx bx-search"></i>
-      </DropdownToggle>
+      </DropdownToggle> */}
       <DropdownMenu className="dropdown-menu p-0 dropdown-menu-end dropdown-menu-lg">
         <div className="search-box p-2">
           <Input type="text" className="form-control" placeholder="搜尋..." />
@@ -213,12 +213,12 @@ const More = ({
         >
           視訊通話 <i className="bx bx-video text-muted"></i>
         </DropdownItem>
-        <DropdownItem
+        {/*<DropdownItem
           className="d-flex justify-content-between align-items-center"
           to="#"
           onClick={onToggleArchive}
         >
-          {isArchive ? (
+          { isArchive ? (
             <>
               取消封存 <i className="bx bx-archive-out text-muted"></i>
             </>
@@ -241,6 +241,7 @@ const More = ({
         >
           刪除對話 <i className="bx bx-trash text-muted"></i>
         </DropdownItem>
+          */}
       </DropdownMenu>
     </Dropdown>
   );

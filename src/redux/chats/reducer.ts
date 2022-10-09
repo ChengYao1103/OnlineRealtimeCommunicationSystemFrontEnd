@@ -3,6 +3,7 @@ import { toast } from "react-toastify";
 import storage from "redux-persist/lib/storage";
 // types
 import { messageRecordModel, ChatsActionTypes, ChatsState } from "./types";
+import { number } from "yup";
 
 export const INIT_STATE: ChatsState = {
   favourites: [],
@@ -13,6 +14,7 @@ export const INIT_STATE: ChatsState = {
   chatUserDetails: {},
   chatUserConversations: [],
   channelPosts: [],
+  channelRole: -1,
   postComments: [],
   isOpenUserDetails: false,
   channelDetails: {},
@@ -133,6 +135,12 @@ const Chats = persistReducer(
               isChannelDetailsFetched: true,
               getUserDetailsLoading: false,
             };
+
+          case ChatsActionTypes.GET_ROLE:
+            return {
+              ...state,
+              channelRole: action.payload.data.role,
+            };
           case ChatsActionTypes.GET_CHANNEL_MEMBERS:
             return {
               ...state,
@@ -173,16 +181,10 @@ const Chats = persistReducer(
               postComments: action.payload.data.comment,
             };
           case ChatsActionTypes.GET_ROLLCALL:
-            console.log(action.payload.data.rollCall);
             return {
               ...state,
               rollCall: action.payload.data.rollCall,
             };
-          // case ChatsActionTypes.GET_ROLLCALL:
-          //   return {
-          //     ...state,
-          //     rollCall: action.payload.data.rollCall,
-          //   }
           default:
             return { ...state };
         }
@@ -287,6 +289,11 @@ const Chats = persistReducer(
               ...state,
               isImageDeleted: true,
             };
+          case ChatsActionTypes.GET_ROLLCALL:
+            return {
+              ...state,
+              rollCall: null,
+            };
           default:
             return { ...state };
         }
@@ -340,6 +347,8 @@ const Chats = persistReducer(
       case ChatsActionTypes.CHANGE_SELECTED_CHAT:
         state.chatUserConversations = [];
         state.channelPosts = [];
+        state.rollCall = undefined;
+        state.channelRole = -1;
         return {
           ...state,
           channelMembers: undefined,

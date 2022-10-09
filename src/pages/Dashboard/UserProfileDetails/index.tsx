@@ -25,6 +25,10 @@ import Media from "../../../components/Media";
 import AttachedFiles from "../../../components/AttachedFiles";
 import Status from "./Status";
 import Members from "./Members";
+import ProfileChannel from "./ProfileChannel";
+import ChannelMeetingModal from "../../../components/ChannelMeetingModal";
+import InviteChannelModal from "../../../components/InviteChannelModal";
+import RollCallModal from "../../../components/RollCallModal";
 
 interface IndexProps {
   isChannel: boolean;
@@ -39,12 +43,14 @@ const Index = ({ isChannel }: IndexProps) => {
     getUserDetailsLoading,
     isOpenUserDetails,
     isFavouriteContactToggled,
+    channelRole,
   } = useAppSelector(state => ({
     selectedChatInfo: state.Chats.selectedChatInfo,
     chatUserDetails: state.Chats.chatUserDetails,
     getUserDetailsLoading: state.Chats.getUserDetailsLoading,
     isOpenUserDetails: state.Chats.isOpenUserDetails,
     isFavouriteContactToggled: state.Chats.isFavouriteContactToggled,
+    channelRole: state.Chats.channelRole,
   }));
 
   useEffect(() => {
@@ -61,8 +67,8 @@ const Index = ({ isChannel }: IndexProps) => {
   };
 
   /*
-    video call modal
-    */
+  video call modal
+  */
   const [isOpenVideoModal, setIsOpenVideoModal] = useState<boolean>(false);
   const onOpenVideo = () => {
     setIsOpenVideoModal(true);
@@ -72,14 +78,37 @@ const Index = ({ isChannel }: IndexProps) => {
   };
 
   /*
-        audio call modal
-    */
+  audio call modal
+  */
   const [isOpenAudioModal, setIsOpenAudioModal] = useState<boolean>(false);
   const onOpenAudio = () => {
     setIsOpenAudioModal(true);
   };
   const onCloseAudio = () => {
     setIsOpenAudioModal(false);
+  };
+
+  /*
+  invite user modal
+  */
+  const [isOpenInviteModal, setIsOpenInviteModal] = useState<boolean>(false);
+  const onOpenInvite = () => {
+    setIsOpenInviteModal(true);
+  };
+  const onCloseInvite = () => {
+    setIsOpenInviteModal(false);
+  };
+
+  /*
+  roll call modal
+  */
+  const [isOpenRollCallModal, setIsOpenRollCallModal] =
+    useState<boolean>(false);
+  const onOpenRollCall = () => {
+    setIsOpenRollCallModal(true);
+  };
+  const onCloseRollCall = () => {
+    setIsOpenRollCallModal(false);
   };
 
   /*
@@ -106,25 +135,34 @@ const Index = ({ isChannel }: IndexProps) => {
         <div className="position-relative">
           {getUserDetailsLoading && <Loader />}
 
-          <ProfileUser
-            onCloseUserDetails={onCloseUserDetails}
-            chatUserDetails={selectedChatInfo}
-            onOpenVideo={onOpenVideo}
-            onOpenAudio={onOpenAudio}
-          />
+          {!isChannel ? (
+            <ProfileUser
+              onCloseUserDetails={onCloseUserDetails}
+              selectedChatInfo={selectedChatInfo}
+              onOpenVideo={onOpenVideo}
+              onOpenAudio={onOpenAudio}
+            />
+          ) : (
+            <ProfileChannel
+              onCloseUserDetails={onCloseUserDetails}
+              selectedChatInfo={selectedChatInfo}
+              onOpenInvite={onOpenInvite}
+              onOpenRollCall={onOpenRollCall}
+            />
+          )}
           {/* <!-- End profile user --> */}
 
           {/* <!-- Start user-profile-desc --> */}
           <AppSimpleBar className="p-4 user-profile-desc">
             {" "}
             {/* simplebar */}
-            <Actions
+            {/* <Actions
               chatUserDetails={chatUserDetails}
               onOpenVideo={onOpenVideo}
               onOpenAudio={onOpenAudio}
               onToggleFavourite={onToggleFavourite}
               onToggleArchive={onToggleArchive}
-            />
+            /> */}
             {/*<Status about={chatUserDetails.about} />*/}
             {!isChannel ? (
               <>
@@ -160,6 +198,20 @@ const Index = ({ isChannel }: IndexProps) => {
               onClose={onCloseVideo}
               callInfo={chatUserDetails}
               user={selectedChatInfo}
+            />
+          )}
+          {isOpenInviteModal && (
+            <InviteChannelModal
+              isOpen={isOpenInviteModal}
+              onClose={onCloseInvite}
+            />
+          )}
+
+          {isOpenRollCallModal && (
+            <RollCallModal
+              isOpen={isOpenRollCallModal}
+              onClose={onCloseRollCall}
+              role={channelRole}
             />
           )}
         </div>

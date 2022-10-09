@@ -170,7 +170,6 @@ const Conversation = ({
         id="channel-post-list"
       >
         {(channelPosts || []).map((post: channelPostModel, key: number) => {
-          //const isFromMe = conversation.SenderID === userProfile.id;
           return (
             <Post
               message={post}
