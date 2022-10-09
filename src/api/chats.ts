@@ -178,11 +178,11 @@ const doRollCall = (data: object) => {
 };
 
 const closeRollCall = (id: string | number) => {
-  return api.update(url.CLOSE_ROLLCALL, id);
+  return api.patch(url.CLOSE_ROLLCALL, id);
 };
 
 const updateRollCall = (data: object) => {
-  return api.update(url.UPDATE_ROLLCALL, data);
+  return api.patch(url.UPDATE_ROLLCALL, data);
 };
 
 const getRollCallRecords = (id: string | number) => {
@@ -191,6 +191,10 @@ const getRollCallRecords = (id: string | number) => {
 
 const getRollCall = (id: string | number) => {
   return api.get(`${url.GET_ROLLCALL}/${id}`);
+};
+
+const getRole = (id: string | number) => {
+  return api.get(`${url.GET_ROLE}/${id}`);
 };
 
 export {
@@ -231,4 +235,5 @@ export {
   updateRollCall,
   getRollCallRecords,
   getRollCall,
+  getRole,
 };

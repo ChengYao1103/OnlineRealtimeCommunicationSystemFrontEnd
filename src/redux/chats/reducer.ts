@@ -3,6 +3,7 @@ import { toast } from "react-toastify";
 import storage from "redux-persist/lib/storage";
 // types
 import { messageRecordModel, ChatsActionTypes, ChatsState } from "./types";
+import { number } from "yup";
 
 export const INIT_STATE: ChatsState = {
   favourites: [],
@@ -20,6 +21,7 @@ export const INIT_STATE: ChatsState = {
   recentChatUsers: [],
   selectedChatInfo: undefined,
   rollCall: undefined,
+  role: null,
 };
 
 const Chats = persistReducer(
@@ -173,16 +175,15 @@ const Chats = persistReducer(
               postComments: action.payload.data.comment,
             };
           case ChatsActionTypes.GET_ROLLCALL:
-            console.log(action.payload.data.rollCall);
             return {
               ...state,
               rollCall: action.payload.data.rollCall,
             };
-          // case ChatsActionTypes.GET_ROLLCALL:
-          //   return {
-          //     ...state,
-          //     rollCall: action.payload.data.rollCall,
-          //   }
+          case ChatsActionTypes.GET_ROLE:
+            return {
+              ...state,
+              role: action.payload.data.role,
+            };
           default:
             return { ...state };
         }
@@ -287,6 +288,11 @@ const Chats = persistReducer(
               ...state,
               isImageDeleted: true,
             };
+          case ChatsActionTypes.GET_ROLLCALL:
+            return {
+              ...state,
+              rollCall: null,
+            };
           default:
             return { ...state };
         }
@@ -340,6 +346,7 @@ const Chats = persistReducer(
       case ChatsActionTypes.CHANGE_SELECTED_CHAT:
         state.chatUserConversations = [];
         state.channelPosts = [];
+        state.rollCall = undefined;
         return {
           ...state,
           channelMembers: undefined,

@@ -202,6 +202,7 @@ interface MoreProps {
   isChannel: boolean;
   onOpenInvite: () => void;
   onOpenRollCall: () => void;
+  role: number;
 }
 const More = ({
   onOpenUserDetails,
@@ -212,6 +213,7 @@ const More = ({
   isChannel,
   onOpenInvite,
   onOpenRollCall,
+  role,
 }: MoreProps) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const toggle = () => setDropdownOpen(!dropdownOpen);
@@ -326,6 +328,7 @@ interface UserHeadProps {
   onDelete: () => void;
   isChannel: boolean;
   onToggleArchive: () => void;
+  role: number;
 }
 const UserHead = ({
   chatUserDetails,
@@ -334,6 +337,7 @@ const UserHead = ({
   onDelete,
   isChannel,
   onToggleArchive,
+  role,
 }: UserHeadProps) => {
   // global store
   const { dispatch } = useRedux();
@@ -447,6 +451,7 @@ const UserHead = ({
                 isChannel={isChannel}
                 onOpenInvite={onOpenInvite}
                 onOpenRollCall={onOpenRollCall}
+                role={role}
               />
             </li>
           </ul>
@@ -482,7 +487,7 @@ const UserHead = ({
         />
       )}
       {isOpenRollCallModal && (
-        <RollCallModal isOpen={isOpenRollCallModal} onClose={onCloseRollCall} />
+        <RollCallModal isOpen={isOpenRollCallModal} onClose={onCloseRollCall} role={role} />
       )}
     </div>
   );

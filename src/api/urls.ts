@@ -58,6 +58,7 @@ export const GET_CHANNEL_MEMBERS = "/channel/allUser";
 export const INVITE_CHANNEL_MEMBERS = "/channel/invite";
 export const GET_CHANNEL_POSTS = "/channel/allPost";
 export const GET_ROLLCALL = "/channel/getRollCall";
+export const GET_ROLE = "/channel/getRole";
 
 // posts
 export const CREATE_POST = "/post/create";

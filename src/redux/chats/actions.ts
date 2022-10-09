@@ -146,6 +146,11 @@ export const getChannelPosts =  (data: any) => ({
   payload: data,
 });
 
+export const getRole =  (id: number | string) => ({
+  type: ChatsActionTypes.GET_ROLE,
+  payload: id,
+});
+
 export const toggleFavouriteContact = (id: number | string) => ({
   type: ChatsActionTypes.TOGGLE_FAVOURITE_CONTACT,
   payload: id,

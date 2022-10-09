@@ -40,7 +40,12 @@ import {
   deletePost as deletePostApi,
   deleteComment as deleteCommentApi,
   getPostComments as getPostCommentsApi,
+  createRollCall as createRollCallApi,
+  updateRollCall as updateRollCallApi,
+  closeRollCall as closeRollCallApi,
   getRollCall as getRollCallApi,
+  doRollCall as doRollCallApi,
+  getRole as getRoleApi,
 } from "../../api/index";
 
 import {
@@ -477,6 +482,45 @@ function* getPostComments({ payload: id }: any) {
   }
 }
 
+function* createRollCall({ payload: rollCallData }: any) {
+  try {
+    const response: Promise<any> = yield call(createRollCallApi, rollCallData);
+    yield put(
+      chatsApiResponseSuccess(ChatsActionTypes.CREATE_ROLLCALL, response)
+    );
+  } catch (error: any) {
+    yield put(
+      chatsApiResponseError(ChatsActionTypes.CREATE_ROLLCALL, error)
+    );
+  }
+}
+
+function* updateRollCall({ payload: rollCallDate }: any) {
+  try {
+    const response: Promise<any> = yield call(updateRollCallApi, rollCallDate);
+    yield put(
+      chatsApiResponseSuccess(ChatsActionTypes.UPDATE_ROLLCALL, response)
+    );
+  } catch (error: any) {
+    yield put(
+      chatsApiResponseError(ChatsActionTypes.UPDATE_ROLLCALL, error)
+    );
+  }
+}
+
+function* closeRollCall({ payload: id }: any) {
+  try {
+    const response: Promise<any> = yield call(closeRollCallApi, id);
+    yield put(
+      chatsApiResponseSuccess(ChatsActionTypes.CLOSE_ROLLCALL, response)
+    );
+  } catch (error: any) {
+    yield put(
+      chatsApiResponseError(ChatsActionTypes.CLOSE_ROLLCALL, error)
+    );
+  }
+}
+
 function* getRollCall({ payload: id }: any) {
   try {
     const response: Promise<any> = yield call(getRollCallApi, id);
@@ -486,6 +530,32 @@ function* getRollCall({ payload: id }: any) {
   } catch (error: any) {
     yield put(
       chatsApiResponseError(ChatsActionTypes.GET_ROLLCALL, error)
+    );
+  }
+}
+
+function* doRollCall({ payload: id }: any) {
+  try {
+    const response: Promise<any> = yield call(doRollCallApi, id);
+    yield put(
+      chatsApiResponseSuccess(ChatsActionTypes.DO_ROLLCALL, response)
+    );
+  } catch (error: any) {
+    yield put(
+      chatsApiResponseError(ChatsActionTypes.DO_ROLLCALL, error)
+    );
+  }
+}
+
+function* getRole({ payload: id }: any) {
+  try {
+    const response: Promise<any> = yield call(getRoleApi, id);
+    yield put(
+      chatsApiResponseSuccess(ChatsActionTypes.GET_ROLE, response)
+    );
+  } catch (error: any) {
+    yield put(
+      chatsApiResponseError(ChatsActionTypes.GET_ROLE, error)
     );
   }
 }
@@ -606,8 +676,28 @@ export function* watchGetPostComments() {
   yield takeEvery(ChatsActionTypes.GET_POST_COMMENTS, getPostComments);
 }
 
+export function* watchCreateRollCall() {
+  yield takeEvery(ChatsActionTypes.CREATE_ROLLCALL, createRollCall);
+}
+
+export function* watchUpdateRollCall() {
+  yield takeEvery(ChatsActionTypes.UPDATE_ROLLCALL, updateRollCall);
+}
+
+export function* watchCloseRollCall() {
+  yield takeEvery(ChatsActionTypes.CLOSE_ROLLCALL, closeRollCall);
+}
+
 export function* watchGetRollCall() {
   yield takeEvery(ChatsActionTypes.GET_ROLLCALL, getRollCall);
+}
+
+export function* watchDoRollCall() {
+  yield takeEvery(ChatsActionTypes.DO_ROLLCALL, doRollCall);
+}
+
+export function* watchGetRole() {
+  yield takeEvery(ChatsActionTypes.GET_ROLE, getRole);
 }
 
 function* chatsSaga() {
@@ -643,7 +733,12 @@ function* chatsSaga() {
     fork(watchDeletePost),
     fork(watchDeleteComment),
     fork(watchGetPostComments),
+    fork(watchCreateRollCall),
+    fork(watchUpdateRollCall),
+    fork(watchCloseRollCall),
     fork(watchGetRollCall),
+    fork(watchDoRollCall),
+    fork(watchGetRole),
   ]);
 }
 

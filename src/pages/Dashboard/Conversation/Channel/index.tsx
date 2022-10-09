@@ -17,6 +17,7 @@ import {
   toggleArchiveContact,
   uploadMessageFile,
   downloadMessageFile,
+  getRole,
 } from "../../../../redux/actions";
 
 // hooks
@@ -56,6 +57,7 @@ const Index = () => {
     isImageDeleted,
     recentChatChannels,
     messageID,
+    role,
   } = useAppSelector(state => ({
     selectedChatInfo: state.Chats.selectedChatInfo,
     chatUserDetails: state.Chats.chatUserDetails,
@@ -68,6 +70,7 @@ const Index = () => {
     isImageDeleted: state.Chats.isImageDeleted,
     recentChatChannels: state.Chats.channels,
     messageID: state.Chats.messageID,
+    role: state.Chats.role,
   }));
   const onOpenUserDetails = () => {
     dispatch(toggleUserDetailsTab(true));
@@ -153,6 +156,8 @@ const Index = () => {
           ID: selectedChatInfo.id,
         })
       );
+      dispatch(getRole(selectedChatInfo.id))
+      console.log(role)
     }
   }, [dispatch, selectedChatInfo, userProfile]);
 
@@ -177,6 +182,7 @@ const Index = () => {
         onDelete={onDeleteUserMessages}
         isChannel={true}
         onToggleArchive={onToggleArchive}
+        role={role}
       />
       <Home
         chatUserConversations={chatUserConversations}

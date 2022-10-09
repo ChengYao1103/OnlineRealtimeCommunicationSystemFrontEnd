@@ -20,6 +20,7 @@ export enum ChatsActionTypes {
   GET_CHAT_USER_CONVERSATIONS = "@@chats/GET_CHAT_USER_CONVERSATIONS",
   GET_RECENT_CHAT = "@@chats/GET_RECENT_CHAT",
   TOGGLE_USER_DETAILS_TAB = "@@chats/TOGGLE_USER_DETAILS_TAB",
+  GET_ROLE = "@@chats/GET_ROLE",
 
   // MESSAGE
   ON_SEND_MESSAGE = "@@chats/ON_SEND_MESSAGE",
@@ -139,4 +140,5 @@ export interface ChatsState {
   archiveContacts: Array<any>;
   selectedChatInfo?: userModel | channelModel;
   rollCall?: rollCallModel;
+  role?: number | null;
 }
