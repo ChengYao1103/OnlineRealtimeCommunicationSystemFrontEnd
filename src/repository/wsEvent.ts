@@ -1,6 +1,16 @@
 import { StringLiteral } from "typescript";
 import { RoleTypes } from "./Enum";
+import { WSApp, YTEvent } from "./wsAppEvent";
 
+/*    App    */
+export interface AppEvent {
+  event: number;
+  data: AppData;
+}
+
+export interface AppData {}
+
+/*    WebSocket    */
 export interface WSEvent {
   event: WSSendEvents | WSReceiveEvents;
   data: WSData;
@@ -28,7 +38,7 @@ export enum WSSendEvents {
   CreateApp = 51,
   UpdateApp = 52,
   FinishApp = 53,
-  UpdateToken = 90
+  UpdateToken = 90,
 }
 
 export enum WSReceiveEvents {
@@ -251,6 +261,11 @@ export interface UserLeaveMeeting extends WSData {
 
 export interface AppCreated extends WSData {
   appID: number;
+}
+
+export interface AppUpdated extends WSData {
+  appID: WSApp;
+  event: AppEvent;
 }
 
 export interface AppFinished extends WSData {

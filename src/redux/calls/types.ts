@@ -12,6 +12,11 @@ export enum CallsActionTypes {
   ANSWERED_CALLING = "@@calls/ANSWERED_CALLING",
   HANGUP_CALLING = "@@calls/HANGUP_CALL",
   GET_MEETING_CREATE_BY_SELF = "@@calls/GET_MEETING_CREATE_BY_SELF",
+
+  /* Youtube */
+  START_YOUTUBE = "@@calls/START_YOUTUBE",
+  YOUTUBE_SYNC = "@@calls/YOUTUBE_SYNC",
+  END_YOUTUBE = "@@calls/END_YOUTUBE",
 }
 export interface CallsState {
   calls: Array<any>;

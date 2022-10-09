@@ -92,6 +92,24 @@ const Calls = (state = INIT_STATE, action: any) => {
           state.meetingId = action.payload.data;
           return { ...state };
         }
+        case CallsActionTypes.START_YOUTUBE: {
+          return {
+            ...state,
+            startedYT: true,
+          };
+        }
+        case CallsActionTypes.YOUTUBE_SYNC: {
+          return {
+            ...state,
+            syncYT: action.payload.data,
+          };
+        }
+        case CallsActionTypes.END_YOUTUBE: {
+          return {
+            ...state,
+            startedYT: false,
+          };
+        }
         default:
           return { ...state };
       }

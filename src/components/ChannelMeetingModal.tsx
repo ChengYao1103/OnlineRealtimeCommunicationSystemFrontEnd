@@ -18,6 +18,7 @@ import VideoPlayer from "./VideoPlayer";
 import { APIClient } from "../api/apiCore";
 import { WSEvent, WSSendEvents } from "../repository/wsEvent";
 import { WSConnection } from "../api/webSocket";
+import { WSApp } from "../repository/wsAppEvent";
 
 interface MeetingModalProps {
   channelId: number;
@@ -39,17 +40,26 @@ const ChannelMeetingModal = ({
   const [syncVideoButtonText, setSyncVideoButtonText] = useState("開啟");
 
   const { useAppSelector } = useRedux();
-  const { meetingId } = useAppSelector(state => ({
+  const { meetingId, startedYT, syncYT } = useAppSelector(state => ({
     meetingId: state.Calls.meetingId,
+    startedYT: state.Calls.startedYT,
+    syncYT: state.Calls.syncYT,
   }));
 
   const leaveMeeting = () => {
     var iframe = document.getElementById("meetingIframe") as HTMLIFrameElement;
     iframe.src = "";
+    let send: WSEvent = {
+      event: WSSendEvents.LeaveMeeting,
+      data: {},
+    };
+    api.WSSend(JSON.stringify(send));
     onClose();
   };
 
   const startVideoSync = () => {
+    if (!inputUrl.current) return;
+    setSyncVideoButtonText("關閉");
     inputUrl.current.classList.remove("d-none");
     buttonUpdateVideo.current.classList.remove("d-none");
     // player display
@@ -58,6 +68,8 @@ const ChannelMeetingModal = ({
   };
 
   const closeVideoSync = () => {
+    if (!inputUrl.current) return;
+    setSyncVideoButtonText("開啟");
     inputUrl.current.classList.add("d-none");
     buttonUpdateVideo.current.classList.add("d-none");
     // player display
@@ -68,27 +80,25 @@ const ChannelMeetingModal = ({
   const switchSyncAppStatus = () => {
     if (!inputUrl.current) return;
     if (syncVideoButtonText === "開啟") {
-      setSyncVideoButtonText("關閉");
       startVideoSync();
 
-      /*let send: WSEvent = {
+      let send: WSEvent = {
         event: WSSendEvents.CreateApp,
         data: {
-          appID: 1,
+          appID: WSApp.youtube,
         },
       };
-      api.WSSend(JSON.stringify(send));*/
+      api.WSSend(JSON.stringify(send));
     } else {
-      setSyncVideoButtonText("開啟");
       closeVideoSync();
 
-      /*let send: WSEvent = {
+      let send: WSEvent = {
         event: WSSendEvents.FinishApp,
         data: {
-          appID: 1,
+          appID: WSApp.youtube,
         },
       };
-      api.WSSend(JSON.stringify(send));*/
+      api.WSSend(JSON.stringify(send));
     }
   };
 
@@ -101,11 +111,23 @@ const ChannelMeetingModal = ({
     let send: WSEvent = {
       event: WSSendEvents.CreateMeeting,
       data: {
-        channelID: channelId,
+        channelId: channelId,
       },
     };
     api.WSSend(JSON.stringify(send));
   }, [channelId]);
+
+  useEffect(() => {
+    if (startedYT) {
+      startVideoSync();
+    } else {
+      closeVideoSync();
+    }
+  }, [startedYT]);
+
+  useEffect(() => {
+    console.log(syncYT);
+  }, [syncYT]);
 
   return (
     <Modal
@@ -153,7 +175,7 @@ const ChannelMeetingModal = ({
           </Stack>
 
           <div style={{ width: "100%", height: "100%" }}>
-            {meetingId && (
+            {true && (
               <iframe
                 id="meetingIframe"
                 src={`https://meet.beeenson.com:8443?name=${userProfile.name}&roomName=${meetingId}`}
