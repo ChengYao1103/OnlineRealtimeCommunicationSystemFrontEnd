@@ -251,7 +251,7 @@ const More = ({
           to="#"
           onClick={onOpenRollCall}
         >
-          建立點名 <i className="bx bxs-phone-call text-muted"></i>
+          點名 <i className="mdi mdi-bell-ring"></i>
         </DropdownItem>
         <DropdownItem
           className="d-flex justify-content-between align-items-center"
@@ -279,14 +279,14 @@ const More = ({
           className="d-flex justify-content-between align-items-center"
           to="#"
         >
-          小組 <i className="bx bx-microphone-off text-muted"></i>
+          檔案 <i className="mdi mdi-folder-multiple"></i>
         </DropdownItem>
         <DropdownItem
           className="d-flex justify-content-between align-items-center"
           to="#"
           onClick={onDelete}
         >
-          作業 <i className="bx bx-trash text-muted"></i>
+          作業 <i className="mdi mdi-pencil"></i>
         </DropdownItem>
         <DropdownItem
           className="d-flex text-danger justify-content-between align-items-center"
