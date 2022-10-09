@@ -21,6 +21,14 @@ export enum WSSendEvents {
   MakeNewPost = 33,
   CommentOnPost = 34,
   CreateRollCall = 35,
+  UpdatePost = 36,
+  CreateMeeting = 41,
+  JoinMeeting = 42,
+  LeaveMeeting = 43,
+  CreateApp = 51,
+  UpdateApp = 52,
+  FinishApp = 53,
+  UpdateToken = 90
 }
 
 export enum WSReceiveEvents {
@@ -36,6 +44,14 @@ export enum WSReceiveEvents {
   PostCreated = 33,
   NewCommentOnPost = 34,
   RollCallCreated = 35,
+  PostUpdated = 36,
+  MeetingCreated = 41,
+  UserJoinMeeting = 42,
+  UserLeaveMeeting = 43,
+  MeetingCreateBySelf = 44,
+  AppCreated = 51,
+  AppUpdated = 52,
+  AppFinished = 53,
   Error = 90,
   TokenExpired = 91,
 }
@@ -103,6 +119,28 @@ export interface CreateRollCall extends WSData {
   channelID: number;
   startTime: string;
   endTime: string;
+}
+
+export interface UpdatePost extends WSData {
+  postID: number;
+  content: string;
+}
+
+export interface CreateMeeting extends WSData {
+  channelID: number;
+  name: string;
+}
+
+export interface JoinMeeting extends WSData {
+  meetingID: number;
+}
+
+export interface CreateApp extends WSData {
+  appID: number;
+}
+
+export interface FinishApp extends WSData {
+  appID: number;
 }
 
 export interface UpdateToken extends WSData {
@@ -184,6 +222,39 @@ export interface RollCallCreated extends WSData {
   createTime: string;
   startTime: string;
   endTime: string;
+}
+
+export interface PostUpdated extends WSData {
+  postID: number;
+  channelID: number;
+  content: string;
+}
+
+export interface MeetingCreated extends WSData {
+  meetingID: number;
+  chairpersonID: number;
+  channelID: number;
+  postID: number;
+  name: string;
+  startTime: string;
+}
+
+export interface UserJoinMeeting extends WSData {
+  meetingID: number;
+  userID: number;
+}
+
+export interface UserLeaveMeeting extends WSData {
+  meetingID: number;
+  userID: number;
+}
+
+export interface AppCreated extends WSData {
+  appID: number;
+}
+
+export interface AppFinished extends WSData {
+  appID: number;
 }
 
 export interface WSReceiveError extends WSData {

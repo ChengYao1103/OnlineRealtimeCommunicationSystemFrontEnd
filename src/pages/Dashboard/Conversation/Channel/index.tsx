@@ -172,7 +172,7 @@ const Index = () => {
   return (
     <>
       <UserHead
-        chatUserDetails={selectedChatInfo}
+        selectedChatInfo={selectedChatInfo}
         pinnedTabs={pinnedTabs}
         onOpenUserDetails={onOpenUserDetails}
         onDelete={onDeleteUserMessages}

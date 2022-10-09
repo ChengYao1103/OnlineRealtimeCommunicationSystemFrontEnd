@@ -107,6 +107,7 @@ interface AddGroupModalProps {
   founderId: number;
   onCreateChannel: (params: CreateChannelPostData) => void;
 }
+
 const AddGroupModal = ({
   isOpen,
   onClose,
