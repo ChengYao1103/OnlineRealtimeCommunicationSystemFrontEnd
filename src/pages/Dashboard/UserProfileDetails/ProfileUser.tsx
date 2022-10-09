@@ -72,12 +72,12 @@ const ProfileUser = ({
                     <i className="bx bx-dots-vertical-rounded"></i>
                   </DropdownToggle>
                   <DropdownMenu className="dropdown-menu-end">
-                    <DropdownItem
+                    {/* <DropdownItem
                       className="d-flex justify-content-between align-items-center d-lg-none user-profile-show"
                       to="#"
                     >
                       查看個人資料 <i className="bx bx-user text-muted"></i>
-                    </DropdownItem>
+                    </DropdownItem> */}
                     <DropdownItem
                       className="d-flex justify-content-between align-items-center d-lg-none"
                       to="#"
@@ -92,7 +92,7 @@ const ProfileUser = ({
                     >
                       視訊通話 <i className="bx bx-video text-muted"></i>
                     </DropdownItem>
-                    <DropdownItem
+                    {/* <DropdownItem
                       className="d-flex justify-content-between align-items-center"
                       to="#"
                     >
@@ -110,7 +110,7 @@ const ProfileUser = ({
                       to="#"
                     >
                       刪除 <i className="bx bx-trash text-muted"></i>
-                    </DropdownItem>
+                    </DropdownItem> */}
                   </DropdownMenu>
                 </Dropdown>
               </div>

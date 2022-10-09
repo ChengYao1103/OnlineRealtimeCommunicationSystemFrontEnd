@@ -46,7 +46,7 @@ const Leftbar = (props: LeftbarProps) => {
             <Chats />
           </TabPane>
 
-          <TabPane
+          {/* <TabPane
             tabId={TABS.CONTACTS}
             role="tabpanel"
             aria-labelledby="pills-contacts-tab"
@@ -68,7 +68,7 @@ const Leftbar = (props: LeftbarProps) => {
             aria-labelledby="pills-bookmark-tab"
           >
             <Bookmark />
-          </TabPane>
+          </TabPane> */}
 
           <TabPane
             tabId={TABS.SETTINGS}

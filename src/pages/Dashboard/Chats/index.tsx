@@ -280,15 +280,14 @@ const Index = (props: IndexProps) => {
             <div className="flex-grow-1">
               <h4 className="mb-4">聊天</h4>
             </div>
-            <div className="flex-shrink-0">
+            {/* <div className="flex-shrink-0">
               <div id="add-contact">
-                {/* Button trigger modal */}
                 <AddButton onClick={openModal} />
               </div>
               <UncontrolledTooltip target="add-contact" placement="bottom">
                 新增聯絡人
               </UncontrolledTooltip>
-            </div>
+            </div> */}
           </div>
           <Form>
             <div className="input-group mb-3">
@@ -339,7 +338,7 @@ const Index = (props: IndexProps) => {
                 selectedChatInfo={selectedChatInfo}
                 onSelectChat={onSelectChat}
               />
-              <h5 className="text-center mb-2">
+              {/* <h5 className="text-center mb-2">
                 <Link
                   to="#"
                   className="mb-3 px-4 mt-4 font-size-11 text-primary"
@@ -347,7 +346,7 @@ const Index = (props: IndexProps) => {
                 >
                   已封存 <i className="bx bxs-archive-in align-middle" />
                 </Link>
-              </h5>
+              </h5> */}
             </>
           )}
           {active === CHATS_TABS.ARCHIVE && (

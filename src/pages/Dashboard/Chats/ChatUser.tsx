@@ -27,7 +27,7 @@ const ChatUser = ({ user, selectedChatInfo, onSelectChat }: ChatUserProps) => {
   const [color] = useState(Math.floor(Math.random() * colors.length));
   //const isOnline = user.status && user.status === STATUS_TYPES.ACTIVE;
   //const unRead = user.meta && user.meta.unRead;
-  const isOnline = STATUS_TYPES.ACTIVE;
+  const isOnline = false;
   const unRead = 0;
 
   const isSelectedChat: boolean =
@@ -71,7 +71,7 @@ const ChatUser = ({ user, selectedChatInfo, onSelectChat }: ChatUserProps) => {
                   )}
                 >
                   <span className="username">{fullName.substring(0, 1)}</span>
-                  <span className="user-status"></span>
+                  {isOnline && <span className="user-status"></span>}
                 </span>
               </div>
             )}

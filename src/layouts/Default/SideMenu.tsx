@@ -76,21 +76,15 @@ const Logo = () => {
 
 interface MenuNavItemProps {
   item: MenuItemType;
-  selectedTab:
-    | TABS.BOOKMARK
-    | TABS.CALLS
-    | TABS.CHAT
-    | TABS.CONTACTS
-    | TABS.SETTINGS
-    | TABS.USERS;
+  selectedTab: // | TABS.BOOKMARK
+  // | TABS.CALLS
+  // | TABS.CONTACTS
+  TABS.CHAT | TABS.SETTINGS | TABS.USERS;
   onChangeTab: (
-    id:
-      | TABS.BOOKMARK
-      | TABS.CALLS
-      | TABS.CHAT
-      | TABS.CONTACTS
-      | TABS.SETTINGS
-      | TABS.USERS
+    id: // | TABS.BOOKMARK
+    // | TABS.CALLS
+    // | TABS.CONTACTS
+    TABS.CHAT | TABS.SETTINGS | TABS.USERS
   ) => void;
 }
 
@@ -121,13 +115,10 @@ const MenuNavItem = ({ item, selectedTab, onChangeTab }: MenuNavItemProps) => {
 interface ProfileDropdownMenuProps {
   authUser: userModel;
   onChangeTab: (
-    id:
-      | TABS.BOOKMARK
-      | TABS.CALLS
-      | TABS.CHAT
-      | TABS.CONTACTS
-      | TABS.SETTINGS
-      | TABS.USERS
+    id: // | TABS.BOOKMARK
+    // | TABS.CALLS
+    // | TABS.CONTACTS
+    TABS.CHAT | TABS.SETTINGS | TABS.USERS
   ) => void;
 }
 const ProfileDropdownMenu = ({
@@ -204,21 +195,16 @@ const SideMenu = ({ onChangeLayoutMode }: any) => {
     tab activation
     */
   const [selectedTab, setSelectedTab] = useState<
-    | TABS.BOOKMARK
-    | TABS.CALLS
-    | TABS.CHAT
-    | TABS.CONTACTS
-    | TABS.SETTINGS
-    | TABS.USERS
+    // | TABS.BOOKMARK
+    // | TABS.CALLS
+    // | TABS.CONTACTS
+    TABS.CHAT | TABS.SETTINGS | TABS.USERS
   >(TABS.CHAT);
   const onChangeTab = (
-    id:
-      | TABS.BOOKMARK
-      | TABS.CALLS
-      | TABS.CHAT
-      | TABS.CONTACTS
-      | TABS.SETTINGS
-      | TABS.USERS
+    id: // | TABS.BOOKMARK
+    // | TABS.CALLS
+    // | TABS.CONTACTS
+    TABS.CHAT | TABS.SETTINGS | TABS.USERS
   ) => {
     setSelectedTab(id);
     dispatch(changeTab(id));

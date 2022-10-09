@@ -109,7 +109,7 @@ const ProfileImage = ({
                   className="rounded-circle avatar-sm"
                   alt=""
                 />
-                <span
+                {/* <span
                   className={classnames(
                     "user-status",
                     {
@@ -125,7 +125,7 @@ const ProfileImage = ({
                         selectedChatInfo.status === STATUS_TYPES.DO_NOT_DISTURB,
                     }
                   )}
-                ></span>
+                ></span> */}
               </>
             ) : (
               <div className="avatar-sm align-self-center">
@@ -139,7 +139,7 @@ const ProfileImage = ({
                   )}
                 >
                   <span className="username"> {fullName.substring(0, 1)}</span>
-                  <span className="user-status"></span>
+                  {/* <span className="user-status"></span> */}
                 </span>
               </div>
             )}
@@ -258,7 +258,7 @@ const More = ({
         >
           開始會議 <i className="bx bx-video text-muted"></i>
         </DropdownItem>
-        <DropdownItem
+        {/* <DropdownItem
           className="d-flex justify-content-between align-items-center"
           to="#"
           onClick={onToggleArchive}
@@ -272,7 +272,7 @@ const More = ({
               封存 <i className="bx bx-archive text-muted"></i>
             </>
           )}
-        </DropdownItem>
+        </DropdownItem> */}
         <DropdownItem
           className="d-flex justify-content-between align-items-center"
           to="#"

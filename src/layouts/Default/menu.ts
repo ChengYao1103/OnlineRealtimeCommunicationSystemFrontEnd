@@ -7,13 +7,10 @@ export interface MenuItemType {
   icon: string;
   tooltipTitle: string;
   className?: string;
-  tabId:
-    | TABS.BOOKMARK
-    | TABS.CALLS
-    | TABS.CHAT
-    | TABS.CONTACTS
-    | TABS.SETTINGS
-    | TABS.USERS;
+  tabId: // | TABS.BOOKMARK
+  // | TABS.CALLS
+  // | TABS.CONTACTS
+  TABS.CHAT | TABS.SETTINGS | TABS.USERS;
 }
 const MENU_ITEMS: MenuItemType[] = [
   {
@@ -31,27 +28,27 @@ const MENU_ITEMS: MenuItemType[] = [
     tooltipTitle: "聊天",
     tabId: TABS.CHAT,
   },
-  {
-    id: 3,
-    key: "pills-contacts-tab",
-    icon: "bx bxs-user-detail",
-    tooltipTitle: "聯絡人",
-    tabId: TABS.CONTACTS,
-  },
-  {
-    id: 4,
-    key: "pills-calls-tab",
-    icon: "bx bx-phone-call",
-    tooltipTitle: "通話紀錄",
-    tabId: TABS.CALLS,
-  },
-  {
-    id: 5,
-    key: "pills-bookmark-tab",
-    icon: "bx bx-bookmarks",
-    tooltipTitle: "書籤",
-    tabId: TABS.BOOKMARK,
-  },
+  // {
+  //   id: 3,
+  //   key: "pills-contacts-tab",
+  //   icon: "bx bxs-user-detail",
+  //   tooltipTitle: "聯絡人",
+  //   tabId: TABS.CONTACTS,
+  // },
+  // {
+  //   id: 4,
+  //   key: "pills-calls-tab",
+  //   icon: "bx bx-phone-call",
+  //   tooltipTitle: "通話紀錄",
+  //   tabId: TABS.CALLS,
+  // },
+  // {
+  //   id: 5,
+  //   key: "pills-bookmark-tab",
+  //   icon: "bx bx-bookmarks",
+  //   tooltipTitle: "書籤",
+  //   tabId: TABS.BOOKMARK,
+  // },
   {
     id: 6,
     key: "pills-setting-tab",
