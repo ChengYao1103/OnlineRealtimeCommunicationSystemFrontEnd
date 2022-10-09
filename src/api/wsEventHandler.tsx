@@ -16,6 +16,11 @@ import {
   WSEvent,
   WSReceiveEvents,
   WSReceiveError,
+  MeetingCreated,
+  AppUpdated,
+  AppEvent,
+  AppCreated,
+  AppFinished,
 } from "../repository/wsEvent";
 import { channelModel, ChatsActionTypes } from "../redux/chats/types";
 import { CallsActionTypes } from "../redux/calls/types";
@@ -32,6 +37,7 @@ import {
   getUserInformation,
 } from "../redux/actions";
 import { userModel } from "../redux/auth/types";
+import { WSApp, YoutubeSync, YTEvent } from "../repository/wsAppEvent";
 
 const WSEventHandler = () => {
   const dispatch = useDispatch();
@@ -158,6 +164,70 @@ const WSEventHandler = () => {
           ErrorMessages[ErrorData.error as ErrorMessagesKey]
         );
         break;
+      case WSReceiveEvents.MeetingCreateBySelf:
+        let meetingData = data.data as MeetingCreated;
+        dispatch(
+          callWebsocketEvent(
+            CallsActionTypes.GET_MEETING_CREATE_BY_SELF,
+            meetingData.meetingID
+          )
+        );
+        break;
+      case WSReceiveEvents.AppCreated: {
+        let creatededData = data.data as AppCreated;
+        // 分辨app
+        switch (creatededData.appID) {
+          case WSApp.youtube: {
+            dispatch(callWebsocketEvent(CallsActionTypes.START_YOUTUBE));
+            break;
+          }
+          default: {
+            break;
+          }
+        }
+        break;
+      }
+      case WSReceiveEvents.AppUpdated: {
+        let updatedData = data.data as AppUpdated;
+        // 分辨app
+        switch (updatedData.appID) {
+          case WSApp.youtube: {
+            let ytData = updatedData.event as AppEvent;
+            // 分辨Youtube app的event
+            switch (ytData.event) {
+              case YTEvent.sync: {
+                let syncData = ytData.data as YoutubeSync;
+                dispatch(
+                  callWebsocketEvent(CallsActionTypes.YOUTUBE_SYNC, syncData)
+                );
+                break;
+              }
+              default: {
+                break;
+              }
+            }
+            break;
+          }
+          default: {
+            break;
+          }
+        }
+        break;
+      }
+      case WSReceiveEvents.AppFinished: {
+        let endedData = data.data as AppFinished;
+        // 分辨app
+        switch (endedData.appID) {
+          case WSApp.youtube: {
+            dispatch(callWebsocketEvent(CallsActionTypes.END_YOUTUBE));
+            break;
+          }
+          default: {
+            break;
+          }
+        }
+        break;
+      }
       // WS service
       case WSReceiveEvents.TokenExpired: // rarely triggered
         // timeout wont trigger this event

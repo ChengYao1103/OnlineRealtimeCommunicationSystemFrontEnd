@@ -498,7 +498,7 @@ const UserHead = ({
       {isOpenVideoModal && (
         <ChannelMeetingModal
           isOpen={isOpenVideoModal}
-          meetingId={0}
+          channelId={selectedChatInfo.id}
           onClose={onCloseVideo}
         />
 
