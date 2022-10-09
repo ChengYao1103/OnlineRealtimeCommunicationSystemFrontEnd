@@ -400,9 +400,8 @@ const UserHead = ({
     dispatch(changeSelectedChat(null));
   };
 
-  /* 離開群組 */
+  /** 離開群組 */
   const onLeave = () => {
-    console.log(selectedChatInfo.id);
     dispatch(kickOutMember(selectedChatInfo.id, userProfile.id));
   };
 

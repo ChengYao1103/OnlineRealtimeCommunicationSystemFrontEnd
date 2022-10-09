@@ -25,6 +25,7 @@ import {
   forwardMessage as forwardMessageApi,
   deleteUserMessages as deleteUserMessagesApi,
   getChannelDetails as getChannelDetailsApi,
+  getRole as getRoleApi,
   getChannelMembers as getChannelMembersApi,
   inviteChannelMembers as inviteChannelMembersApi,
   kickOutMember as kickOutMemberApi,
@@ -263,6 +264,15 @@ function* getChannelDetails({ payload: id }: any) {
     yield put(
       chatsApiResponseError(ChatsActionTypes.GET_CHANNEL_DETAILS, error)
     );
+  }
+}
+
+function* getRole({ payload: id }: any) {
+  try {
+    const response: Promise<any> = yield call(getRoleApi, id.toString());
+    yield put(chatsApiResponseSuccess(ChatsActionTypes.GET_ROLE, response));
+  } catch (error: any) {
+    yield put(chatsApiResponseError(ChatsActionTypes.GET_ROLE, error));
   }
 }
 
@@ -537,6 +547,9 @@ export function* watchGetChannels() {
 export function* watchGetChannelDetails() {
   yield takeEvery(ChatsActionTypes.GET_CHANNEL_DETAILS, getChannelDetails);
 }
+export function* watchGetRole() {
+  yield takeEvery(ChatsActionTypes.GET_ROLE, getRole);
+}
 export function* watchGetChannelMembers() {
   yield takeEvery(ChatsActionTypes.GET_CHANNEL_MEMBERS, getChannelMembers);
 }
@@ -623,6 +636,7 @@ function* chatsSaga() {
     fork(watchCreateChannel),
     fork(watchGetChannels),
     fork(watchGetChannelDetails),
+    fork(watchGetRole),
     fork(watchGetChannelMembers),
     fork(watchInviteChannelMembers),
     fork(watchKickOutMember),

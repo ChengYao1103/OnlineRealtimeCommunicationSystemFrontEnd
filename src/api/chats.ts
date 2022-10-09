@@ -90,6 +90,11 @@ const getChannels = (userId: string) => {
   return api.get(destUrl);
 };
 
+const getRole = (channelId: string) => {
+  let destUrl = `${url.GET_ROLE}/${channelId}`;
+  return api.get(destUrl);
+};
+
 const getChannelDetails = (id: string | number) => {
   return api.get(`${url.GET_CHANNEL_DETAILS}/${id}`);
 };
@@ -108,7 +113,8 @@ const inviteChannelMembers = (data: any) => {
 };
 
 const kickOutMember = (data: object) => {
-  return api.delete(url.KICK_OUT, data);
+  console.log({ data });
+  return api.delete(url.KICK_OUT, { data });
 };
 
 const getChannelPosts = (data: any) => {
@@ -213,6 +219,7 @@ export {
   deleteUserMessages,
   createChannel,
   getChannels,
+  getRole,
   getChannelDetails,
   getChannelMembers,
   inviteChannelMembers,

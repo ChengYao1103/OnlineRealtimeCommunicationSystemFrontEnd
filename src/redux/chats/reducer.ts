@@ -13,6 +13,7 @@ export const INIT_STATE: ChatsState = {
   chatUserDetails: {},
   chatUserConversations: [],
   channelPosts: [],
+  channelRole: -1,
   postComments: [],
   isOpenUserDetails: false,
   channelDetails: {},
@@ -132,6 +133,12 @@ const Chats = persistReducer(
               chatUserDetails: { ...action.payload.data, isChannel: true },
               isChannelDetailsFetched: true,
               getUserDetailsLoading: false,
+            };
+
+          case ChatsActionTypes.GET_ROLE:
+            return {
+              ...state,
+              channelRole: action.payload.data.role,
             };
           case ChatsActionTypes.GET_CHANNEL_MEMBERS:
             return {
@@ -340,6 +347,7 @@ const Chats = persistReducer(
       case ChatsActionTypes.CHANGE_SELECTED_CHAT:
         state.chatUserConversations = [];
         state.channelPosts = [];
+        state.channelRole = -1;
         return {
           ...state,
           channelMembers: undefined,
