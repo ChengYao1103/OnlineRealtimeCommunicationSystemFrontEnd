@@ -11,10 +11,12 @@ export enum CallsActionTypes {
   ON_CALLING = "@@calls/ON_CALLING",
   ANSWERED_CALLING = "@@calls/ANSWERED_CALLING",
   HANGUP_CALLING = "@@calls/HANGUP_CALL",
+  GET_MEETING_CREATE_BY_SELF = "@@calls/GET_MEETING_CREATE_BY_SELF",
 }
 export interface CallsState {
   calls: Array<any>;
   onCallingType: string;
   endCalling: boolean;
   hasAnswered: boolean;
+  meetingId: number;
 }

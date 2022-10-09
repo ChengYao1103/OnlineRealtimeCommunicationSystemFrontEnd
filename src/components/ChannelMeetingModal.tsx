@@ -1,8 +1,16 @@
 import { url } from "inspector";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRedux } from "../hooks";
-import Stack from 'react-bootstrap/Stack';
-import { Button, Modal, ModalBody, ModalFooter, ModalHeader, Input, InputGroup } from "reactstrap";
+import Stack from "react-bootstrap/Stack";
+import {
+  Button,
+  Modal,
+  ModalBody,
+  ModalFooter,
+  ModalHeader,
+  Input,
+  InputGroup,
+} from "reactstrap";
 import { useProfile } from "../hooks";
 import VideoPlayer from "./VideoPlayer";
 
@@ -17,7 +25,6 @@ interface MeetingModalProps {
   onClose: () => void;
 }
 
-
 const ChannelMeetingModal = ({
   isOpen,
   channelId,
@@ -30,7 +37,7 @@ const ChannelMeetingModal = ({
   const syncVideoButton = useRef<any>();
   const [url, setUrl] = useState("https://www.youtube.com/watch?v=b9IkpUYlOx8");
   const [syncVideoButtonText, setSyncVideoButtonText] = useState("開啟");
-  
+
   const { useAppSelector } = useRedux();
   const { meetingId } = useAppSelector(state => ({
     meetingId: state.Calls.meetingId,
@@ -59,8 +66,7 @@ const ChannelMeetingModal = ({
   };
 
   const switchSyncAppStatus = () => {
-    if(!inputUrl.current)
-      return;
+    if (!inputUrl.current) return;
     if (syncVideoButtonText === "開啟") {
       setSyncVideoButtonText("關閉");
       startVideoSync();
@@ -87,24 +93,24 @@ const ChannelMeetingModal = ({
   };
 
   const changeVideo = () => {
-    if(!inputUrl.current)
-      return;
+    if (!inputUrl.current) return;
     setUrl(inputUrl.current.value);
   };
 
-  let send: WSEvent = {
-    event: WSSendEvents.CreateMeeting,
-    data: {
-      channelID: {channelId},
-    },
-  };
-  api.WSSend(JSON.stringify(send));
-  
+  useEffect(() => {
+    let send: WSEvent = {
+      event: WSSendEvents.CreateMeeting,
+      data: {
+        channelID: channelId,
+      },
+    };
+    api.WSSend(JSON.stringify(send));
+  }, [channelId]);
 
   return (
     <Modal
       size="lg"
-      style={{maxWidth: "70%", maxHeight: "75%"}}
+      style={{ maxWidth: "70%", maxHeight: "75%" }}
       modalClassName=""
       isOpen={isOpen}
       tabIndex={-1}
@@ -112,18 +118,20 @@ const ChannelMeetingModal = ({
       className="channelMeetingModal"
       contentClassName="shadow-lg border-0"
     >
-      <ModalHeader>
-        會議
-      </ModalHeader>
-      <ModalBody className="d-flex align-items-stretch" style={{height: "70%"}}>
+      <ModalHeader>會議</ModalHeader>
+      <ModalBody
+        className="d-flex align-items-stretch"
+        style={{ height: "70%" }}
+      >
         <Stack gap={3}>
           <Stack direction="horizontal">
-            <Button 
+            <Button
               type="button"
               className="btn btn-primary col-2"
-              style={{marginRight: "30px"}}
+              style={{ marginRight: "30px" }}
               onClick={switchSyncAppStatus}
-              innerRef={syncVideoButton}>
+              innerRef={syncVideoButton}
+            >
               {syncVideoButtonText}YouTube同步
             </Button>
             <Input
@@ -138,26 +146,33 @@ const ChannelMeetingModal = ({
               type="button"
               className="btn btn-primary col-1 d-none"
               onClick={changeVideo}
-              innerRef={buttonUpdateVideo}>
+              innerRef={buttonUpdateVideo}
+            >
               更新影片
             </Button>
           </Stack>
 
-          <div style={{ width: "100%", height: "100%"}}>
-            <iframe
-              id="meetingIframe"
-              src={`https://meet.beeenson.com:8443?name=${userProfile.name}&roomName=${channelId}`}
-              width="100%"
-              title="group meeting"
-              allow="camera;microphone"
-              scrolling="no"
-              style={{ borderRadius: "5px", height: "100%" }}
-            ></iframe>
+          <div style={{ width: "100%", height: "100%" }}>
+            {meetingId && (
+              <iframe
+                id="meetingIframe"
+                src={`https://meet.beeenson.com:8443?name=${userProfile.name}&roomName=${meetingId}`}
+                width="100%"
+                title="group meeting"
+                allow="camera;microphone"
+                scrolling="no"
+                style={{ borderRadius: "5px", height: "100%" }}
+              ></iframe>
+            )}
             <VideoPlayer
               height="50%"
               width="50%"
               className="d-none"
-              style={{marginTop: "-35%", marginLeft: "auto", marginRight: "0"}}
+              style={{
+                marginTop: "-35%",
+                marginLeft: "auto",
+                marginRight: "0",
+              }}
               url={url}
             />
           </div>

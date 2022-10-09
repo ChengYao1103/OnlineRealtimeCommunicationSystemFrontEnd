@@ -16,6 +16,7 @@ import {
   WSEvent,
   WSReceiveEvents,
   WSReceiveError,
+  MeetingCreated,
 } from "../repository/wsEvent";
 import { channelModel, ChatsActionTypes } from "../redux/chats/types";
 import { CallsActionTypes } from "../redux/calls/types";
@@ -156,6 +157,15 @@ const WSEventHandler = () => {
         let ErrorData = data.data as WSReceiveError;
         showErrorNotification(
           ErrorMessages[ErrorData.error as ErrorMessagesKey]
+        );
+        break;
+      case WSReceiveEvents.MeetingCreateBySelf:
+        let meetingData = data.data as MeetingCreated;
+        dispatch(
+          callWebsocketEvent(
+            CallsActionTypes.GET_MEETING_CREATE_BY_SELF,
+            meetingData.meetingID
+          )
         );
         break;
       // WS service
