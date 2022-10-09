@@ -2,11 +2,6 @@ import { takeEvery, fork, put, all, call } from "redux-saga/effects";
 
 // Login Redux States
 import { ChatsActionTypes } from "./types";
-import {
-  getChannelMembers as refreshChannelMembers,
-  chatsApiResponseSuccess,
-  chatsApiResponseError,
-} from "./actions";
 
 import {
   getFavourites as getFavouritesApi,
@@ -54,7 +49,9 @@ import {
 import {
   getDirectMessages as getDirectMessagesAction,
   getFavourites as getFavouritesAction,
-  getChannels as getChannelsAction,
+  getChannelMembers as refreshChannelMembers,
+  chatsApiResponseSuccess,
+  chatsApiResponseError,
 } from "./actions";
 
 function* getFavourites() {
@@ -317,8 +314,9 @@ function* getChannelPosts({ payload: id }: any) {
 
 function* kickOutMember({ payload: data }: any) {
   try {
-    const response: Promise<any> = yield call(kickOutMemberApi, data);
+    yield call(kickOutMemberApi, data);
     yield call(showSuccessNotification, "成功");
+    yield put(refreshChannelMembers(data.channelID));
   } catch (error: any) {
     yield call(showErrorNotification, "發生問題");
   }

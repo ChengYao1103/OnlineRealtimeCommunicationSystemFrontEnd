@@ -26,7 +26,11 @@ import AddPinnedTabModal from "../../../../components/AddPinnedTabModal";
 import { PinTypes } from "../../../../data/chat";
 
 // actions
-import { changeSelectedChat, kickOutMember } from "../../../../redux/actions";
+import {
+  changeSelectedChat,
+  getChannels,
+  kickOutMember,
+} from "../../../../redux/actions";
 
 // constants
 import { STATUS_TYPES } from "../../../../constants";
@@ -403,6 +407,7 @@ const UserHead = ({
   /** 離開群組 */
   const onLeave = () => {
     dispatch(kickOutMember(selectedChatInfo.id, userProfile.id));
+    dispatch(getChannels(userProfile.id.toString()));
   };
 
   return (

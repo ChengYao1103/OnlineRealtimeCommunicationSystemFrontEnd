@@ -113,7 +113,6 @@ const inviteChannelMembers = (data: any) => {
 };
 
 const kickOutMember = (data: object) => {
-  console.log({ data });
   return api.delete(url.KICK_OUT, { data });
 };
 
