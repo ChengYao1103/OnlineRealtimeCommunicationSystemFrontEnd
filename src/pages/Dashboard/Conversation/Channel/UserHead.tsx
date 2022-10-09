@@ -38,6 +38,7 @@ import Loader from "../../../../components/Loader";
 import InviteChannelModal from "../../../../components/InviteChannelModal";
 import RollCallModal from "../../../../components/RollCallModal";
 import ChannelMeetingModal from "../../../../components/ChannelMeetingModal";
+import HomeworkModal from "../../../../components/HomeworkModal";
 interface ProfileImageProps {
   selectedChatInfo: any;
   onCloseConversation: () => any;
@@ -207,6 +208,7 @@ interface MoreProps {
   isChannel: boolean;
   onOpenInvite: () => void;
   onOpenRollCall: () => void;
+  onOpenHomework: () => void;
   role: number;
 }
 const More = ({
@@ -219,6 +221,7 @@ const More = ({
   isChannel,
   onOpenInvite,
   onOpenRollCall,
+  onOpenHomework,
   role,
 }: MoreProps) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -284,7 +287,7 @@ const More = ({
         <DropdownItem
           className="d-flex justify-content-between align-items-center"
           to="#"
-          onClick={onDelete}
+          onClick={onOpenHomework}
         >
           作業 <i className="mdi mdi-pencil"></i>
         </DropdownItem>
@@ -402,6 +405,18 @@ const UserHead = ({
   };
 
   /*
+  roll call modal
+  */
+  const [isOpenHomeworkModal, setIsOpenHomeworkModal] =
+    useState<boolean>(false);
+  const onOpenHomework = () => {
+    setIsOpenHomeworkModal(true);
+  };
+  const onCloseHomework = () => {
+    setIsOpenHomeworkModal(false);
+  };
+
+  /*
   mobile menu chat conversation close
   */
   const onCloseConversation = () => {
@@ -472,6 +487,7 @@ const UserHead = ({
                 isChannel={isChannel}
                 onOpenInvite={onOpenInvite}
                 onOpenRollCall={onOpenRollCall}
+                onOpenHomework={onOpenHomework}
                 role={role}
               />
             </li>
@@ -509,6 +525,9 @@ const UserHead = ({
       )}
       {isOpenRollCallModal && (
         <RollCallModal isOpen={isOpenRollCallModal} onClose={onCloseRollCall} role={role} />
+      )}
+      {isOpenHomeworkModal && (
+        <HomeworkModal isOpen={isOpenHomeworkModal} onClose={onCloseHomework} role={role} />
       )}
     </div>
   );

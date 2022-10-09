@@ -119,6 +119,10 @@ const kickOutMember = (data: object) => {
 const getChannelPosts = (data: any) => {
   return api.get(`${url.GET_CHANNEL_POSTS}/${data.ID}`);
 };
+
+const getChannelHomeworks = (id: string | number) => {
+  return api.get(`${url.GET_CHANNEL_HOMEWORK}/${id}`);
+};
 /*
 archive
 */
@@ -202,6 +206,36 @@ const getRollCall = (id: string | number) => {
   return api.get(`${url.GET_ROLLCALL}/${id}`);
 };
 
+/* 
+homework
+*/
+const createHomework = (data: object) => {
+  return api.create(url.CREATE_HOMEWORK, data);
+};
+
+const updateHomework = (data: object) => {
+  return api.patch(url.UPDATE_HOMEWORK, data);
+};
+
+const closeHomework = (data: object) => {
+  return api.patch(url.CLOSE_HOMEWORK, data);
+};
+
+const uploadHomework = (data: object) => {
+  return api.createWithFile(url.UPLOAD_HOMEWORK, data);
+};
+
+const downloadHomework = (data: object, filename: string) => {
+  return api.getFile(url.DOWNLOAD_MESSAGE_FILE, filename, data);
+};
+
+const setHomeworkScore = (data: object) => {
+  return api.patch(url.SET_HOMEWORK_SCORE, data);
+};
+
+const getHomework = (id: string | number) => {
+  return api.get(`${url.GET_HOMEWORK}/${id}`);
+};
 export {
   getFavourites,
   getDirectMessages,
@@ -224,6 +258,7 @@ export {
   inviteChannelMembers,
   kickOutMember,
   getChannelPosts,
+  getChannelHomeworks,
   toggleFavouriteContact,
   getArchiveContact,
   toggleArchiveContact,
@@ -242,4 +277,11 @@ export {
   updateRollCall,
   getRollCallRecords,
   getRollCall,
+  createHomework,
+  updateHomework,
+  closeHomework,
+  uploadHomework,
+  downloadHomework,
+  setHomeworkScore,
+  getHomework,
 };

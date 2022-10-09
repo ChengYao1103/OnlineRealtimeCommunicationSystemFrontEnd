@@ -1,6 +1,6 @@
 import { RoleTypes } from "../../repository/Enum";
 import { userModel } from "../auth/types";
-import { channelModel, ChatsActionTypes, messageRecordModel } from "./types";
+import { channelHomeworkModel, channelModel, ChatsActionTypes, messageRecordModel } from "./types";
 
 // common success
 export const chatsApiResponseSuccess = (actionType: string, data: any) => ({
@@ -156,6 +156,11 @@ export const getChannelPosts = (data: any) => ({
   payload: data,
 });
 
+export const getChannelHomeworks = (data: any) => ({
+  type: ChatsActionTypes.GET_CHANNEL_HOMEWORKS,
+  payload: data,
+});
+
 export const toggleFavouriteContact = (id: number | string) => ({
   type: ChatsActionTypes.TOGGLE_FAVOURITE_CONTACT,
   payload: id,
@@ -247,4 +252,46 @@ export const getRollCallRecords = (id: number | string) => ({
 export const getRollCall = (id: number | string) => ({
   type: ChatsActionTypes.GET_ROLLCALL,
   payload: id,
+});
+
+export const createHomework = (data: any) => ({
+  type: ChatsActionTypes.CREATE_HOMEWORK,
+  payload: data,
+});
+
+export const closeHomework = (data: any) => ({
+  type: ChatsActionTypes.CLOSE_HOMEWORK,
+  payload: data,
+});
+
+export const updateHomework = (data: any) => ({
+  type: ChatsActionTypes.UPDATE_HOMEWORK,
+  payload: data,
+});
+
+export const uploadHomework = (data: any) => ({
+  type: ChatsActionTypes.UPLOAD_HOMEWORK,
+  payload: data,
+});
+
+export const downloadHomework = (filename: string, data: any) => ({
+  type: ChatsActionTypes.DOWNLOAD_HOMEWORK,
+  payload: {filename, data},
+});
+
+export const setHomeworkScore = (data: any) => ({
+  type: ChatsActionTypes.SET_HOMEWORK_SCORE,
+  payload: data,
+});
+
+export const getHomework = (id: number | string) => ({
+  type: ChatsActionTypes.GET_HOMEWORK,
+  payload: id,
+});
+
+export const changeSelectedHomework = (
+  selectedHomework?: channelHomeworkModel | null,
+) => ({
+  type: ChatsActionTypes.CHANGE_SELECTED_HOMEWORK,
+  payload: { selectedHomework },
 });

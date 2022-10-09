@@ -14,6 +14,7 @@ export enum ChatsActionTypes {
   INVITE_CHANNEL_MEMBERS = "@@chats/INVITE_CHANNEL_MEMBERS",
   GET_CHANNEL_POSTS = "@@chats/GET_CHANNEL_POSTS",
   KICK_OUT_MEMBER = "@@chats/KICK_OUT_MEMBER",
+  GET_CHANNEL_HOMEWORKS = "@@chats/GET_CHANNEL_HOMEWORK",
 
   ADD_CONTACTS = "@@chats/ADD_CONTACTS",
   CREATE_CHANNEL = "@@chats/CREATE_CHANNEL",
@@ -54,6 +55,16 @@ export enum ChatsActionTypes {
   UPDATE_ROLLCALL = "@@chats/UPDATE_ROLLCALL",
   GET_ROLLCALL_RECORDS = "@@chats/GET_ROLLCALL_RECORDS",
   GET_ROLLCALL = "@@chats/GET_ROLLCALL",
+
+  //HOMEWORK
+  CREATE_HOMEWORK = "@@chats/CREATE_HOMEWORK",
+  UPDATE_HOMEWORK = "@@chats/UPDATE_HOMEWORK",
+  CLOSE_HOMEWORK = "@@chats/CLOSE_HOMEWORK",
+  UPLOAD_HOMEWORK = "@@chats/UPLOAD_HOMEWORK",
+  DOWNLOAD_HOMEWORK = "@@chats/DOWNLOAD_HOMEWORK",
+  SET_HOMEWORK_SCORE = "@@chats/SET_HOMEWORK_SCORE",
+  GET_HOMEWORK = "@@chats/GET_HOMEWORK",
+  CHANGE_SELECTED_HOMEWORK = "@@chats/CHANGE_SELECTED_HOMEWORK",
 }
 
 export interface senderModel {
@@ -109,6 +120,17 @@ export interface channelPostModel {
   timestamp: string;
 }
 
+export interface channelHomeworkModel {
+  id: number;
+  name: string;
+  channelID: number;
+  createTime: string;
+  startTime: string;
+  endTime: string;
+  description: string;
+  type: boolean;
+}
+
 export interface postCommentModel {
   postID: number;
   id: number;
@@ -134,6 +156,7 @@ export interface ChatsState {
   chatUserDetails: object;
   chatUserConversations: Array<messageRecordModel>;
   channelPosts: Array<channelPostModel>;
+  channelHomeworks: Array<channelHomeworkModel>;
   channelRole: number;
   postComments: Array<postCommentModel>;
   recentChatUsers: Array<recentChatUserModel>;
@@ -142,5 +165,7 @@ export interface ChatsState {
   archiveContacts: Array<any>;
   selectedChatInfo?: userModel | channelModel;
   rollCall?: rollCallModel;
+  homework?: channelHomeworkModel;
   role?: number | null;
+  selectedHomework?: channelHomeworkModel | null;
 }

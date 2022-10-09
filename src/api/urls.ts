@@ -60,6 +60,7 @@ export const INVITE_CHANNEL_MEMBERS = "/channel/invite";
 export const GET_CHANNEL_POSTS = "/channel/allPost";
 export const GET_ROLLCALL = "/channel/getRollCall";
 export const KICK_OUT = "/channel/kickOut";
+export const GET_CHANNEL_HOMEWORK = "/channel/allHomework";
 
 // posts
 export const CREATE_POST = "/post/create";
@@ -74,3 +75,12 @@ export const DO_ROLLCALL = "/rollCall/do";
 export const CLOSE_ROLLCALL = "/rollCall/close";
 export const UPDATE_ROLLCALL = "/rollCall/update";
 export const GET_ROLLCALL_RECORDS = "/rollCall/record";
+
+//homework
+export const CREATE_HOMEWORK = "/homework/create";
+export const UPDATE_HOMEWORK = "/homework/update";
+export const CLOSE_HOMEWORK = "/homework/close";
+export const UPLOAD_HOMEWORK = "/homework/upload";
+export const DOWNLOAD_HOMEWORK = "/homework/download";
+export const SET_HOMEWORK_SCORE = "/homework/setScore";
+export const GET_HOMEWORK = "/homework";

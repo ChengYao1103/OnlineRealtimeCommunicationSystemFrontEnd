@@ -24,7 +24,8 @@ import {
   getChannelMembers as getChannelMembersApi,
   inviteChannelMembers as inviteChannelMembersApi,
   kickOutMember as kickOutMemberApi,
-  getChannelPosts as getChannelPostsApi,
+  getChannelPosts as getChannelPostsApi,  
+  getChannelHomeworks as getChannelHomeworksApi,
   toggleFavouriteContact as toggleFavouriteContactApi,
   getArchiveContact as getArchiveContactApi,
   toggleArchiveContact as toggleArchiveContactApi,
@@ -42,6 +43,13 @@ import {
   closeRollCall as closeRollCallApi,
   getRollCall as getRollCallApi,
   doRollCall as doRollCallApi,
+  createHomework as createHomeworkApi,
+  updateHomework as updateHomeworkApi,
+  closeHomework as closeHomeworkApi,
+  uploadHomework as uploadHomeworkApi,
+  downloadHomework as downloadHomeworkApi,
+  setHomeworkScore as setHomeworkScoreApi,
+  getHomework as getHomeworkApi,
 } from "../../api/index";
 
 import {
@@ -326,6 +334,19 @@ function* kickOutMember({ payload: data }: any) {
   }
 }
 
+function* getChannelHomeworks({ payload: id }: any) {
+  try {
+    const response: Promise<any> = yield call(getChannelHomeworksApi, id);
+    yield put(
+      chatsApiResponseSuccess(ChatsActionTypes.GET_CHANNEL_HOMEWORKS, response)
+    );
+  } catch (error: any) {
+    yield put(
+      chatsApiResponseError(ChatsActionTypes.GET_CHANNEL_HOMEWORKS, error)
+    );
+  }
+}
+
 function* toggleFavouriteContact({ payload: id }: any) {
   try {
     const response: Promise<any> = yield call(toggleFavouriteContactApi, id);
@@ -498,15 +519,15 @@ function* createRollCall({ payload: rollCallData }: any) {
   }
 }
 
-function* updateRollCall({ payload: rollCallDate }: any) {
+function* updateRollCall({ payload: HomeworkData }: any) {
   try {
-    const response: Promise<any> = yield call(updateRollCallApi, rollCallDate);
+    const response: Promise<any> = yield call(updateRollCallApi, HomeworkData);
     yield put(
-      chatsApiResponseSuccess(ChatsActionTypes.UPDATE_ROLLCALL, response)
+      chatsApiResponseSuccess(ChatsActionTypes.UPDATE_HOMEWORK, response)
     );
   } catch (error: any) {
     yield put(
-      chatsApiResponseError(ChatsActionTypes.UPDATE_ROLLCALL, error)
+      chatsApiResponseError(ChatsActionTypes.UPDATE_HOMEWORK, error)
     );
   }
 }
@@ -543,6 +564,93 @@ function* doRollCall({ payload: id }: any) {
     yield put(
       chatsApiResponseError(ChatsActionTypes.DO_ROLLCALL, error)
     );
+  }
+}
+
+function* createHomework({ payload: homeworkData }: any) {
+  try {
+    const response: Promise<any> = yield call(createHomeworkApi, homeworkData);
+    yield put(
+      chatsApiResponseSuccess(ChatsActionTypes.CREATE_HOMEWORK, response)
+    );
+  } catch (error: any) {
+    yield put(
+      chatsApiResponseError(ChatsActionTypes.CREATE_HOMEWORK, error)
+    );
+  }
+}
+
+function* updateHomework({ payload: homeworkData }: any) {
+  try {
+    const response: Promise<any> = yield call(updateHomeworkApi, homeworkData);
+    yield put(
+      chatsApiResponseSuccess(ChatsActionTypes.UPDATE_HOMEWORK, response)
+    );
+  } catch (error: any) {
+    yield put(
+      chatsApiResponseError(ChatsActionTypes.UPDATE_HOMEWORK, error)
+    );
+  }
+}
+
+function* closeHomework({ payload: data }: any) {
+  try {
+    const response: Promise<any> = yield call(closeHomeworkApi, data);
+    yield put(
+      chatsApiResponseSuccess(ChatsActionTypes.CLOSE_HOMEWORK, response)
+    );
+  } catch (error: any) {
+    yield put(
+      chatsApiResponseError(ChatsActionTypes.CLOSE_HOMEWORK, error)
+    );
+  }
+}
+
+function* getHomework({ payload: id }: any) {
+  try {
+    const response: Promise<any> = yield call(getHomeworkApi, id);
+    yield put(chatsApiResponseSuccess(ChatsActionTypes.GET_HOMEWORK, response));
+  } catch (error: any) {
+    yield put(chatsApiResponseError(ChatsActionTypes.GET_HOMEWORK, error));
+  }
+}
+
+function* uploadHomework({ payload: data }: any) {
+  try {
+    const response: Promise<any> = yield call(uploadHomeworkApi, data);
+    yield put(
+      chatsApiResponseSuccess(ChatsActionTypes.UPLOAD_HOMEWORK, response)
+    );
+  } catch (error: any) {
+    yield put(
+      chatsApiResponseError(ChatsActionTypes.UPLOAD_HOMEWORK, error)
+    );
+  }
+}
+
+function* downloadHomework({ payload: { data, filename } }: any) {
+  try {
+    const response: Promise<any> = yield call(
+      downloadHomeworkApi,
+      data,
+      filename
+    );
+    yield put(
+      chatsApiResponseSuccess(ChatsActionTypes.DOWNLOAD_HOMEWORK, response)
+    );
+  } catch (error: any) {
+    yield put(
+      chatsApiResponseError(ChatsActionTypes.DOWNLOAD_HOMEWORK, error)
+    );
+  }
+}
+
+function* setHomeworkScore({ payload: data }: any) {
+  try {
+    const response: Promise<any> = yield call(setHomeworkScoreApi, data);
+    yield put(chatsApiResponseSuccess(ChatsActionTypes.SET_HOMEWORK_SCORE, response));
+  } catch (error: any) {
+    yield put(chatsApiResponseError(ChatsActionTypes.SET_HOMEWORK_SCORE, error));
   }
 }
 
@@ -619,6 +727,9 @@ export function* watchKickOutMember() {
 export function* watchGetChannelPosts() {
   yield takeEvery(ChatsActionTypes.GET_CHANNEL_POSTS, getChannelPosts);
 }
+export function* watchGetChannelHomeworks() {
+  yield takeEvery(ChatsActionTypes.GET_CHANNEL_HOMEWORKS, getChannelHomeworks);
+}
 export function* watchToggleFavouriteContact() {
   yield takeEvery(
     ChatsActionTypes.TOGGLE_FAVOURITE_CONTACT,
@@ -688,6 +799,33 @@ export function* watchDoRollCall() {
   yield takeEvery(ChatsActionTypes.DO_ROLLCALL, doRollCall);
 }
 
+export function* watchCreateHomework() {
+  yield takeEvery(ChatsActionTypes.CREATE_HOMEWORK, createHomework);
+}
+
+export function* watchUpdateHomework() {
+  yield takeEvery(ChatsActionTypes.UPDATE_HOMEWORK, updateHomework);
+}
+
+export function* watchCloseHomework() {
+  yield takeEvery(ChatsActionTypes.CLOSE_HOMEWORK, closeHomework);
+}
+
+export function* watchUploadHomework() {
+  yield takeEvery(ChatsActionTypes.UPLOAD_HOMEWORK, uploadHomework);
+}
+
+export function* watchDownloadHomework() {
+  yield takeEvery(ChatsActionTypes.DOWNLOAD_HOMEWORK, downloadHomework);
+}
+
+export function* watchGetHomework() {
+  yield takeEvery(ChatsActionTypes.GET_ROLLCALL, getHomework);
+}
+
+export function* watchSetHomewokScore() {
+  yield takeEvery(ChatsActionTypes.SET_HOMEWORK_SCORE, setHomeworkScore);
+}
 function* chatsSaga() {
   yield all([
     fork(watchGetFavourites),
@@ -711,6 +849,7 @@ function* chatsSaga() {
     fork(watchInviteChannelMembers),
     fork(watchKickOutMember),
     fork(watchGetChannelPosts),
+    fork(watchGetChannelHomeworks),
     fork(watchToggleFavouriteContact),
     fork(watchGetArchiveContact),
     fork(watchToggleArchiveContact),
@@ -729,6 +868,13 @@ function* chatsSaga() {
     fork(watchGetRollCall),
     fork(watchDoRollCall),
     fork(watchGetRole),
+    fork(watchCreateHomework),
+    fork(watchUpdateHomework),
+    fork(watchCloseHomework),
+    fork(watchUploadHomework),
+    fork(watchDownloadHomework),
+    fork(watchGetHomework),
+    fork(watchSetHomewokScore),
   ]);
 }
 

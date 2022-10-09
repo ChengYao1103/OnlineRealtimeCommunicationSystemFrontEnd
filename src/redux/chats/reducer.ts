@@ -14,6 +14,7 @@ export const INIT_STATE: ChatsState = {
   chatUserDetails: {},
   chatUserConversations: [],
   channelPosts: [],
+  channelHomeworks: [],
   channelRole: -1,
   postComments: [],
   isOpenUserDetails: false,
@@ -22,6 +23,8 @@ export const INIT_STATE: ChatsState = {
   recentChatUsers: [],
   selectedChatInfo: undefined,
   rollCall: undefined,
+  homework: undefined,
+  selectedHomework: null,
 };
 
 const Chats = persistReducer(
@@ -152,6 +155,12 @@ const Chats = persistReducer(
               getChannelPostsLoading: false,
               channelPosts: action.payload.data.post,
             };
+          case ChatsActionTypes.GET_CHANNEL_HOMEWORKS:
+            return {
+              ...state,
+              getChannelHomeworksLoading: false,
+              channelHomeworks: action.payload.data.homework,
+            };
           case ChatsActionTypes.TOGGLE_FAVOURITE_CONTACT:
             return {
               ...state,
@@ -184,6 +193,12 @@ const Chats = persistReducer(
             return {
               ...state,
               rollCall: action.payload.data.rollCall,
+            };
+          case ChatsActionTypes.GET_HOMEWORK:
+            console.log(action.payload.data)
+            return {
+              ...state,
+              homework: action.payload.data.homework,
             };
           default:
             return { ...state };
@@ -294,6 +309,11 @@ const Chats = persistReducer(
               ...state,
               rollCall: null,
             };
+          case ChatsActionTypes.GET_HOMEWORK:
+            return {
+              ...state,
+              homework: null,
+            };
           default:
             return { ...state };
         }
@@ -354,6 +374,12 @@ const Chats = persistReducer(
           channelMembers: undefined,
           selectedChat: action.payload.selectedChat,
           selectedChatInfo: action.payload.selectedChatInfo,
+        };
+      case ChatsActionTypes.CHANGE_SELECTED_HOMEWORK:
+        state.homework = undefined
+        return {
+          ...state,
+          selectedHomework: action.payload.selectedHomework,
         };
       case ChatsActionTypes.GET_CHAT_USER_DETAILS:
         return {
@@ -435,6 +461,11 @@ const Chats = persistReducer(
         return {
           ...state,
           getChannelPostsLoading: true,
+        };
+      case ChatsActionTypes.GET_CHANNEL_HOMEWORKS:
+        return {
+          ...state,
+          getChannelHomeworksLoading: true,
         };
       case ChatsActionTypes.GET_POST_COMMENTS:
         return {
