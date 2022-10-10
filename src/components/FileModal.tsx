@@ -56,26 +56,27 @@ const FileModal = ({
         dispatch(changeSelectedDir(info));
         if (info)
             setPath([...path, info])
-        console.log(info)
-        console.log(dirInfo)
-        console.log([...path, info])
-        console.log(([...path, info]).join("/"))
         let tmp = ([...path, info]).join("/")
         let data = {
             path: tmp,
-          }  
-          console.log(data)
+        }  
         dispatch(getChannelDir(channelInfo.id, data))
-        console.log(channelDir)
-
       };
-
+      const onBack = () => {
+        let tmp = path
+        tmp.pop()
+        let data = {
+            path: tmp.length === 0 ? "" : path.join("/"),
+        }  
+        dispatch(getChannelDir(channelInfo.id, data))
+        setPath([...tmp])
+      };
 
     const onLoad = () => {
         let data = {
             path: "",
         }
-        console.log(data)
+        console.log(path)
         dispatch(getChannelDir(channelInfo.id, data))
     }
 //   const onClear = () => {
@@ -92,6 +93,9 @@ const FileModal = ({
   useEffect(() => {
     console.log(channelDir)
   }, [channelDir])
+
+  useEffect(() => {
+}, [path])
 
 //   useEffect(() => {
 //     console.log(path)
@@ -116,16 +120,16 @@ const FileModal = ({
       )}
       <ModalBody className="p-4">
         <FormGroup>
-        <Button>
-        <i className="mdi mdi-arrow-left"></i>
+        <Button disabled={path.length === 0 || !path} onClick={onBack}>
+          <i className="mdi mdi-arrow-left"></i>
         </Button>   
         <Label htmlFor="RollCallStartTime-input" className="form-label">現在位置: </Label>
-              <Input               
-                type="datetime"
-              className="form-control mb-3"
-              id="RollCallStartTime-input"
-              value={path.join("/")}
-              disabled={true} />
+        <Input               
+          type="datetime"
+          className="form-control mb-3"
+          id="RollCallStartTime-input"
+          value={path.join("/")}
+          disabled={true} />
       </FormGroup>
       <Table>
         <thead>
@@ -135,6 +139,11 @@ const FileModal = ({
             </th>
           </tr>
         </thead>
+        <FormGroup>
+        <Label className="form-label" style={{color: "red"}}>
+              {(channelDir.length === 0) && "沒有檔案"}
+        </Label>
+        </FormGroup>
         {(channelDir || []).map((dir: string, key: number) => {
           return (
             <>

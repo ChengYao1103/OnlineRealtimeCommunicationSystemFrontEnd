@@ -699,10 +699,10 @@ function* createChannelDir({ payload: dirData }: any) {
   }
 }
 
-function* getChannelDir({ payload: id, dirData }: any) {
-  console.log(dirData)
+function* getChannelDir({ payload: id, data }: any) {
+  console.log(data)
   try {
-    const response: Promise<any> = yield call(getChannelDirApi, id, dirData);
+    const response: Promise<any> = yield call(getChannelDirApi, id, data);
 
     console.log(response)
     yield put(
