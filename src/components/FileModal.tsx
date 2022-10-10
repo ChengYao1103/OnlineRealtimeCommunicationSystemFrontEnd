@@ -13,7 +13,7 @@ import {
   Table,
 } from "reactstrap";
 import { useRedux } from "../hooks";
-import { getChannelDir, createHomework, updateHomework, closeHomework, getChannelHomeworks, doRollCall, changeSelectedHomework, changeSelectedDir } from "../redux/actions";
+import { getChannelDir, createChannelDir, updateHomework, closeHomework, getChannelHomeworks, doRollCall, changeSelectedHomework, changeSelectedDir } from "../redux/actions";
 import { channelHomeworkModel } from "../redux/chats/types";
 import { Link } from "react-router-dom";
 import { Icons } from "react-toastify";
@@ -37,22 +37,12 @@ const FileModal = ({
     }));
 
     const [path, setPath] = useState(Array<string>)
-    const [name, setName] = useState("")
-    const [description, setDescription] = useState("")
-    const [startDateTime, setStartDateTime] = useState("");
-    const [endDateTime, setEndDateTime] = useState("");
-    const [startDate, setStartDate] = useState("");
-    const [endDate, setEndDate] = useState("");
-    const [startTime, setStartTime] = useState("");
-    const [endTime, setEndTime] = useState("");
-    const [mode, setMode] = useState(0); //0: 作業總覽 1: 作業詳細內容 2:編輯作業 3: 新增作業
+    const [isOpenInputName, setIsOpenInputName] = useState(false)
+    const [dirName, setDirName] = useState("")
 
     const onSelectDir = (
         info: string,
       ) => {
-        if (dirInfo === info) {
-          return;
-        }
         dispatch(changeSelectedDir(info));
         if (info)
             setPath([...path, info])
@@ -63,10 +53,10 @@ const FileModal = ({
         dispatch(getChannelDir(channelInfo.id, data))
       };
       const onBack = () => {
-        let tmp = path
+        let tmp = [...path]
         tmp.pop()
         let data = {
-            path: tmp.length === 0 ? "" : path.join("/"),
+            path: tmp.length === 0 ? "" : tmp.join("/"),
         }  
         dispatch(getChannelDir(channelInfo.id, data))
         setPath([...tmp])
@@ -76,32 +66,15 @@ const FileModal = ({
         let data = {
             path: "",
         }
-        console.log(path)
         dispatch(getChannelDir(channelInfo.id, data))
     }
-//   const onClear = () => {
-//     setStartDateTime("")
-//     setEndDateTime("")
-//     setStartDate("")
-//     setEndDate("")
-//     setStartTime("")
-//     setEndTime("")
-//   };
-
-
-
-  useEffect(() => {
-    console.log(channelDir)
-  }, [channelDir])
-
-  useEffect(() => {
-}, [path])
-
-//   useEffect(() => {
-//     console.log(path)
-//     dispatch(getChannelDir(channelInfo.id, path.join("/")))
-//     console.log(channelDir)
-//   }, [path]);
+    
+    const onAddDir = () => {
+      let tmp = [...path]
+      tmp.push(dirName)
+      setDirName("")
+      dispatch(createChannelDir({id: channelInfo.id, path: tmp.length === 0 ? "" : tmp.join("/")}))
+    }
 
   return (
     <Modal isOpen={isOpen} toggle={onClose} tabIndex={-1} onOpened={onLoad} centered scrollable>
@@ -112,13 +85,37 @@ const FileModal = ({
         <ModalFooter>
           {role === 0 && (
             <>
-            <Button onClick={()=>{}}>新增資料夾</Button>
+            <Button onClick={()=>setIsOpenInputName(true)}>新增資料夾</Button>
             <Button onClick={()=>{}}>上傳檔案</Button>
             </>
           )}
         </ModalFooter>
       )}
+                  {isOpenInputName && (
+              <ModalBody>
+                <Label htmlFor="RollCallStartTime-input" className="form-label">新增資料夾 </Label>
+                <FormGroup>
+                <Label htmlFor="RollCallStartTime-input" className="form-label">請輸入資料夾名稱: </Label>
+                <Input               
+                  type="datetime"
+                  className="form-control mb-3"
+                  id="RollCallStartTime-input"
+                  value={dirName}
+                  onChange={(e: any) => {
+                    setDirName(e.target.value);
+                  }} />
+                </FormGroup>
+                <FormGroup>
+                  <Button onClick={onAddDir}>
+                    確認
+                  </Button>
+                </FormGroup>
+              </ModalBody>
+
+            )}
+
       <ModalBody className="p-4">
+        <Form>
         <FormGroup>
         <Button disabled={path.length === 0 || !path} onClick={onBack}>
           <i className="mdi mdi-arrow-left"></i>
@@ -131,6 +128,7 @@ const FileModal = ({
           value={path.join("/")}
           disabled={true} />
       </FormGroup>
+      </Form>
       <Table>
         <thead>
           <tr>
@@ -139,11 +137,6 @@ const FileModal = ({
             </th>
           </tr>
         </thead>
-        <FormGroup>
-        <Label className="form-label" style={{color: "red"}}>
-              {(channelDir.length === 0) && "沒有檔案"}
-        </Label>
-        </FormGroup>
         {(channelDir || []).map((dir: string, key: number) => {
           return (
             <>
@@ -158,6 +151,13 @@ const FileModal = ({
             </>
           );
         })}
+        <Form>
+        <FormGroup>
+        <Label className="form-label" style={{color: "red"}}>
+              {(channelDir.length === 0 || !channelDir) && "沒有檔案"}
+        </Label>
+        </FormGroup>
+        </Form>
         </Table>
       </ModalBody>
     </Modal>
