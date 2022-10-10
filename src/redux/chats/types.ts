@@ -118,6 +118,8 @@ export interface channelPostModel {
   content: string;
   deleted: boolean;
   timestamp: string;
+  chennelID: number;
+  meetingID: number;
 }
 
 export interface channelHomeworkModel {

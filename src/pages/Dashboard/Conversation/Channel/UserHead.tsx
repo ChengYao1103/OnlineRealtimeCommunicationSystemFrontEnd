@@ -499,6 +499,7 @@ const UserHead = ({
         <ChannelMeetingModal
           isOpen={isOpenVideoModal}
           channelId={selectedChatInfo.id}
+          isCreate={true}
           onClose={onCloseVideo}
         />
 
@@ -524,10 +525,18 @@ const UserHead = ({
         />
       )}
       {isOpenRollCallModal && (
-        <RollCallModal isOpen={isOpenRollCallModal} onClose={onCloseRollCall} role={role} />
+        <RollCallModal
+          isOpen={isOpenRollCallModal}
+          onClose={onCloseRollCall}
+          role={role}
+        />
       )}
       {isOpenHomeworkModal && (
-        <HomeworkModal isOpen={isOpenHomeworkModal} onClose={onCloseHomework} role={role} />
+        <HomeworkModal
+          isOpen={isOpenHomeworkModal}
+          onClose={onCloseHomework}
+          role={role}
+        />
       )}
     </div>
   );

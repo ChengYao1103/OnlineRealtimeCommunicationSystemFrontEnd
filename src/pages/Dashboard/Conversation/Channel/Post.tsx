@@ -30,6 +30,7 @@ import { getDateTime } from "../../../../utils";
 
 // actions
 import {
+  changeMeetingId,
   changeSelectedChat,
   createComment,
   getPostComments,
@@ -37,6 +38,7 @@ import {
 import Loader from "../../../../components/Loader";
 import EndButtons from "../Shared/ChatInputSection/EndButtons";
 import { Link } from "react-router-dom";
+import ChannelMeetingModal from "../../../../components/ChannelMeetingModal";
 
 interface MessageProps {
   message: channelPostModel;
@@ -84,8 +86,19 @@ const Post = ({
   }));
   const [comments, setComments] = useState([]);
   const [inputText, setInputText] = useState("");
+  const [isOpenMeetingModal, setIsOpenMeetingModal] = useState<boolean>(false);
+  const onOpenMeeting = () => {
+    setIsOpenMeetingModal(true);
+  };
+  const onCloseMeeting = () => {
+    setIsOpenMeetingModal(false);
+  };
 
   const postAuthor = channelPost.user;
+
+  const isInMeeting =
+    channelPost.meetingID &&
+    channelPost.content.split(" ").slice(-1)[0] !== "end.\n";
 
   const date = getDateTime(message.timestamp);
 
@@ -159,7 +172,23 @@ const Post = ({
                 </div>
               </Link>
             </CardTitle>
-            <CardText>{channelPost.content}</CardText>
+            <CardText>
+              {channelPost.content}
+              {isInMeeting && (
+                <Button
+                  color="primary"
+                  type="button"
+                  onClick={() => {
+                    dispatch(changeMeetingId(channelPost.meetingID));
+                    onOpenMeeting();
+                  }}
+                  className="btn btn-primary position-absolute end-0 me-3"
+                >
+                  加入會議
+                </Button>
+              )}
+            </CardText>
+
             <small className={classnames("text-muted", "mb-0", "me-2")}>
               {date}
             </small>
@@ -230,6 +259,14 @@ const Post = ({
           </ListGroup>
         </Card>
       </div>
+      {isOpenMeetingModal && (
+        <ChannelMeetingModal
+          isOpen={isOpenMeetingModal}
+          channelId={channelPost.chennelID}
+          isCreate={false}
+          onClose={onCloseMeeting}
+        />
+      )}
     </li>
   );
 };
