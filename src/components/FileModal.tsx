@@ -13,10 +13,11 @@ import {
   Table,
 } from "reactstrap";
 import { useRedux } from "../hooks";
-import { getChannelDir, createChannelDir, updateHomework, closeHomework, getChannelHomeworks, doRollCall, changeSelectedHomework, changeSelectedDir } from "../redux/actions";
+import { getChannelDir, createChannelDir, uploadChannelFile, downloadChannelFile, getChannelHomeworks, doRollCall, changeSelectedHomework, changeSelectedDir } from "../redux/actions";
 import { channelHomeworkModel } from "../redux/chats/types";
 import { Link } from "react-router-dom";
 import { Icons } from "react-toastify";
+import { pathToFileURL } from "url";
 
 interface FileModalProps {
   isOpen: boolean;
@@ -28,53 +29,60 @@ const FileModal = ({
   onClose,
   role,
 }: FileModalProps) => {
-    const { dispatch, useAppSelector } = useRedux();
-    const { channelInfo, channelDir, isDir, dirInfo } = useAppSelector(state => ({
-      channelInfo: state.Chats.selectedChatInfo,
-      channelDir: state.Chats.channelDir,
-      isDir: state.Chats.isDir,
-      dirInfo: state.Chats.selectedDir
-    }));
+  const { dispatch, useAppSelector } = useRedux();
+  const { channelInfo, channelDir, isDir, dirInfo } = useAppSelector(state => ({
+    channelInfo: state.Chats.selectedChatInfo,
+    channelDir: state.Chats.channelDir,
+    isDir: state.Chats.isDir,
+    dirInfo: state.Chats.selectedDir
+  }));
 
-    const [path, setPath] = useState(Array<string>)
-    const [isOpenInputName, setIsOpenInputName] = useState(false)
-    const [dirName, setDirName] = useState("")
+  const [path, setPath] = useState(Array<string>)
+  const [isOpenInputName, setIsOpenInputName] = useState(false)
+  const [dirName, setDirName] = useState("")
 
-    const onSelectDir = (
-        info: string,
-      ) => {
-        dispatch(changeSelectedDir(info));
-        if (info)
-            setPath([...path, info])
-        let tmp = ([...path, info]).join("/")
-        let data = {
-            path: tmp,
-        }  
-        dispatch(getChannelDir(channelInfo.id, data))
-      };
-      const onBack = () => {
-        let tmp = [...path]
-        tmp.pop()
-        let data = {
-            path: tmp.length === 0 ? "" : tmp.join("/"),
-        }  
-        dispatch(getChannelDir(channelInfo.id, data))
-        setPath([...tmp])
-      };
+  const onSelectDir = (info: string) => {
+    dispatch(changeSelectedDir(info));
+    if (info)
+        setPath([...path, info])
+    let tmp = ([...path, info]).join("/")
+    let data = {
+      path: tmp,
+    }  
+    dispatch(getChannelDir(channelInfo.id, data))
+  };
+  const onBack = () => {
+    let tmp = [...path]
+    tmp.pop()
+    let data = {
+      path: tmp.length === 0 ? "" : tmp.join("/"),
+    }  
+    dispatch(getChannelDir(channelInfo.id, data))
+    setPath([...tmp])
+  };
 
-    const onLoad = () => {
-        let data = {
-            path: "",
-        }
-        dispatch(getChannelDir(channelInfo.id, data))
+  const onLoad = () => {
+    let data = {
+      path: "",
     }
+    dispatch(getChannelDir(channelInfo.id, data))
+  }
     
-    const onAddDir = () => {
-      let tmp = [...path]
-      tmp.push(dirName)
-      setDirName("")
-      dispatch(createChannelDir({id: channelInfo.id, path: tmp.length === 0 ? "" : tmp.join("/")}))
-    }
+  const onAddDir = () => {
+    let tmp = [...path]
+    tmp.push(dirName)
+    setDirName("")
+    dispatch(createChannelDir({id: channelInfo.id, path: tmp.length === 0 ? "" : tmp.join("/")}))
+  }
+
+  const onDownload = (filename: string) => {
+    let tmp = [...path, filename]
+    let data = {
+      channelID: channelInfo.id,
+      dirArray: tmp,
+    };
+    dispatch(downloadChannelFile(filename, data));
+  };
 
   return (
     <Modal isOpen={isOpen} toggle={onClose} tabIndex={-1} onOpened={onLoad} centered scrollable>
@@ -91,29 +99,22 @@ const FileModal = ({
           )}
         </ModalFooter>
       )}
-                  {isOpenInputName && (
-              <ModalBody>
-                <Label htmlFor="RollCallStartTime-input" className="form-label">新增資料夾 </Label>
-                <FormGroup>
-                <Label htmlFor="RollCallStartTime-input" className="form-label">請輸入資料夾名稱: </Label>
-                <Input               
-                  type="datetime"
-                  className="form-control mb-3"
-                  id="RollCallStartTime-input"
-                  value={dirName}
-                  onChange={(e: any) => {
-                    setDirName(e.target.value);
-                  }} />
-                </FormGroup>
-                <FormGroup>
-                  <Button onClick={onAddDir}>
-                    確認
-                  </Button>
-                </FormGroup>
-              </ModalBody>
-
-            )}
-
+      {isOpenInputName && (
+        <ModalBody>
+          <Label htmlFor="RollCallStartTime-input" className="form-label">請輸入資料夾名稱: </Label>
+          <Input               
+            type="datetime"
+            className="form-control mb-3"
+            id="RollCallStartTime-input"
+            value={dirName}
+            onChange={(e: any) => {
+              setDirName(e.target.value);
+            }} />
+          <Button onClick={onAddDir}>
+            確認
+          </Button>
+        </ModalBody>
+      )}
       <ModalBody className="p-4">
         <Form>
         <FormGroup>
@@ -141,7 +142,7 @@ const FileModal = ({
           return (
             <>
             <tbody>
-              <tr className="table-primary" style={{padding: "20px"}} onClick={() => {isDir[key] && onSelectDir(dir)}}>
+              <tr className="table-primary" style={{padding: "20px"}} onClick={() => {isDir[key] ? onSelectDir(dir) : onDownload(dir)}}>
                 <td>
                   {isDir[key] ? (<i className="mdi mdi-folder" style={{margin: "10px"}}></i>) : (<i className="mdi mdi-file" style={{margin: "10px"}}></i>)}
                   {dir}
