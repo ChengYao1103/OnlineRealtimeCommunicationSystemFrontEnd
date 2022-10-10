@@ -257,7 +257,7 @@ const More = ({
           to="#"
           onClick={onOpenRollCall}
         >
-          點名 <i className="mdi mdi-bell-ring"></i>
+          點名 <i className="mdi mdi-bell-ring-outline text-muted"></i>
         </DropdownItem>
         <DropdownItem
           className="d-flex justify-content-between align-items-center"
@@ -286,14 +286,14 @@ const More = ({
           to="#"
           onClick={onOpenFile}
         >
-          檔案 <i className="mdi mdi-folder-multiple"></i>
+          檔案 <i className="mdi mdi-folder-multiple-outline text-muted"></i>
         </DropdownItem>
         <DropdownItem
           className="d-flex justify-content-between align-items-center"
           to="#"
           onClick={onOpenHomework}
         >
-          作業 <i className="mdi mdi-pencil"></i>
+          作業 <i className="mdi mdi-pencil-outline text-muted"></i>
         </DropdownItem>
         <DropdownItem
           className="d-flex text-danger justify-content-between align-items-center"
@@ -516,6 +516,7 @@ const UserHead = ({
         <ChannelMeetingModal
           isOpen={isOpenVideoModal}
           channelId={selectedChatInfo.id}
+          isCreate={true}
           onClose={onCloseVideo}
         />
 
@@ -541,10 +542,18 @@ const UserHead = ({
         />
       )}
       {isOpenRollCallModal && (
-        <RollCallModal isOpen={isOpenRollCallModal} onClose={onCloseRollCall} role={role} />
+        <RollCallModal
+          isOpen={isOpenRollCallModal}
+          onClose={onCloseRollCall}
+          role={role}
+        />
       )}
       {isOpenHomeworkModal && (
-        <HomeworkModal isOpen={isOpenHomeworkModal} onClose={onCloseHomework} role={role} />
+        <HomeworkModal
+          isOpen={isOpenHomeworkModal}
+          onClose={onCloseHomework}
+          role={role}
+        />
       )}
       {isOpenFileModal && (
         <FileModal isOpen={isOpenFileModal} onClose={onCloseFile} role={role} />
