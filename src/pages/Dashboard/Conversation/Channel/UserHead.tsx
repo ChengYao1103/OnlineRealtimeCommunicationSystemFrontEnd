@@ -253,14 +253,14 @@ const More = ({
         </DropdownItem>
 
         <DropdownItem
-          className="d-flex justify-content-between align-items-center"
+          className="d-flex justify-content-between align-items-center d-xxl-none"
           to="#"
           onClick={onOpenRollCall}
         >
           點名 <i className="mdi mdi-bell-ring-outline text-muted"></i>
         </DropdownItem>
         <DropdownItem
-          className="d-flex justify-content-between align-items-center"
+          className="d-flex justify-content-between align-items-center d-xxl-none"
           to="#"
           onClick={onOpenVideo}
         >
@@ -423,8 +423,7 @@ const UserHead = ({
   /*
  file modal
   */
-  const [isOpenFileModal, setIsOpenFileModal] =
-    useState<boolean>(false);
+  const [isOpenFileModal, setIsOpenFileModal] = useState<boolean>(false);
   const onOpenFile = () => {
     setIsOpenFileModal(true);
   };
@@ -468,7 +467,7 @@ const UserHead = ({
                 className="btn nav-btn"
                 onClick={onOpenRollCall}
               >
-                <i className="bx bxs-phone-call"></i>
+                <i className="mdi mdi-bell-ring-outline"></i>
               </Button>
             </li>
             <li className="list-inline-item d-none d-xxl-inline-block me-2 ms-0">
