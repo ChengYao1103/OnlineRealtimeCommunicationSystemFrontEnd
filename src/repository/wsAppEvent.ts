@@ -11,8 +11,8 @@ export enum YTEvent {
 }
 
 export interface YoutubeSync extends AppData {
-  state: number;
-  videoID: string;
-  rate: string;
-  currentTime: number;
+  playing?: boolean;
+  video?: string;
+  rate?: string;
+  currentTime?: number;
 }
