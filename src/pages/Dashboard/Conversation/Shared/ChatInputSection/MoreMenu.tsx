@@ -87,33 +87,6 @@ const MoreMenu = ({
               </div>
             </SwiperSlide>
             <SwiperSlide>
-              <div className="text-center px-2">
-                <div className="avatar-sm mx-auto">
-                  <div className="avatar-title font-size-18 bg-soft-primary text-primary rounded-circle">
-                    <i className="bx bxs-camera"></i>
-                  </div>
-                </div>
-                <h5 className="font-size-11 text-uppercase text-truncate mt-3 mb-0">
-                  <Link to="#" className="text-body stretched-link">
-                    開啟相機
-                  </Link>
-                </h5>
-              </div>
-            </SwiperSlide>
-            <SwiperSlide>
-              {/* <div className="text-center px-2">
-                <div className="avatar-sm mx-auto">
-                  <div className="avatar-title font-size-18 bg-soft-primary text-primary rounded-circle">
-                    <i className="bx bx-images"></i>
-                  </div>
-                </div>
-
-                <h5 className="font-size-11 text-uppercase text-truncate mt-3 mb-0">
-                  <Link to="#" className="text-body stretched-link">
-                    Gallery
-                  </Link>
-                </h5>
-              </div> */}
               <div className="text-center px-2 position-relative">
                 <div>
                   <Input
@@ -135,6 +108,35 @@ const MoreMenu = ({
                 </div>
                 <h5 className="font-size-11 text-uppercase mt-3 mb-0 text-body text-truncate">
                   圖片
+                </h5>
+              </div>
+            </SwiperSlide>
+            {/* <SwiperSlide>
+              <div className="text-center px-2">
+                <div className="avatar-sm mx-auto">
+                  <div className="avatar-title font-size-18 bg-soft-primary text-primary rounded-circle">
+                    <i className="bx bxs-camera"></i>
+                  </div>
+                </div>
+                <h5 className="font-size-11 text-uppercase text-truncate mt-3 mb-0">
+                  <Link to="#" className="text-body stretched-link">
+                    開啟相機
+                  </Link>
+                </h5>
+              </div>
+            </SwiperSlide>
+            <SwiperSlide>
+              <div className="text-center px-2">
+                <div className="avatar-sm mx-auto">
+                  <div className="avatar-title font-size-18 bg-soft-primary text-primary rounded-circle">
+                    <i className="bx bx-images"></i>
+                  </div>
+                </div>
+
+                <h5 className="font-size-11 text-uppercase text-truncate mt-3 mb-0">
+                  <Link to="#" className="text-body stretched-link">
+                    Gallery
+                  </Link>
                 </h5>
               </div>
             </SwiperSlide>
@@ -201,7 +203,7 @@ const MoreMenu = ({
                   </Link>
                 </h5>
               </div>
-            </SwiperSlide>
+            </SwiperSlide> */}
           </Swiper>
         </CardBody>
       </Card>

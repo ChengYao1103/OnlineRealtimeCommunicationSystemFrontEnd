@@ -36,7 +36,7 @@ const StartButtons = ({ onToggle, onChange, text }: StartButtonsProps) => {
         </Button>
       </div>
       <UncontrolledTooltip target="more-menu" placement="top">
-        More
+        更多...
       </UncontrolledTooltip>
       <div className="links-list-item" id="emoji">
         <Button

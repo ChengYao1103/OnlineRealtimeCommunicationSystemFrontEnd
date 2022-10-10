@@ -8,7 +8,7 @@ interface EndButtonsProps {
 const EndButtons = ({ onSubmit, disabled }: EndButtonsProps) => {
   return (
     <div className="chat-input-links ms-2 gap-md-1">
-      <div className="links-list-item d-none d-sm-block">
+      {/* <div className="links-list-item d-none d-sm-block">
         <Button
           color="none"
           type="button"
@@ -28,7 +28,7 @@ const EndButtons = ({ onSubmit, disabled }: EndButtonsProps) => {
             <div className="line"></div>
           </div>
         </PopoverBody>
-      </UncontrolledPopover>
+      </UncontrolledPopover> */}
       <div className="links-list-item">
         <Button
           color="primary"
