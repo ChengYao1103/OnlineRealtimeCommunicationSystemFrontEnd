@@ -61,6 +61,10 @@ export const GET_CHANNEL_POSTS = "/channel/allPost";
 export const GET_ROLLCALL = "/channel/getRollCall";
 export const KICK_OUT = "/channel/kickOut";
 export const GET_CHANNEL_HOMEWORK = "/channel/allHomework";
+export const CREATE_CHANNEL_DIRS = "/channel/createDir";
+export const GET_CHANNEL_DIRS = "/channel/allDir";
+export const UPLOAD_CHANNEL_FILE = "/channel/upload";
+export const DOWNLOAD_CHANNEL_FILE = "/channel/download";
 
 // posts
 export const CREATE_POST = "/post/create";

@@ -1,9 +1,9 @@
 // @flow
 import React from "react";
-import { useForm, Resolver, SubmitHandler } from "react-hook-form";
+import { useForm, Resolver, SubmitHandler, FieldValues } from "react-hook-form";
 import { Form } from "reactstrap";
 
-interface VerticalFromProps<TFormValues> {
+interface VerticalFromProps<TFormValues extends FieldValues> {
   defaultValues?: any;
   resolver?: Resolver<TFormValues>;
   children?: any;

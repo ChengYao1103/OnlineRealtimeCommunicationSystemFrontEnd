@@ -295,3 +295,37 @@ export const changeSelectedHomework = (
   type: ChatsActionTypes.CHANGE_SELECTED_HOMEWORK,
   payload: { selectedHomework },
 });
+
+export const uploadChannelFile = (data: any) => ({
+  type: ChatsActionTypes.UPLOAD_CHANNEL_FILE,
+  payload: data,
+});
+
+export const downloadChannelFile = (filename: string, data: any) => ({
+  type: ChatsActionTypes.DOWNLOAD_CHANNEL_FILE,
+  payload: { data, filename },
+});
+
+export const createChannelDir = (data: any) => ({
+  type: ChatsActionTypes.CREATE_CHANNEL_DIRS,
+  payload: data,
+});
+
+export const getChannelDir = (id: number, data: any) => ({
+  type: ChatsActionTypes.GET_CHANNEL_DIRS,
+  payload: id, data,
+});
+
+export const backSelectedDir = (
+  selectedDir?: string | null,
+) => ({
+  type: ChatsActionTypes.BACK_SELECTED_DIR,
+  payload: { selectedDir },
+});
+
+export const changeSelectedDir = (
+  selectedDir?: string | null,
+) => ({
+  type: ChatsActionTypes.CHANGE_SELECTED_DIR,
+  payload: { selectedDir },
+});

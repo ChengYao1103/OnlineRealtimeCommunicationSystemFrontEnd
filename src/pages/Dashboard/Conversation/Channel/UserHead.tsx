@@ -39,6 +39,7 @@ import InviteChannelModal from "../../../../components/InviteChannelModal";
 import RollCallModal from "../../../../components/RollCallModal";
 import ChannelMeetingModal from "../../../../components/ChannelMeetingModal";
 import HomeworkModal from "../../../../components/HomeworkModal";
+import FileModal from "../../../../components/FileModal";
 interface ProfileImageProps {
   selectedChatInfo: any;
   onCloseConversation: () => any;
@@ -209,6 +210,7 @@ interface MoreProps {
   onOpenInvite: () => void;
   onOpenRollCall: () => void;
   onOpenHomework: () => void;
+  onOpenFile: () => void;
   role: number;
 }
 const More = ({
@@ -222,6 +224,7 @@ const More = ({
   onOpenInvite,
   onOpenRollCall,
   onOpenHomework,
+  onOpenFile,
   role,
 }: MoreProps) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -281,6 +284,7 @@ const More = ({
         <DropdownItem
           className="d-flex justify-content-between align-items-center"
           to="#"
+          onClick={onOpenFile}
         >
           檔案 <i className="mdi mdi-folder-multiple"></i>
         </DropdownItem>
@@ -405,7 +409,7 @@ const UserHead = ({
   };
 
   /*
-  roll call modal
+  homework modal
   */
   const [isOpenHomeworkModal, setIsOpenHomeworkModal] =
     useState<boolean>(false);
@@ -414,6 +418,18 @@ const UserHead = ({
   };
   const onCloseHomework = () => {
     setIsOpenHomeworkModal(false);
+  };
+
+  /*
+ file modal
+  */
+  const [isOpenFileModal, setIsOpenFileModal] =
+    useState<boolean>(false);
+  const onOpenFile = () => {
+    setIsOpenFileModal(true);
+  };
+  const onCloseFile = () => {
+    setIsOpenFileModal(false);
   };
 
   /*
@@ -488,6 +504,7 @@ const UserHead = ({
                 onOpenInvite={onOpenInvite}
                 onOpenRollCall={onOpenRollCall}
                 onOpenHomework={onOpenHomework}
+                onOpenFile={onOpenFile}
                 role={role}
               />
             </li>
@@ -528,6 +545,9 @@ const UserHead = ({
       )}
       {isOpenHomeworkModal && (
         <HomeworkModal isOpen={isOpenHomeworkModal} onClose={onCloseHomework} role={role} />
+      )}
+      {isOpenFileModal && (
+        <FileModal isOpen={isOpenFileModal} onClose={onCloseFile} role={role} />
       )}
     </div>
   );

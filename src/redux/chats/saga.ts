@@ -50,6 +50,10 @@ import {
   downloadHomework as downloadHomeworkApi,
   setHomeworkScore as setHomeworkScoreApi,
   getHomework as getHomeworkApi,
+  uploadChannelFile as uploadChannelFileApi,
+  downloadChannelFile as downloadChannelFileApi,
+  createChannelDir as createChannelDirApi,
+  getChannelDir as getChannelDirApi,
 } from "../../api/index";
 
 import {
@@ -654,6 +658,63 @@ function* setHomeworkScore({ payload: data }: any) {
   }
 }
 
+function* uploadChannelFile({ payload: data }: any) {
+  try {
+    const response: Promise<any> = yield call(uploadChannelFileApi, data);
+    yield put(
+      chatsApiResponseSuccess(ChatsActionTypes.UPLOAD_CHANNEL_FILE, response)
+    );
+  } catch (error: any) {
+    yield put(
+      chatsApiResponseError(ChatsActionTypes.UPLOAD_CHANNEL_FILE, error)
+    );
+  }
+}
+
+function* downloadChannelFile({ payload: { data, filename } }: any) {
+  try {
+    const response: Promise<any> = yield call(
+      downloadChannelFileApi,
+      data,
+      filename
+    );
+    yield put(
+      chatsApiResponseSuccess(ChatsActionTypes.DOWNLOAD_CHANNEL_FILE, response)
+    );
+  } catch (error: any) {
+    yield put(
+      chatsApiResponseError(ChatsActionTypes.DOWNLOAD_CHANNEL_FILE, error)
+    );
+  }
+}
+
+function* createChannelDir({ payload: dirData }: any) {
+  try {
+    const response: Promise<any> = yield call(createChannelDirApi, dirData);
+    yield put(chatsApiResponseSuccess(ChatsActionTypes.CREATE_CHANNEL_DIRS, response));
+    yield call(showSuccessNotification, "Success!");
+  } catch (error: any) {
+    yield call(showErrorNotification, error.data.message);
+    yield put(chatsApiResponseError(ChatsActionTypes.CREATE_CHANNEL_DIRS, error));
+  }
+}
+
+function* getChannelDir({ payload: id, dirData }: any) {
+  console.log(dirData)
+  try {
+    const response: Promise<any> = yield call(getChannelDirApi, id, dirData);
+
+    console.log(response)
+    yield put(
+      chatsApiResponseSuccess(ChatsActionTypes.GET_CHANNEL_DIRS, response)
+    );
+    yield call(showSuccessNotification, "Success!");
+  } catch (error: any) {
+    yield call(showErrorNotification, error.data.message);
+    yield put(chatsApiResponseError(ChatsActionTypes.GET_CHANNEL_DIRS, error));
+  }
+}
+
 export function* watchGetFavourites() {
   yield takeEvery(ChatsActionTypes.GET_FAVOURITES, getFavourites);
 }
@@ -826,6 +887,22 @@ export function* watchGetHomework() {
 export function* watchSetHomewokScore() {
   yield takeEvery(ChatsActionTypes.SET_HOMEWORK_SCORE, setHomeworkScore);
 }
+
+export function* watchCreateChannelDir(){
+  yield takeEvery(ChatsActionTypes.CREATE_CHANNEL_DIRS, createChannelDir);
+}
+
+export function* watchGetChannelDir(){
+  yield takeEvery(ChatsActionTypes.GET_CHANNEL_DIRS, getChannelDir);
+}
+
+export function* watchUploadChannelFile(){
+  yield takeEvery(ChatsActionTypes.UPLOAD_CHANNEL_FILE, uploadChannelFile);
+}
+
+export function* watchDownloadChannelFile(){
+  yield takeEvery(ChatsActionTypes.DOWNLOAD_CHANNEL_FILE, downloadChannelFile);
+}
 function* chatsSaga() {
   yield all([
     fork(watchGetFavourites),
@@ -875,6 +952,10 @@ function* chatsSaga() {
     fork(watchDownloadHomework),
     fork(watchGetHomework),
     fork(watchSetHomewokScore),
+    fork(watchCreateChannelDir),
+    fork(watchGetChannelDir),
+    fork(watchUploadChannelFile),
+    fork(watchDownloadChannelFile),
   ]);
 }
 
