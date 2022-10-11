@@ -39,6 +39,7 @@ import InviteChannelModal from "../../../../components/InviteChannelModal";
 import RollCallModal from "../../../../components/RollCallModal";
 import ChannelMeetingModal from "../../../../components/ChannelMeetingModal";
 import HomeworkModal from "../../../../components/HomeworkModal";
+import FileModal from "../../../../components/FileModal";
 interface ProfileImageProps {
   selectedChatInfo: any;
   onCloseConversation: () => any;
@@ -209,6 +210,7 @@ interface MoreProps {
   onOpenInvite: () => void;
   onOpenRollCall: () => void;
   onOpenHomework: () => void;
+  onOpenFile: () => void;
   role: number;
 }
 const More = ({
@@ -222,6 +224,7 @@ const More = ({
   onOpenInvite,
   onOpenRollCall,
   onOpenHomework,
+  onOpenFile,
   role,
 }: MoreProps) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -250,14 +253,14 @@ const More = ({
         </DropdownItem>
 
         <DropdownItem
-          className="d-flex justify-content-between align-items-center"
+          className="d-flex justify-content-between align-items-center d-xxl-none"
           to="#"
           onClick={onOpenRollCall}
         >
-          點名 <i className="mdi mdi-bell-ring"></i>
+          點名 <i className="mdi mdi-bell-ring-outline text-muted"></i>
         </DropdownItem>
         <DropdownItem
-          className="d-flex justify-content-between align-items-center"
+          className="d-flex justify-content-between align-items-center d-xxl-none"
           to="#"
           onClick={onOpenVideo}
         >
@@ -281,15 +284,16 @@ const More = ({
         <DropdownItem
           className="d-flex justify-content-between align-items-center"
           to="#"
+          onClick={onOpenFile}
         >
-          檔案 <i className="mdi mdi-folder-multiple"></i>
+          檔案 <i className="mdi mdi-folder-multiple-outline text-muted"></i>
         </DropdownItem>
         <DropdownItem
           className="d-flex justify-content-between align-items-center"
           to="#"
           onClick={onOpenHomework}
         >
-          作業 <i className="mdi mdi-pencil"></i>
+          作業 <i className="mdi mdi-pencil-outline text-muted"></i>
         </DropdownItem>
         <DropdownItem
           className="d-flex text-danger justify-content-between align-items-center"
@@ -405,7 +409,7 @@ const UserHead = ({
   };
 
   /*
-  roll call modal
+  homework modal
   */
   const [isOpenHomeworkModal, setIsOpenHomeworkModal] =
     useState<boolean>(false);
@@ -414,6 +418,17 @@ const UserHead = ({
   };
   const onCloseHomework = () => {
     setIsOpenHomeworkModal(false);
+  };
+
+  /*
+ file modal
+  */
+  const [isOpenFileModal, setIsOpenFileModal] = useState<boolean>(false);
+  const onOpenFile = () => {
+    setIsOpenFileModal(true);
+  };
+  const onCloseFile = () => {
+    setIsOpenFileModal(false);
   };
 
   /*
@@ -452,7 +467,7 @@ const UserHead = ({
                 className="btn nav-btn"
                 onClick={onOpenRollCall}
               >
-                <i className="bx bxs-phone-call"></i>
+                <i className="mdi mdi-bell-ring-outline"></i>
               </Button>
             </li>
             <li className="list-inline-item d-none d-xxl-inline-block me-2 ms-0">
@@ -488,6 +503,7 @@ const UserHead = ({
                 onOpenInvite={onOpenInvite}
                 onOpenRollCall={onOpenRollCall}
                 onOpenHomework={onOpenHomework}
+                onOpenFile={onOpenFile}
                 role={role}
               />
             </li>
@@ -499,6 +515,7 @@ const UserHead = ({
         <ChannelMeetingModal
           isOpen={isOpenVideoModal}
           channelId={selectedChatInfo.id}
+          isCreate={true}
           onClose={onCloseVideo}
         />
 
@@ -524,10 +541,21 @@ const UserHead = ({
         />
       )}
       {isOpenRollCallModal && (
-        <RollCallModal isOpen={isOpenRollCallModal} onClose={onCloseRollCall} role={role} />
+        <RollCallModal
+          isOpen={isOpenRollCallModal}
+          onClose={onCloseRollCall}
+          role={role}
+        />
       )}
       {isOpenHomeworkModal && (
-        <HomeworkModal isOpen={isOpenHomeworkModal} onClose={onCloseHomework} role={role} />
+        <HomeworkModal
+          isOpen={isOpenHomeworkModal}
+          onClose={onCloseHomework}
+          role={role}
+        />
+      )}
+      {isOpenFileModal && (
+        <FileModal isOpen={isOpenFileModal} onClose={onCloseFile} role={role} />
       )}
     </div>
   );

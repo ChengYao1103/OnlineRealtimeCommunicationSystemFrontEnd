@@ -68,6 +68,11 @@ const Calls = (state = INIT_STATE, action: any) => {
       };
     }
 
+    case CallsActionTypes.CHANGE_MEETING_ID: {
+      state.meetingId = action.payload;
+      return { ...state };
+    }
+
     case CallsActionTypes.WS_EVENT: {
       switch (action.payload.actionType) {
         case CallsActionTypes.ON_CALLING: {

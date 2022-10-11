@@ -226,7 +226,7 @@ const uploadHomework = (data: object) => {
 };
 
 const downloadHomework = (data: object, filename: string) => {
-  return api.getFile(url.DOWNLOAD_MESSAGE_FILE, filename, data);
+  return api.getFile(url.DOWNLOAD_HOMEWORK, filename, data);
 };
 
 const setHomeworkScore = (data: object) => {
@@ -236,6 +236,24 @@ const setHomeworkScore = (data: object) => {
 const getHomework = (id: string | number) => {
   return api.get(`${url.GET_HOMEWORK}/${id}`);
 };
+const uploadChannelFile = (data: object) => {
+  return api.createWithFile(url.UPLOAD_CHANNEL_FILE, data);
+};
+
+const downloadChannelFile = (data: object, filename: string) => {
+  return api.getFile(url.DOWNLOAD_CHANNEL_FILE, filename, data);
+};
+
+const createChannelDir = (data: object) => {
+  return api.create(url.CREATE_CHANNEL_DIRS, data);
+};
+
+const getChannelDir = (id: string | number, data: object) => {
+  console.log(data)
+
+  return api.create(`${url.GET_CHANNEL_DIRS}/${id}`, data);
+};
+
 export {
   getFavourites,
   getDirectMessages,
@@ -284,4 +302,8 @@ export {
   downloadHomework,
   setHomeworkScore,
   getHomework,
+  uploadChannelFile,
+  downloadChannelFile,
+  createChannelDir,
+  getChannelDir,
 };

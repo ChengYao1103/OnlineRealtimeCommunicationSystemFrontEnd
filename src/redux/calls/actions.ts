@@ -33,6 +33,14 @@ export const resetCallingStatus = () => ({
   type: CallsActionTypes.RESET_CALLING_STATUS,
 });
 
+/**
+ * 更改state裡的meeting id，用於加入/離開會議
+ */
+export const changeMeetingId = (meetingId: number) => ({
+  type: CallsActionTypes.CHANGE_MEETING_ID,
+  payload: meetingId,
+});
+
 // websocket event
 export const callWebsocketEvent = (actionType: string, data?: any) => ({
   type: CallsActionTypes.WS_EVENT,

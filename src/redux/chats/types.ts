@@ -14,7 +14,13 @@ export enum ChatsActionTypes {
   INVITE_CHANNEL_MEMBERS = "@@chats/INVITE_CHANNEL_MEMBERS",
   GET_CHANNEL_POSTS = "@@chats/GET_CHANNEL_POSTS",
   KICK_OUT_MEMBER = "@@chats/KICK_OUT_MEMBER",
-  GET_CHANNEL_HOMEWORKS = "@@chats/GET_CHANNEL_HOMEWORK",
+  GET_CHANNEL_HOMEWORKS = "@@chats/GET_CHANNEL_HOMEWORKS",
+  GET_CHANNEL_DIRS = "@@chats/GET_CHANNEL_DIRS",
+  CREATE_CHANNEL_DIRS = "@@chats/CREATE_CHANNEL_DIRS",
+  UPLOAD_CHANNEL_FILE = "@@chats/UPLOAD_CHANNEL_FILE",
+  DOWNLOAD_CHANNEL_FILE = "@@chats/DOWNLOAD_CHANNEL_FILE",
+  CHANGE_SELECTED_DIR = "@@chats/CHANGE_SELECTED_DIR",
+  BACK_SELECTED_DIR = "@@chats/BACK_SELECTED_DIR",
 
   ADD_CONTACTS = "@@chats/ADD_CONTACTS",
   CREATE_CHANNEL = "@@chats/CREATE_CHANNEL",
@@ -118,6 +124,8 @@ export interface channelPostModel {
   content: string;
   deleted: boolean;
   timestamp: string;
+  chennelID: number;
+  meetingID: number;
 }
 
 export interface channelHomeworkModel {
@@ -168,4 +176,7 @@ export interface ChatsState {
   homework?: channelHomeworkModel;
   role?: number | null;
   selectedHomework?: channelHomeworkModel | null;
+  channelDir: Array<string>,
+  isDir: Array<boolean>,
+  selectedDir: string | null;
 }

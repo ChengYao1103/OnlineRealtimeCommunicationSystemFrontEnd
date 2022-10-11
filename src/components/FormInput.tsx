@@ -219,7 +219,7 @@ const FormInput: React.FunctionComponent<FormInputProps> = ({
                   </div>
                   {errors && errors[name] ? (
                     <FormFeedback type="invalid">
-                      {errors[name]["message"]}
+                      {errors.name?.message}
                     </FormFeedback>
                   ) : null}
                 </>
@@ -243,7 +243,7 @@ const FormInput: React.FunctionComponent<FormInputProps> = ({
                       />
                       {errors && errors[name] ? (
                         <FormFeedback type="invalid">
-                          {errors[name]["message"]}
+                          {errors.name?.message}
                         </FormFeedback>
                       ) : null}
                     </>
@@ -272,7 +272,7 @@ const FormInput: React.FunctionComponent<FormInputProps> = ({
                       />
                       {errors && errors[name] ? (
                         <FormFeedback type="invalid">
-                          {errors[name]["message"]}
+                          {errors.name?.message}
                         </FormFeedback>
                       ) : null}
                     </>

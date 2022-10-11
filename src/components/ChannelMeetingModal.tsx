@@ -22,19 +22,23 @@ import ReactPlayer from "react-player";
 import React from "react";
 import { RefObject } from "react";
 import { toast } from "react-toastify";
+import { changeMeetingId } from "../redux/actions";
 
 interface MeetingModalProps {
   channelId: number;
   isOpen: boolean;
+  isCreate: boolean;
   onClose: () => void;
 }
 
 const ChannelMeetingModal = ({
   isOpen,
   channelId,
+  isCreate,
   onClose,
 }: MeetingModalProps) => {
   const api = new APIClient();
+  const { dispatch } = useRedux();
   const { userProfile } = useProfile();
   const inputUrl = useRef<any>();
   const player = useRef() as RefObject<ReactPlayer>;
@@ -45,7 +49,7 @@ const ChannelMeetingModal = ({
   const [playing, setPlaying] = useState(false);
   const [playbackRate, setPlaybackRate] = useState(1.0);
   const [skipUpdate, setSkipUpdateChange] = useState(false);
-  
+
   const { useAppSelector } = useRedux();
   const { meetingId, startedYT, syncYT } = useAppSelector(state => ({
     meetingId: state.Calls.meetingId,
@@ -55,6 +59,7 @@ const ChannelMeetingModal = ({
 
   // create meeting (get ws receive)
   useEffect(() => {
+    if (!isCreate) return;
     let send: WSEvent = {
       event: WSSendEvents.CreateMeeting,
       data: {
@@ -64,6 +69,18 @@ const ChannelMeetingModal = ({
     api.WSSend(JSON.stringify(send));
   }, [channelId]);
 
+  // join meeting
+  useEffect(() => {
+    if (isCreate || meetingId === 0) return;
+    let send: WSEvent = {
+      event: WSSendEvents.JoinMeeting,
+      data: {
+        meetingId: meetingId,
+      },
+    };
+    api.WSSend(JSON.stringify(send));
+  }, [channelId, meetingId]);
+
   const leaveMeeting = () => {
     var iframe = document.getElementById("meetingIframe") as HTMLIFrameElement;
     iframe.src = "";
@@ -72,6 +89,7 @@ const ChannelMeetingModal = ({
       data: {},
     };
     api.WSSend(JSON.stringify(send));
+    dispatch(changeMeetingId(0));
     onClose();
   };
 
@@ -110,7 +128,7 @@ const ChannelMeetingModal = ({
       api.WSSend(JSON.stringify(send));
 
       let info: YoutubeSync = {
-        video: "https://www.youtube.com/watch?v=b9IkpUYlOx8"
+        video: "https://www.youtube.com/watch?v=b9IkpUYlOx8",
       };
       update(info, false);
     } else {
@@ -127,22 +145,22 @@ const ChannelMeetingModal = ({
   };
 
   /* update youtube sync events */
-  const update = (obj: YoutubeSync, autoFillTime=true) => {
+  const update = (obj: YoutubeSync, autoFillTime = true) => {
     if (!player.current) return;
     obj.currentTime = Math.round(player.current.getCurrentTime());
-    
+
     let send: WSEvent = {
       event: WSSendEvents.UpdateApp,
       data: {
         appID: WSApp.youtube,
         event: {
           event: YTEvent.sync,
-          data: obj
-        }
-      }
+          data: obj,
+        },
+      },
     };
     api.WSSend(JSON.stringify(send));
-  }
+  };
 
   const changeVideo = () => {
     if (!inputUrl.current) return;
@@ -155,7 +173,7 @@ const ChannelMeetingModal = ({
 
     setUrl(url);
     let info: YoutubeSync = {
-      video: url
+      video: url,
     };
     update(info, false);
   };
@@ -166,12 +184,12 @@ const ChannelMeetingModal = ({
     if (skipUpdate) {
       // trigger by WS event
       setSkipUpdateChange(false);
-      return
+      return;
     }
 
     setPlaying(true);
     let info: YoutubeSync = {
-      playing: true
+      playing: true,
     };
     update(info);
   };
@@ -187,7 +205,7 @@ const ChannelMeetingModal = ({
 
     setPlaying(false);
     let info: YoutubeSync = {
-      playing: false
+      playing: false,
     };
     update(info);
   };
@@ -200,10 +218,10 @@ const ChannelMeetingModal = ({
       setSkipUpdateChange(false);
       return;
     }
-    
-    setPlaybackRate(parseFloat(speed))
+
+    setPlaybackRate(parseFloat(speed));
     let info: YoutubeSync = {
-      rate: speed.toString()
+      rate: speed.toString(),
     };
     update(info);
   };
@@ -221,7 +239,7 @@ const ChannelMeetingModal = ({
     if (!player.current) return;
     console.log(syncYT);
     // time
-    let playerTime = player.current.getCurrentTime()
+    let playerTime = player.current.getCurrentTime();
     if (Math.abs(playerTime - syncYT.currentTime) > 1) {
       setSkipUpdateChange(true);
       player.current.seekTo(syncYT.currentTime);
@@ -294,7 +312,7 @@ const ChannelMeetingModal = ({
           </Stack>
 
           <div style={{ width: "100%", height: "100%" }}>
-            {(
+            {
               <iframe
                 id="meetingIframe"
                 src={`https://meet.beeenson.com:8443?name=${userProfile.name}&roomName=${meetingId}`}
@@ -304,9 +322,9 @@ const ChannelMeetingModal = ({
                 scrolling="no"
                 style={{ borderRadius: "5px", height: "100%" }}
               ></iframe>
-            )}
+            }
             <ReactPlayer
-              className='react-player d-none'
+              className="react-player d-none"
               url={url}
               width="50%"
               height="50%"
@@ -324,7 +342,7 @@ const ChannelMeetingModal = ({
               playbackRate={playbackRate}
               onPlay={onPlay}
               onPause={onPause}
-              onSeek={e => console.log('onSeek', e)}
+              onSeek={e => console.log("onSeek", e)}
               onPlaybackRateChange={onPlaybackRateChange}
             />
           </div>

@@ -11,7 +11,10 @@ export enum CallsActionTypes {
   ON_CALLING = "@@calls/ON_CALLING",
   ANSWERED_CALLING = "@@calls/ANSWERED_CALLING",
   HANGUP_CALLING = "@@calls/HANGUP_CALL",
+
+  /* meeting */
   GET_MEETING_CREATE_BY_SELF = "@@calls/GET_MEETING_CREATE_BY_SELF",
+  CHANGE_MEETING_ID = "@@calls/CHANGE_MEETING_ID",
 
   /* Youtube */
   START_YOUTUBE = "@@calls/START_YOUTUBE",
