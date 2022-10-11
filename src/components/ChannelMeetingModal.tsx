@@ -311,9 +311,11 @@ const ChannelMeetingModal = ({
               width="50%"
               height="50%"
               style={{
-                marginTop: "-35%",
+                position: "relative",
+                bottom: "7px",
                 marginLeft: "auto",
-                marginRight: "0",
+                marginRight: "1px",
+                transform: "translateY(-100%)",
               }}
               controls={true}
               id={"player"}
