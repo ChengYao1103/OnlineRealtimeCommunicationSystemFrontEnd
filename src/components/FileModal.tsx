@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+
 import classnames from "classnames";
 import {
   Form,
@@ -41,9 +42,10 @@ const FileModal = ({ isOpen, onClose, role }: FileModalProps) => {
     isDir: state.Chats.isDir,
     dirInfo: state.Chats.selectedDir,
   }));
-
+  const [files, setFiles] = useState<Array<any>>([]);
   const [path, setPath] = useState<Array<string>>([]);
   const [isOpenInputName, setIsOpenInputName] = useState(false);
+  const [isOpenUploadFile, setIsOpenUploadFile] = useState(false);
   const [dirName, setDirName] = useState("");
 
   const onSelectDir = (info: string) => {
@@ -83,6 +85,18 @@ const FileModal = ({ isOpen, onClose, role }: FileModalProps) => {
       })
     );
   };
+  const onUpload = () => {
+    let tmp = [...path];
+    files.forEach(file => {
+      let data = {
+        channelID: channelInfo.id,
+        file: file,
+        dirArray: tmp,
+      };
+      dispatch(uploadChannelFile(data));      
+    });
+
+  };
 
   const onDownload = (filename: string) => {
     let tmp = [...path, filename];
@@ -91,6 +105,10 @@ const FileModal = ({ isOpen, onClose, role }: FileModalProps) => {
       dirArray: tmp,
     };
     dispatch(downloadChannelFile(filename, data));
+  };
+
+  const onSelectFiles = (e: any) => {
+    setFiles([...e.target.files]);
   };
 
   return (
@@ -112,7 +130,7 @@ const FileModal = ({ isOpen, onClose, role }: FileModalProps) => {
               <Button onClick={() => setIsOpenInputName(true)}>
                 新增資料夾
               </Button>
-              <Button className="btn btn-primary" onClick={() => {}}>
+              <Button className="btn btn-primary" onClick={() => setIsOpenUploadFile(true)}>
                 上傳檔案
               </Button>
             </>
@@ -137,6 +155,39 @@ const FileModal = ({ isOpen, onClose, role }: FileModalProps) => {
             disabled={dirName.trim().length === 0}
             color="primary"
             onClick={onAddDir}
+          >
+            確認
+          </Button>
+        </ModalBody>
+      )}
+      {isOpenUploadFile && (
+        <ModalBody>
+          <div className="text-center px-2 position-relative">
+            <div>
+              <Input
+                id="channelattachedfile-input"
+                type="file"
+                className="d-none"
+                onChange={(e: any) => onSelectFiles(e)}
+                multiple
+              />
+                <Label
+                htmlFor="channelattachedfile-input"
+                className="avatar-sm mx-auto stretched-link"
+              >
+                <span className="avatar-title font-size-18 bg-soft-primary text-primary rounded-circle">
+                  <i className="bx bx-paperclip"></i>
+                </span>
+              </Label>
+            </div>
+            <h5 className="font-size-11 text-uppercase mt-3 mb-0 text-body text-truncate">
+              附件
+            </h5>
+          </div>
+          <Button
+            disabled={files.length == 0}
+            color="primary"
+            onClick={onUpload}
           >
             確認
           </Button>
