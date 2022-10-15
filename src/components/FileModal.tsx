@@ -108,6 +108,7 @@ const FileModal = ({ isOpen, onClose, role }: FileModalProps) => {
   };
 
   const onSelectFiles = (e: any) => {
+    console.log(e.target.files)
     setFiles([...e.target.files]);
   };
 

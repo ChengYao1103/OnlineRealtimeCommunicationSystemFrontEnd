@@ -13,7 +13,7 @@ import {
   Table,
 } from "reactstrap";
 import { useRedux } from "../hooks";
-import { createHomework, updateHomework, closeHomework, getChannelHomeworks, doRollCall, changeSelectedHomework } from "../redux/actions";
+import { createHomework, updateHomework, closeHomework, getChannelHomeworks, uploadHomework, changeSelectedHomework } from "../redux/actions";
 import { channelHomeworkModel } from "../redux/chats/types";
 import { Link } from "react-router-dom";
 
@@ -43,6 +43,7 @@ const HomeworkModal = ({
     const [startTime, setStartTime] = useState("");
     const [endTime, setEndTime] = useState("");
     const [mode, setMode] = useState(0); //0: 作業總覽 1: 作業詳細內容 2:編輯作業 3: 新增作業
+    const [file, setFile] = useState<any>();
 
     const onSelectHomework = (
         info: channelHomeworkModel | null,
@@ -54,21 +55,21 @@ const HomeworkModal = ({
         console.log(info)
         console.log(homeworkInfo)
       };
-    
-  const onClear = () => {
-    setStartDateTime("")
-    setEndDateTime("")
-    setStartDate("")
-    setEndDate("")
-    setStartTime("")
-    setEndTime("")
+
+    const onUpload = () => {
+      let data = {
+        homeworkID: homeworkInfo.id,
+        file: file,
+      };
+      dispatch(uploadHomework(data));      
+    };
+
+  const onSelectFile = (e: any) => {
+    setFile(e.target.files[0]);
   };
 
   useEffect(() => {
-    //onClear()
-    console.log(channelInfo)
     dispatch(getChannelHomeworks(channelInfo.id))
-    console.log(channelHomeworks)
   }, []);
 
   return (
@@ -129,66 +130,94 @@ const HomeworkModal = ({
         </Table>}
         {mode === 1 && <Form>
             <FormGroup>
-            <Label htmlFor="RollCallStartTime-input" className="form-label">
+            <Label className="form-label">
               {homeworkInfo ? homeworkInfo.name : "undefined"}
             </Label>
           </FormGroup>
           <FormGroup>
-            <Label htmlFor="RollCallStartTime-input" className="form-label">
+            <Label htmlFor="HomeworkDescription-input" className="form-label">
               敘述:
             </Label>
             <Input
               type="datetime"
               className="form-control mb-3"
-              id="RollCallStartTime-input"
+              id="HomeworkDescription-inputt"
               value={homeworkInfo.description}
               disabled={true}
             />
           </FormGroup>
           <FormGroup>
-            <Label htmlFor="RollCallStartTime-input" className="form-label">
+            <Label htmlFor="HomeworkCreateTime-input" className="form-label">
               建立時間:
             </Label>
             <Input
               type="datetime"
               className="form-control mb-3"
-              id="RollCallStartTime-input"
+              id="HomeworkCreateTime-input"
               value={new Date(homeworkInfo.createTime).toLocaleString()}
               disabled={true}
             />
           </FormGroup>
           <FormGroup>
-            <Label htmlFor="RollCallStartTime-input" className="form-label">
+            <Label htmlFor="HomeworkStartTime-input" className="form-label">
               開始時間:
             </Label>
             <Input
               type="datetime"
               className="form-control mb-3"
-              id="RollCallStartTime-input"
+              id="HomeworkStartTime-input"
               value={new Date(homeworkInfo.startTime).toLocaleString()}
               disabled={true}
             />
           </FormGroup>
           <FormGroup>
-            <Label htmlFor="RollCallEndTime-input" className="form-label">
+            <Label htmlFor="HomeworkEndTime-input" className="form-label">
               結束時間:
             </Label>
             <Input
               type="datetime"
               className="form-control mb-3"
-              id="RollCallEndTime-input"
+              id="HomeworkEndTime-input"
               value={homeworkInfo.endTime == "0001-01-01T00:00:00Z" ? "" : new Date(homeworkInfo.endTime).toLocaleString()}
               disabled={true}
             ></Input>
           </FormGroup>
           <FormGroup>
-            <Label htmlFor="RollCallEndTime-input" className="form-label">
+            <Label htmlFor="HomeworkFile-input" className="form-label">
+              檔案:
+            </Label>
+            <Input 
+              type="file" 
+              className="form-control mb-3" 
+              id="HomeworkFile-input" 
+              onChange={(e: any) => onSelectFile(e)}
+            />       
+                        {/* <div>
+              <Input
+                id="channelattachedfile-input"
+                type="file"
+                className="d-none"
+                onChange={(e: any) => onSelectFile(e)}
+                multiple
+              />
+                <Label
+                htmlFor="channelattachedfile-input"
+                className="avatar-sm mx-auto stretched-link"
+              >
+                <span className="avatar-title font-size-18 bg-soft-primary text-primary rounded-circle">
+                  <i className="bx bx-paperclip"></i>
+                </span>
+              </Label>
+            </div> */}
+          </FormGroup>
+          <FormGroup>
+            <Label htmlFor="HomeworkScore-input" className="form-label">
               成績:
             </Label>
             <Input
               type="datetime"
               className="form-control mb-3"
-              id="RollCallEndTime-input"
+              id="HomeworkScore-input"
               value={"尚未批改"}
               disabled={true}
             ></Input>
@@ -198,12 +227,12 @@ const HomeworkModal = ({
         {(mode === 2 || mode === 3) && <Form>
           <div className="mb-3">
           <FormGroup>
-          <Label htmlFor="RollCallStartTime-input" className="form-label">
+          <Label htmlFor="HomeworkName-input" className="form-label">
             作業名稱:
           </Label>
           <Input
             className="form-control mb-3"
-            id="RollCallStartTime-input"
+            id="HomeworkName-input"
             placeholder="請輸入此作業的名稱"
             value={name}
             onChange={(e: any) => {
@@ -212,7 +241,7 @@ const HomeworkModal = ({
           />
         </FormGroup>
         <FormGroup>
-          <Label htmlFor="RollCallStartTime-input" className="form-label">
+          <Label htmlFor="HomeworkDescription-input" className="form-label">
             敘述(選填):
           </Label>
           <Input
@@ -226,13 +255,13 @@ const HomeworkModal = ({
           />
         </FormGroup>
           <FormGroup>
-          <Label htmlFor="RollCallStartDate-input" className="form-label">
+          <Label htmlFor="HomeworkStartDate-input" className="form-label">
             開始日期:
           </Label>
           <Input
             type="date"
             className="form-control mb-3"
-            id="RollCallStartDate-input"
+            id="HomeworkStartDate-input"
             placeholder="Choose start date"
             value={startDate}
             onChange={(e: any) => {
@@ -241,13 +270,13 @@ const HomeworkModal = ({
           />
         </FormGroup>
         <FormGroup>
-          <Label htmlFor="RollCallStartTime-input" className="form-label">
+          <Label htmlFor="HomeworkStartTime-input" className="form-label">
             開始時間:
           </Label>
           <Input
             type="time"
             className="form-control mb-3"
-            id="RollCallStartTime-input"
+            id="HomeworkStartTime-input"
             placeholder="Choose start time"
             value={startTime}
             onChange={(e: any) => {
@@ -256,13 +285,13 @@ const HomeworkModal = ({
           />
         </FormGroup>
         <FormGroup>
-          <Label htmlFor="RollCallEndDate-input" className="form-label">
+          <Label htmlFor="HomeworkEndDate-input" className="form-label">
             結束日期(選填):
           </Label>
           <Input
             type="date"
             className="form-control mb-3"
-            id="RollCallEndDate-input"
+            id="HomeworkEndDate-input"
             placeholder="Choose end date (optional)"
             value={endDate}
             onChange={(e: any) => {
@@ -271,13 +300,13 @@ const HomeworkModal = ({
           ></Input>
         </FormGroup>
         <FormGroup>
-          <Label htmlFor="RollCallEndTime-input" className="form-label">
+          <Label htmlFor="HomeworkEndTime-input" className="form-label">
             結束時間(選填):
           </Label>
           <Input
             type="time"
             className="form-control mb-3"
-            id="RollCallEndTime-input"
+            id="HomeworkEndTime-input"
             placeholder="Choose end time (optional)"
             value={endTime}
             onChange={(e: any) => {
@@ -299,9 +328,14 @@ const HomeworkModal = ({
           //disabled={!valid}
           onClick={() => {
             if(mode === 1) {
-              dispatch(closeHomework({
-                id: homeworkInfo.id
-              }))
+              if(role === 2) {
+                onUpload()
+              }
+              else {
+                dispatch(closeHomework({
+                  id: homeworkInfo.id
+                }))
+              }
             }
             if(mode === 2) {
                 let tmpStartDateTime = startDate + " " + startTime
