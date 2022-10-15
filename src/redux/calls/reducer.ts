@@ -7,8 +7,10 @@ export const INIT_STATE: CallsState = {
   endCalling: false,
   hasAnswered: false,
   meetingId: 0,
+  openedApps: [],
 };
 
+let userJoin = false;
 const Calls = (state = INIT_STATE, action: any) => {
   switch (action.type) {
     case CallsActionTypes.API_RESPONSE_SUCCESS:
@@ -95,6 +97,17 @@ const Calls = (state = INIT_STATE, action: any) => {
         }
         case CallsActionTypes.GET_MEETING_CREATE_BY_SELF: {
           state.meetingId = action.payload.data;
+          return { ...state };
+        }
+        case CallsActionTypes.USER_JOIN_ROOM: {
+          userJoin = !userJoin;
+          return {
+            ...state,
+            userJoinRoom: userJoin,
+          };
+        }
+        case CallsActionTypes.GET_MEETING_OPENED_APPS: {
+          state.openedApps = action.payload.data;
           return { ...state };
         }
         case CallsActionTypes.START_YOUTUBE: {

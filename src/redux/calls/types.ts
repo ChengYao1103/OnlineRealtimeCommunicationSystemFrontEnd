@@ -1,3 +1,5 @@
+import { WSApp } from "../../repository/wsAppEvent";
+
 export enum CallsActionTypes {
   API_RESPONSE_SUCCESS = "@@calls/API_RESPONSE_SUCCESS",
   API_RESPONSE_ERROR = "@@calls/API_RESPONSE_ERROR",
@@ -15,6 +17,8 @@ export enum CallsActionTypes {
   /* meeting */
   GET_MEETING_CREATE_BY_SELF = "@@calls/GET_MEETING_CREATE_BY_SELF",
   CHANGE_MEETING_ID = "@@calls/CHANGE_MEETING_ID",
+  USER_JOIN_ROOM = "@@calls/USER_JOIN_ROOM",
+  GET_MEETING_OPENED_APPS = "@@calls/GET_MEETING_OPENED_APPS",
 
   /* Youtube */
   START_YOUTUBE = "@@calls/START_YOUTUBE",
@@ -27,4 +31,5 @@ export interface CallsState {
   endCalling: boolean;
   hasAnswered: boolean;
   meetingId: number;
+  openedApps: WSApp[];
 }

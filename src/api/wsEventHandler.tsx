@@ -21,6 +21,7 @@ import {
   AppEvent,
   AppCreated,
   AppFinished,
+  OpenedApps,
 } from "../repository/wsEvent";
 import { channelModel, ChatsActionTypes } from "../redux/chats/types";
 import { CallsActionTypes } from "../redux/calls/types";
@@ -158,11 +159,9 @@ const WSEventHandler = () => {
         break;
       case WSReceiveEvents.RollCallCreated:
         break;
-      case WSReceiveEvents.Error:
-        let ErrorData = data.data as WSReceiveError;
-        showErrorNotification(
-          ErrorMessages[ErrorData.error as ErrorMessagesKey]
-        );
+      // Meeting
+      case WSReceiveEvents.UserJoinMeeting:
+        dispatch(callWebsocketEvent(CallsActionTypes.USER_JOIN_ROOM));
         break;
       case WSReceiveEvents.MeetingCreateBySelf:
         let meetingData = data.data as MeetingCreated;
@@ -173,11 +172,21 @@ const WSEventHandler = () => {
           )
         );
         break;
-      case WSReceiveEvents.AppCreated: {
+      case WSReceiveEvents.OpenedApps:
+        let openedApps = data.data as OpenedApps;
+        dispatch(
+          callWebsocketEvent(
+            CallsActionTypes.GET_MEETING_OPENED_APPS,
+            openedApps.appIDs
+          )
+        );
+        break;
+      // App
+      case WSReceiveEvents.AppCreated:
         let creatededData = data.data as AppCreated;
         // 分辨app
         switch (creatededData.appID) {
-          case WSApp.youtube: {
+          case WSApp.YouTubeSync: {
             dispatch(callWebsocketEvent(CallsActionTypes.START_YOUTUBE));
             break;
           }
@@ -186,12 +195,11 @@ const WSEventHandler = () => {
           }
         }
         break;
-      }
       case WSReceiveEvents.AppUpdated: {
         let updatedData = data.data as AppUpdated;
         // 分辨app
         switch (updatedData.appID) {
-          case WSApp.youtube: {
+          case WSApp.YouTubeSync: {
             let ytData = updatedData.event as AppEvent;
             // 分辨Youtube app的event
             switch (ytData.event) {
@@ -218,7 +226,7 @@ const WSEventHandler = () => {
         let endedData = data.data as AppFinished;
         // 分辨app
         switch (endedData.appID) {
-          case WSApp.youtube: {
+          case WSApp.YouTubeSync: {
             dispatch(callWebsocketEvent(CallsActionTypes.END_YOUTUBE));
             break;
           }
@@ -229,6 +237,12 @@ const WSEventHandler = () => {
         break;
       }
       // WS service
+      case WSReceiveEvents.Error:
+        let ErrorData = data.data as WSReceiveError;
+        showErrorNotification(
+          ErrorMessages[ErrorData.error as ErrorMessagesKey]
+        );
+        break;
       case WSReceiveEvents.TokenExpired: // rarely triggered
         // timeout wont trigger this event
         console.log("token expired");

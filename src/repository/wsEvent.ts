@@ -59,6 +59,7 @@ export enum WSReceiveEvents {
   UserJoinMeeting = 42,
   UserLeaveMeeting = 43,
   MeetingCreateBySelf = 44,
+  OpenedApps = 45,
   AppCreated = 51,
   AppUpdated = 52,
   AppFinished = 53,
@@ -257,6 +258,10 @@ export interface UserJoinMeeting extends WSData {
 export interface UserLeaveMeeting extends WSData {
   meetingID: number;
   userID: number;
+}
+
+export interface OpenedApps extends WSData {
+  appIDs: WSApp[];
 }
 
 export interface AppCreated extends WSData {

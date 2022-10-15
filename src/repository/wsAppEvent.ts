@@ -1,7 +1,7 @@
 import { AppData } from "./wsEvent";
 
 export enum WSApp {
-  youtube = 1,
+  YouTubeSync = 1,
 }
 
 /*    Youtube    */

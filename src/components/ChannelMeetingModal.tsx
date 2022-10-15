@@ -45,16 +45,20 @@ const ChannelMeetingModal = ({
   const buttonUpdateVideo = useRef<any>();
   const syncVideoButton = useRef<any>();
   const [syncVideoButtonText, setSyncVideoButtonText] = useState("開啟");
-  const [url, setUrl] = useState("https://www.youtube.com/watch?v=b9IkpUYlOx8");
+  const [url, setUrl] = useState("");
   const [playing, setPlaying] = useState(false);
+  const [YTPlayerHost, setYTPlayerHost] = useState(false);
   const [playbackRate, setPlaybackRate] = useState(1.0);
   const [skipUpdate, setSkipUpdateChange] = useState(false);
+  const [expectTime, setExpectTime] = useState(0);
 
   const { useAppSelector } = useRedux();
-  const { meetingId, startedYT, syncYT } = useAppSelector(state => ({
+  const { meetingId, startedYT, syncYT, openedApps, userJoinRoom } = useAppSelector(state => ({
     meetingId: state.Calls.meetingId,
     startedYT: state.Calls.startedYT,
     syncYT: state.Calls.syncYT,
+    openedApps: state.Calls.openedApps,
+    userJoinRoom: state.Calls.userJoinRoom,
   }));
 
   // create meeting (get ws receive)
@@ -81,6 +85,26 @@ const ChannelMeetingModal = ({
     api.WSSend(JSON.stringify(send));
   }, [channelId, meetingId]);
 
+  useEffect(() => {
+    if (YTPlayerHost) {
+      update({});
+    }
+  }, [userJoinRoom]);
+
+  useEffect(() => {
+    console.log("YTPlayerHost", YTPlayerHost);
+  }, [YTPlayerHost]);
+
+  useEffect(() => {
+    (openedApps as WSApp[]).forEach(appID => {
+      switch(appID) {
+        case WSApp.YouTubeSync:
+          showVideoSyncUI();
+          break;
+      }
+    });
+  }, [openedApps]);
+
   const leaveMeeting = () => {
     var iframe = document.getElementById("meetingIframe") as HTMLIFrameElement;
     iframe.src = "";
@@ -94,7 +118,7 @@ const ChannelMeetingModal = ({
   };
 
   // control UI display or not (youtube sync)
-  const startVideoSync = () => {
+  const showVideoSyncUI = () => {
     if (!inputUrl.current) return;
     setSyncVideoButtonText("關閉");
     inputUrl.current.classList.remove("d-none");
@@ -104,7 +128,7 @@ const ChannelMeetingModal = ({
     player.classList.remove("d-none");
   };
 
-  const closeVideoSync = () => {
+  const hideVideoSyncUI = () => {
     if (!inputUrl.current) return;
     setSyncVideoButtonText("開啟");
     inputUrl.current.classList.add("d-none");
@@ -117,27 +141,23 @@ const ChannelMeetingModal = ({
   const switchSyncAppStatus = () => {
     if (!inputUrl.current) return;
     if (syncVideoButtonText === "開啟") {
-      startVideoSync();
+      showVideoSyncUI();
 
       let send: WSEvent = {
         event: WSSendEvents.CreateApp,
         data: {
-          appID: WSApp.youtube,
+          appID: WSApp.YouTubeSync,
         },
       };
       api.WSSend(JSON.stringify(send));
-
-      let info: YoutubeSync = {
-        video: "https://www.youtube.com/watch?v=b9IkpUYlOx8",
-      };
-      update(info, false);
+      setYTPlayerHost(true);
     } else {
-      closeVideoSync();
+      hideVideoSyncUI();
 
       let send: WSEvent = {
         event: WSSendEvents.FinishApp,
         data: {
-          appID: WSApp.youtube,
+          appID: WSApp.YouTubeSync,
         },
       };
       api.WSSend(JSON.stringify(send));
@@ -147,12 +167,14 @@ const ChannelMeetingModal = ({
   /* update youtube sync events */
   const update = (obj: YoutubeSync, autoFillTime = true) => {
     if (!player.current) return;
-    obj.currentTime = Math.round(player.current.getCurrentTime());
+    if(autoFillTime) {
+      obj.currentTime = Math.round(player.current.getCurrentTime());
+    }
 
     let send: WSEvent = {
       event: WSSendEvents.UpdateApp,
       data: {
-        appID: WSApp.youtube,
+        appID: WSApp.YouTubeSync,
         event: {
           event: YTEvent.sync,
           data: obj,
@@ -160,6 +182,7 @@ const ChannelMeetingModal = ({
       },
     };
     api.WSSend(JSON.stringify(send));
+    setYTPlayerHost(true);
   };
 
   const changeVideo = () => {
@@ -210,6 +233,17 @@ const ChannelMeetingModal = ({
     update(info);
   };
 
+  const onReady = () => {
+    if (!player.current) return;
+
+    let playerTime = player.current.getCurrentTime();
+    
+    if (Math.abs(playerTime - syncYT.currentTime) > 1) {
+      setSkipUpdateChange(true);
+      player.current.seekTo(syncYT.currentTime);
+    }
+  }
+
   const onPlaybackRateChange = (speed: string) => {
     if (!player.current) return;
 
@@ -229,18 +263,24 @@ const ChannelMeetingModal = ({
   /* receive youtube sync events */
   useEffect(() => {
     if (startedYT) {
-      startVideoSync();
+      showVideoSyncUI();
     } else {
-      closeVideoSync();
+      hideVideoSyncUI();
     }
   }, [startedYT]);
 
   useEffect(() => {
     if (!player.current) return;
-    console.log(syncYT);
+    setYTPlayerHost(false);
+    // video
+    if (url !== syncYT.video) {
+      setSkipUpdateChange(true);
+      setUrl(syncYT.video);
+    }
     // time
     let playerTime = player.current.getCurrentTime();
-    if (Math.abs(playerTime - syncYT.currentTime) > 1) {
+    setExpectTime(syncYT.currentTime);
+    if (Math.abs(playerTime - expectTime) > 1) {
       setSkipUpdateChange(true);
       player.current.seekTo(syncYT.currentTime);
     }
@@ -249,16 +289,7 @@ const ChannelMeetingModal = ({
       setSkipUpdateChange(true);
       setPlaying(syncYT.playing);
     }
-    // video
-    console.log(url);
-    console.log(syncYT.video);
-    if (url !== syncYT.video) {
-      setSkipUpdateChange(true);
-      setUrl(syncYT.video);
-    }
     // rate
-    console.log(playbackRate);
-    console.log(syncYT.rate);
     let rate = parseFloat(syncYT.rate);
     if (playbackRate !== rate) {
       setSkipUpdateChange(true);
@@ -342,6 +373,7 @@ const ChannelMeetingModal = ({
               playbackRate={playbackRate}
               onPlay={onPlay}
               onPause={onPause}
+              onReady={onReady}
               onSeek={e => console.log("onSeek", e)}
               onPlaybackRateChange={onPlaybackRateChange}
             />
