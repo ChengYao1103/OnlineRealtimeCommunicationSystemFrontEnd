@@ -77,6 +77,12 @@ const DirectMessages = ({
     }
   }, [isLoadInformation, otherUserInfoState, recentChatArray]);
 
+  useEffect(() => {
+    if (recentChatArray.length > 0) {
+      setIsLoadInformation(false);
+    }
+  }, [recentChatArray]);
+
   /*
     add contacts
     */
