@@ -10,7 +10,7 @@ import {
   Input,
 } from "reactstrap";
 import { RoleTypes, RoleTypesKey } from "../repository/Enum";
-import { useRedux } from "../hooks";
+import { useProfile, useRedux } from "../hooks";
 import { inviteChannelMembers } from "../redux/actions";
 
 interface InviteContactModalProps {
@@ -19,8 +19,10 @@ interface InviteContactModalProps {
 }
 const InviteChannelModal = ({ isOpen, onClose }: InviteContactModalProps) => {
   const { dispatch, useAppSelector } = useRedux();
-  const { channelInfo } = useAppSelector(state => ({
+  const { userProfile } = useProfile();
+  const { channelInfo, channelRole } = useAppSelector(state => ({
     channelInfo: state.Chats.selectedChatInfo,
+    channelRole: state.Chats.channelRole,
   }));
 
   const [emails, setEmails] = useState([""]);
@@ -29,6 +31,29 @@ const InviteChannelModal = ({ isOpen, onClose }: InviteContactModalProps) => {
 
   const roleTypeAmout = Object.keys(RoleTypes).length / 2;
   const roleOption = Object.keys(RoleTypes).slice(roleTypeAmout);
+
+  const getRoleList = () => {
+    if (
+      channelRole === RoleTypes["老師"] ||
+      channelInfo.founderID === userProfile.id
+    ) {
+      return roleOption.map((role, key) => {
+        if (channelRole) {
+          return (
+            <option key={key} value={key}>
+              {role}
+            </option>
+          );
+        }
+        return null;
+      });
+    }
+    return (
+      <option key={RoleTypes["學生"]} value={RoleTypes["學生"]}>
+        學生
+      </option>
+    );
+  };
 
   const onInvite = () => {
     dispatch(inviteChannelMembers(channelInfo.id, emails, roles));
@@ -94,13 +119,7 @@ const InviteChannelModal = ({ isOpen, onClose }: InviteContactModalProps) => {
                 onChangeRoles(parseInt(e.target.value), 0);
               }}
             >
-              {roleOption.map((role, key) => {
-                return (
-                  <option key={key} value={key}>
-                    {role}
-                  </option>
-                );
-              })}
+              {getRoleList()}
             </Input>
           </div>
         </Form>
