@@ -1,3 +1,4 @@
+import { RoleTypes } from "../../repository/Enum";
 import { userModel } from "../auth/types";
 
 export enum ChatsActionTypes {
@@ -85,6 +86,10 @@ export interface channelModel {
   name: string;
   recordPath: string;
   deleted: boolean;
+}
+
+export interface channelMemberModel extends userModel {
+  role: RoleTypes;
 }
 
 //contentTypes = ["文字", "圖片", "音訊", "檔案"];
@@ -176,7 +181,7 @@ export interface ChatsState {
   homework?: channelHomeworkModel;
   role?: number | null;
   selectedHomework?: channelHomeworkModel | null;
-  channelDir: Array<string>,
-  isDir: Array<boolean>,
+  channelDir: Array<string>;
+  isDir: Array<boolean>;
   selectedDir: string | null;
 }

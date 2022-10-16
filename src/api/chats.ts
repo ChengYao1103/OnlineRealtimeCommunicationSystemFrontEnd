@@ -249,7 +249,7 @@ const createChannelDir = (data: object) => {
 };
 
 const getChannelDir = (id: string | number, data: object) => {
-  console.log(data)
+  console.log(data);
 
   return api.create(`${url.GET_CHANNEL_DIRS}/${id}`, data);
 };
