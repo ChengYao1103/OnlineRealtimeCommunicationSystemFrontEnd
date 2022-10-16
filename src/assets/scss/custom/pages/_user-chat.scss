@@ -389,9 +389,13 @@
   }
 }
 
+.channelMeetingModal.modal-dialog {
+  flex-direction: column;
+}
+
 .channelMeetingModal {
   .modal-content {
-    height: 1200px;
+    flex-grow: 1;
     min-height: 512px;
     min-width: auto;
     overflow: hidden;

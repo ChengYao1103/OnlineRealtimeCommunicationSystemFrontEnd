@@ -342,7 +342,7 @@ const ChannelMeetingModal = ({
             </Button>
           </Stack>
 
-          <div style={{ width: "100%", height: "100%" }}>
+          <div style={{ width: "100%", height: "100%", flexGrow: 1 }}>
             {
               <iframe
                 id="meetingIframe"
