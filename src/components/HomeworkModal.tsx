@@ -11,6 +11,7 @@ import {
   Label,
   Input,
   Table,
+  Col,
 } from "reactstrap";
 import { useRedux } from "../hooks";
 import { createHomework, updateHomework, closeHomework, getChannelHomeworks, uploadHomework, changeSelectedHomework, getAllUpload, downloadHomework, setHomeworkScore } from "../redux/actions";
@@ -378,20 +379,25 @@ const HomeworkModal = ({
                         <i className="mdi mdi-pen" style={{padding: 10}}> </i>
                         </Link>
                       </p> :
-                       <p className="mb-0 ctext-content">
+                      
+                      <Form inline> 
+                      <FormGroup row>
+                      <div className="input-group">
                         <Input 
-                          type="datetime"
-                          className="form-control mb-3"
+                          className="mr-sm-3"
                           id="score-input"
                           value={inputScore ? inputScore : upload.score}
                           onChange={(e) => setInputScore(e.target.value.replace(/\D/g, ''))}
+                          width={10}
                         >
                        </Input>
-                       <Link to="#" onClick={() => {setIsEditing(false); inputScore && dispatch(setHomeworkScore({userID: upload.user.id, homeworkID: homeworkInfo.id, score: Number(inputScore)}))}}>
-                       <i className="mdi mdi-check" style={{padding: 10}}> </i>
+                       <Link to="#" onClick={() => {setIsEditing(false); inputScore && dispatch(setHomeworkScore({userID: upload.user.id, homeworkID: homeworkInfo.id, score: Number(inputScore)})); setInputScore("")}}>
+                        <i className="mdi mdi-check" style={{padding: 10}}> </i>
                        </Link>
-
-                     </p>}                     
+                       </div>
+                     </FormGroup>
+                     </Form>
+                     }                     
                       </td>
                   </tr>
                 </tbody>
@@ -402,6 +408,7 @@ const HomeworkModal = ({
 
       }
       </ModalBody>
+      {((role === 2 && mode === 1) || mode === 2 || mode === 3) &&
       <ModalFooter>
         <Button type="button" color="link" className="btn" onClick={onClose}>
           取消
@@ -450,6 +457,7 @@ const HomeworkModal = ({
           送出
         </Button>
       </ModalFooter>
+      }
     </Modal>
   );
 };
