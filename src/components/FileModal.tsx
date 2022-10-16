@@ -163,35 +163,25 @@ const FileModal = ({ isOpen, onClose, role }: FileModalProps) => {
       )}
       {isOpenUploadFile && (
         <ModalBody>
-          <div className="text-center px-2 position-relative">
-            <div>
-              <Input
-                id="channelattachedfile-input"
-                type="file"
-                className="d-none"
-                onChange={(e: any) => onSelectFiles(e)}
-                multiple
-              />
-                <Label
-                htmlFor="channelattachedfile-input"
-                className="avatar-sm mx-auto stretched-link"
-              >
-                <span className="avatar-title font-size-18 bg-soft-primary text-primary rounded-circle">
-                  <i className="bx bx-paperclip"></i>
-                </span>
-              </Label>
-            </div>
-            <h5 className="font-size-11 text-uppercase mt-3 mb-0 text-body text-truncate">
-              附件
-            </h5>
-          </div>
-          <Button
+          <FormGroup>
+            <Label htmlFor="HomeworkFile-input" className="form-label">
+              檔案:
+            </Label>
+            <Input 
+              type="file" 
+              className="form-control mb-3" 
+              id="HomeworkFile-input" 
+              onChange={(e: any) => onSelectFiles(e)}
+            />
+                      <Button
             disabled={files.length == 0}
             color="primary"
             onClick={onUpload}
           >
             確認
           </Button>
+          </FormGroup>           
+
         </ModalBody>
       )}
       <ModalBody className="p-4">
