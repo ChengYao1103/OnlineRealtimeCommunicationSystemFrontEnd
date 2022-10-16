@@ -1,6 +1,6 @@
 import { RoleTypes } from "../../repository/Enum";
 import { userModel } from "../auth/types";
-import { channelHomeworkModel, channelModel, ChatsActionTypes, messageRecordModel } from "./types";
+import { channelHomeworkModel, channelModel, ChatsActionTypes, messageRecordModel, rollCallModel } from "./types";
 
 // common success
 export const chatsApiResponseSuccess = (actionType: string, data: any) => ({
@@ -161,6 +161,11 @@ export const getChannelHomeworks = (data: any) => ({
   payload: data,
 });
 
+export const getChannelRollCalls = (data: any) => ({
+  type: ChatsActionTypes.GET_CHANNEL_ROLLCALLS,
+  payload: data,
+});
+
 export const toggleFavouriteContact = (id: number | string) => ({
   type: ChatsActionTypes.TOGGLE_FAVOURITE_CONTACT,
   payload: id,
@@ -249,9 +254,26 @@ export const getRollCallRecords = (id: number | string) => ({
   payload: id,
 });
 
+export const getRollCallRecordsByID = (id: number | string) => ({
+  type: ChatsActionTypes.GET_ROLLCALL_RECORDS_BY_ID,
+  payload: id,
+});
+
+export const getMyRollCallRecord = (id: number | string) => ({
+  type: ChatsActionTypes.GET_MY_ROLLCALL_RECORD,
+  payload: id,
+});
+
 export const getRollCall = (id: number | string) => ({
   type: ChatsActionTypes.GET_ROLLCALL,
   payload: id,
+});
+
+export const changeSelectedRollCall = (
+  selectedRollCallInfo?: rollCallModel | null
+) => ({
+  type: ChatsActionTypes.CHANGE_SELECTED_ROLLCALL,
+  payload: { selectedRollCallInfo },
 });
 
 export const createHomework = (data: any) => ({

@@ -9,9 +9,11 @@ import {
   ModalFooter,
   Label,
   Input,
+  Table,
 } from "reactstrap";
 import { useRedux } from "../hooks";
-import { createRollCall, updateRollCall, closeRollCall, getRollCall, doRollCall } from "../redux/actions";
+import { createRollCall, updateRollCall, closeRollCall, getRollCall, doRollCall, getRollCallRecordsByID, getMyRollCallRecord, getChannelRollCalls } from "../redux/actions";
+import { rollCallModel } from "../redux/chats/types";
 
 interface RollCallModalProps {
   isOpen: boolean;
@@ -20,9 +22,13 @@ interface RollCallModalProps {
 }
 const RollCallModal = ({ isOpen, onClose, role }: RollCallModalProps) => {
   const { dispatch, useAppSelector } = useRedux();
-  const { channelInfo, rollCall } = useAppSelector(state => ({
+  const { channelInfo, rollCall, rollCallRecords, myRollCallRecord, selectedRollCall, channelRollCalls } = useAppSelector(state => ({
     channelInfo: state.Chats.selectedChatInfo,
     rollCall: state.Chats.rollCall,
+    rollCallRecords: state.Chats.rollCallRecords,
+    myRollCallRecord: state.Chats.myRollCallRecord,
+    selectedRollCall: state.Chats.selectedRollCall,
+    channelRollCalls: state.Chats.channelRollCalls,
   }));
 
   const [startDateTime, setStartDateTime] = useState("");
@@ -31,7 +37,7 @@ const RollCallModal = ({ isOpen, onClose, role }: RollCallModalProps) => {
   const [endDate, setEndDate] = useState("");
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
-  const [mode, setMode] = useState(0); //0: 查看進行中的點名 1: 編輯進行中點名(老師) 2: 新增點名(老師) 3: 查看點名狀況(老師) 4: 查看點名狀況(學生)
+  const [mode, setMode] = useState(0); //0: 查看進行中的點名 1: 編輯進行中點名(老師) 2: 新增點名(老師) 3: 點名總表 4: 查看點名狀況(老師) 5: 查看點名狀況(學生)
 
   const onLoad = () => {
     onClear()
@@ -47,10 +53,27 @@ const RollCallModal = ({ isOpen, onClose, role }: RollCallModalProps) => {
     setEndTime("")
   };
 
+  const getRollCallRecordsByRollCallID = () => {
+    dispatch(getRollCallRecordsByID(selectedRollCall.id))
+  }
+  
+  const getMyRollCallRecordByRollCallID = () => {
+    dispatch(getMyRollCallRecord(selectedRollCall.id))
+  }
+
+  const getChannelRollCallsByID = () => {
+    dispatch(getChannelRollCalls(channelInfo.id))
+  }
+
   useEffect(() => {
-    if(mode === 0) {
-    onClear()
-    dispatch(getRollCall(channelInfo.id));
+    console.log(channelRollCalls)
+  }, [channelRollCalls])
+
+  useEffect(() => {
+    if (mode === 0) {
+      onClear()
+      dispatch(getRollCall(channelInfo.id));
+      dispatch(getMyRollCallRecord(rollCall?.id))
     }
   }, [mode]);
 
@@ -61,6 +84,8 @@ const RollCallModal = ({ isOpen, onClose, role }: RollCallModalProps) => {
 
   useEffect(() => {
     if (rollCall) {
+      console.log(rollCall)
+      dispatch(getMyRollCallRecord(rollCall?.id))
       if (new Date(rollCall.startTime).toISOString() !== "Invalid Date")
         setStartDateTime(new Date(rollCall.startTime).toLocaleString());
       if (new Date(rollCall.end).toLocaleString() !== "Invalid Date")
@@ -79,19 +104,50 @@ const RollCallModal = ({ isOpen, onClose, role }: RollCallModalProps) => {
       scrollable
     >
       <ModalHeader className="modal-title-custom" toggle={onClose}>
-        {mode == 0 ? "進行中的點名" : mode === 1 ? "編輯進行中的點名" : "新增點名"}
+        {(mode === 0 && "進行中的點名") || (mode === 1 && "編輯進行中的點名") || (mode === 2 && "新增點名") || (mode === 3 && "歷史點名紀錄")}
 
       </ModalHeader>
-      {role == 0 && (
+        {mode === 0 &&
+          <ModalFooter>
+            {role == 0 && (
+            <>
+            <Button disabled={!rollCall} onClick={() => setMode(1)}>編輯進行中的點名</Button>
+            <Button onClick={() => setMode(2)}>新增點名</Button>
+            </>
+            )}
+            <Button onClick={() => {getChannelRollCallsByID(); setMode(3)}}>歷史點名紀錄</Button>
+          </ModalFooter>
+        }
+        {mode === 1 &&
+          <ModalFooter>
+            <Button onClick={() => setMode(0)}>查看進行中的點名</Button>
+            <Button onClick={() => setMode(2)}>新增點名</Button>
+            <Button onClick={() => {getChannelRollCallsByID(); setMode(3)}}>歷史點名紀錄</Button>
+          </ModalFooter>
+        }
+        {mode === 2 &&
+          <ModalFooter>
+            <Button onClick={() => setMode(0)}>查看進行中的點名</Button>
+            <Button onClick={() => {getChannelRollCallsByID(); setMode(3)}}>歷史點名紀錄</Button>
+          </ModalFooter>
+        }
+        {mode === 3 &&
+          <ModalFooter>
+            <Button onClick={() => setMode(0)}>查看進行中的點名</Button>
+            {role != 2 && <Button onClick={() => setMode(2)}>新增點名</Button>}
+          </ModalFooter>
+        }
+      {/* {role == 0 && (
         <ModalFooter>
+          <Button>歷史點名紀錄</Button>
           <Button disabled={!rollCall && mode === 0 } onClick={()=> mode === 0 ? setMode(1) : setMode(0)}>{mode === 0 ? "編輯進行中的點名" : "查看進行中的點名"}</Button>
           <Button disabled={!rollCall && mode === 2 } onClick={()=> mode === 2 ? setMode(1) : setMode(2)}>{mode === 2 ? "編輯進行中的點名" : "新增點名"}</Button>
         </ModalFooter>
-      )}
+      )} */}
       <ModalBody className="p-4">
         <Form>
           <div className="mb-3">
-          {mode !== 0 ?
+          {(mode === 1 || mode === 2) &&
           (
           <>
           <FormGroup>
@@ -155,7 +211,8 @@ const RollCallModal = ({ isOpen, onClose, role }: RollCallModalProps) => {
           ></Input>
         </FormGroup>
         </>
-        ) :
+        )}
+        {mode === 0 &&
         (<>
           <FormGroup>
             <Label className="form-label" style={{color: "red"}}>
@@ -195,13 +252,73 @@ const RollCallModal = ({ isOpen, onClose, role }: RollCallModalProps) => {
           </FormGroup>
           </>)
           }
+          {mode === 3 &&
+            <FormGroup>
+              <Table>
+                <thead>
+                  <tr>
+                    <th>
+                      開始時間
+                    </th>
+                    <th>
+                      結束時間
+                    </th>
+                    <th>
+                      建立時間
+                    </th>
+                  </tr>
+                </thead>
+                {(channelRollCalls || []).map((channelRollCall: rollCallModel, key: number) => {
+                  return (
+                    <tbody>
+                      <tr className="table-primary" onClick={() => {}}>
+                      <td>
+                      {/* <Input
+            type="datetime"
+            className="form-control mb-3"
+            id="HomeworkStartDate-input"
+            placeholder="Choose start date"
+            value={new Date(channelRollCall.startTime).toLocaleString()}
+            disabled={true}
+          /> */}
+                        {new Date(channelRollCall.startTime).toLocaleString()}
+                      </td>
+                      <td>
+                      {/* <Input
+            type="datetime"
+            className="form-control mb-3"
+            id="HomeworkStartDate-input"
+            placeholder="Choose start date"
+            value={ channelRollCall.endTime !== "0001-01-01T00:00:00Z" ? new Date(channelRollCall.endTime).toLocaleString() : "無截止時間"}
+            disabled={true}
+          /> */}
+                        { channelRollCall.endTime !== "0001-01-01T00:00:00Z" ? new Date(channelRollCall.endTime).toLocaleString() : "無截止時間"}
+                      </td>
+                      <td>
+                      {/* <Input
+            type="datetime"
+            className="form-control mb-3"
+            id="HomeworkStartDate-input"
+            placeholder="Choose start date"
+            value={Date.parse(channelRollCall.createTime).toLocaleString()}
+            disabled={true}
+          /> */}
+                        {new Date(channelRollCall.createTime).toLocaleString()}
+                      </td>
+                      </tr>
+                    </tbody>
+                  )
+                })}
+              </Table>
+            </FormGroup>
+          }
           </div>
         </Form>
       </ModalBody>
       <Button 
       color="primary" 
       className="m-3"
-      disabled={mode === 0 && !rollCall}
+      disabled={mode === 0 && (!rollCall || myRollCallRecord)}
       onClick={() => {
           if (role === 0) {
             if (mode === 0) {
@@ -222,7 +339,7 @@ const RollCallModal = ({ isOpen, onClose, role }: RollCallModalProps) => {
         }
       }
       >
-        {role === 0 ? (mode === 0 ? "關閉點名" : (mode === 1 ? "儲存變更" : "建立點名")) : "簽到"}
+        {role === 0 ? (mode === 0 ? "關閉點名" : (mode === 1 ? "儲存變更" : "建立點名")) : (myRollCallRecord ? "已簽到" : "簽到")}
       </Button>
     </Modal>
   );
