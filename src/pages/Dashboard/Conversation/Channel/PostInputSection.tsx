@@ -170,11 +170,11 @@ const PostInputSection = ({
       >
         <div className="row g-0 align-items-center">
           <div className="col-auto">
-            <StartButtons
+            {/* <StartButtons
               onToggle={onToggle}
               text={text}
               onChange={onChangeText}
-            />
+            /> */}
           </div>
           <div className="col">
             <InputSection value={text} onChange={onChangeText} />
@@ -208,12 +208,12 @@ const PostInputSection = ({
         </Alert>
       ) : null}
 
-      <MoreMenu
+      {/* <MoreMenu
         isOpen={isOpen}
         onSelectImages={onSelectImages}
         onSelectFiles={onSelectFiles}
         onToggle={onToggle}
-      />
+      /> */}
 
       <Reply
         reply={replyData}

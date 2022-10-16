@@ -168,6 +168,14 @@ const uploadMessageFile = (data: object) => {
   return api.createWithFile(url.UPLOAD_MESSAGE_FILE, data);
 };
 
+const notifyChatUserNewFile = (data: any) => {
+  let send: WSEvent = {
+    event: WSSendEvents.SendFileToUser,
+    data: data,
+  };
+  api.WSSend(JSON.stringify(send));
+};
+
 const downloadMessageFile = (data: object, filename: string) => {
   return api.getFile(url.DOWNLOAD_MESSAGE_FILE, filename, data);
 };
@@ -294,6 +302,7 @@ export {
   readConversation,
   deleteImage,
   uploadMessageFile,
+  notifyChatUserNewFile,
   downloadMessageFile,
   createPost,
   createComment,

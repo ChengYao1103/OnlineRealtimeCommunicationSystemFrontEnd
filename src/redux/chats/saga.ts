@@ -32,6 +32,7 @@ import {
   readConversation as readConversationApi,
   deleteImage as deleteImageApi,
   uploadMessageFile as uploadMessageFileApi,
+  notifyChatUserNewFile as notifyChatUserNewFileApi,
   downloadMessageFile as downloadMessageFileApi,
   createPost as createPostApi,
   createComment as createCommentApi,
@@ -429,6 +430,12 @@ function* deleteImage({ payload: { userId, messageId, imageId } }: any) {
 function* uploadMessageFile({ payload: data }: any) {
   try {
     const response: Promise<any> = yield call(uploadMessageFileApi, data);
+    console.log(response);
+    let wsData = {
+      to: data.receiverID,
+      messageID: (response as any).id,
+    };
+    yield call(notifyChatUserNewFileApi, wsData);
     yield put(
       chatsApiResponseSuccess(ChatsActionTypes.UPLOAD_MESSAGE_FILE, response)
     );

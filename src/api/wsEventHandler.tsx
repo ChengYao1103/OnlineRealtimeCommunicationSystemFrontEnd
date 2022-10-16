@@ -24,8 +24,13 @@ import {
   OpenedApps,
   PostCreated,
   NewCommentOnPost,
+  NewFileFromUser,
 } from "../repository/wsEvent";
-import { channelModel, ChatsActionTypes } from "../redux/chats/types";
+import {
+  channelModel,
+  ChatsActionTypes,
+  MessageTypeEnum,
+} from "../redux/chats/types";
 import { CallsActionTypes } from "../redux/calls/types";
 import { ErrorMessages, ErrorMessagesKey } from "../repository/Enum";
 
@@ -52,20 +57,34 @@ const WSEventHandler = () => {
     channels: state.Chats.channels as channelModel[],
     recentChatUsers: state.Chats.recentChatUsers as userModel[],
   }));
-  const [newContentInfo, setNewContentInfo] = useState<NewContent>();
+  const [newContentInfo, setNewContentInfo] = useState<messageNotification>();
   const [invitedID, setInvitedID] = useState(-1);
   const { userProfile } = useProfile();
 
   /** 新訊息的提醒 */
   useEffect(() => {
     if (newContentInfo && SenderUser && SenderUser.id === newContentInfo.from) {
-      showInfoNotification(
-        <span>
-          {SenderUser.name} 傳送了一則訊息:
-          <br />
-          {newContentInfo.content}
-        </span>
-      );
+      switch (newContentInfo.type) {
+        case MessageTypeEnum.text: {
+          showInfoNotification(
+            <span>
+              {SenderUser.name} 傳送了一則訊息:
+              <br />
+              {newContentInfo.content}
+            </span>
+          );
+          break;
+        }
+        case MessageTypeEnum.image: {
+          showInfoNotification(`${SenderUser.name} 傳送了一張圖片`);
+          break;
+        }
+        case MessageTypeEnum.file: {
+          showInfoNotification(`${SenderUser.name} 傳送了一個檔案`);
+          break;
+        }
+      }
+
       dispatch(clearOtherUserInformation());
       setNewContentInfo({} as NewContent);
     }
@@ -99,9 +118,16 @@ const WSEventHandler = () => {
       // Message
       case WSReceiveEvents.NewContent:
         let contentInfo = data.data as NewContent;
-        if (contentInfo.type === 0 && contentInfo.from !== userProfile.id) {
+        if (contentInfo.from !== userProfile.id) {
           dispatch(getUserInformation(contentInfo.from.toString()));
-          setNewContentInfo(contentInfo);
+          setNewContentInfo({
+            from: contentInfo.from,
+            type: contentInfo.type,
+            content:
+              contentInfo.type === MessageTypeEnum.text
+                ? contentInfo.content
+                : "",
+          });
         }
         if (
           !recentChatUsers ||
@@ -113,6 +139,7 @@ const WSEventHandler = () => {
         }
         dispatch(
           chatWebsocketEvent(ChatsActionTypes.RECEIVE_MESSAGE, {
+            ID: contentInfo.id,
             SenderID: contentInfo.from,
             ReceiverID: contentInfo.to,
             Content: contentInfo.content,
@@ -124,6 +151,32 @@ const WSEventHandler = () => {
       case WSReceiveEvents.ContentBeenRead:
         break;
       case WSReceiveEvents.NewFileFromUser:
+        let fileInfo = data.data as NewFileFromUser;
+        if (fileInfo.from !== userProfile.id) {
+          dispatch(getUserInformation(fileInfo.from.toString()));
+          setNewContentInfo({
+            from: fileInfo.from,
+            type: fileInfo.type,
+            content: fileInfo.filename,
+          });
+        }
+        if (
+          !recentChatUsers ||
+          (recentChatUsers &&
+            recentChatUsers.findIndex(user => user.id === fileInfo.from) === -1)
+        ) {
+          dispatch(getRecentChat(10, 1));
+        }
+        dispatch(
+          chatWebsocketEvent(ChatsActionTypes.RECEIVE_MESSAGE, {
+            ID: fileInfo.messageID,
+            SenderID: fileInfo.from,
+            ReceiverID: fileInfo.to,
+            Content: fileInfo.filename,
+            Time: fileInfo.time,
+            Type: fileInfo.type,
+          })
+        );
         break;
       // Calls
       case WSReceiveEvents.AskPhoneCall:
@@ -269,3 +322,9 @@ const WSEventHandler = () => {
 };
 
 export default WSEventHandler;
+
+interface messageNotification {
+  from: number;
+  type: MessageTypeEnum;
+  content: string;
+}

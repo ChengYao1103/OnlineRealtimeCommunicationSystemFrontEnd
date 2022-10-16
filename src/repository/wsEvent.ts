@@ -180,6 +180,7 @@ export interface NewFileFromUser extends WSData {
   to: number;
   filename: string;
   type: number;
+  messageID: number;
   time: string;
 }
 
