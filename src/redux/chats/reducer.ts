@@ -28,6 +28,7 @@ export const INIT_STATE: ChatsState = {
   channelDir: [],
   isDir: [],
   selectedDir: null,
+  homeworkUploads: [],
 };
 
 const Chats = persistReducer(
@@ -198,17 +199,20 @@ const Chats = persistReducer(
               rollCall: action.payload.data.rollCall,
             };
           case ChatsActionTypes.GET_HOMEWORK:
-            console.log(action.payload.data)
             return {
               ...state,
               homework: action.payload.data.homework,
             };
           case ChatsActionTypes.GET_CHANNEL_DIRS:
-            console.log(action.payload.data)
             return {
               ...state,
               channelDir: action.payload.data.fileNameArray,
               isDir: action.payload.data.isDirArray
+            };
+          case ChatsActionTypes.GET_ALL_UPLOAD:
+            return {
+              ...state,
+              homeworkUploads: action.payload.data.homeworkUpload,
             };
           default:
             return { ...state };

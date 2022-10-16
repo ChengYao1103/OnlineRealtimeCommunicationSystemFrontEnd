@@ -54,6 +54,7 @@ import {
   downloadChannelFile as downloadChannelFileApi,
   createChannelDir as createChannelDirApi,
   getChannelDir as getChannelDirApi,
+  getAllUpload as getAllUploadApi,
 } from "../../api/index";
 
 import {
@@ -688,17 +689,26 @@ function* createChannelDir({ payload: dirData }: any) {
 }
 
 function* getChannelDir({ payload: id, data }: any) {
-  console.log(data);
   try {
     const response: Promise<any> = yield call(getChannelDirApi, id, data);
-
-    console.log(response);
     yield put(
       chatsApiResponseSuccess(ChatsActionTypes.GET_CHANNEL_DIRS, response)
     );
   } catch (error: any) {
     yield call(showErrorNotification, error.data.message);
     yield put(chatsApiResponseError(ChatsActionTypes.GET_CHANNEL_DIRS, error));
+  }
+}
+
+function* getAllUpload({ payload: id }: any) {
+  try {
+    const response: Promise<any> = yield call(getAllUploadApi, id);
+    yield put(
+      chatsApiResponseSuccess(ChatsActionTypes.GET_ALL_UPLOAD, response)
+    );
+  } catch (error: any) {
+    yield call(showErrorNotification, error.data.message);
+    yield put(chatsApiResponseError(ChatsActionTypes.GET_ALL_UPLOAD, error));
   }
 }
 
@@ -868,7 +878,7 @@ export function* watchDownloadHomework() {
 }
 
 export function* watchGetHomework() {
-  yield takeEvery(ChatsActionTypes.GET_ROLLCALL, getHomework);
+  yield takeEvery(ChatsActionTypes.GET_HOMEWORK, getHomework);
 }
 
 export function* watchSetHomewokScore() {
@@ -890,6 +900,11 @@ export function* watchUploadChannelFile() {
 export function* watchDownloadChannelFile() {
   yield takeEvery(ChatsActionTypes.DOWNLOAD_CHANNEL_FILE, downloadChannelFile);
 }
+
+export function* watchGetAllUpload() {
+  yield takeEvery(ChatsActionTypes.GET_ALL_UPLOAD, getAllUpload);
+}
+
 function* chatsSaga() {
   yield all([
     fork(watchGetFavourites),
@@ -943,6 +958,7 @@ function* chatsSaga() {
     fork(watchGetChannelDir),
     fork(watchUploadChannelFile),
     fork(watchDownloadChannelFile),
+    fork(watchGetAllUpload),
   ]);
 }
 
