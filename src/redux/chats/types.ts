@@ -76,6 +76,7 @@ export enum ChatsActionTypes {
   UPLOAD_HOMEWORK = "@@chats/UPLOAD_HOMEWORK",
   DOWNLOAD_HOMEWORK = "@@chats/DOWNLOAD_HOMEWORK",
   SET_HOMEWORK_SCORE = "@@chats/SET_HOMEWORK_SCORE",
+  GET_HOMEWORK_SCORE = "@@chats/GET_HOMEWORK_SCORE",
   GET_HOMEWORK = "@@chats/GET_HOMEWORK",
   CHANGE_SELECTED_HOMEWORK = "@@chats/CHANGE_SELECTED_HOMEWORK",
   GET_ALL_UPLOAD = "@@chats/GET_ALL_UPLOAD",
@@ -210,5 +211,6 @@ export interface ChatsState {
   myRollCallRecord: rollCallModel | null;
   selectedRollCall: rollCallModel | null;
   channelMembers: Array<channelMemberModel>;
-  studentRollCallRecords: Array<rollCallRecordModel>
+  studentRollCallRecords: Array<rollCallRecordModel>;
+  score: number;
 }

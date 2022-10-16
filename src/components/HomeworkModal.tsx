@@ -11,11 +11,17 @@ import {
   Label,
   Input,
   Table,
+  Col,
 } from "reactstrap";
 import { useRedux } from "../hooks";
-import { createHomework, updateHomework, closeHomework, getChannelHomeworks, uploadHomework, changeSelectedHomework, getAllUpload } from "../redux/actions";
+import { createHomework, updateHomework, closeHomework, getChannelHomeworks, uploadHomework, changeSelectedHomework, getAllUpload, downloadHomework, setHomeworkScore, getHomeworkScore } from "../redux/actions";
 import { channelHomeworkModel, homeworkUploadModel } from "../redux/chats/types";
+
+//images
+import imagePlaceholder from "../assets/images/users/profile-placeholder.png";
 import { Link } from "react-router-dom";
+import { parse } from "date-fns";
+import Loader from "./Loader";
 
 interface HomeworkModalProps {
   isOpen: boolean;
@@ -28,11 +34,13 @@ const HomeworkModal = ({
   role,
 }: HomeworkModalProps) => {
   const { dispatch, useAppSelector } = useRedux();
-  const { channelInfo, channelHomeworks, homeworkInfo, homeworkUploads } = useAppSelector(state => ({
+  const { channelInfo, channelHomeworks, homeworkInfo, homeworkUploads, score, homeworkLoading } = useAppSelector(state => ({
     channelInfo: state.Chats.selectedChatInfo,
     channelHomeworks: state.Chats.channelHomeworks,
     homeworkInfo: state.Chats.selectedHomework,
     homeworkUploads: state.Chats.homeworkUploads,
+    score: state.Chats.score,
+    homeworkLoading: state.Chats.homeworkLoading
   }));
 
   const [name, setName] = useState("")
@@ -45,7 +53,8 @@ const HomeworkModal = ({
   const [endTime, setEndTime] = useState("");
   const [mode, setMode] = useState(0); //0: 作業總覽 1: 作業詳細內容 2:編輯作業 3: 新增作業 4:作業繳交情況
   const [file, setFile] = useState<any>();
-
+  const [isEditing, setIsEditing] = useState(false);
+  const [inputScore, setInputScore] = useState("");
   const onSelectHomework = (
     info: channelHomeworkModel | null,
   ) => {
@@ -53,6 +62,10 @@ const HomeworkModal = ({
       return;
     }
     dispatch(changeSelectedHomework(info));
+    if (role === 2) {
+      if (info)
+        dispatch(getHomeworkScore(info.id))
+    }
   };
 
   const onUpload = () => {
@@ -61,6 +74,14 @@ const HomeworkModal = ({
       file: file,
     };
     dispatch(uploadHomework(data));      
+  };
+
+  const onDownload = (upload: homeworkUploadModel) => {
+    let data = {
+      homeworkID: homeworkInfo.id,
+      userID: upload.user.id
+    };
+    dispatch(downloadHomework(upload.fileName, data));      
   };
 
   const onSelectFile = (e: any) => {
@@ -103,6 +124,7 @@ const HomeworkModal = ({
           )}
         </ModalFooter>
       )}
+      {homeworkLoading && <Loader />}
       <ModalBody className="p-4">
       {mode === 0 && <Table>
         <thead>
@@ -117,8 +139,7 @@ const HomeworkModal = ({
         </thead>
         {(channelHomeworks || []).map((homework: channelHomeworkModel, key: number) => {
           return (
-            <>
-            <tbody>
+            <tbody key={key}>
               <tr className="table-primary" onClick={() => {setMode(1); onSelectHomework(homework)}}>
                 <td>
                   {homework.name}
@@ -128,7 +149,6 @@ const HomeworkModal = ({
                 </td>
               </tr>
             </tbody>
-            </>
           );
         })}
         </Table>}
@@ -186,6 +206,8 @@ const HomeworkModal = ({
               disabled={true}
             ></Input>
           </FormGroup>
+          {role === 2 &&
+          <>
           <FormGroup>
             <Label htmlFor="HomeworkFile-input" className="form-label">
               檔案:
@@ -194,6 +216,7 @@ const HomeworkModal = ({
               type="file" 
               className="form-control mb-3" 
               id="HomeworkFile-input" 
+              //value={"test"}
               onChange={(e: any) => onSelectFile(e)}
             />       
           </FormGroup>
@@ -205,10 +228,12 @@ const HomeworkModal = ({
               type="datetime"
               className="form-control mb-3"
               id="HomeworkScore-input"
-              value={"尚未批改"}
+              value={score != -1 ? score : "尚未批改"}
               disabled={true}
             ></Input>
           </FormGroup>
+          </>
+          }
           </Form>
         }
         {(mode === 2 || mode === 3) && <Form>
@@ -308,13 +333,14 @@ const HomeworkModal = ({
       <Table>
           <thead>
             <tr>
-              <th>繳交情況</th>
+              <th>學生</th>
+              <th>檔案</th>
+              <th>分數</th>
             </tr>
           </thead>
           {(homeworkUploads || []).map((upload: homeworkUploadModel, key: number) => {
             return (
-              <>
-                <tbody>
+                <tbody key={key}>
                   <tr
                     className="table-primary"
                     style={{ padding: "20px" }}
@@ -323,23 +349,73 @@ const HomeworkModal = ({
                     }}
                   >
                     <td>
-                      {upload.user.name}
+                    <Link 
+                      to="#"
+                      className="p-0">
+                    <div className="d-flex align-items-center">
+                        <div className="chat-avatar me-2">
+                    <img
+                      src={
+                        upload.user.photo !== ""
+                          ? upload.user.photo
+                          : imagePlaceholder
+                      }
+                      alt=""
+                      width="20"
+                      height="20"
+                    />
+
+                    </div>
+                    <h6 className="m-0">{upload.user.name}</h6>
+                    </div>    
+                    </Link>                
                     </td>
                     <td>
-                      {upload.fileName}
+                      <Link to="#" onClick={() => onDownload(upload)}>
+                      <p className="mb-0 ctext-content">
+                        <i className="mdi mdi-download"> </i>
+                        {upload.fileName}
+                      </p>
+                      </Link>
                     </td>
                     <td>
-                      {upload.score}
-                    </td>
+                      {!isEditing ?
+                      <p className="mb-0 ctext-content">
+                        {upload.score}
+                        
+                      <Link to="#" onClick={() => setIsEditing(true)}>
+                        <i className="mdi mdi-pen" style={{margin: 10}}> </i>
+                        </Link>
+                      </p> :
+                      
+                      <Form inline key={key}> 
+                      <FormGroup row>
+                      <div className="input-group">
+                        <Input 
+                          className="mr-sm-3"
+                          id="score-input"
+                          value={inputScore ? inputScore : upload.score}
+                          onChange={(e) => setInputScore(e.target.value.replace(/\D/g, ''))}
+                          width={10}
+                        >
+                       </Input>
+                       <Link to="#" onClick={() => {setIsEditing(false); inputScore && dispatch(setHomeworkScore({userID: upload.user.id, homeworkID: homeworkInfo.id, score: Number(inputScore)})); setInputScore("")}}>
+                        <i className="mdi mdi-check" style={{margin: 10}}> </i>
+                       </Link>
+                       </div>
+                     </FormGroup>
+                     </Form>
+                     }                     
+                      </td>
                   </tr>
                 </tbody>
-              </>
             );
           })}
       </Table>
 
       }
       </ModalBody>
+      {((role === 2 && mode === 1) || mode === 2 || mode === 3) &&
       <ModalFooter>
         <Button type="button" color="link" className="btn" onClick={onClose}>
           取消
@@ -388,6 +464,7 @@ const HomeworkModal = ({
           送出
         </Button>
       </ModalFooter>
+      }
     </Modal>
   );
 };

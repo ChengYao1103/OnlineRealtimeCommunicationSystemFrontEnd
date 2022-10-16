@@ -28,6 +28,7 @@ import { channelHomeworkModel } from "../redux/chats/types";
 import { Link } from "react-router-dom";
 import { Icons } from "react-toastify";
 import { pathToFileURL } from "url";
+import Loader from "./Loader";
 
 interface FileModalProps {
   isOpen: boolean;
@@ -36,11 +37,11 @@ interface FileModalProps {
 }
 const FileModal = ({ isOpen, onClose, role }: FileModalProps) => {
   const { dispatch, useAppSelector } = useRedux();
-  const { channelInfo, channelDir, isDir, dirInfo } = useAppSelector(state => ({
+  const { channelInfo, channelDir, isDir, fileLoading } = useAppSelector(state => ({
     channelInfo: state.Chats.selectedChatInfo,
     channelDir: state.Chats.channelDir,
     isDir: state.Chats.isDir,
-    dirInfo: state.Chats.selectedDir,
+    fileLoading: state.Chats.fileLoading,
   }));
   const [files, setFiles] = useState<Array<any>>([]);
   const [path, setPath] = useState<Array<string>>([]);
@@ -138,15 +139,15 @@ const FileModal = ({ isOpen, onClose, role }: FileModalProps) => {
           )}
         </ModalFooter>
       )}
+      {fileLoading && <Loader />}
       {isOpenInputName && (
         <ModalBody>
-          <Label htmlFor="RollCallStartTime-input" className="form-label">
+          <Label htmlFor="path-input" className="form-label">
             請輸入資料夾名稱:{" "}
           </Label>
           <Input
-            type="datetime"
             className="form-control mb-3"
-            id="RollCallStartTime-input"
+            id="path-input"
             value={dirName}
             onChange={(e: any) => {
               setDirName(e.target.value);
@@ -164,24 +165,23 @@ const FileModal = ({ isOpen, onClose, role }: FileModalProps) => {
       {isOpenUploadFile && (
         <ModalBody>
           <FormGroup>
-            <Label htmlFor="HomeworkFile-input" className="form-label">
+            <Label htmlFor="file-input" className="form-label">
               檔案:
             </Label>
             <Input 
               type="file" 
               className="form-control mb-3" 
-              id="HomeworkFile-input" 
+              id="file-input" 
               onChange={(e: any) => onSelectFiles(e)}
             />
-                      <Button
-            disabled={files.length == 0}
-            color="primary"
-            onClick={onUpload}
-          >
-            確認
-          </Button>
+            <Button
+              disabled={files.length == 0}
+              color="primary"
+              onClick={onUpload}
+            >
+              確認
+            </Button>
           </FormGroup>           
-
         </ModalBody>
       )}
       <ModalBody className="p-4">
@@ -192,7 +192,9 @@ const FileModal = ({ isOpen, onClose, role }: FileModalProps) => {
               color="none"
               className="btn nav-btn"
               disabled={path.length === 0 || !path}
-              onClick={onBack}
+              onClick={() => {
+                onBack();
+              }}
             >
               <i className="bx bx-left-arrow-alt"></i>
             </Button>
@@ -216,16 +218,16 @@ const FileModal = ({ isOpen, onClose, role }: FileModalProps) => {
           </thead>
           {(channelDir || []).map((dir: string, key: number) => {
             return (
-              <>
-                <tbody>
+                <tbody key={key}>
                   <tr
                     className="table-primary"
                     style={{ padding: "20px" }}
-                    onClick={() => {
-                      isDir[key] ? onSelectDir(dir) : onDownload(dir);
-                    }}
+
                   >
                     <td>
+                      <Link to="#" onClick={() => {
+                      isDir[key] ? onSelectDir(dir) : onDownload(dir);
+                    }}>
                       {isDir[key] ? (
                         <i
                           className="mdi mdi-folder"
@@ -238,12 +240,13 @@ const FileModal = ({ isOpen, onClose, role }: FileModalProps) => {
                         ></i>
                       )}
                       {dir}
+                      </Link>
                     </td>
                   </tr>
                 </tbody>
-              </>
             );
           })}
+        </Table>
           <Form>
             <FormGroup>
               <Label className="form-label" style={{ color: "red" }}>
@@ -251,7 +254,6 @@ const FileModal = ({ isOpen, onClose, role }: FileModalProps) => {
               </Label>
             </FormGroup>
           </Form>
-        </Table>
       </ModalBody>
     </Modal>
   );

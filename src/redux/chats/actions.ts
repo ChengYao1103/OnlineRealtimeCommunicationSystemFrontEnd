@@ -306,6 +306,11 @@ export const setHomeworkScore = (data: any) => ({
   payload: data,
 });
 
+export const getHomeworkScore = (id: number | string) => ({
+  type: ChatsActionTypes.GET_HOMEWORK_SCORE,
+  payload: id,
+});
+
 export const getHomework = (id: number | string) => ({
   type: ChatsActionTypes.GET_HOMEWORK,
   payload: id,

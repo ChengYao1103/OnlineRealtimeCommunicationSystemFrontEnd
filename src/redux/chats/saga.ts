@@ -51,6 +51,7 @@ import {
   uploadHomework as uploadHomeworkApi,
   downloadHomework as downloadHomeworkApi,
   setHomeworkScore as setHomeworkScoreApi,
+  getHomeworkScore as getHomeworkScoreApi,
   getHomework as getHomeworkApi,
   uploadChannelFile as uploadChannelFileApi,
   downloadChannelFile as downloadChannelFileApi,
@@ -685,6 +686,19 @@ function* setHomeworkScore({ payload: data }: any) {
   }
 }
 
+function* getHomeworkScore({ payload: id }: any) {
+  try {
+    const response: Promise<any> = yield call(getHomeworkScoreApi, id);
+    yield put(
+      chatsApiResponseSuccess(ChatsActionTypes.GET_HOMEWORK_SCORE, response)
+    );
+  } catch (error: any) {
+    yield put(
+      chatsApiResponseError(ChatsActionTypes.GET_HOMEWORK_SCORE, error)
+    );
+  }
+}
+
 function* uploadChannelFile({ payload: data }: any) {
   try {
     const response: Promise<any> = yield call(uploadChannelFileApi, data);
@@ -938,6 +952,10 @@ export function* watchSetHomewokScore() {
   yield takeEvery(ChatsActionTypes.SET_HOMEWORK_SCORE, setHomeworkScore);
 }
 
+export function* watchGetHomewokScore() {
+  yield takeEvery(ChatsActionTypes.GET_HOMEWORK_SCORE, getHomeworkScore);
+}
+
 export function* watchCreateChannelDir() {
   yield takeEvery(ChatsActionTypes.CREATE_CHANNEL_DIRS, createChannelDir);
 }
@@ -1009,6 +1027,7 @@ function* chatsSaga() {
     fork(watchDownloadHomework),
     fork(watchGetHomework),
     fork(watchSetHomewokScore),
+    fork(watchGetHomewokScore),
     fork(watchCreateChannelDir),
     fork(watchGetChannelDir),
     fork(watchUploadChannelFile),
