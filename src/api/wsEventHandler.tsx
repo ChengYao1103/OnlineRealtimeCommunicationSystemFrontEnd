@@ -47,6 +47,7 @@ import {
 } from "../redux/actions";
 import { userModel } from "../redux/auth/types";
 import { WSApp, YoutubeSync, YTEvent } from "../repository/wsAppEvent";
+import { LOGOUT_URL } from "./apiCore";
 
 const WSEventHandler = () => {
   const dispatch = useDispatch();
@@ -307,6 +308,7 @@ const WSEventHandler = () => {
       case WSReceiveEvents.TokenExpired: // rarely triggered
         // timeout wont trigger this event
         console.log("token expired");
+        window.location.href = LOGOUT_URL;
         break;
       default:
         console.log("unknown ws event");

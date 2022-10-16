@@ -403,36 +403,39 @@ const VideoCallModal = ({
       className="videocallModal"
       contentClassName="shadow-lg border-0"
     >
-      <ModalBody className="p-0">
-        <div className="videocallModal-bg">
-          <video
-            autoPlay
-            id="remoteVideo"
-            className="videocallModal-bg w-100"
-          ></video>
-          <video
-            autoPlay
-            id="remoteVideo2"
-            className="d-none position-absolute w-25 start-0 rounded-3"
-            style={{ margin: "20px", top: "30%" }}
-          ></video>
-          <video
-            autoPlay
-            id="myVideo"
-            className="position-absolute w-25 start-0 rounded-3"
-            style={{ margin: "20px" }}
-          ></video>
-        </div>
+      <ModalBody className="p-0 position-relative">
+        {!isAccept ? (
+          <div className="avatar-xl position-absolute top-50 start-50 translate-middle">
+            <img
+              src={user.photo ? user.photo : imagePlaceholder}
+              alt=""
+              className="img-thumbnail rounded-circle"
+            />
+          </div>
+        ) : (
+          <div className="videocallModal-bg d-flex">
+            <video
+              autoPlay
+              id="remoteVideo"
+              className="videocallModal-bg"
+            ></video>
+            <video
+              autoPlay
+              id="remoteVideo2"
+              className="videocallModal-small d-none position-absolute w-25 start-0 rounded-3"
+              style={{ margin: "20px", top: "30%" }}
+            ></video>
+            <video
+              autoPlay
+              id="myVideo"
+              className="videocallModal-small position-absolute w-25 start-0 rounded-3"
+              style={{ margin: "20px" }}
+            ></video>
+          </div>
+        )}
 
         <div className="position-absolute start-0 end-0 bottom-0">
           <div className="text-center">
-            {!isAccept && (
-              <img
-                src={user.photo ? user.photo : imagePlaceholder}
-                alt=""
-                className="img-thumbnail rounded-circle"
-              />
-            )}
             {isAccept && (
               <div className="d-flex justify-content-center align-items-center text-center">
                 <div className="avatar-md h-auto">

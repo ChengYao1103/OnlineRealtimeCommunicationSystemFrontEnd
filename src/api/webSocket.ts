@@ -4,6 +4,7 @@ export class WSConnection {
   public static instance: WebSocket;
   public static signalingInfoQueue: any[] = [];
   token: string;
+  url: string;
   flag: boolean = false;
   heartbeat: any;
   public static onOpenEvent?: (event: any) => void;
@@ -13,13 +14,18 @@ export class WSConnection {
   public static getSignalingEvent?: (data: any) => void;
 
   constructor(url: string, token: string) {
-    WSConnection.instance = new WebSocket(url, "http");
     this.token = token;
+    this.url = url;
+    this.onConstruct();
+  }
+
+  onConstruct = () => {
+    WSConnection.instance = new WebSocket(this.url, "http");
     WSConnection.instance.onopen = this.onOpen;
     WSConnection.instance.onmessage = this.onMessage;
     WSConnection.instance.onerror = this.onError;
     WSConnection.instance.onclose = this.onClose;
-  }
+  };
 
   send = (data: string) => {
     WSConnection.instance.send(data);
@@ -72,8 +78,7 @@ export class WSConnection {
     console.log("websocket connection had closed!");
     if (WSConnection.onCloseEvent) {
       WSConnection.onCloseEvent(event);
-    } else {
-      window.location.href = LOGOUT_URL;
     }
+    this.onConstruct();
   };
 }
