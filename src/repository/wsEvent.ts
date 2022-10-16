@@ -216,6 +216,7 @@ export interface PostCreated extends WSData {
   content: string;
   createUser: number;
   createTime: string;
+  meetingID: number;
   postID: string;
 }
 

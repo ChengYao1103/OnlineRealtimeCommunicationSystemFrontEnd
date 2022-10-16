@@ -7,8 +7,12 @@ import {
   ChatsActionTypes,
   ChatsState,
   channelMemberModel,
+  channelModel,
+  channelPostModel,
+  postCommentModel,
 } from "./types";
 import { number } from "yup";
+import { userModel } from "../auth/types";
 
 export const INIT_STATE: ChatsState = {
   favourites: [],
@@ -34,6 +38,7 @@ export const INIT_STATE: ChatsState = {
   isDir: [],
   selectedDir: null,
   homeworkUploads: [],
+  channelMembers: [],
 };
 
 const Chats = persistReducer(
@@ -372,6 +377,53 @@ const Chats = persistReducer(
               state.recentChatUsers[index].Messages[0] = action.payload.data;
             }
             return { ...state };
+          case ChatsActionTypes.NEW_POST: {
+            let wsData = action.payload.data;
+            if (
+              state.selectedChatInfo &&
+              "founderID" in state.selectedChatInfo &&
+              state.selectedChatInfo.id === wsData.channelID
+            ) {
+              let user = state.channelMembers.find(
+                (user: channelMemberModel) => user.id === wsData.createUser
+              );
+              console.log(wsData.content);
+              let postData: channelPostModel = {
+                id: wsData.postID,
+                user: user as userModel,
+                content: wsData.content,
+                deleted: false,
+                timestamp: wsData.createTime,
+                chennelID: wsData.chennelID,
+                meetingID: wsData.meetingID,
+              };
+              state.channelPosts.push(postData);
+            }
+            return { ...state };
+          }
+          case ChatsActionTypes.NEW_COMMENT: {
+            let wsData = action.payload.data;
+            if (
+              state.channelMembers &&
+              state.selectedChatInfo &&
+              "founderID" in state.selectedChatInfo &&
+              state.selectedChatInfo.id === wsData.channelID
+            ) {
+              let user = state.channelMembers.find(
+                (user: channelMemberModel) => user.id === wsData.createUser
+              );
+              let commentData: postCommentModel = {
+                id: wsData.commentID,
+                postID: wsData.postID,
+                user: user as userModel,
+                content: wsData.content,
+                deleted: false,
+                timestamp: wsData.createTime,
+              };
+              state.postComments.push(commentData);
+            }
+            return { ...state };
+          }
           default:
             return { ...state };
         }
@@ -398,11 +450,12 @@ const Chats = persistReducer(
       case ChatsActionTypes.CHANGE_SELECTED_CHAT:
         state.chatUserConversations = [];
         state.channelPosts = [];
+        state.postComments = [];
+        state.channelMembers = [];
         state.rollCall = undefined;
         state.channelRole = -1;
         return {
           ...state,
-          channelMembers: undefined,
           selectedChat: action.payload.selectedChat,
           selectedChatInfo: action.payload.selectedChatInfo,
         };

@@ -22,6 +22,8 @@ import {
   AppCreated,
   AppFinished,
   OpenedApps,
+  PostCreated,
+  NewCommentOnPost,
 } from "../repository/wsEvent";
 import { channelModel, ChatsActionTypes } from "../redux/chats/types";
 import { CallsActionTypes } from "../redux/calls/types";
@@ -34,6 +36,7 @@ import {
   clearOtherUserInformation,
   getCallerInfo,
   getChannels,
+  getPostComments,
   getRecentChat,
   getUserInformation,
 } from "../redux/actions";
@@ -154,8 +157,13 @@ const WSEventHandler = () => {
       case WSReceiveEvents.BeenKickedOutChannel:
         break;
       case WSReceiveEvents.PostCreated:
+        let postInfo = data.data as PostCreated;
+        dispatch(chatWebsocketEvent(ChatsActionTypes.NEW_POST, postInfo));
         break;
       case WSReceiveEvents.NewCommentOnPost:
+        let commentInfo = data.data as NewCommentOnPost;
+        dispatch(getPostComments(commentInfo.postID));
+        // dispatch(chatWebsocketEvent(ChatsActionTypes.NEW_COMMENT, commentInfo));
         break;
       case WSReceiveEvents.RollCallCreated:
         break;
