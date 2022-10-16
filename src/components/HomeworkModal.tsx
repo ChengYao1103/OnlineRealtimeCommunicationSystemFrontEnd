@@ -13,9 +13,13 @@ import {
   Table,
 } from "reactstrap";
 import { useRedux } from "../hooks";
-import { createHomework, updateHomework, closeHomework, getChannelHomeworks, uploadHomework, changeSelectedHomework, getAllUpload } from "../redux/actions";
+import { createHomework, updateHomework, closeHomework, getChannelHomeworks, uploadHomework, changeSelectedHomework, getAllUpload, downloadHomework, setHomeworkScore } from "../redux/actions";
 import { channelHomeworkModel, homeworkUploadModel } from "../redux/chats/types";
+
+//images
+import imagePlaceholder from "../assets/images/users/profile-placeholder.png";
 import { Link } from "react-router-dom";
+import { parse } from "date-fns";
 
 interface HomeworkModalProps {
   isOpen: boolean;
@@ -45,7 +49,8 @@ const HomeworkModal = ({
   const [endTime, setEndTime] = useState("");
   const [mode, setMode] = useState(0); //0: 作業總覽 1: 作業詳細內容 2:編輯作業 3: 新增作業 4:作業繳交情況
   const [file, setFile] = useState<any>();
-
+  const [isEditing, setIsEditing] = useState(false);
+  const [inputScore, setInputScore] = useState("");
   const onSelectHomework = (
     info: channelHomeworkModel | null,
   ) => {
@@ -61,6 +66,14 @@ const HomeworkModal = ({
       file: file,
     };
     dispatch(uploadHomework(data));      
+  };
+
+  const onDownload = (upload: homeworkUploadModel) => {
+    let data = {
+      homeworkID: homeworkInfo.id,
+      userID: upload.user.id
+    };
+    dispatch(downloadHomework(upload.fileName, data));      
   };
 
   const onSelectFile = (e: any) => {
@@ -186,6 +199,7 @@ const HomeworkModal = ({
               disabled={true}
             ></Input>
           </FormGroup>
+          {role === 2 &&
           <FormGroup>
             <Label htmlFor="HomeworkFile-input" className="form-label">
               檔案:
@@ -197,6 +211,7 @@ const HomeworkModal = ({
               onChange={(e: any) => onSelectFile(e)}
             />       
           </FormGroup>
+          }
           <FormGroup>
             <Label htmlFor="HomeworkScore-input" className="form-label">
               成績:
@@ -308,13 +323,15 @@ const HomeworkModal = ({
       <Table>
           <thead>
             <tr>
-              <th>繳交情況</th>
+              <th>學生</th>
+              <th>檔案</th>
+              <th>分數</th>
             </tr>
           </thead>
           {(homeworkUploads || []).map((upload: homeworkUploadModel, key: number) => {
             return (
               <>
-                <tbody>
+                <tbody key={key}>
                   <tr
                     className="table-primary"
                     style={{ padding: "20px" }}
@@ -323,14 +340,59 @@ const HomeworkModal = ({
                     }}
                   >
                     <td>
-                      {upload.user.name}
+                    <Link 
+                      to="#"
+                      className="p-0">
+                    <div className="d-flex align-items-center">
+                        <div className="chat-avatar me-2">
+                    <img
+                      src={
+                        upload.user.photo !== ""
+                          ? upload.user.photo
+                          : imagePlaceholder
+                      }
+                      alt=""
+                      width="20"
+                      height="20"
+                    />
+
+                    </div>
+                    <h6 className="m-0">{upload.user.name}</h6>
+                    </div>    
+                    </Link>                
                     </td>
                     <td>
-                      {upload.fileName}
+                      <Link to="#" onClick={() => onDownload(upload)}>
+                      <p className="mb-0 ctext-content">
+                        <i className="mdi mdi-download"> </i>
+                        {upload.fileName}
+                      </p>
+                      </Link>
                     </td>
                     <td>
-                      {upload.score}
-                    </td>
+                      {!isEditing ?
+                      <p className="mb-0 ctext-content">
+                        {upload.score}
+                        
+                      <Link to="#" onClick={() => setIsEditing(true)}>
+                        <i className="mdi mdi-pen" style={{padding: 10}}> </i>
+                        </Link>
+                      </p> :
+                       <p className="mb-0 ctext-content">
+                        <Input 
+                          type="datetime"
+                          className="form-control mb-3"
+                          id="score-input"
+                          value={inputScore ? inputScore : upload.score}
+                          onChange={(e) => setInputScore(e.target.value.replace(/\D/g, ''))}
+                        >
+                       </Input>
+                       <Link to="#" onClick={() => {setIsEditing(false); inputScore && dispatch(setHomeworkScore({userID: upload.user.id, homeworkID: homeworkInfo.id, score: Number(inputScore)}))}}>
+                       <i className="mdi mdi-check" style={{padding: 10}}> </i>
+                       </Link>
+
+                     </p>}                     
+                      </td>
                   </tr>
                 </tbody>
               </>
