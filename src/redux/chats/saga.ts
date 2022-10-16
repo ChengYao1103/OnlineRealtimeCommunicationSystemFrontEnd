@@ -55,6 +55,8 @@ import {
   createChannelDir as createChannelDirApi,
   getChannelDir as getChannelDirApi,
   getAllUpload as getAllUploadApi,
+  getMyRollCallRecord as getMyRollCallRecordApi,
+  getChannelRollCalls as getChannelRollCallsApi,
 } from "../../api/index";
 
 import {
@@ -352,6 +354,19 @@ function* getChannelHomeworks({ payload: id }: any) {
   }
 }
 
+function* getChannelRollCalls({ payload: id }: any) {
+  try {
+    const response: Promise<any> = yield call(getChannelRollCallsApi, id);
+    yield put(
+      chatsApiResponseSuccess(ChatsActionTypes.GET_CHANNEL_ROLLCALLS, response)
+    );
+  } catch (error: any) {
+    yield put(
+      chatsApiResponseError(ChatsActionTypes.GET_CHANNEL_ROLLCALLS, error)
+    );
+  }
+}
+
 function* toggleFavouriteContact({ payload: id }: any) {
   try {
     const response: Promise<any> = yield call(toggleFavouriteContactApi, id);
@@ -559,6 +574,25 @@ function* doRollCall({ payload: id }: any) {
     yield put(chatsApiResponseSuccess(ChatsActionTypes.DO_ROLLCALL, response));
   } catch (error: any) {
     yield put(chatsApiResponseError(ChatsActionTypes.DO_ROLLCALL, error));
+  }
+}
+
+
+function* getRollCallRecordsByID({ payload: id }: any) {
+  try {
+    const response: Promise<any> = yield call(getRollCallApi, id);
+    yield put(chatsApiResponseSuccess(ChatsActionTypes.GET_ROLLCALL_RECORDS_BY_ID, response));
+  } catch (error: any) {
+    yield put(chatsApiResponseError(ChatsActionTypes.GET_ROLLCALL_RECORDS_BY_ID, error));
+  }
+}
+
+function* getMyRollCallRecord({ payload: id }: any) {
+  try {
+    const response: Promise<any> = yield call(getMyRollCallRecordApi, id);
+    yield put(chatsApiResponseSuccess(ChatsActionTypes.GET_MY_ROLLCALL_RECORD, response));
+  } catch (error: any) {
+    yield put(chatsApiResponseError(ChatsActionTypes.GET_MY_ROLLCALL_RECORD, error));
   }
 }
 
@@ -788,6 +822,9 @@ export function* watchGetChannelPosts() {
 export function* watchGetChannelHomeworks() {
   yield takeEvery(ChatsActionTypes.GET_CHANNEL_HOMEWORKS, getChannelHomeworks);
 }
+export function* watchGetChannelRollCalls() {
+  yield takeEvery(ChatsActionTypes.GET_CHANNEL_ROLLCALLS, getChannelRollCalls);
+}
 export function* watchToggleFavouriteContact() {
   yield takeEvery(
     ChatsActionTypes.TOGGLE_FAVOURITE_CONTACT,
@@ -855,6 +892,14 @@ export function* watchGetRollCall() {
 
 export function* watchDoRollCall() {
   yield takeEvery(ChatsActionTypes.DO_ROLLCALL, doRollCall);
+}
+
+export function* watchGetRollCallRecordByID() {
+  yield takeEvery(ChatsActionTypes.GET_ROLLCALL_RECORDS_BY_ID, getRollCallRecordsByID);
+}
+
+export function* watchGetMyRollCallRecord() {
+  yield takeEvery(ChatsActionTypes.GET_MY_ROLLCALL_RECORD, getMyRollCallRecord);
 }
 
 export function* watchCreateHomework() {
@@ -946,6 +991,8 @@ function* chatsSaga() {
     fork(watchCloseRollCall),
     fork(watchGetRollCall),
     fork(watchDoRollCall),
+    fork(watchGetRollCallRecordByID),
+    fork(watchGetMyRollCallRecord),
     fork(watchGetRole),
     fork(watchCreateHomework),
     fork(watchUpdateHomework),
@@ -959,6 +1006,7 @@ function* chatsSaga() {
     fork(watchUploadChannelFile),
     fork(watchDownloadChannelFile),
     fork(watchGetAllUpload),
+    fork(watchGetChannelRollCalls),
   ]);
 }
 

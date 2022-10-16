@@ -121,7 +121,7 @@ const getChannelPosts = (data: any) => {
 };
 
 const getChannelHomeworks = (id: string | number) => {
-  return api.get(`${url.GET_CHANNEL_HOMEWORK}/${id}`);
+  return api.get(`${url.GET_CHANNEL_HOMEWORKS}/${id}`);
 };
 
 const uploadChannelFile = (data: object) => {
@@ -138,6 +138,10 @@ const createChannelDir = (data: object) => {
 
 const getChannelDir = (id: string | number, data: object) => {
   return api.create(`${url.GET_CHANNEL_DIRS}/${id}`, data);
+};
+
+const getChannelRollCalls = (id: string | number) => {
+  return api.get(`${url.GET_CHANNEL_ROLLCALLS}/${id}`);
 };
 /*
 archive
@@ -222,6 +226,14 @@ const getRollCall = (id: string | number) => {
   return api.get(`${url.GET_ROLLCALL}/${id}`);
 };
 
+const getMyRollCallRecord = (id: string | number) => {
+  return api.get(`${url.GET_MY_ROLLCALL_RECORD}/${id}`);
+};
+
+const getRollCallRecordsByID = (id: string | number) => {
+  return api.get(`${url.GET_ROLLCALL_RECORDS}/${id}`);
+};
+
 /* 
 homework
 */
@@ -299,6 +311,8 @@ export {
   updateRollCall,
   getRollCallRecords,
   getRollCall,
+  getMyRollCallRecord,
+  getRollCallRecordsByID,
   createHomework,
   updateHomework,
   closeHomework,
@@ -311,4 +325,5 @@ export {
   createChannelDir,
   getChannelDir,
   getAllUpload,
+  getChannelRollCalls,
 };

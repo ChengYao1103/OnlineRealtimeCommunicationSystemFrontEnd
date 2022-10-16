@@ -22,6 +22,7 @@ export enum ChatsActionTypes {
   DOWNLOAD_CHANNEL_FILE = "@@chats/DOWNLOAD_CHANNEL_FILE",
   CHANGE_SELECTED_DIR = "@@chats/CHANGE_SELECTED_DIR",
   BACK_SELECTED_DIR = "@@chats/BACK_SELECTED_DIR",
+  GET_CHANNEL_ROLLCALLS = "@@chats/GET_CHANNEL_ROLLCALLS",
 
   ADD_CONTACTS = "@@chats/ADD_CONTACTS",
   CREATE_CHANNEL = "@@chats/CREATE_CHANNEL",
@@ -62,6 +63,9 @@ export enum ChatsActionTypes {
   UPDATE_ROLLCALL = "@@chats/UPDATE_ROLLCALL",
   GET_ROLLCALL_RECORDS = "@@chats/GET_ROLLCALL_RECORDS",
   GET_ROLLCALL = "@@chats/GET_ROLLCALL",
+  GET_ROLLCALL_RECORDS_BY_ID = "@@chats/GET_ROLLCALL_RECORDS_BY_ID",
+  GET_MY_ROLLCALL_RECORD = "@@chats/GET_MY_ROLLCALL_RECORD",
+  CHANGE_SELECTED_ROLLCALL = "@@chats/CHANGE_SELECTED_ROLLCALL",
 
   //HOMEWORK
   CREATE_HOMEWORK = "@@chats/CREATE_HOMEWORK",
@@ -168,6 +172,12 @@ export interface homeworkUploadModel {
   score: number;
 }
 
+export interface rollCallRecordModel {
+  rollCallID: number;
+  user: userModel;
+  timestamp: string;
+}
+
 export interface ChatsState {
   favourites: Array<any>;
   directMessages: Array<any>;
@@ -178,6 +188,7 @@ export interface ChatsState {
   chatUserConversations: Array<messageRecordModel>;
   channelPosts: Array<channelPostModel>;
   channelHomeworks: Array<channelHomeworkModel>;
+  channelRollCalls: Array<rollCallModel>;
   channelRole: number;
   postComments: Array<postCommentModel>;
   recentChatUsers: Array<recentChatUserModel>;
@@ -193,4 +204,7 @@ export interface ChatsState {
   isDir: Array<boolean>;
   selectedDir: string | null;
   homeworkUploads: Array<homeworkUploadModel>;
+  rollCallRecords: Array<rollCallRecordModel>,
+  myRollCallRecord: rollCallModel | null,
+  selectedRollCall: rollCallModel | null,
 }

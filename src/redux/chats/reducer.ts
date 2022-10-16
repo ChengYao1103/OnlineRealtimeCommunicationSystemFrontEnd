@@ -15,6 +15,7 @@ export const INIT_STATE: ChatsState = {
   chatUserConversations: [],
   channelPosts: [],
   channelHomeworks: [],
+  channelRollCalls: [],
   channelRole: -1,
   postComments: [],
   isOpenUserDetails: false,
@@ -29,6 +30,9 @@ export const INIT_STATE: ChatsState = {
   isDir: [],
   selectedDir: null,
   homeworkUploads: [],
+  rollCallRecords: [],
+  myRollCallRecord: null,
+  selectedRollCall: null,
 };
 
 const Chats = persistReducer(
@@ -165,6 +169,12 @@ const Chats = persistReducer(
               getChannelHomeworksLoading: false,
               channelHomeworks: action.payload.data.homework,
             };
+          case ChatsActionTypes.GET_CHANNEL_ROLLCALLS:
+            return {
+              ...state,
+              getChannelRollCallsLoading: false,
+              channelRollCalls: action.payload.data.rollCall,
+            };
           case ChatsActionTypes.TOGGLE_FAVOURITE_CONTACT:
             return {
               ...state,
@@ -214,6 +224,16 @@ const Chats = persistReducer(
               ...state,
               homeworkUploads: action.payload.data.homeworkUpload,
             };
+          case ChatsActionTypes.GET_ROLLCALL_RECORDS_BY_ID:
+            return {
+              ...state,
+              rollCallRecords: action.payload.data.rollCallRecord,
+            };           
+          case ChatsActionTypes.GET_MY_ROLLCALL_RECORD:
+            return {
+              ...state,
+              myRollCallRecord: action.payload.data.rollCallRecord,
+            };   
           default:
             return { ...state };
         }
@@ -401,6 +421,12 @@ const Chats = persistReducer(
           ...state,
           selectedHomework: action.payload.selectedHomework,
         };
+      case ChatsActionTypes.CHANGE_SELECTED_ROLLCALL:
+        state.selectedRollCall = null
+        return {
+          ...state,
+          selectedRollCall: action.payload.selectedRollCall,
+        };
       case ChatsActionTypes.BACK_SELECTED_DIR:
         return {
           ...state,
@@ -497,6 +523,11 @@ const Chats = persistReducer(
           ...state,
           getChannelHomeworksLoading: true,
         };
+      case ChatsActionTypes.GET_CHANNEL_ROLLCALLS:
+        return {
+          ...state,
+          getChannelRollCallsLoading: true,
+        };        
       case ChatsActionTypes.GET_POST_COMMENTS:
         return {
           ...state,
