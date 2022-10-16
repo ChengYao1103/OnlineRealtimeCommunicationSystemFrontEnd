@@ -44,6 +44,7 @@ export const INIT_STATE: ChatsState = {
   selectedRollCall: null,
   channelMembers: [],
   studentRollCallRecords: [],
+  score: -1,
 };
 
 const Chats = persistReducer(
@@ -255,6 +256,11 @@ const Chats = persistReducer(
             return {
               ...state,
               studentRollCallRecords: action.payload.data.rollCallRecord,
+            };
+          case ChatsActionTypes.GET_HOMEWORK_SCORE:
+            return {
+              ...state,
+              score: action.payload.data.score,
             };
           default:
             return { ...state };

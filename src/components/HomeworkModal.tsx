@@ -14,7 +14,7 @@ import {
   Col,
 } from "reactstrap";
 import { useRedux } from "../hooks";
-import { createHomework, updateHomework, closeHomework, getChannelHomeworks, uploadHomework, changeSelectedHomework, getAllUpload, downloadHomework, setHomeworkScore } from "../redux/actions";
+import { createHomework, updateHomework, closeHomework, getChannelHomeworks, uploadHomework, changeSelectedHomework, getAllUpload, downloadHomework, setHomeworkScore, getHomeworkScore } from "../redux/actions";
 import { channelHomeworkModel, homeworkUploadModel } from "../redux/chats/types";
 
 //images
@@ -33,11 +33,12 @@ const HomeworkModal = ({
   role,
 }: HomeworkModalProps) => {
   const { dispatch, useAppSelector } = useRedux();
-  const { channelInfo, channelHomeworks, homeworkInfo, homeworkUploads } = useAppSelector(state => ({
+  const { channelInfo, channelHomeworks, homeworkInfo, homeworkUploads, score } = useAppSelector(state => ({
     channelInfo: state.Chats.selectedChatInfo,
     channelHomeworks: state.Chats.channelHomeworks,
     homeworkInfo: state.Chats.selectedHomework,
     homeworkUploads: state.Chats.homeworkUploads,
+    score: state.Chats.score,
   }));
 
   const [name, setName] = useState("")
@@ -59,6 +60,10 @@ const HomeworkModal = ({
       return;
     }
     dispatch(changeSelectedHomework(info));
+    if (role === 2) {
+      if (info)
+        dispatch(getHomeworkScore(info.id))
+    }
   };
 
   const onUpload = () => {
@@ -131,8 +136,7 @@ const HomeworkModal = ({
         </thead>
         {(channelHomeworks || []).map((homework: channelHomeworkModel, key: number) => {
           return (
-            <>
-            <tbody>
+            <tbody key={key}>
               <tr className="table-primary" onClick={() => {setMode(1); onSelectHomework(homework)}}>
                 <td>
                   {homework.name}
@@ -142,7 +146,6 @@ const HomeworkModal = ({
                 </td>
               </tr>
             </tbody>
-            </>
           );
         })}
         </Table>}
@@ -209,6 +212,7 @@ const HomeworkModal = ({
               type="file" 
               className="form-control mb-3" 
               id="HomeworkFile-input" 
+              //value={"test"}
               onChange={(e: any) => onSelectFile(e)}
             />       
           </FormGroup>
@@ -221,7 +225,7 @@ const HomeworkModal = ({
               type="datetime"
               className="form-control mb-3"
               id="HomeworkScore-input"
-              value={"尚未批改"}
+              value={score != -1 ? score : "尚未批改"}
               disabled={true}
             ></Input>
           </FormGroup>
@@ -237,7 +241,7 @@ const HomeworkModal = ({
             className="form-control mb-3"
             id="HomeworkName-input"
             placeholder="請輸入此作業的名稱"
-            value={name}
+            value={name ? name : homeworkInfo.name}
             onChange={(e: any) => {
               setName(e.target.value);
             }}
@@ -251,7 +255,7 @@ const HomeworkModal = ({
             className="form-control mb-3"
             id="RollCallStartTime-input"
             placeholder="請輸入關於此作業的敘述"
-            value={description}
+            value={description ? description : homeworkInfo.description}
             onChange={(e: any) => {
               setDescription(e.target.value);
             }}
@@ -380,7 +384,7 @@ const HomeworkModal = ({
                         </Link>
                       </p> :
                       
-                      <Form inline> 
+                      <Form inline key={key}> 
                       <FormGroup row>
                       <div className="input-group">
                         <Input 

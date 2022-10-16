@@ -277,6 +277,10 @@ const setHomeworkScore = (data: object) => {
   return api.patch(url.SET_HOMEWORK_SCORE, data);
 };
 
+const getHomeworkScore = (id: string | number) => {
+  return api.get(`${url.GET_HOMEWORK_SCORE}/${id}`);
+};
+
 const getHomework = (id: string | number) => {
   return api.get(`${url.GET_HOMEWORK}/${id}`);
 };
@@ -335,6 +339,7 @@ export {
   uploadHomework,
   downloadHomework,
   setHomeworkScore,
+  getHomeworkScore,  
   getHomework,
   uploadChannelFile,
   downloadChannelFile,
