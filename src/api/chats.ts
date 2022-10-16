@@ -234,12 +234,12 @@ const updateRollCall = (data: object) => {
   return api.patch(url.UPDATE_ROLLCALL, data);
 };
 
-const getRollCallRecords = (id: string | number) => {
-  return api.create(url.GET_ROLLCALL_RECORDS, id);
-};
+// const getRollCallRecords = (id: string | number) => {
+//   return api.create(url.GET_ROLLCALL_RECORDS, id);
+// };
 
-const getRollCall = (id: string | number) => {
-  return api.get(`${url.GET_ROLLCALL}/${id}`);
+const getRollCallByChannelID = (id: string | number) => {
+  return api.create(url.GET_ROLLCALL_RECORDS, id);
 };
 
 const getMyRollCallRecord = (id: string | number) => {
@@ -325,8 +325,8 @@ export {
   doRollCall,
   closeRollCall,
   updateRollCall,
-  getRollCallRecords,
-  getRollCall,
+  // getRollCallRecords,
+  getRollCallByChannelID,
   getMyRollCallRecord,
   getRollCallRecordsByID,
   createHomework,

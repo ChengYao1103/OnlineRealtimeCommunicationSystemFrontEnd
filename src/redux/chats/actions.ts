@@ -265,7 +265,7 @@ export const getMyRollCallRecord = (id: number | string) => ({
 });
 
 export const getRollCall = (id: number | string) => ({
-  type: ChatsActionTypes.GET_ROLLCALL,
+  type: ChatsActionTypes.GET_ROLLCALL_BY_CHANNELID,
   payload: id,
 });
 

@@ -64,7 +64,7 @@ export enum ChatsActionTypes {
   CLOSE_ROLLCALL = "@@chats/CLOSE_ROLLCALL",
   UPDATE_ROLLCALL = "@@chats/UPDATE_ROLLCALL",
   GET_ROLLCALL_RECORDS = "@@chats/GET_ROLLCALL_RECORDS",
-  GET_ROLLCALL = "@@chats/GET_ROLLCALL",
+  GET_ROLLCALL_BY_CHANNELID = "@@chats/GET_ROLLCALL_BY_CHANNELID",
   GET_ROLLCALL_RECORDS_BY_ID = "@@chats/GET_ROLLCALL_RECORDS_BY_ID",
   GET_MY_ROLLCALL_RECORD = "@@chats/GET_MY_ROLLCALL_RECORD",
   CHANGE_SELECTED_ROLLCALL = "@@chats/CHANGE_SELECTED_ROLLCALL",
@@ -207,7 +207,8 @@ export interface ChatsState {
   selectedDir: string | null;
   homeworkUploads: Array<homeworkUploadModel>;
   rollCallRecords: Array<rollCallRecordModel>,
-  myRollCallRecord: rollCallModel | null,
-  selectedRollCall: rollCallModel | null,
+  myRollCallRecord: rollCallModel | null;
+  selectedRollCall: rollCallModel | null;
   channelMembers: Array<channelMemberModel>;
+  studentRollCallRecords: Array<rollCallRecordModel>
 }

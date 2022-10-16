@@ -43,6 +43,7 @@ export const INIT_STATE: ChatsState = {
   myRollCallRecord: null,
   selectedRollCall: null,
   channelMembers: [],
+  studentRollCallRecords: [],
 };
 
 const Chats = persistReducer(
@@ -219,7 +220,7 @@ const Chats = persistReducer(
               getPostCommentsLoading: false,
               postComments: action.payload.data.comment,
             };
-          case ChatsActionTypes.GET_ROLLCALL:
+          case ChatsActionTypes.GET_ROLLCALL_BY_CHANNELID:
             return {
               ...state,
               rollCall: action.payload.data.rollCall,
@@ -240,7 +241,7 @@ const Chats = persistReducer(
               ...state,
               homeworkUploads: action.payload.data.homeworkUpload,
             };
-          case ChatsActionTypes.GET_ROLLCALL_RECORDS_BY_ID:
+          case ChatsActionTypes.GET_ROLLCALL_RECORDS:
             return {
               ...state,
               rollCallRecords: action.payload.data.rollCallRecord,
@@ -249,6 +250,11 @@ const Chats = persistReducer(
             return {
               ...state,
               myRollCallRecord: action.payload.data.rollCallRecord,
+            };
+          case ChatsActionTypes.GET_ROLLCALL_BY_CHANNELID:
+            return {
+              ...state,
+              studentRollCallRecords: action.payload.data.rollCallRecord,
             };
           default:
             return { ...state };
@@ -354,7 +360,7 @@ const Chats = persistReducer(
               ...state,
               isImageDeleted: true,
             };
-          case ChatsActionTypes.GET_ROLLCALL:
+          case ChatsActionTypes.GET_ROLLCALL_BY_CHANNELID:
             return {
               ...state,
               rollCall: null,

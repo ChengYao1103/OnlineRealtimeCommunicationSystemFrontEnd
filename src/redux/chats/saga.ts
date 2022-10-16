@@ -42,7 +42,8 @@ import {
   createRollCall as createRollCallApi,
   updateRollCall as updateRollCallApi,
   closeRollCall as closeRollCallApi,
-  getRollCall as getRollCallApi,
+  getRollCallByChannelID as getRollCallByChannelIDApi,
+  getRollCallRecordsByID as getRollCallRecordsByIDApi,
   doRollCall as doRollCallApi,
   createHomework as createHomeworkApi,
   updateHomework as updateHomeworkApi,
@@ -568,10 +569,10 @@ function* closeRollCall({ payload: id }: any) {
 
 function* getRollCall({ payload: id }: any) {
   try {
-    const response: Promise<any> = yield call(getRollCallApi, id);
-    yield put(chatsApiResponseSuccess(ChatsActionTypes.GET_ROLLCALL, response));
+    const response: Promise<any> = yield call(getRollCallByChannelIDApi, id);
+    yield put(chatsApiResponseSuccess(ChatsActionTypes.GET_ROLLCALL_BY_CHANNELID, response));
   } catch (error: any) {
-    yield put(chatsApiResponseError(ChatsActionTypes.GET_ROLLCALL, error));
+    yield put(chatsApiResponseError(ChatsActionTypes.GET_ROLLCALL_BY_CHANNELID, error));
   }
 }
 
@@ -587,7 +588,7 @@ function* doRollCall({ payload: id }: any) {
 
 function* getRollCallRecordsByID({ payload: id }: any) {
   try {
-    const response: Promise<any> = yield call(getRollCallApi, id);
+    const response: Promise<any> = yield call(getRollCallRecordsByIDApi, id);
     yield put(chatsApiResponseSuccess(ChatsActionTypes.GET_ROLLCALL_RECORDS_BY_ID, response));
   } catch (error: any) {
     yield put(chatsApiResponseError(ChatsActionTypes.GET_ROLLCALL_RECORDS_BY_ID, error));
@@ -894,7 +895,7 @@ export function* watchCloseRollCall() {
 }
 
 export function* watchGetRollCall() {
-  yield takeEvery(ChatsActionTypes.GET_ROLLCALL, getRollCall);
+  yield takeEvery(ChatsActionTypes.GET_ROLLCALL_BY_CHANNELID, getRollCall);
 }
 
 export function* watchDoRollCall() {

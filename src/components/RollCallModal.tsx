@@ -12,8 +12,8 @@ import {
   Table,
 } from "reactstrap";
 import { useRedux } from "../hooks";
-import { createRollCall, updateRollCall, closeRollCall, getRollCall, doRollCall, getRollCallRecordsByID, getMyRollCallRecord, getChannelRollCalls } from "../redux/actions";
-import { rollCallModel } from "../redux/chats/types";
+import { createRollCall, updateRollCall, closeRollCall, getRollCall, doRollCall, getRollCallRecordsByID, getMyRollCallRecord, getChannelRollCalls, changeSelectedRollCall, getRollCallRecords } from "../redux/actions";
+import { rollCallModel, rollCallRecordModel } from "../redux/chats/types";
 
 interface RollCallModalProps {
   isOpen: boolean;
@@ -22,13 +22,14 @@ interface RollCallModalProps {
 }
 const RollCallModal = ({ isOpen, onClose, role }: RollCallModalProps) => {
   const { dispatch, useAppSelector } = useRedux();
-  const { channelInfo, rollCall, rollCallRecords, myRollCallRecord, selectedRollCall, channelRollCalls } = useAppSelector(state => ({
+  const { channelInfo, rollCall, rollCallRecords, myRollCallRecord, selectedRollCall, channelRollCalls, studentRollCallRecords } = useAppSelector(state => ({
     channelInfo: state.Chats.selectedChatInfo,
     rollCall: state.Chats.rollCall,
     rollCallRecords: state.Chats.rollCallRecords,
     myRollCallRecord: state.Chats.myRollCallRecord,
     selectedRollCall: state.Chats.selectedRollCall,
     channelRollCalls: state.Chats.channelRollCalls,
+    studentRollCallRecords: state.Chats.studentRollCallRecords,
   }));
 
   const [startDateTime, setStartDateTime] = useState("");
@@ -53,12 +54,31 @@ const RollCallModal = ({ isOpen, onClose, role }: RollCallModalProps) => {
     setEndTime("")
   };
 
+  const onSelectRollCall = (
+    info: rollCallModel | null,
+  ) => {
+    if (selectedRollCall === info) {
+      return;
+    }
+    dispatch(changeSelectedRollCall(info));
+    if (info && role !== 2) {
+      dispatch(getRollCallRecordsByID(info.id))
+    }
+    else if (info && role === 2) {
+      dispatch(getMyRollCallRecord(info.id))
+    }
+  };
+
   const getRollCallRecordsByRollCallID = () => {
-    dispatch(getRollCallRecordsByID(selectedRollCall.id))
+    if (selectedRollCall) {
+      dispatch(getRollCallRecords(channelInfo.id))
+    }
   }
   
   const getMyRollCallRecordByRollCallID = () => {
-    dispatch(getMyRollCallRecord(selectedRollCall.id))
+    if (selectedRollCall) {
+      dispatch(getMyRollCallRecord(selectedRollCall.id))
+    }
   }
 
   const getChannelRollCallsByID = () => {
@@ -73,7 +93,8 @@ const RollCallModal = ({ isOpen, onClose, role }: RollCallModalProps) => {
     if (mode === 0) {
       onClear()
       dispatch(getRollCall(channelInfo.id));
-      dispatch(getMyRollCallRecord(rollCall?.id))
+      if (role === 2)
+        dispatch(getMyRollCallRecord(rollCall?.id))
     }
   }, [mode]);
 
@@ -137,13 +158,12 @@ const RollCallModal = ({ isOpen, onClose, role }: RollCallModalProps) => {
             {role != 2 && <Button onClick={() => setMode(2)}>新增點名</Button>}
           </ModalFooter>
         }
-      {/* {role == 0 && (
-        <ModalFooter>
-          <Button>歷史點名紀錄</Button>
-          <Button disabled={!rollCall && mode === 0 } onClick={()=> mode === 0 ? setMode(1) : setMode(0)}>{mode === 0 ? "編輯進行中的點名" : "查看進行中的點名"}</Button>
-          <Button disabled={!rollCall && mode === 2 } onClick={()=> mode === 2 ? setMode(1) : setMode(2)}>{mode === 2 ? "編輯進行中的點名" : "新增點名"}</Button>
-        </ModalFooter>
-      )} */}
+        {(mode === 4 || mode === 5) &&
+          <ModalFooter>
+          <Button onClick={() => setMode(0)}>查看進行中的點名</Button>
+          <Button onClick={() => {setMode(3)}}>歷史點名紀錄</Button>
+          </ModalFooter>        
+        }
       <ModalBody className="p-4">
         <Form>
           <div className="mb-3">
@@ -271,38 +291,14 @@ const RollCallModal = ({ isOpen, onClose, role }: RollCallModalProps) => {
                 {(channelRollCalls || []).map((channelRollCall: rollCallModel, key: number) => {
                   return (
                     <tbody>
-                      <tr className="table-primary" onClick={() => {}}>
+                      <tr className="table-primary" onClick={() => {role === 2 ? setMode(5) : setMode(4); onSelectRollCall(channelRollCall)}}>
                       <td>
-                      {/* <Input
-            type="datetime"
-            className="form-control mb-3"
-            id="HomeworkStartDate-input"
-            placeholder="Choose start date"
-            value={new Date(channelRollCall.startTime).toLocaleString()}
-            disabled={true}
-          /> */}
                         {new Date(channelRollCall.startTime).toLocaleString()}
                       </td>
                       <td>
-                      {/* <Input
-            type="datetime"
-            className="form-control mb-3"
-            id="HomeworkStartDate-input"
-            placeholder="Choose start date"
-            value={ channelRollCall.endTime !== "0001-01-01T00:00:00Z" ? new Date(channelRollCall.endTime).toLocaleString() : "無截止時間"}
-            disabled={true}
-          /> */}
                         { channelRollCall.endTime !== "0001-01-01T00:00:00Z" ? new Date(channelRollCall.endTime).toLocaleString() : "無截止時間"}
                       </td>
                       <td>
-                      {/* <Input
-            type="datetime"
-            className="form-control mb-3"
-            id="HomeworkStartDate-input"
-            placeholder="Choose start date"
-            value={Date.parse(channelRollCall.createTime).toLocaleString()}
-            disabled={true}
-          /> */}
                         {new Date(channelRollCall.createTime).toLocaleString()}
                       </td>
                       </tr>
@@ -312,9 +308,59 @@ const RollCallModal = ({ isOpen, onClose, role }: RollCallModalProps) => {
               </Table>
             </FormGroup>
           }
+          {mode === 4 && (
+            <FormGroup>
+            <Table>
+              <thead>
+                <tr>
+                  <th>
+                    學生姓名
+                  </th>
+                  <th>
+                    簽到時間
+                  </th>
+                </tr>
+              </thead>
+              {(rollCallRecords || []).map((rollCallRecord: rollCallRecordModel, key: number) => {
+                return (
+                  <tbody>
+                    <tr className="table-primary" onClick={() => {setMode(4)}}>
+                    <td>
+                      {rollCallRecord.user.name}
+                    </td>
+                    <td>
+                      {new Date(rollCallRecord.timestamp).toLocaleString()}
+                    </td>
+                    </tr>
+                  </tbody>
+                )
+              })}
+            </Table>
+          </FormGroup>          
+          )}
+          {mode === 5 && ( myRollCallRecord ? 
+        <FormGroup>
+          <Label htmlFor="RollCallStartTime-input" className="form-label">
+            簽到時間:
+          </Label>
+          <Input
+            type="datetime"
+            className="form-control mb-3"
+            id="RollCallStartTime-input"
+            value={new Date(myRollCallRecord.timestamp).toLocaleString()}
+            disabled={true}
+          />
+        </FormGroup> :
+          <FormGroup>
+          <Label className="form-label" style={{color: "red"}}>
+            無點名紀錄
+          </Label>
+        </FormGroup>
+        )}
           </div>
         </Form>
       </ModalBody>
+      {(mode !== 3 && mode !== 4 && mode !== 5) && 
       <Button 
       color="primary" 
       className="m-3"
@@ -339,8 +385,9 @@ const RollCallModal = ({ isOpen, onClose, role }: RollCallModalProps) => {
         }
       }
       >
-        {role === 0 ? (mode === 0 ? "關閉點名" : (mode === 1 ? "儲存變更" : "建立點名")) : (myRollCallRecord ? "已簽到" : "簽到")}
+        {(mode === 0 && (role === 0 ? "關閉點名" : (myRollCallRecord ? "已簽到" : "簽到")) || mode === 1 && "儲存變更" || mode === 2 && "建立點名")}
       </Button>
+      }
     </Modal>
   );
 };
