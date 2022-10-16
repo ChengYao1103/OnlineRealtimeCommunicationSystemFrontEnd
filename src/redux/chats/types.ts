@@ -72,6 +72,7 @@ export enum ChatsActionTypes {
   SET_HOMEWORK_SCORE = "@@chats/SET_HOMEWORK_SCORE",
   GET_HOMEWORK = "@@chats/GET_HOMEWORK",
   CHANGE_SELECTED_HOMEWORK = "@@chats/CHANGE_SELECTED_HOMEWORK",
+  GET_ALL_UPLOAD = "@@chats/GET_ALL_UPLOAD",
 }
 
 export interface senderModel {
@@ -160,6 +161,13 @@ export interface rollCallModel {
   endTime: string;
 }
 
+export interface homeworkUploadModel {
+  user: userModel;
+  fileName: string;
+  time: string;
+  score: number;
+}
+
 export interface ChatsState {
   favourites: Array<any>;
   directMessages: Array<any>;
@@ -184,4 +192,5 @@ export interface ChatsState {
   channelDir: Array<string>;
   isDir: Array<boolean>;
   selectedDir: string | null;
+  homeworkUploads: Array<homeworkUploadModel>;
 }

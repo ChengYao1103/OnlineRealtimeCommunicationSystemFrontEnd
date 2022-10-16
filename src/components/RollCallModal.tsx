@@ -31,7 +31,7 @@ const RollCallModal = ({ isOpen, onClose, role }: RollCallModalProps) => {
   const [endDate, setEndDate] = useState("");
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
-  const [mode, setMode] = useState(0); //0: 查看 1: 編輯 2: 新增
+  const [mode, setMode] = useState(0); //0: 查看進行中的點名 1: 編輯進行中點名(老師) 2: 新增點名(老師) 3: 查看點名狀況(老師) 4: 查看點名狀況(學生)
 
   const onLoad = () => {
     onClear()

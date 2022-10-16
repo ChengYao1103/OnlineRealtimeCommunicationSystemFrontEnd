@@ -88,3 +88,4 @@ export const UPLOAD_HOMEWORK = "/homework/upload";
 export const DOWNLOAD_HOMEWORK = "/homework/download";
 export const SET_HOMEWORK_SCORE = "/homework/setScore";
 export const GET_HOMEWORK = "/homework";
+export const GET_ALL_UPLOAD = "/homework/allUpload"

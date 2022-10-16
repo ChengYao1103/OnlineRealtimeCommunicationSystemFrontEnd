@@ -13,8 +13,8 @@ import {
   Table,
 } from "reactstrap";
 import { useRedux } from "../hooks";
-import { createHomework, updateHomework, closeHomework, getChannelHomeworks, uploadHomework, changeSelectedHomework } from "../redux/actions";
-import { channelHomeworkModel } from "../redux/chats/types";
+import { createHomework, updateHomework, closeHomework, getChannelHomeworks, uploadHomework, changeSelectedHomework, getAllUpload } from "../redux/actions";
+import { channelHomeworkModel, homeworkUploadModel } from "../redux/chats/types";
 import { Link } from "react-router-dom";
 
 interface HomeworkModalProps {
@@ -27,45 +27,48 @@ const HomeworkModal = ({
   onClose,
   role,
 }: HomeworkModalProps) => {
-    const { dispatch, useAppSelector } = useRedux();
-    const { channelInfo, channelHomeworks, homeworkInfo } = useAppSelector(state => ({
-      channelInfo: state.Chats.selectedChatInfo,
-      channelHomeworks: state.Chats.channelHomeworks,
-      homeworkInfo: state.Chats.selectedHomework,
-    }));
+  const { dispatch, useAppSelector } = useRedux();
+  const { channelInfo, channelHomeworks, homeworkInfo, homeworkUploads } = useAppSelector(state => ({
+    channelInfo: state.Chats.selectedChatInfo,
+    channelHomeworks: state.Chats.channelHomeworks,
+    homeworkInfo: state.Chats.selectedHomework,
+    homeworkUploads: state.Chats.homeworkUploads,
+  }));
 
-    const [name, setName] = useState("")
-    const [description, setDescription] = useState("")
-    const [startDateTime, setStartDateTime] = useState("");
-    const [endDateTime, setEndDateTime] = useState("");
-    const [startDate, setStartDate] = useState("");
-    const [endDate, setEndDate] = useState("");
-    const [startTime, setStartTime] = useState("");
-    const [endTime, setEndTime] = useState("");
-    const [mode, setMode] = useState(0); //0: 作業總覽 1: 作業詳細內容 2:編輯作業 3: 新增作業
-    const [file, setFile] = useState<any>();
+  const [name, setName] = useState("")
+  const [description, setDescription] = useState("")
+  const [startDateTime, setStartDateTime] = useState("");
+  const [endDateTime, setEndDateTime] = useState("");
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [startTime, setStartTime] = useState("");
+  const [endTime, setEndTime] = useState("");
+  const [mode, setMode] = useState(0); //0: 作業總覽 1: 作業詳細內容 2:編輯作業 3: 新增作業 4:作業繳交情況
+  const [file, setFile] = useState<any>();
 
-    const onSelectHomework = (
-        info: channelHomeworkModel | null,
-      ) => {
-        if (homeworkInfo === info) {
-          return;
-        }
-        dispatch(changeSelectedHomework(info));
-        console.log(info)
-        console.log(homeworkInfo)
-      };
+  const onSelectHomework = (
+    info: channelHomeworkModel | null,
+  ) => {
+    if (homeworkInfo === info) {
+      return;
+    }
+    dispatch(changeSelectedHomework(info));
+  };
 
-    const onUpload = () => {
-      let data = {
-        homeworkID: homeworkInfo.id,
-        file: file,
-      };
-      dispatch(uploadHomework(data));      
+  const onUpload = () => {
+    let data = {
+      homeworkID: homeworkInfo.id,
+      file: file,
     };
+    dispatch(uploadHomework(data));      
+  };
 
   const onSelectFile = (e: any) => {
     setFile(e.target.files[0]);
+  };
+
+  const getAllHomewrkUpload = () => {
+    dispatch(getAllUpload(homeworkInfo.id));      
   };
 
   useEffect(() => {
@@ -86,6 +89,7 @@ const HomeworkModal = ({
             <>
               <Button onClick={()=> setMode(2)}>編輯作業</Button>
               <Button onClick={()=> setMode(0)}>回到作業總覽</Button>
+              <Button onClick={()=> {setMode(4); getAllHomewrkUpload()}}>繳交情況</Button>
             </>
           )}
           {mode === 2 && (
@@ -94,7 +98,7 @@ const HomeworkModal = ({
               <Button onClick={()=> setMode(0)}>回到作業總覽</Button>
             </>
           )}
-          {mode === 3 && (
+          {(mode === 3 || mode === 4) && (
             <Button onClick={()=> setMode(0)}>回到作業總覽</Button>
           )}
         </ModalFooter>
@@ -192,23 +196,6 @@ const HomeworkModal = ({
               id="HomeworkFile-input" 
               onChange={(e: any) => onSelectFile(e)}
             />       
-                        {/* <div>
-              <Input
-                id="channelattachedfile-input"
-                type="file"
-                className="d-none"
-                onChange={(e: any) => onSelectFile(e)}
-                multiple
-              />
-                <Label
-                htmlFor="channelattachedfile-input"
-                className="avatar-sm mx-auto stretched-link"
-              >
-                <span className="avatar-title font-size-18 bg-soft-primary text-primary rounded-circle">
-                  <i className="bx bx-paperclip"></i>
-                </span>
-              </Label>
-            </div> */}
           </FormGroup>
           <FormGroup>
             <Label htmlFor="HomeworkScore-input" className="form-label">
@@ -316,6 +303,41 @@ const HomeworkModal = ({
         </FormGroup>
         </div>
         </Form>
+      }
+      {mode === 4 && 
+      <Table>
+          <thead>
+            <tr>
+              <th>繳交情況</th>
+            </tr>
+          </thead>
+          {(homeworkUploads || []).map((upload: homeworkUploadModel, key: number) => {
+            return (
+              <>
+                <tbody>
+                  <tr
+                    className="table-primary"
+                    style={{ padding: "20px" }}
+                    onClick={() => {
+                      //isDir[key] ? onSelectDir(dir) : onDownload(dir);
+                    }}
+                  >
+                    <td>
+                      {upload.user.name}
+                    </td>
+                    <td>
+                      {upload.fileName}
+                    </td>
+                    <td>
+                      {upload.score}
+                    </td>
+                  </tr>
+                </tbody>
+              </>
+            );
+          })}
+      </Table>
+
       }
       </ModalBody>
       <ModalFooter>

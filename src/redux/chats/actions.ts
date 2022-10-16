@@ -329,3 +329,8 @@ export const changeSelectedDir = (
   type: ChatsActionTypes.CHANGE_SELECTED_DIR,
   payload: { selectedDir },
 });
+
+export const getAllUpload = (id: string | number) => ({
+  type: ChatsActionTypes.GET_ALL_UPLOAD,
+  payload: id,
+});
