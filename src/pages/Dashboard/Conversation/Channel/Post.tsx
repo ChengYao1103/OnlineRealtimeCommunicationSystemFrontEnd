@@ -102,11 +102,11 @@ const Post = ({
 
   const date = getDateTime(message.timestamp);
 
-  const onLoadComment = () => {
+  useEffect(() => {
     if (channelPost.id) {
       dispatch(getPostComments(channelPost.id));
     }
-  };
+  }, [channelPost, dispatch]);
 
   const onSelectChat = (id: string | number, user: userModel) => {
     if (id === userProfile.id) {
@@ -147,7 +147,6 @@ const Post = ({
             display: "flex",
             margin: "0px",
           }}
-          onLoad={onLoadComment}
         >
           {getPostCommentsLoading && <Loader />}
           <CardBody style={{ backgroundColor: "#c1c4c9" }}>
@@ -233,6 +232,7 @@ const Post = ({
                 <div className="col me-3">
                   <Input
                     placeholder="輸入..."
+                    value={inputText}
                     onChange={e => setInputText(e.target.value)}
                   ></Input>
                 </div>
@@ -242,6 +242,7 @@ const Post = ({
                     type="submit"
                     disabled={inputText.trim().length === 0}
                     onClick={() => {
+                      setInputText("");
                       dispatch(
                         createComment({
                           postID: channelPost.id,

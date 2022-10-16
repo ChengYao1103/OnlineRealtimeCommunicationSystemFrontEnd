@@ -244,12 +244,12 @@ const Chats = persistReducer(
             return {
               ...state,
               rollCallRecords: action.payload.data.rollCallRecord,
-            };           
+            };
           case ChatsActionTypes.GET_MY_ROLLCALL_RECORD:
             return {
               ...state,
               myRollCallRecord: action.payload.data.rollCallRecord,
-            };   
+            };
           default:
             return { ...state };
         }
@@ -486,7 +486,7 @@ const Chats = persistReducer(
           selectedHomework: action.payload.selectedHomework,
         };
       case ChatsActionTypes.CHANGE_SELECTED_ROLLCALL:
-        state.selectedRollCall = null
+        state.selectedRollCall = null;
         return {
           ...state,
           selectedRollCall: action.payload.selectedRollCall,
@@ -591,7 +591,7 @@ const Chats = persistReducer(
         return {
           ...state,
           getChannelRollCallsLoading: true,
-        };        
+        };
       case ChatsActionTypes.GET_POST_COMMENTS:
         return {
           ...state,
