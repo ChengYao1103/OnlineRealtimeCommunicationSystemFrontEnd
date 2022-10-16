@@ -16,12 +16,11 @@ import {
   getRole,
   kickOutMember,
 } from "../../../redux/actions";
-import { channelModel } from "../../../redux/chats/types";
-import { userModel } from "../../../redux/auth/types";
+import { channelMemberModel, channelModel } from "../../../redux/chats/types";
 import { RoleTypes } from "../../../repository/Enum";
 
 interface MemberProps {
-  member: userModel;
+  member: channelMemberModel;
   channelInfo: channelModel;
 }
 const Member = ({ member, channelInfo }: MemberProps) => {
@@ -113,19 +112,20 @@ const Member = ({ member, channelInfo }: MemberProps) => {
             </div>
           </div>
         </Link>
-        {isFounder ? (
+        {isFounder && (
           <div className="ms-auto">
             <Badge className="badge badge-soft-primary rounded p-1">
               擁有者
             </Badge>
           </div>
-        ) : canKickOut ? (
+        )}
+        {canKickOut && member.role !== RoleTypes["老師"] && (
           <div className="ms-auto">
             <Badge className="btn btn-danger" onClick={onKickOut}>
               踢除
             </Badge>
           </div>
-        ) : null}
+        )}
       </div>
     </li>
   );
@@ -155,9 +155,15 @@ const Members = ({ selectedChatInfo }: GroupsProps) => {
 
       {channelMembers ? (
         <ul className="list-unstyled chat-list mx-n4">
-          {(channelMembers || []).map((member: userModel, key: number) => (
-            <Member key={key} member={member} channelInfo={selectedChatInfo} />
-          ))}
+          {(channelMembers || []).map(
+            (member: channelMemberModel, key: number) => (
+              <Member
+                key={key}
+                member={member}
+                channelInfo={selectedChatInfo}
+              />
+            )
+          )}
         </ul>
       ) : (
         <p>無成員</p>

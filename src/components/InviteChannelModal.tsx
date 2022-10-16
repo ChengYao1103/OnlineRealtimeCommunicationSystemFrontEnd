@@ -24,7 +24,7 @@ const InviteChannelModal = ({ isOpen, onClose }: InviteContactModalProps) => {
   }));
 
   const [emails, setEmails] = useState([""]);
-  const [roles, setRoles] = useState([RoleTypes["Student" as RoleTypesKey]]);
+  const [roles, setRoles] = useState([RoleTypes["學生" as RoleTypesKey]]);
   const [valid, setValid] = useState<boolean>(false);
 
   const roleTypeAmout = Object.keys(RoleTypes).length / 2;
@@ -45,8 +45,7 @@ const InviteChannelModal = ({ isOpen, onClose }: InviteContactModalProps) => {
   const onChangeRoles = (value: RoleTypes, index: number) => {
     var modyfiedRoles = [...roles];
     modyfiedRoles[index] = value;
-    //modyfiedRoles = value;
-    setRoles([...modyfiedRoles]);
+    setRoles(modyfiedRoles);
   };
 
   /*
