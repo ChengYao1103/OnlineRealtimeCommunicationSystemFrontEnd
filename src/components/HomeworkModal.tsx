@@ -21,6 +21,7 @@ import { channelHomeworkModel, homeworkUploadModel } from "../redux/chats/types"
 import imagePlaceholder from "../assets/images/users/profile-placeholder.png";
 import { Link } from "react-router-dom";
 import { parse } from "date-fns";
+import Loader from "./Loader";
 
 interface HomeworkModalProps {
   isOpen: boolean;
@@ -33,12 +34,13 @@ const HomeworkModal = ({
   role,
 }: HomeworkModalProps) => {
   const { dispatch, useAppSelector } = useRedux();
-  const { channelInfo, channelHomeworks, homeworkInfo, homeworkUploads, score } = useAppSelector(state => ({
+  const { channelInfo, channelHomeworks, homeworkInfo, homeworkUploads, score, homeworkLoading } = useAppSelector(state => ({
     channelInfo: state.Chats.selectedChatInfo,
     channelHomeworks: state.Chats.channelHomeworks,
     homeworkInfo: state.Chats.selectedHomework,
     homeworkUploads: state.Chats.homeworkUploads,
     score: state.Chats.score,
+    homeworkLoading: state.Chats.homeworkLoading
   }));
 
   const [name, setName] = useState("")
@@ -122,6 +124,7 @@ const HomeworkModal = ({
           )}
         </ModalFooter>
       )}
+      {homeworkLoading && <Loader />}
       <ModalBody className="p-4">
       {mode === 0 && <Table>
         <thead>
@@ -204,6 +207,7 @@ const HomeworkModal = ({
             ></Input>
           </FormGroup>
           {role === 2 &&
+          <>
           <FormGroup>
             <Label htmlFor="HomeworkFile-input" className="form-label">
               檔案:
@@ -216,7 +220,6 @@ const HomeworkModal = ({
               onChange={(e: any) => onSelectFile(e)}
             />       
           </FormGroup>
-          }
           <FormGroup>
             <Label htmlFor="HomeworkScore-input" className="form-label">
               成績:
@@ -229,6 +232,8 @@ const HomeworkModal = ({
               disabled={true}
             ></Input>
           </FormGroup>
+          </>
+          }
           </Form>
         }
         {(mode === 2 || mode === 3) && <Form>
@@ -241,7 +246,7 @@ const HomeworkModal = ({
             className="form-control mb-3"
             id="HomeworkName-input"
             placeholder="請輸入此作業的名稱"
-            value={name ? name : homeworkInfo.name}
+            value={name}
             onChange={(e: any) => {
               setName(e.target.value);
             }}
@@ -255,7 +260,7 @@ const HomeworkModal = ({
             className="form-control mb-3"
             id="RollCallStartTime-input"
             placeholder="請輸入關於此作業的敘述"
-            value={description ? description : homeworkInfo.description}
+            value={description}
             onChange={(e: any) => {
               setDescription(e.target.value);
             }}
@@ -335,7 +340,6 @@ const HomeworkModal = ({
           </thead>
           {(homeworkUploads || []).map((upload: homeworkUploadModel, key: number) => {
             return (
-              <>
                 <tbody key={key}>
                   <tr
                     className="table-primary"
@@ -380,7 +384,7 @@ const HomeworkModal = ({
                         {upload.score}
                         
                       <Link to="#" onClick={() => setIsEditing(true)}>
-                        <i className="mdi mdi-pen" style={{padding: 10}}> </i>
+                        <i className="mdi mdi-pen" style={{margin: 10}}> </i>
                         </Link>
                       </p> :
                       
@@ -396,7 +400,7 @@ const HomeworkModal = ({
                         >
                        </Input>
                        <Link to="#" onClick={() => {setIsEditing(false); inputScore && dispatch(setHomeworkScore({userID: upload.user.id, homeworkID: homeworkInfo.id, score: Number(inputScore)})); setInputScore("")}}>
-                        <i className="mdi mdi-check" style={{padding: 10}}> </i>
+                        <i className="mdi mdi-check" style={{margin: 10}}> </i>
                        </Link>
                        </div>
                      </FormGroup>
@@ -405,7 +409,6 @@ const HomeworkModal = ({
                       </td>
                   </tr>
                 </tbody>
-              </>
             );
           })}
       </Table>

@@ -14,6 +14,7 @@ import {
 import { useRedux } from "../hooks";
 import { createRollCall, updateRollCall, closeRollCall, getRollCall, doRollCall, getRollCallRecordsByID, getMyRollCallRecord, getChannelRollCalls, changeSelectedRollCall, getRollCallRecords } from "../redux/actions";
 import { rollCallModel, rollCallRecordModel } from "../redux/chats/types";
+import Loader from "./Loader";
 
 interface RollCallModalProps {
   isOpen: boolean;
@@ -22,14 +23,14 @@ interface RollCallModalProps {
 }
 const RollCallModal = ({ isOpen, onClose, role }: RollCallModalProps) => {
   const { dispatch, useAppSelector } = useRedux();
-  const { channelInfo, rollCall, rollCallRecords, myRollCallRecord, selectedRollCall, channelRollCalls, studentRollCallRecords } = useAppSelector(state => ({
+  const { channelInfo, rollCall, rollCallRecords, myRollCallRecord, selectedRollCall, channelRollCalls, rollCallLoading } = useAppSelector(state => ({
     channelInfo: state.Chats.selectedChatInfo,
     rollCall: state.Chats.rollCall,
     rollCallRecords: state.Chats.rollCallRecords,
     myRollCallRecord: state.Chats.myRollCallRecord,
     selectedRollCall: state.Chats.selectedRollCall,
     channelRollCalls: state.Chats.channelRollCalls,
-    studentRollCallRecords: state.Chats.studentRollCallRecords,
+    rollCallLoading: state.Chats.rollCallLoading,
   }));
 
   const [startDateTime, setStartDateTime] = useState("");
@@ -69,32 +70,17 @@ const RollCallModal = ({ isOpen, onClose, role }: RollCallModalProps) => {
     }
   };
 
-  const getRollCallRecordsByRollCallID = () => {
-    if (selectedRollCall) {
-      dispatch(getRollCallRecords(channelInfo.id))
-    }
-  }
-  
-  const getMyRollCallRecordByRollCallID = () => {
-    if (selectedRollCall) {
-      dispatch(getMyRollCallRecord(selectedRollCall.id))
-    }
-  }
-
   const getChannelRollCallsByID = () => {
     dispatch(getChannelRollCalls(channelInfo.id))
   }
-
-  useEffect(() => {
-    console.log(channelRollCalls)
-  }, [channelRollCalls])
 
   useEffect(() => {
     if (mode === 0) {
       onClear()
       dispatch(getRollCall(channelInfo.id));
       if (role === 2)
-        dispatch(getMyRollCallRecord(rollCall?.id))
+        if (rollCall)
+          dispatch(getMyRollCallRecord(rollCall?.id))
     }
   }, [mode]);
 
@@ -166,6 +152,7 @@ const RollCallModal = ({ isOpen, onClose, role }: RollCallModalProps) => {
         }
       <ModalBody className="p-4">
         <Form>
+          {rollCallLoading && <Loader />}
           <div className="mb-3">
           {(mode === 1 || mode === 2) &&
           (
@@ -290,7 +277,7 @@ const RollCallModal = ({ isOpen, onClose, role }: RollCallModalProps) => {
                 </thead>
                 {(channelRollCalls || []).map((channelRollCall: rollCallModel, key: number) => {
                   return (
-                    <tbody>
+                    <tbody key={key}>
                       <tr className="table-primary" onClick={() => {role === 2 ? setMode(5) : setMode(4); onSelectRollCall(channelRollCall)}}>
                       <td>
                         {new Date(channelRollCall.startTime).toLocaleString()}
@@ -323,7 +310,7 @@ const RollCallModal = ({ isOpen, onClose, role }: RollCallModalProps) => {
               </thead>
               {(rollCallRecords || []).map((rollCallRecord: rollCallRecordModel, key: number) => {
                 return (
-                  <tbody>
+                  <tbody key={key}>
                     <tr className="table-primary" onClick={() => {setMode(4)}}>
                     <td>
                       {rollCallRecord.user.name}
