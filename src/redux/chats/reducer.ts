@@ -2,7 +2,12 @@ import { persistReducer } from "redux-persist";
 import { toast } from "react-toastify";
 import storage from "redux-persist/lib/storage";
 // types
-import { messageRecordModel, ChatsActionTypes, ChatsState } from "./types";
+import {
+  messageRecordModel,
+  ChatsActionTypes,
+  ChatsState,
+  channelMemberModel,
+} from "./types";
 import { number } from "yup";
 
 export const INIT_STATE: ChatsState = {
@@ -148,9 +153,15 @@ const Chats = persistReducer(
               channelRole: action.payload.data.role,
             };
           case ChatsActionTypes.GET_CHANNEL_MEMBERS:
+            var channelMembers = action.payload.data.users;
+            channelMembers.sort(
+              (a: channelMemberModel, b: channelMemberModel) => {
+                return a.role - b.role;
+              }
+            );
             return {
               ...state,
-              channelMembers: action.payload.data.users,
+              channelMembers: channelMembers,
             };
           case ChatsActionTypes.GET_CHANNEL_POSTS:
             return {
@@ -198,17 +209,17 @@ const Chats = persistReducer(
               rollCall: action.payload.data.rollCall,
             };
           case ChatsActionTypes.GET_HOMEWORK:
-            console.log(action.payload.data)
+            console.log(action.payload.data);
             return {
               ...state,
               homework: action.payload.data.homework,
             };
           case ChatsActionTypes.GET_CHANNEL_DIRS:
-            console.log(action.payload.data)
+            console.log(action.payload.data);
             return {
               ...state,
               channelDir: action.payload.data.fileNameArray,
-              isDir: action.payload.data.isDirArray
+              isDir: action.payload.data.isDirArray,
             };
           default:
             return { ...state };
@@ -392,7 +403,7 @@ const Chats = persistReducer(
           selectedChatInfo: action.payload.selectedChatInfo,
         };
       case ChatsActionTypes.CHANGE_SELECTED_HOMEWORK:
-        state.homework = undefined
+        state.homework = undefined;
         return {
           ...state,
           selectedHomework: action.payload.selectedHomework,

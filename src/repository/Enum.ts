@@ -1,6 +1,6 @@
 export enum RoleTypes {
   "老師" = 0,
-  "TA" = 1,
+  "助教" = 1,
   "學生" = 2,
 }
 
