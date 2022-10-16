@@ -180,11 +180,19 @@ const downloadMessageFile = (data: object, filename: string) => {
 post 
 */
 const createPost = (data: object) => {
-  return api.create(url.CREATE_POST, data);
+  let send: WSEvent = {
+    event: WSSendEvents.MakeNewPost,
+    data: data,
+  };
+  return api.WSSend(JSON.stringify(send));
 };
 
 const createComment = (data: object) => {
-  return api.create(url.CREATE_COMMENT, data);
+  let send: WSEvent = {
+    event: WSSendEvents.CommentOnPost,
+    data: data,
+  };
+  return api.WSSend(JSON.stringify(send));
 };
 
 const deletePost = (id: string | number) => {
@@ -268,7 +276,6 @@ const getHomework = (id: string | number) => {
 const getAllUpload = (id: string | number) => {
   return api.get(`${url.GET_ALL_UPLOAD}/${id}`);
 };
-
 
 export {
   getFavourites,

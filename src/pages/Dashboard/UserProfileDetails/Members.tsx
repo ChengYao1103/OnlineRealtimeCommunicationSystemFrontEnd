@@ -37,11 +37,11 @@ const Member = ({ member, channelInfo }: MemberProps) => {
 
   const isFounder = member.id === channelInfo.founderID;
 
-  /** 如果為頻道創立者或身分為老師/TA才可以踢人 */
+  /** 如果本身身分為老師/TA且成員身分不為老師才可以踢人 */
   const canKickOut =
-    userProfile === channelInfo.founderID ||
-    channelRole === RoleTypes["老師"] ||
-    channelRole === RoleTypes["TA"];
+    (channelRole === RoleTypes["老師"] || channelRole === RoleTypes["助教"]) &&
+    member.id !== userProfile.id &&
+    member.role !== RoleTypes["老師"];
 
   const onKickOut = () => {
     dispatch(kickOutMember(channelInfo.id, member.id));
@@ -72,11 +72,38 @@ const Member = ({ member, channelInfo }: MemberProps) => {
   ];
   const [color] = useState(Math.floor(Math.random() * colors.length));
 
+  const getRoleTag = (role: RoleTypes) => {
+    switch (role) {
+      case RoleTypes["老師"]: {
+        return (
+          <Badge className="badge badge-soft-danger rounded p-1 me-3 start-0">
+            {RoleTypes[member.role]}
+          </Badge>
+        );
+      }
+      case RoleTypes["助教"]: {
+        return (
+          <Badge className="badge badge-soft-info rounded p-1 me-3 start-0">
+            {RoleTypes[member.role]}
+          </Badge>
+        );
+      }
+      case RoleTypes["學生"]: {
+        return (
+          <Badge className="badge badge-soft-secondary rounded p-1 me-3 start-0">
+            {RoleTypes[member.role]}
+          </Badge>
+        );
+      }
+    }
+  };
+
   return (
     <li>
       <div className="d-flex me-3">
         <Link to="#" onClick={() => onSelectChat(member.id)}>
           <div className="d-flex align-items-center">
+            <div>{getRoleTag(member.role)}</div>
             <div className="flex-shrink-0 avatar-xs me-2">
               {member.photo ? (
                 <div
@@ -108,7 +135,7 @@ const Member = ({ member, channelInfo }: MemberProps) => {
               )}
             </div>
             <div className="flex-grow-1 overflow-hidden">
-              <p className="text-truncate mb-0">{member.name}</p>
+              <span className="text-truncate mb-0">{member.name}</span>
             </div>
           </div>
         </Link>
@@ -119,7 +146,7 @@ const Member = ({ member, channelInfo }: MemberProps) => {
             </Badge>
           </div>
         )}
-        {canKickOut && member.role !== RoleTypes["老師"] && (
+        {canKickOut && (
           <div className="ms-auto">
             <Badge className="btn btn-danger" onClick={onKickOut}>
               踢除

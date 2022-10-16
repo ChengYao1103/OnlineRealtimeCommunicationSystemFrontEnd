@@ -55,6 +55,8 @@ export enum ChatsActionTypes {
   DELETE_POST = "@@chats/DELETE_POST",
   DELETE_COMMENT = "@@chats/DELETE_COMMENT",
   GET_POST_COMMENTS = "@@chats/GET_POST_COMMENTS",
+  NEW_POST = "@@chats/NEW_POST",
+  NEW_COMMENT = "@@chats/NEW_COMMENT",
 
   //ROLLCALL
   CREATE_ROLLCALL = "@@chats/CREATE_ROLLCALL",
@@ -207,4 +209,5 @@ export interface ChatsState {
   rollCallRecords: Array<rollCallRecordModel>,
   myRollCallRecord: rollCallModel | null,
   selectedRollCall: rollCallModel | null,
+  channelMembers: Array<channelMemberModel>;
 }
