@@ -50,8 +50,8 @@ const VideoCallModal = ({
   //const [cameraType, setCameraType] = useState("front");
   const [currentStream, setCurrentStream] = useState(new MediaStream());
   const [connection, setConnection] = useState<RTCPeerConnection>();
-  const [displayShareingTrack, setDisplayShareingTrack] =
-    useState<MediaStreamTrack>();
+  const [displayShareingStream, setDisplayShareingStream] =
+    useState<MediaStream>();
   const api = new APIClient();
 
   // end call when page refresh
@@ -70,21 +70,26 @@ const VideoCallModal = ({
    */
   const setScreenShare = () => {
     if (isSharing) {
-      if (!displayShareingTrack) {
+      if (
+        !displayShareingStream ||
+        displayShareingStream.getTracks().length < 1
+      ) {
         return;
       }
 
-      connection
-        ?.getSenders()
-        .filter(rtpSender => {
-          return rtpSender.track?.id === displayShareingTrack.id;
-        })
-        .forEach(sender => {
-          connection.removeTrack(sender);
-        });
+      displayShareingStream.getTracks().forEach(track => {
+        connection
+          ?.getSenders()
+          .filter(rtpSender => {
+            return rtpSender.track?.id === track.id;
+          })
+          .forEach(sender => {
+            connection.removeTrack(sender);
+          });
 
-      displayShareingTrack.enabled = false;
-      displayShareingTrack.stop();
+        track.enabled = false;
+        track.stop();
+      });
       setIsSharing(false);
     } else {
       let constraints = {
@@ -100,7 +105,7 @@ const VideoCallModal = ({
           if (connection) {
             setIsSharing(true);
             console.log("tracks", stream.getTracks());
-            setDisplayShareingTrack(stream.getTracks()[0]);
+            setDisplayShareingStream(stream);
             stream.getTracks().forEach(track => {
               connection.addTrack(track, stream);
             });
@@ -413,6 +418,12 @@ const VideoCallModal = ({
       track.stop();
       track.enabled = false;
     });
+    if (displayShareingStream && displayShareingStream.getTracks().length > 0) {
+      displayShareingStream.getTracks().forEach(track => {
+        track.enabled = false;
+        track.stop();
+      });
+    }
     setCurrentStream(stream);
     console.log(currentStream.getTracks()); // readyState:"ended"(分頁的取用圖示消失)
     // 透過ws發送掛斷的請求
@@ -427,9 +438,6 @@ const VideoCallModal = ({
         },
       };
       api.WSSend(JSON.stringify(data));
-    }
-    if (displayShareingTrack) {
-      displayShareingTrack.stop();
     }
     if (connection) {
       connection.close();
