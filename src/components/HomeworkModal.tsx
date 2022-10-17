@@ -118,34 +118,38 @@ const HomeworkModal = ({ isOpen, onClose, role }: HomeworkModalProps) => {
           (mode === 2 && "編輯作業") ||
           (mode === 3 && "新增作業")}
       </ModalHeader>
-      {role !== 2 && (
-        <ModalFooter>
-          {mode === 0 && <Button onClick={() => setMode(3)}>新增作業</Button>}
-          {mode === 1 && (
-            <>
-              <Button onClick={() => setMode(2)}>編輯作業</Button>
+      <ModalFooter>
+        {role !== 2 ? (
+          <>
+            {mode === 0 && <Button onClick={() => setMode(3)}>新增作業</Button>}
+            {mode === 1 && (
+              <>
+                <Button onClick={() => setMode(2)}>編輯作業</Button>
+                <Button onClick={() => setMode(0)}>回到作業總覽</Button>
+                <Button
+                  onClick={() => {
+                    setMode(4);
+                    getAllHomewrkUpload();
+                  }}
+                >
+                  繳交情況
+                </Button>
+              </>
+            )}
+            {mode === 2 && (
+              <>
+                <Button onClick={() => setMode(1)}>回到詳細內容</Button>
+                <Button onClick={() => setMode(0)}>回到作業總覽</Button>
+              </>
+            )}
+            {(mode === 3 || mode === 4) && (
               <Button onClick={() => setMode(0)}>回到作業總覽</Button>
-              <Button
-                onClick={() => {
-                  setMode(4);
-                  getAllHomewrkUpload();
-                }}
-              >
-                繳交情況
-              </Button>
-            </>
-          )}
-          {mode === 2 && (
-            <>
-              <Button onClick={() => setMode(1)}>回到詳細內容</Button>
-              <Button onClick={() => setMode(0)}>回到作業總覽</Button>
-            </>
-          )}
-          {(mode === 3 || mode === 4) && (
-            <Button onClick={() => setMode(0)}>回到作業總覽</Button>
-          )}
-        </ModalFooter>
-      )}
+            )}
+          </>
+        ) : (
+          mode === 1 && <Button onClick={() => setMode(0)}>回到作業總覽</Button>
+        )}
+      </ModalFooter>
       {homeworkLoading && <Loader />}
       <ModalBody className="p-4">
         {mode === 0 && (

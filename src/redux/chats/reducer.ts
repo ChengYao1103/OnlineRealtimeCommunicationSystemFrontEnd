@@ -259,12 +259,6 @@ const Chats = persistReducer(
               myRollCallRecord: action.payload.data.rollCallRecord,
               rollCallLoading: false,
             };
-          case ChatsActionTypes.GET_ROLLCALL_BY_CHANNELID:
-            return {
-              ...state,
-              studentRollCallRecords: action.payload.data.rollCallRecord,
-              rollCallLoading: false,
-            };
           case ChatsActionTypes.GET_HOMEWORK_SCORE:
             return {
               ...state,
@@ -378,14 +372,14 @@ const Chats = persistReducer(
           case ChatsActionTypes.GET_ROLLCALL_BY_CHANNELID:
             return {
               ...state,
-              rollCall: undefined,              
+              rollCall: undefined,
               rollCallLoading: true,
             };
           case ChatsActionTypes.GET_HOMEWORK:
             return {
               ...state,
               homework: undefined,
-              homeworkLoading: true,
+              homeworkLoading: false,
             };
           case ChatsActionTypes.GET_CHANNEL_DIRS:
             return {
@@ -403,19 +397,14 @@ const Chats = persistReducer(
           case ChatsActionTypes.GET_MY_ROLLCALL_RECORD:
             return {
               ...state,
-              myRollCallRecord: action.payload.data.rollCallRecord,
+              myRollCallRecord: null,
               rollCallLoading: true,
-            };       
+            };
           case ChatsActionTypes.GET_CHANNEL_ROLLCALLS:
             return {
               ...state,
               channelRollCalls: [],
               rollCallLoading: true,
-            };
-          case ChatsActionTypes.GET_CHANNEL_DIRS:
-            return {
-              ...state,
-              fileLoading: true,
             };
           default:
             return { ...state };
@@ -531,14 +520,13 @@ const Chats = persistReducer(
         return {
           ...state,
           selectedHomework: action.payload.selectedHomework,
-          homeworkLoading: state.channelRole === 2 ? true : false
         };
       case ChatsActionTypes.CHANGE_SELECTED_ROLLCALL:
         state.selectedRollCall = null;
         return {
           ...state,
           selectedRollCall: action.payload.selectedRollCall,
-          rollCallLoading: true
+          rollCallLoading: true,
         };
       case ChatsActionTypes.BACK_SELECTED_DIR:
         return {
