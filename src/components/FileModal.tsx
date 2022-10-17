@@ -37,12 +37,14 @@ interface FileModalProps {
 }
 const FileModal = ({ isOpen, onClose, role }: FileModalProps) => {
   const { dispatch, useAppSelector } = useRedux();
-  const { channelInfo, channelDir, isDir, fileLoading } = useAppSelector(state => ({
-    channelInfo: state.Chats.selectedChatInfo,
-    channelDir: state.Chats.channelDir,
-    isDir: state.Chats.isDir,
-    fileLoading: state.Chats.fileLoading,
-  }));
+  const { channelInfo, channelDir, isDir, fileLoading } = useAppSelector(
+    state => ({
+      channelInfo: state.Chats.selectedChatInfo,
+      channelDir: state.Chats.channelDir,
+      isDir: state.Chats.isDir,
+      fileLoading: state.Chats.fileLoading,
+    })
+  );
   const [files, setFiles] = useState<Array<any>>([]);
   const [path, setPath] = useState<Array<string>>([]);
   const [isOpenInputName, setIsOpenInputName] = useState(false);
@@ -94,9 +96,8 @@ const FileModal = ({ isOpen, onClose, role }: FileModalProps) => {
         file: file,
         dirArray: tmp,
       };
-      dispatch(uploadChannelFile(data));      
+      dispatch(uploadChannelFile(data));
     });
-
   };
 
   const onDownload = (filename: string) => {
@@ -109,7 +110,7 @@ const FileModal = ({ isOpen, onClose, role }: FileModalProps) => {
   };
 
   const onSelectFiles = (e: any) => {
-    console.log(e.target.files)
+    console.log(e.target.files);
     setFiles([...e.target.files]);
   };
 
@@ -125,14 +126,17 @@ const FileModal = ({ isOpen, onClose, role }: FileModalProps) => {
       <ModalHeader className="modal-title-custom" toggle={onClose}>
         檔案
       </ModalHeader>
-      {role === 0 && (
+      {role !== 2 && (
         <ModalFooter>
-          {role === 0 && (
+          {role !== 2 && (
             <>
               <Button onClick={() => setIsOpenInputName(true)}>
                 新增資料夾
               </Button>
-              <Button className="btn btn-primary" onClick={() => setIsOpenUploadFile(true)}>
+              <Button
+                className="btn btn-primary"
+                onClick={() => setIsOpenUploadFile(true)}
+              >
                 上傳檔案
               </Button>
             </>
@@ -168,10 +172,10 @@ const FileModal = ({ isOpen, onClose, role }: FileModalProps) => {
             <Label htmlFor="file-input" className="form-label">
               檔案:
             </Label>
-            <Input 
-              type="file" 
-              className="form-control mb-3" 
-              id="file-input" 
+            <Input
+              type="file"
+              className="form-control mb-3"
+              id="file-input"
               onChange={(e: any) => onSelectFiles(e)}
             />
             <Button
@@ -181,7 +185,7 @@ const FileModal = ({ isOpen, onClose, role }: FileModalProps) => {
             >
               確認
             </Button>
-          </FormGroup>           
+          </FormGroup>
         </ModalBody>
       )}
       <ModalBody className="p-4">
@@ -218,16 +222,15 @@ const FileModal = ({ isOpen, onClose, role }: FileModalProps) => {
           </thead>
           {(channelDir || []).map((dir: string, key: number) => {
             return (
-                <tbody key={key}>
-                  <tr
-                    className="table-primary"
-                    style={{ padding: "20px" }}
-
-                  >
-                    <td>
-                      <Link to="#" onClick={() => {
-                      isDir[key] ? onSelectDir(dir) : onDownload(dir);
-                    }}>
+              <tbody key={key}>
+                <tr className="table-primary" style={{ padding: "20px" }}>
+                  <td>
+                    <Link
+                      to="#"
+                      onClick={() => {
+                        isDir[key] ? onSelectDir(dir) : onDownload(dir);
+                      }}
+                    >
                       {isDir[key] ? (
                         <i
                           className="mdi mdi-folder"
@@ -240,20 +243,20 @@ const FileModal = ({ isOpen, onClose, role }: FileModalProps) => {
                         ></i>
                       )}
                       {dir}
-                      </Link>
-                    </td>
-                  </tr>
-                </tbody>
+                    </Link>
+                  </td>
+                </tr>
+              </tbody>
             );
           })}
         </Table>
-          <Form>
-            <FormGroup>
-              <Label className="form-label" style={{ color: "red" }}>
-                {(channelDir.length === 0 || !channelDir) && "沒有檔案"}
-              </Label>
-            </FormGroup>
-          </Form>
+        <Form>
+          <FormGroup>
+            <Label className="form-label" style={{ color: "red" }}>
+              {(channelDir.length === 0 || !channelDir) && "沒有檔案"}
+            </Label>
+          </FormGroup>
+        </Form>
       </ModalBody>
     </Modal>
   );
