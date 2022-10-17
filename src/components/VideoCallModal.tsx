@@ -8,6 +8,7 @@ import { userModel } from "../redux/auth/types";
 
 //images
 import imagePlaceholder from "../assets/images/users/profile-placeholder.png";
+import callGif from "../assets/images/incomingCall.gif";
 
 // apis
 import { APIClient } from "../api/apiCore";
@@ -599,9 +600,12 @@ const VideoCallModal = ({
                     color="success"
                     onClick={() => answerPhoneCall(true)}
                   >
-                    <span className="avatar-title bg-transparent font-size-24">
-                      <i className="mdi mdi-phone"></i>
-                    </span>
+                    <img
+                      src={callGif}
+                      alt=""
+                      width="100%"
+                      style={{ filter: "brightness(0) invert(1)" }}
+                    />
                   </Button>
                   <Button
                     type="button"
