@@ -253,14 +253,14 @@ const More = ({
         </DropdownItem>
 
         <DropdownItem
-          className="d-flex justify-content-between align-items-center d-xxl-none"
+          className="d-flex justify-content-between align-items-center user-profile-show"
           to="#"
           onClick={onOpenRollCall}
         >
           點名 <i className="mdi mdi-bell-ring-outline text-muted"></i>
         </DropdownItem>
         <DropdownItem
-          className="d-flex justify-content-between align-items-center d-xxl-none"
+          className="d-flex justify-content-between align-items-center user-profile-show"
           to="#"
           onClick={onOpenVideo}
         >
