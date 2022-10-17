@@ -51,6 +51,17 @@ const VideoCallModal = ({
   const [connection, setConnection] = useState<RTCPeerConnection>();
   const api = new APIClient();
 
+  // end call when page refresh
+  useEffect(() => {
+    window.onbeforeunload = function() {
+      finishCall();
+    };
+
+    return () => {
+      window.onbeforeunload = null;
+    };
+  }, []);
+
   /**
    * 設定螢幕共享畫面
    */
