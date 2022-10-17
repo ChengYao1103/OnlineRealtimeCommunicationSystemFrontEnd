@@ -253,6 +253,12 @@ const Chats = persistReducer(
               rollCallRecords: action.payload.data.rollCallRecord,
               rollCallLoading: false,
             };
+          case ChatsActionTypes.GET_ROLLCALL_RECORDS_BY_ID:
+            state.rollCallRecords = action.payload.data.rollCallRecord;
+            return {
+              ...state,
+              rollCallLoading: false,
+            };
           case ChatsActionTypes.GET_MY_ROLLCALL_RECORD:
             let rollCallRecord = action.payload.data.rollCallRecord;
             return {
@@ -375,7 +381,7 @@ const Chats = persistReducer(
             return {
               ...state,
               rollCall: undefined,
-              rollCallLoading: true,
+              rollCallLoading: false,
             };
           case ChatsActionTypes.GET_HOMEWORK:
             return {
@@ -394,19 +400,25 @@ const Chats = persistReducer(
             return {
               ...state,
               rollCallRecords: action.payload.data.rollCallRecord,
-              rollCallLoading: true,
+              rollCallLoading: false,
+            };
+          case ChatsActionTypes.GET_ROLLCALL_RECORDS_BY_ID:
+            state.rollCallRecords = [];
+            return {
+              ...state,
+              rollCallLoading: false,
             };
           case ChatsActionTypes.GET_MY_ROLLCALL_RECORD:
             return {
               ...state,
               myRollCallRecord: null,
-              rollCallLoading: true,
+              rollCallLoading: false,
             };
           case ChatsActionTypes.GET_CHANNEL_ROLLCALLS:
             return {
               ...state,
               channelRollCalls: [],
-              rollCallLoading: true,
+              rollCallLoading: false,
             };
           default:
             return { ...state };

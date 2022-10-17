@@ -608,6 +608,7 @@ function* doRollCall({ payload: id }: any) {
 function* getRollCallRecordsByID({ payload: id }: any) {
   try {
     const response: Promise<any> = yield call(getRollCallRecordsByIDApi, id);
+    console.log(response);
     yield put(
       chatsApiResponseSuccess(
         ChatsActionTypes.GET_ROLLCALL_RECORDS_BY_ID,
