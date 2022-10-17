@@ -114,7 +114,7 @@ const WSEventHandler = () => {
 
   WSConnection.onMessageEvent = (event: any) => {
     let data: WSEvent = JSON.parse(event.data);
-    console.log(data, data.event);
+    
     switch (data.event) {
       // Message
       case WSReceiveEvents.NewContent:
@@ -305,10 +305,8 @@ const WSEventHandler = () => {
           ErrorMessages[ErrorData.error as ErrorMessagesKey]
         );
         break;
-      case WSReceiveEvents.TokenExpired: // rarely triggered
-        // timeout wont trigger this event
+      case WSReceiveEvents.TokenExpired:
         console.log("token expired");
-        window.location.href = LOGOUT_URL;
         break;
       default:
         console.log("unknown ws event");
