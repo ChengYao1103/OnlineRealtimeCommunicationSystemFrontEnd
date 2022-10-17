@@ -179,6 +179,17 @@ const AudioCallModal = ({
 
   /** 設定喇叭禁音 */
   const setSpeaker = () => {
+    var audioEle = document.getElementById("remoteAudio") as HTMLAudioElement;
+    if (!audioEle.srcObject) {
+      return;
+    }
+    // Ex: 關閉喇叭狀態下進來 => isCloseSpeaker = true
+    // enable = true => 不會禁音
+    // 調整完再更改isCloseSpeaker狀態
+    let stream = audioEle.srcObject as MediaStream;
+    stream.getAudioTracks().forEach(track => {
+      track.enabled = isCloseSpeaker;
+    });
     setIsCloseSpeaker(!isCloseSpeaker);
   };
 

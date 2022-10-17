@@ -204,11 +204,15 @@ const VideoCallModal = ({
         if (videoRef.srcObject === event.streams[0]) {
           return;
         }
-        var shareRef = document.getElementById(
+        var secondVideoRef = document.getElementById(
           "remoteVideo2"
         ) as HTMLVideoElement;
-        shareRef.srcObject = videoRef.srcObject;
-        shareRef.classList.remove("d-none");
+        var firstSrc = videoRef.srcObject as MediaStream;
+        secondVideoRef.srcObject = videoRef.srcObject;
+        secondVideoRef.classList.remove("d-none");
+        event.streams[0].getAudioTracks().forEach(track => {
+          track.enabled = firstSrc.getAudioTracks()[0].enabled;
+        });
 
         setRemoteVideo(videoRef, event.streams[0]);
         console.log("接收流並顯示於遠端視訊！", event);
@@ -289,6 +293,28 @@ const VideoCallModal = ({
   };
 
   const setSpeaker = () => {
+    let firstVideoEle = document.getElementById(
+      "remoteVideo"
+    ) as HTMLVideoElement;
+    let secondVideoEle = document.getElementById(
+      "remoteVideo2"
+    ) as HTMLVideoElement;
+    if (!firstVideoEle.srcObject) {
+      return;
+    }
+    // Ex: 關閉喇叭狀態下進來 => isCloseSpeaker = true
+    // enable = true => 不會禁音
+    // 調整完再更改isCloseSpeaker狀態
+    let stream = firstVideoEle.srcObject as MediaStream;
+    stream.getAudioTracks().forEach(track => {
+      track.enabled = isCloseSpeaker;
+    });
+    if (secondVideoEle.srcObject) {
+      stream = secondVideoEle.srcObject as MediaStream;
+      stream.getAudioTracks().forEach(track => {
+        track.enabled = isCloseSpeaker;
+      });
+    }
     setIsCloseSpeaker(!isCloseSpeaker);
   };
 
