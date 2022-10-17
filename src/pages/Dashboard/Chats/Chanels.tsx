@@ -3,21 +3,26 @@ import { UncontrolledTooltip } from "reactstrap";
 
 // interface
 import { ChannelTypes } from "../../../data/chat";
+import { channelModel } from "../../../redux/chats/types";
 
 // components
 import AddButton from "../../../components/AddButton";
 import ChatChannel from "./ChatChannel";
 
 interface ChanelsProps {
-  channels: Array<ChannelTypes>;
+  channels: Array<channelModel>;
   openCreateChannel: () => void;
-  selectedChat: string | number;
-  onSelectChat: (id: number | string, isChannel?: boolean) => void;
+  selectedChatInfo: channelModel;
+  onSelectChat: (
+    id: number | string,
+    info: channelModel,
+    isChannel?: boolean
+  ) => void;
 }
 const Chanels = ({
   channels,
   openCreateChannel,
-  selectedChat,
+  selectedChatInfo,
   onSelectChat,
 }: ChanelsProps) => {
   return (
@@ -25,7 +30,7 @@ const Chanels = ({
       <div className="d-flex align-items-center px-4 mt-5 mb-2">
         <div className="flex-grow-1">
           <h4 className="mb-0 font-size-11 text-muted text-uppercase">
-            Channels
+            多人頻道
           </h4>
         </div>
         <div className="flex-shrink-0">
@@ -35,18 +40,18 @@ const Chanels = ({
             {/* addgroup-exampleModal */}
           </div>
           <UncontrolledTooltip target="create-group" placement="bottom">
-            Create group
+            建立頻道
           </UncontrolledTooltip>
         </div>
       </div>
 
       <div className="chat-message-list">
         <ul className="list-unstyled chat-list chat-user-list mb-3">
-          {(channels || []).map((channel: ChannelTypes, key: number) => (
+          {(channels || []).map((channel: channelModel, key: number) => (
             <ChatChannel
               channel={channel}
-              key={key}
-              selectedChat={selectedChat}
+              key={channel.id}
+              selectedChatInfo={selectedChatInfo}
               onSelectChat={onSelectChat}
             />
           ))}

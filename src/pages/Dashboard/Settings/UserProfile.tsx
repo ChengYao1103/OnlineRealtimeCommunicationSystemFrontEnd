@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import avatarPlaceHolder from "../../../assets/images/users/profile-placeholder.png";
 import {
   Label,
   Dropdown,
@@ -6,38 +7,47 @@ import {
   DropdownMenu,
   DropdownItem,
 } from "reactstrap";
+import { useRedux } from "../../../hooks";
+import { userChangeInformation } from "../../../redux/actions";
 import classnames from "classnames";
 
 // interface
 import { BasicDetailsTypes } from "../../../data/settings";
+import { userModel } from "../../../redux/auth/types";
 
 // CONSTANTS
 import { STATUS_TYPES } from "../../../constants";
 interface UserProfileProps {
-  basicDetails: BasicDetailsTypes;
+  user: userModel;
   status: STATUS_TYPES;
 }
-const UserProfile = ({ basicDetails, status }: UserProfileProps) => {
-  const fullName = basicDetails
-    ? `${basicDetails.firstName} ${basicDetails.lastName}`
-    : "-";
+const UserProfile = ({ user, status }: UserProfileProps) => {
+  const { dispatch } = useRedux();
+  const fullName = user ? user.name : "-";
 
   /*
     profile image
     */
-  const [image, setImage] = useState<string>(
-    basicDetails && basicDetails.profile
-  );
+  const [image, setImage] = useState<string>("");
   useEffect(() => {
-    if (basicDetails && basicDetails.profile) {
-      setImage(basicDetails.profile);
-    }
-  }, [basicDetails]);
+    setImage(user.photo);
+  }, [user]);
+
   const onChangeProfile = (e: any) => {
     const files = [...e.target.files];
     if (files[0]) {
-      const src = URL.createObjectURL(files[0]);
-      setImage(src);
+      // 將圖片轉換為base64
+      const reader = new FileReader();
+      reader.readAsDataURL(files[0]);
+      reader.onload = () => {
+        //儲存轉換完成之圖片
+        const base64 = reader.result;
+        var data = { newPhoto: base64 };
+        if (typeof base64 === "string") {
+          dispatch(userChangeInformation(data));
+          setImage(base64);
+        }
+      };
     }
   };
 
@@ -64,7 +74,7 @@ const UserProfile = ({ basicDetails, status }: UserProfileProps) => {
     <div className="text-center p-3 p-lg-4 border-bottom pt-2 pt-lg-2 mt-n5 position-relative">
       <div className="mb-3 profile-user">
         <img
-          src={image}
+          src={image ? image : avatarPlaceHolder}
           className="rounded-circle avatar-lg img-thumbnail user-profile-image"
           alt="user-profile"
         />
@@ -89,7 +99,7 @@ const UserProfile = ({ basicDetails, status }: UserProfileProps) => {
 
       <h5 className="font-size-16 mb-1 text-truncate">{fullName}</h5>
 
-      <Dropdown
+      {/* <Dropdown
         className="d-inline-block"
         isOpen={dropdownOpen}
         toggle={toggle}
@@ -112,20 +122,20 @@ const UserProfile = ({ basicDetails, status }: UserProfileProps) => {
         <DropdownMenu>
           <DropdownItem onClick={() => onChangeStatus(STATUS_TYPES.ACTIVE)}>
             <i className="bx bxs-circle text-success font-size-10 me-1 align-middle"></i>{" "}
-            Active
+            線上
           </DropdownItem>
           <DropdownItem onClick={() => onChangeStatus(STATUS_TYPES.AWAY)}>
             <i className="bx bxs-circle text-warning font-size-10 me-1 align-middle"></i>{" "}
-            Away
+            閒置
           </DropdownItem>
           <DropdownItem
             onClick={() => onChangeStatus(STATUS_TYPES.DO_NOT_DISTURB)}
           >
             <i className="bx bxs-circle text-danger font-size-10 me-1 align-middle"></i>{" "}
-            Do not disturb
+            請勿打擾
           </DropdownItem>
         </DropdownMenu>
-      </Dropdown>
+      </Dropdown> */}
     </div>
   );
 };

@@ -4,7 +4,7 @@ import { Container, Row, Col } from "reactstrap";
 import { Link } from "react-router-dom";
 
 // images
-import authImage from "../assets/images/auth-img.png";
+import icon from "../assets/images/icon.png";
 
 interface NonAuthLayoutWrapperProps {
   children: any;
@@ -19,18 +19,13 @@ const NonAuthLayoutWrapper = (props: NonAuthLayoutWrapperProps) => {
             <Col xl={3} lg={4}>
               <div className="p-4 pb-0 p-lg-5 pb-lg-0 auth-logo-section">
                 <div className="text-white-50">
-                  <h3>
-                    <Link to="/" className="text-white">
-                      <i className="bx bxs-message-alt-detail align-middle text-white h3 mb-1 me-2"></i>{" "}
-                      Doot
-                    </Link>
+                  <h3 className="text-white">
+                    <img src={icon} width="64px" alt="ORCS"></img>{" "}
+                    網路即時通訊系統
                   </h3>
                   <p className="font-size-16">
-                    Responsive Bootstrap 5 Chat App
+                    Online Realtime Communication System
                   </p>
-                </div>
-                <div className="mt-auto">
-                  <img src={authImage} alt="auth" className="auth-img" />
                 </div>
               </div>
             </Col>
@@ -44,9 +39,8 @@ const NonAuthLayoutWrapper = (props: NonAuthLayoutWrapperProps) => {
                     <Col xl={12}>
                       <div className="text-center text-muted p-4">
                         <p className="mb-0">
-                          &copy; {new Date().getFullYear()} Doot. Crafted with{" "}
-                          <i className="mdi mdi-heart text-danger"></i> by
-                          Themesbrand
+                          {new Date().getFullYear()} &copy; Crafted by 何秉育
+                          陳琴蓮 廖酉詳 劉程耀
                         </p>
                       </div>
                     </Col>

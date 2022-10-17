@@ -11,7 +11,7 @@ const AuthProtected = (props: any) => {
     redirect is un-auth access protected routes via url
   */
   const location = useLocation();
-  if (!userProfile && loading) {
+  if (userProfile.id === 0 && loading) {
     return (
       <Redirect to={{ pathname: "/auth-login", state: { from: location } }} />
     );

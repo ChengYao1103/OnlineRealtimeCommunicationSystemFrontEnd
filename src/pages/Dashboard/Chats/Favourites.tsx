@@ -19,14 +19,14 @@ const Favourites = ({ users, selectedChat, onSelectChat }: FavouritesProps) => {
 
       <div className="chat-message-list">
         <ul className="list-unstyled chat-list chat-user-list">
-          {(users || []).map((user: UserTypes, key: number) => (
+          {/*(users || []).map((user: UserTypes, key: number) => (
             <ChatUser
               user={user}
               key={key}
               selectedChat={selectedChat}
               onSelectChat={onSelectChat}
             />
-          ))}
+          ))*/}
         </ul>
       </div>
     </>

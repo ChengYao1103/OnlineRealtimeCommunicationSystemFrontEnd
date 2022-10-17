@@ -10,6 +10,7 @@ import * as yup from "yup";
 import { useForm } from "react-hook-form";
 
 // hooks
+import { useProfile } from "../../hooks";
 // import { useProfile } from "../../hooks";
 
 // components
@@ -18,13 +19,16 @@ import AuthHeader from "../../components/AuthHeader";
 import FormInput from "../../components/FormInput";
 
 // images
-import avatar1 from "../../assets/images/users/avatar-1.jpg";
+import avatarPlaceHolder from "../../assets/images/users/profile-placeholder.png";
+import { ErrorMessages } from "../../repository/Enum";
 
 interface LockScreenProps {}
 const LockScreen = (props: LockScreenProps) => {
+  const { userProfile } = useProfile();
+
   const resolver = yupResolver(
     yup.object().shape({
-      password: yup.string().required("Please Enter Password."),
+      password: yup.string().required(ErrorMessages["required"]),
     })
   );
 
@@ -49,17 +53,14 @@ const LockScreen = (props: LockScreenProps) => {
       <Row className=" justify-content-center my-auto">
         <Col sm={8} lg={6} xl={5} className="col-xxl-4">
           <div className="py-md-5 py-4">
-            <AuthHeader
-              title="Lock screen"
-              subtitle="Enter your password to unlock the screen!"
-            />
+            <AuthHeader title="頁面鎖定中" subtitle="輸入密碼以解鎖" />
             <div className="user-thumb text-center mb-4">
               <img
-                src={avatar1}
+                src={userProfile.photo ? userProfile.photo : avatarPlaceHolder}
                 className="rounded-circle img-thumbnail avatar-lg"
                 alt="thumbnail"
               />
-              <h5 className="font-size-15 mt-3">Kathryn Swarey</h5>
+              <h5 className="font-size-15 mt-3">{userProfile.name}</h5>
             </div>
 
             <Form
@@ -68,7 +69,7 @@ const LockScreen = (props: LockScreenProps) => {
             >
               <div className="mb-3">
                 <FormInput
-                  label="Password"
+                  label="密碼"
                   type="password"
                   name="password"
                   register={register}
@@ -83,19 +84,19 @@ const LockScreen = (props: LockScreenProps) => {
               </div>
               <div className="text-center mt-4">
                 <Button color="primary" className="w-100" type="submit">
-                  Unlock
+                  解鎖
                 </Button>
               </div>
             </Form>
             <div className="mt-5 text-center text-muted">
               <p>
-                Not you ? return{" "}
+                不是您嗎?{" "}
                 <Link
-                  to="/auth-login"
+                  to="/lougout"
                   className="fw-medium text-decoration-underline"
                 >
                   {" "}
-                  Login
+                  登出
                 </Link>
               </p>
             </div>

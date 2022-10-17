@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import {
   Nav,
   NavItem,
@@ -13,7 +13,7 @@ import {
 } from "reactstrap";
 
 // hooks
-import { useRedux } from "../../hooks/index";
+import { useProfile, useRedux } from "../../hooks/index";
 
 // actions
 import { changeTab } from "../../redux/actions";
@@ -23,10 +23,12 @@ import { TABS } from "../../constants/index";
 import LightDarkMode from "../../components/LightDarkMode";
 
 //images
-import avatar1 from "../../assets/images/users/avatar-1.jpg";
+import avatarPlaceHolder from "../../assets/images/users/profile-placeholder.png";
+import icon from "../../assets/images/icon.png";
 
 // menu
 import { MENU_ITEMS, MenuItemType } from "./menu";
+import { userModel } from "../../redux/auth/types";
 
 const LogoLightSVG = () => {
   return (
@@ -59,13 +61,13 @@ const Logo = () => {
     <div className="navbar-brand-box">
       <Link to="#" className="logo logo-dark">
         <span className="logo-sm">
-          <LogoLightSVG />
+          <img src={icon} width="48px" alt="ORCS"></img>
         </span>
       </Link>
 
       <Link to="#" className="logo logo-light">
         <span className="logo-sm">
-          <LogoDarkSVG />
+          <img src={icon} width="48px" alt="ORCS"></img>
         </span>
       </Link>
     </div>
@@ -74,23 +76,18 @@ const Logo = () => {
 
 interface MenuNavItemProps {
   item: MenuItemType;
-  selectedTab:
-    | TABS.BOOKMARK
-    | TABS.CALLS
-    | TABS.CHAT
-    | TABS.CONTACTS
-    | TABS.SETTINGS
-    | TABS.USERS;
+  selectedTab: // | TABS.BOOKMARK
+  // | TABS.CALLS
+  // | TABS.CONTACTS
+  TABS.CHAT | TABS.SETTINGS | TABS.USERS;
   onChangeTab: (
-    id:
-      | TABS.BOOKMARK
-      | TABS.CALLS
-      | TABS.CHAT
-      | TABS.CONTACTS
-      | TABS.SETTINGS
-      | TABS.USERS
+    id: // | TABS.BOOKMARK
+    // | TABS.CALLS
+    // | TABS.CONTACTS
+    TABS.CHAT | TABS.SETTINGS | TABS.USERS
   ) => void;
 }
+
 const MenuNavItem = ({ item, selectedTab, onChangeTab }: MenuNavItemProps) => {
   const onClick = () => {
     onChangeTab(item.tabId);
@@ -116,19 +113,25 @@ const MenuNavItem = ({ item, selectedTab, onChangeTab }: MenuNavItemProps) => {
 };
 
 interface ProfileDropdownMenuProps {
+  authUser: userModel;
   onChangeTab: (
-    id:
-      | TABS.BOOKMARK
-      | TABS.CALLS
-      | TABS.CHAT
-      | TABS.CONTACTS
-      | TABS.SETTINGS
-      | TABS.USERS
+    id: // | TABS.BOOKMARK
+    // | TABS.CALLS
+    // | TABS.CONTACTS
+    TABS.CHAT | TABS.SETTINGS | TABS.USERS
   ) => void;
 }
-const ProfileDropdownMenu = ({ onChangeTab }: ProfileDropdownMenuProps) => {
+const ProfileDropdownMenu = ({
+  authUser,
+  onChangeTab,
+}: ProfileDropdownMenuProps) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const toggle = () => setDropdownOpen(!dropdownOpen);
+
+  let history = useHistory();
+  const redirect = (path: string) => {
+    history.push(path);
+  };
 
   return (
     <Dropdown
@@ -138,26 +141,30 @@ const ProfileDropdownMenu = ({ onChangeTab }: ProfileDropdownMenuProps) => {
       toggle={toggle}
     >
       <DropdownToggle nav className="bg-transparent">
-        <img src={avatar1} alt="" className="profile-user rounded-circle" />
+        <img
+          src={authUser.photo ? authUser.photo : avatarPlaceHolder}
+          alt=""
+          className="profile-user rounded-circle"
+        />
       </DropdownToggle>
       <DropdownMenu>
         <DropdownItem
           className="d-flex align-items-center justify-content-between"
           onClick={() => onChangeTab(TABS.USERS)}
         >
-          Profile <i className="bx bx-user-circle text-muted ms-1"></i>
+          個人資料 <i className="bx bx-user-circle text-muted ms-1"></i>
         </DropdownItem>
         <DropdownItem
           className="d-flex align-items-center justify-content-between"
           onClick={() => onChangeTab(TABS.SETTINGS)}
         >
-          Setting <i className="bx bx-cog text-muted ms-1"></i>
+          個人資料設定 <i className="bx bx-cog text-muted ms-1"></i>
         </DropdownItem>
         <DropdownItem
           className="d-flex align-items-center justify-content-between"
-          href="/auth-changepassword"
+          onClick={() => redirect("/auth-changepassword")}
         >
-          Change Password <i className="bx bx-lock-open text-muted ms-1"></i>
+          變更密碼 <i className="bx bx-lock-open text-muted ms-1" />
         </DropdownItem>
 
         <DropdownItem />
@@ -166,7 +173,7 @@ const ProfileDropdownMenu = ({ onChangeTab }: ProfileDropdownMenuProps) => {
           tag="a"
           href="/logout"
         >
-          Log out <i className="bx bx-log-out-circle text-muted ms-1"></i>
+          登出 <i className="bx bx-log-out-circle text-muted ms-1"></i>
         </DropdownItem>
       </DropdownMenu>
     </Dropdown>
@@ -182,26 +189,22 @@ const SideMenu = ({ onChangeLayoutMode }: any) => {
     activeTab: state.Layout.activeTab,
     layoutMode: state.Layout.layoutMode,
   }));
+  const { userProfile } = useProfile();
 
   /* 
     tab activation
     */
   const [selectedTab, setSelectedTab] = useState<
-    | TABS.BOOKMARK
-    | TABS.CALLS
-    | TABS.CHAT
-    | TABS.CONTACTS
-    | TABS.SETTINGS
-    | TABS.USERS
+    // | TABS.BOOKMARK
+    // | TABS.CALLS
+    // | TABS.CONTACTS
+    TABS.CHAT | TABS.SETTINGS | TABS.USERS
   >(TABS.CHAT);
   const onChangeTab = (
-    id:
-      | TABS.BOOKMARK
-      | TABS.CALLS
-      | TABS.CHAT
-      | TABS.CONTACTS
-      | TABS.SETTINGS
-      | TABS.USERS
+    id: // | TABS.BOOKMARK
+    // | TABS.CALLS
+    // | TABS.CONTACTS
+    TABS.CHAT | TABS.SETTINGS | TABS.USERS
   ) => {
     setSelectedTab(id);
     dispatch(changeTab(id));
@@ -236,7 +239,10 @@ const SideMenu = ({ onChangeLayoutMode }: any) => {
           />
 
           {/* profile menu dropdown */}
-          <ProfileDropdownMenu onChangeTab={onChangeTab} />
+          <ProfileDropdownMenu
+            authUser={userProfile}
+            onChangeTab={onChangeTab}
+          />
         </Nav>
       </div>
       {/* end side-menu nav */}

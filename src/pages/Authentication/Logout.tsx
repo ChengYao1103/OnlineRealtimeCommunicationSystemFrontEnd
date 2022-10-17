@@ -34,17 +34,16 @@ const Logout = (props: any) => {
               </div>
             </div>
             <div className="mt-4 pt-2">
-              <h5>You are Logged Out</h5>
+              <h5>您已經登出</h5>
               <p className="text-muted font-size-15">
-                Thank you for using{" "}
-                <span className="fw-semibold text-dark">Doot</span>
+                感謝您的使用 <span className="fw-semibold text-dark"></span>!
               </p>
               <div className="mt-4">
                 <Link
                   to="/auth-login"
                   className="btn btn-primary w-100 waves-effect waves-light"
                 >
-                  Sign In
+                  返回登入畫面
                 </Link>
               </div>
             </div>

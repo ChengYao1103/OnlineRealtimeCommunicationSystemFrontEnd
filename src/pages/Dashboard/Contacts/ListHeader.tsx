@@ -11,7 +11,7 @@ const ListHeader = ({ openModal, search, onChangeSearch }: ListHeaderProps) => {
     <div className="px-4 pt-4">
       <div className="d-flex align-items-start">
         <div className="flex-grow-1">
-          <h4 className="mb-4">Contacts</h4>
+          <h4 className="mb-4">聯絡人</h4>
         </div>
         <div className="flex-shrink-0">
           <div id="add-contact-button">
@@ -26,7 +26,7 @@ const ListHeader = ({ openModal, search, onChangeSearch }: ListHeaderProps) => {
             </Button>
           </div>
           <UncontrolledTooltip target="add-contact-button" placement="bottom">
-            Add Contact
+            新增聯絡人
           </UncontrolledTooltip>
         </div>
       </div>
@@ -36,7 +36,7 @@ const ListHeader = ({ openModal, search, onChangeSearch }: ListHeaderProps) => {
           <Input
             type="text"
             className="form-control bg-light border-0 pe-0"
-            placeholder="Search Contacts.."
+            placeholder="搜尋..."
             aria-label="Search Contacts..."
             aria-describedby="button-searchcontactsaddon"
             value={search || ""}

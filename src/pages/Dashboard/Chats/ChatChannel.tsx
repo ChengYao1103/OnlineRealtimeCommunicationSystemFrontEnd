@@ -4,18 +4,30 @@ import classnames from "classnames";
 
 // interface
 import { ChannelTypes } from "../../../data/chat";
+import { channelModel } from "../../../redux/chats/types";
 
 interface ChannelProps {
-  channel: ChannelTypes;
-  selectedChat: string | number;
-  onSelectChat: (id: number | string, isChannel?: boolean) => void;
+  channel: channelModel;
+  selectedChatInfo: channelModel;
+  onSelectChat: (
+    id: number | string,
+    info: channelModel,
+    isChannel?: boolean
+  ) => void;
 }
-const ChatChannel = ({ channel, selectedChat, onSelectChat }: ChannelProps) => {
-  const unRead = channel.meta && channel.meta.unRead;
+const ChatChannel = ({
+  channel,
+  selectedChatInfo,
+  onSelectChat,
+}: ChannelProps) => {
+  //const unRead = channel.meta && channel.meta.unRead;
+  const unRead = false;
   const isSelectedChat: boolean =
-    selectedChat && selectedChat === channel.id ? true : false;
+    selectedChatInfo &&
+    selectedChatInfo.id === channel.id &&
+    selectedChatInfo.name === channel.name;
   const onClick = () => {
-    onSelectChat(channel.id, true);
+    onSelectChat(channel.id, channel, true);
   };
 
   return (

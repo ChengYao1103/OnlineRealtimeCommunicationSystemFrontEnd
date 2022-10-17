@@ -13,30 +13,29 @@ import imagePlaceholder from "../../../assets/images/users/profile-placeholder.p
 
 // constants
 import { STATUS_TYPES } from "../../../constants";
+
+//interfaces
+import { userModel } from "../../../redux/auth/types";
+
 interface ProfileUserProps {
   onCloseUserDetails: () => any;
-  chatUserDetails: any;
+  selectedChatInfo: userModel;
   onOpenVideo: () => void;
   onOpenAudio: () => void;
 }
 const ProfileUser = ({
   onCloseUserDetails,
-  chatUserDetails,
+  selectedChatInfo,
   onOpenAudio,
   onOpenVideo,
 }: ProfileUserProps) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const toggle = () => setDropdownOpen(!dropdownOpen);
 
-  const profile = chatUserDetails.profileImage
-    ? chatUserDetails.profileImage
+  const profile = selectedChatInfo.cover
+    ? selectedChatInfo.cover
     : imagePlaceholder;
-  const fullName =
-    chatUserDetails.name === undefined
-      ? chatUserDetails.firstName
-        ? `${chatUserDetails.firstName} ${chatUserDetails.lastName}`
-        : "-"
-      : chatUserDetails.name;
+  const fullName = selectedChatInfo.name;
 
   return (
     <div className="p-3 border-bottom">
@@ -73,44 +72,45 @@ const ProfileUser = ({
                     <i className="bx bx-dots-vertical-rounded"></i>
                   </DropdownToggle>
                   <DropdownMenu className="dropdown-menu-end">
-                    <DropdownItem
+                    {/* <DropdownItem
                       className="d-flex justify-content-between align-items-center d-lg-none user-profile-show"
                       to="#"
                     >
-                      View Profile <i className="bx bx-user text-muted"></i>
-                    </DropdownItem>
+                      查看個人資料 <i className="bx bx-user text-muted"></i>
+                    </DropdownItem> */}
                     <DropdownItem
                       className="d-flex justify-content-between align-items-center d-lg-none"
                       to="#"
                       onClick={onOpenAudio}
                     >
-                      Audio <i className="bx bxs-phone-call text-muted"></i>
+                      語音通話 <i className="bx bxs-phone-call text-muted"></i>
                     </DropdownItem>
                     <DropdownItem
                       className="d-flex justify-content-between align-items-center d-lg-none"
                       to="#"
                       onClick={onOpenVideo}
                     >
-                      Video <i className="bx bx-video text-muted"></i>
+                      視訊通話 <i className="bx bx-video text-muted"></i>
+                    </DropdownItem>
+                    {/* <DropdownItem
+                      className="d-flex justify-content-between align-items-center"
+                      to="#"
+                    >
+                      封存 <i className="bx bx-archive text-muted"></i>
                     </DropdownItem>
                     <DropdownItem
                       className="d-flex justify-content-between align-items-center"
                       to="#"
                     >
-                      Archive <i className="bx bx-archive text-muted"></i>
+                      關閉提醒{" "}
+                      <i className="bx bx-microphone-off text-muted"></i>
                     </DropdownItem>
                     <DropdownItem
                       className="d-flex justify-content-between align-items-center"
                       to="#"
                     >
-                      Muted <i className="bx bx-microphone-off text-muted"></i>
-                    </DropdownItem>
-                    <DropdownItem
-                      className="d-flex justify-content-between align-items-center"
-                      to="#"
-                    >
-                      Delete <i className="bx bx-trash text-muted"></i>
-                    </DropdownItem>
+                      刪除 <i className="bx bx-trash text-muted"></i>
+                    </DropdownItem> */}
                   </DropdownMenu>
                 </Dropdown>
               </div>
@@ -118,7 +118,7 @@ const ProfileUser = ({
           </div>
           <div className="mt-auto p-3">
             <h5 className="user-name mb-1 text-truncate">{fullName}</h5>
-            {chatUserDetails.status && (
+            {/*chatUserDetails.status && (
               <p className="font-size-14 text-truncate mb-0">
                 <i
                   className={classnames(
@@ -141,9 +141,9 @@ const ProfileUser = ({
                     }
                   )}
                 ></i>{" "}
-                {chatUserDetails.status}
+                {chatUserDetails.status*}
               </p>
-            )}
+            )*/}
           </div>
         </div>
       </div>

@@ -3,6 +3,7 @@ import firebase from "firebase/app";
 // Add the Firebase products that you want to use
 import "firebase/auth";
 import "firebase/firestore";
+import { setAuthorization } from "../api/apiCore";
 
 class FirebaseAuthBackend {
   constructor(firebaseConfig) {
@@ -184,7 +185,8 @@ class FirebaseAuthBackend {
 let _fireBaseBackend = null;
 
 const setLoggeedInUser = user => {
-  localStorage.setItem("authUser", JSON.stringify(user));
+  localStorage.setItem("authUser", JSON.stringify(user["user"]));
+  setAuthorization(user["token"]);
 };
 
 /**

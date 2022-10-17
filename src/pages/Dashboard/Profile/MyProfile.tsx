@@ -1,4 +1,7 @@
 import React, { useState } from "react";
+import { userModel } from "../../../redux/auth/types";
+import coverPlaceHolder from "../../../assets/images/pattern-1.jpg";
+import avatarPlaceHolder from "../../../assets/images/users/profile-placeholder.png";
 
 import {
   Dropdown,
@@ -7,27 +10,52 @@ import {
   DropdownItem,
 } from "reactstrap";
 
+// hooks
+import { useRedux } from "../../../hooks/index";
+
+// costants
+import { TABS } from "../../../constants/index";
+
+// actions
+import { changeTab } from "../../../redux/actions";
+import { getAuthInformation, getUserInformation } from "../../../redux/actions";
+
 // interface
 import { BasicDetailsTypes } from "../../../data/myProfile";
 
 interface MyProfileProps {
-  basicDetails: BasicDetailsTypes;
+  user: userModel;
 }
-const MyProfile = ({ basicDetails }: MyProfileProps) => {
+
+const MyProfile = ({ user }: MyProfileProps) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const toggle = () => setDropdownOpen(!dropdownOpen);
+  const { dispatch } = useRedux();
 
-  const fullName = basicDetails
-    ? `${basicDetails.firstName} ${basicDetails.lastName}`
-    : "-";
+  const onChangeTab = () => {
+    dispatch(changeTab(TABS.SETTINGS));
+  };
+
+  const GetAuthInfo = () => {
+    dispatch(getAuthInformation());
+  };
+
   return (
     <>
       <div className="user-profile-img">
-        {basicDetails && basicDetails.coverImage && (
+        {user && user.cover && (
           <img
-            src={basicDetails.coverImage}
-            className="profile-img"
+            src={user.cover}
+            className="profile-img profile-foreground-img"
+            style={{ height: "160px" }}
+            alt=""
+          />
+        )}
+        {(!user || !user.cover) && (
+          <img
+            src={coverPlaceHolder}
+            className="profile-img profile-foreground-img"
             style={{ height: "160px" }}
             alt=""
           />
@@ -38,7 +66,7 @@ const MyProfile = ({ basicDetails }: MyProfileProps) => {
             <div className="user-chat-nav p-2 ps-3">
               <div className="d-flex w-100 align-items-center">
                 <div className="flex-grow-1">
-                  <h5 className="text-white mb-0">My Profile</h5>
+                  <h5 className="text-white mb-0">個人資料</h5>
                 </div>
                 <div className="flex-shrink-0">
                   <Dropdown isOpen={dropdownOpen} toggle={toggle}>
@@ -49,26 +77,27 @@ const MyProfile = ({ basicDetails }: MyProfileProps) => {
                     >
                       <i className="bx bx-dots-vertical-rounded"></i>
                     </DropdownToggle>
-                    <DropdownMenu className="dropdown-menu-end">
+                    <DropdownMenu className="dropdown-menu-end" right>
                       <DropdownItem
                         className="d-flex align-items-center justify-content-between"
                         href="#"
+                        onClick={() => GetAuthInfo()}
                       >
-                        Info{" "}
+                        個人資料{" "}
                         <i className="bx bx-info-circle ms-2 text-muted"></i>
                       </DropdownItem>
                       <DropdownItem
                         className="d-flex align-items-center justify-content-between"
-                        href="#"
+                        onClick={() => onChangeTab()}
                       >
-                        Setting <i className="bx bx-cog text-muted ms-2"></i>
+                        設定 <i className="bx bx-cog text-muted ms-2"></i>
                       </DropdownItem>
                       <DropdownItem divider />
                       <DropdownItem
                         className="d-flex align-items-center justify-content-between"
                         href="#"
                       >
-                        Help{" "}
+                        協助{" "}
                         <i className="bx bx-help-circle ms-2 text-muted"></i>
                       </DropdownItem>
                     </DropdownMenu>
@@ -82,19 +111,23 @@ const MyProfile = ({ basicDetails }: MyProfileProps) => {
 
       <div className="text-center p-3 p-lg-4 border-bottom pt-2 pt-lg-2 mt-n5 position-relative">
         <div className="mb-lg-3 mb-2">
-          {basicDetails && basicDetails.coverImage && (
+          {user && user.photo && (
             <img
-              src={basicDetails.avatar}
-              className="rounded-circle avatar-lg img-thumbnail"
+              src={user.photo}
+              className="rounded-circle avatar-lg img-thumbnail user-profile-image"
+              alt=""
+            />
+          )}
+          {(!user || !user.photo) && (
+            <img
+              src={avatarPlaceHolder}
+              className="rounded-circle avatar-lg img-thumbnail user-profile-image"
               alt=""
             />
           )}
         </div>
 
-        <h5 className="font-size-16 mb-1 text-truncate">{fullName}</h5>
-        <p className="text-muted font-size-14 text-truncate mb-0">
-          {basicDetails && basicDetails.title ? basicDetails.title : "-"}
-        </p>
+        <h5 className="font-size-16 mb-1 text-truncate">{user.name}</h5>
       </div>
     </>
   );

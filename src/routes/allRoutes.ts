@@ -23,15 +23,15 @@ interface RouteProps {
 const publicRoutes: Array<RouteProps> = [
   { path: "/auth-login", component: Login },
   { path: "/auth-register", component: Register },
-  { path: "/auth-recoverpw", component: RecoverPassword },
   { path: "/auth-changepassword", component: ChangePassword },
-  { path: "/auth-lock-screen", component: LockScreen },
+  { path: "/auth-recoverpw", component: RecoverPassword },
   { path: "/logout", component: Logout },
 ];
 
 const privateRoutes: Array<RouteProps> = [
   { path: "/pages-starter", component: StarterPage },
   { path: "/dashboard", component: Dashboard },
+  { path: "/auth-lock-screen", component: LockScreen },
   { path: "/", exact: true, component: Root },
 ];
 

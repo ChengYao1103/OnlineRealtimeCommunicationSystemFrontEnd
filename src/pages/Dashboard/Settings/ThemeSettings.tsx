@@ -16,7 +16,7 @@ const ThemeSettings = ({ theme, onChangeData }: ThemeSettingsProps) => {
     <div className="accordion-body">
       <ThemeColor theme={theme} onChangeData={onChangeData} />
 
-      <ThemeImage theme={theme} onChangeData={onChangeData} />
+      {/*<ThemeImage theme={theme} onChangeData={onChangeData} />*/}
     </div>
   );
 };

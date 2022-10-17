@@ -1,7 +1,8 @@
 import React, { useEffect } from "react";
 
 // hooks
-import { useRedux } from "../../../hooks/index";
+import { useProfile, useRedux } from "../../../hooks/index";
+import { userModel } from "../../../redux/auth/types";
 
 // components
 import Loader from "../../../components/Loader";
@@ -25,6 +26,7 @@ const Index = (props: IndexProps) => {
       getProfileLoading: state.Profile.getProfileLoading,
       isProfileFetched: state.Profile.isProfileFetched,
     }));
+  const user: userModel = useProfile().userProfile;
 
   // get user profile details
   useEffect(() => {
@@ -34,10 +36,10 @@ const Index = (props: IndexProps) => {
   return (
     <div className="position-relative">
       {getProfileLoading && !isProfileFetched && <Loader />}
-      <MyProfile basicDetails={profileDetails.basicDetails} />
+      <MyProfile user={user} />
 
       <AppSimpleBar className="p-4 profile-desc">
-        <UserDescription basicDetails={profileDetails.basicDetails} />
+        <UserDescription user={user} location={"location"} />
         <hr className="my-4" />
 
         <Media media={profileDetails.media} limit={2} />

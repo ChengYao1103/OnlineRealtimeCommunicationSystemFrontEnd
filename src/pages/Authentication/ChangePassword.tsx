@@ -2,18 +2,21 @@ import React from "react";
 import { Alert, Row, Col, Form } from "reactstrap";
 
 // hooks
-import { useRedux } from "../../hooks/index";
+import { useProfile, useRedux } from "../../hooks/index";
+
+// router
+import { useHistory } from "react-router-dom";
 
 // validations
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
 
-// // hooks
-// import { useProfile } from "../../hooks";
-
 //actions
-import { userChangePassword } from "../../redux/actions";
+import {
+  userChangePassword,
+  clearChangePasswordState,
+} from "../../redux/actions";
 
 // components
 import NonAuthLayoutWrapper from "../../components/NonAutnLayoutWrapper";
@@ -22,28 +25,37 @@ import FormInput from "../../components/FormInput";
 import Loader from "../../components/Loader";
 
 //images
-import avatar1 from "../../assets/images/users/avatar-1.jpg";
+import avatarPlaceHolder from "../../assets/images/users/profile-placeholder.png";
+import { ErrorMessages } from "../../repository/Enum";
 
 interface ChangePasswordProps {}
-const ChangePassword = (props: ChangePasswordProps) => {
+
+interface ChangePasswordFormProps {
+  oldPassword: string;
+  newPassword: string;
+  confirmPassword: string;
+}
+
+const ChangePassword = (prop: ChangePasswordProps) => {
   // global store
   const { dispatch, useAppSelector } = useRedux();
+  const { userProfile } = useProfile();
 
   const { changepasswordError, passwordChanged, changePassLoading } =
     useAppSelector(state => ({
-      passwordChanged: state.ForgetPassword.passwordChanged,
-      changepasswordError: state.ForgetPassword.changepasswordError,
-      changePassLoading: state.ForgetPassword.loading,
+      passwordChanged: state.Auth.passwordChanged,
+      changepasswordError: state.Auth.changepasswordError,
+      changePassLoading: state.Auth.loading,
     }));
 
   const resolver = yupResolver(
     yup.object().shape({
-      oldPassword: yup.string().required("Please Enter Old Password."),
-      password: yup.string().required("Please Enter New Password."),
-      confirmpassword: yup
+      oldPassword: yup.string().required(ErrorMessages["required"]),
+      newPassword: yup.string().required(ErrorMessages["required"]),
+      confirmPassword: yup
         .string()
-        .oneOf([yup.ref("password"), null], "Passwords don't match")
-        .required("This value is required."),
+        .oneOf([yup.ref("newPassword"), null], "與新密碼不相符")
+        .required(ErrorMessages["required"]),
     })
   );
 
@@ -57,9 +69,24 @@ const ChangePassword = (props: ChangePasswordProps) => {
     formState: { errors },
   } = methods;
 
-  const onSubmitForm = (values: object) => {
+  const onSubmitForm = (values: ChangePasswordFormProps) => {
     dispatch(userChangePassword(values));
   };
+
+  let history = useHistory();
+
+  const goBack = () => {
+    dispatch(clearChangePasswordState());
+    history.goBack();
+  };
+
+  if (passwordChanged) {
+    setTimeout(() => goBack(), 1000);
+  }
+
+  if (userProfile.email === "") {
+    history.push("/");
+  }
 
   // const { userProfile, loading } = useProfile();
 
@@ -68,21 +95,19 @@ const ChangePassword = (props: ChangePasswordProps) => {
       <Row className=" justify-content-center my-auto">
         <Col sm={8} lg={6} xl={5} className="col-xxl-4">
           <div className="py-md-5 py-4">
-            <AuthHeader title="Change Password" />
+            <AuthHeader title="變更密碼" />
             <div className="user-thumb text-center mb-4">
               <img
-                src={avatar1}
+                src={userProfile.photo ? userProfile.photo : avatarPlaceHolder}
                 className="rounded-circle img-thumbnail avatar-lg"
                 alt="thumbnail"
               />
-              <h5 className="font-size-15 mt-3">Kathryn Swarey</h5>
+              <h5 className="font-size-15 mt-3">{userProfile.name}</h5>
             </div>
-            {changepasswordError && changepasswordError ? (
-              <Alert color="danger">{changepasswordError}</Alert>
-            ) : null}
-            {passwordChanged ? (
-              <Alert color="success">Your Password is changed</Alert>
-            ) : null}
+            {changepasswordError && !passwordChanged && (
+              <Alert color="danger">舊密碼錯誤</Alert>
+            )}
+            {passwordChanged && <Alert color="success">密碼變更成功</Alert>}
 
             <Form
               onSubmit={handleSubmit(onSubmitForm)}
@@ -91,7 +116,7 @@ const ChangePassword = (props: ChangePasswordProps) => {
               {changePassLoading && <Loader />}
               <div className="mb-3">
                 <FormInput
-                  label="Old Password"
+                  label="舊密碼"
                   type="password"
                   name="oldPassword"
                   register={register}
@@ -106,9 +131,9 @@ const ChangePassword = (props: ChangePasswordProps) => {
               </div>
               <div className="mb-3">
                 <FormInput
-                  label="New Password"
+                  label="新密碼"
                   type="password"
-                  name="password"
+                  name="newPassword"
                   register={register}
                   errors={errors}
                   control={control}
@@ -121,14 +146,14 @@ const ChangePassword = (props: ChangePasswordProps) => {
               </div>
               <div className="mb-3">
                 <FormInput
-                  label="Confirm New Password"
+                  label="確認新密碼"
                   type="password"
-                  name="confirmpassword"
+                  name="confirmPassword"
                   register={register}
                   errors={errors}
                   control={control}
                   labelClassName="form-label"
-                  placeholder="Enter Confirm Password"
+                  placeholder="Enter New Password Again"
                   className="form-control"
                   withoutLabel={true}
                   hidePasswordButton={true}
@@ -139,12 +164,18 @@ const ChangePassword = (props: ChangePasswordProps) => {
                 <div className="row">
                   <div className="col-6">
                     <button className="btn btn-primary w-100" type="submit">
-                      Save
+                      變更
                     </button>
                   </div>
                   <div className="col-6">
-                    <button className="btn btn-light w-100" type="button">
-                      Cancel
+                    <button
+                      className="btn btn-light w-100"
+                      type="reset"
+                      onClick={() => {
+                        goBack();
+                      }}
+                    >
+                      返回
                     </button>
                   </div>
                 </div>

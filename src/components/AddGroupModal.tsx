@@ -16,7 +16,7 @@ import {
 //utils
 import { DivideByKeyResultTypes } from "../utils";
 
-// interfaaces
+// interfaces
 import { ContactTypes } from "../data/contacts";
 import { useContacts } from "../hooks";
 import { CreateChannelPostData } from "../redux/actions";
@@ -28,6 +28,7 @@ interface DataTypes {
   channelName: string;
   description: string;
 }
+/*  建立群組時勾選邀請人的item::start
 interface ContactItemProps {
   contact: ContactTypes;
   selected: boolean;
@@ -99,14 +100,18 @@ const CharacterItem = ({
     </div>
   );
 };
+  建立群組時勾選邀請人的item::end  */
 interface AddGroupModalProps {
   isOpen: boolean;
   onClose: () => void;
+  founderId: number;
   onCreateChannel: (params: CreateChannelPostData) => void;
 }
+
 const AddGroupModal = ({
   isOpen,
   onClose,
+  founderId,
   onCreateChannel,
 }: AddGroupModalProps) => {
   /*
@@ -157,9 +162,10 @@ const AddGroupModal = ({
   const [valid, setValid] = useState(false);
   useEffect(() => {
     if (
-      selectedContacts.length === 0 &&
+      /*selectedContacts.length === 0 &&
       !data.description &&
-      data.description === ""
+      data.description === ""*/
+      data.channelName === ""
     ) {
       setValid(false);
     } else {
@@ -173,8 +179,7 @@ const AddGroupModal = ({
   const onSubmit = () => {
     const params = {
       name: data.channelName,
-      members: selectedContacts,
-      description: data.description,
+      founderId: founderId,
     };
     onCreateChannel(params);
   };
@@ -190,83 +195,84 @@ const AddGroupModal = ({
       role="dialog"
     >
       <ModalHeader className="modal-title-custom" toggle={onClose}>
-        Create New Group
+        建立頻道
       </ModalHeader>
 
       <ModalBody className="p-4">
         <Form>
           <div className="mb-4">
             <Label htmlFor="addgroupname-input" className="form-label">
-              Group Name
+              頻道名稱
             </Label>
-            <Input
+            <input
               type="text"
               className="form-control"
               id="addgroupname-input"
-              placeholder="Enter Group Name"
+              placeholder="Enter Channel Name"
               value={data.channelName || ""}
               onChange={(e: any) => {
                 onDataChange("channelName", e.target.value);
               }}
             />
           </div>
-          <div className="mb-4">
-            <label className="form-label">Group Members</label>
-            <div className="mb-3">
-              <Button
-                color="light"
-                size="sm"
-                type="button"
-                onClick={toggleCollapse}
-              >
-                Select Members
-              </Button>
-            </div>
-
-            <Collapse isOpen={isOpenCollapse} id="groupmembercollapse">
-              <div className="card border">
-                <div className="card-header">
-                  <h5 className="font-size-15 mb-0">Contacts</h5>
-                </div>
-                <div className="card-body p-2">
-                  <AppSimpleBar style={{ maxHeight: "150px" }}>
-                    {(categorizedContacts || []).map(
-                      (letterContacts: DivideByKeyResultTypes, key: number) => (
-                        <CharacterItem
-                          letterContacts={letterContacts}
-                          key={key}
-                          index={key}
-                          totalContacts={totalContacts}
-                          selectedContacts={selectedContacts}
-                          onSelectContact={onSelectContact}
-                        />
-                      )
-                    )}
-                  </AppSimpleBar>
-                </div>
-              </div>
-            </Collapse>
+          {/*
+    <div className="mb-4">
+      <label className="form-label">Channel Members</label>
+      <div className="mb-3">
+        <Button
+          color="light"
+          size="sm"
+          type="button"
+          onClick={toggleCollapse}
+        >
+          Select Members
+        </Button>
+      </div>
+      <Collapse isOpen={isOpenCollapse} id="groupmembercollapse">
+        <div className="card border">
+          <div className="card-header">
+            <h5 className="font-size-15 mb-0">Contacts</h5>
           </div>
-          <div className="mb-3">
-            <Label htmlFor="addgroupdescription-input" className="form-label">
-              Description
-            </Label>
-            <textarea
-              className="form-control"
-              id="addgroupdescription-input"
-              rows={3}
-              placeholder="Enter Description"
-              value={data.description || ""}
-              onChange={(e: any) => {
-                onDataChange("description", e.target.value);
-              }}
-            />
+          <div className="card-body p-2">
+            <AppSimpleBar style={{ maxHeight: "150px" }}>
+              {(categorizedContacts || []).map(
+                (letterContacts: DivideByKeyResultTypes, key: number) => (
+                  <CharacterItem
+                    letterContacts={letterContacts}
+                    key={key}
+                    index={key}
+                    totalContacts={totalContacts}
+                    selectedContacts={selectedContacts}
+                    onSelectContact={onSelectContact}
+                  />
+                )
+              )}
+            </AppSimpleBar>
           </div>
+        </div>
+      </Collapse>
+    </div>
+    <div className="mb-3">
+      <Label htmlFor="addgroupdescription-input" className="form-label">
+        Description
+      </Label>
+      <textarea
+        className="form-control"
+        id="addgroupdescription-input"
+        rows={3}
+        placeholder="Enter Description"
+        value={data.description || ""}
+        onChange={(e: any) => {
+          onDataChange("description", e.target.value);
+        }}
+      />
+        </div>
+      */}
         </Form>
       </ModalBody>
       <ModalFooter>
         <Button color="link" type="button" onClick={onClose}>
-          Close
+          取消
         </Button>
         <Button
           type="button"
@@ -274,7 +280,7 @@ const AddGroupModal = ({
           onClick={onSubmit}
           disabled={!valid}
         >
-          Create Groups
+          建立
         </Button>
       </ModalFooter>
     </Modal>

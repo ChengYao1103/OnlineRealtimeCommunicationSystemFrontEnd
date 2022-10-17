@@ -4,6 +4,7 @@ import { Input, Label, FormFeedback } from "reactstrap";
 import classNames from "classnames";
 
 import { FieldErrors } from "react-hook-form";
+import { Link } from "react-router-dom";
 
 interface PasswordInputProps {
   name: string;
@@ -57,9 +58,59 @@ const PasswordInput: React.FunctionComponent<PasswordInputProps> = ({
             }}
             data-password={showPassword ? "true" : "false"}
           >
-            <i className="ri-eye-fill align-middle"></i>
+            <i className="ri-eye-fill align-middle me-3"></i>
           </button>
         )}
+      </div>
+    </>
+  );
+};
+
+interface SelectInputProps {
+  name: string;
+  placeholder?: string;
+  refCallback?: any;
+  errors: any;
+  register?: any;
+  className?: string;
+  withoutLabel?: boolean;
+  options?: any[];
+  defaultValue?: any;
+}
+
+/* Select Input */
+const SelectInput: React.FunctionComponent<SelectInputProps> = ({
+  name,
+  refCallback,
+  errors,
+  register,
+  className,
+  options,
+  defaultValue,
+}) => {
+  return (
+    <>
+      <div className="position-relative auth-pass-inputgroup mb-3">
+        <select
+          name={name}
+          id={name}
+          ref={(r: HTMLInputElement) => {
+            if (refCallback) refCallback(r);
+          }}
+          className={classNames(className, {
+            "is-invalid": errors && errors[name],
+          })}
+          {...(register ? register(name) : {})}
+          autoComplete={name}
+          defaultValue={defaultValue}
+        >
+          {options?.map(option => (
+            <option value={option.value}>{option.label}</option>
+          ))}
+        </select>
+        {errors && errors[name] ? (
+          <FormFeedback type="invalid"> {errors[name]["message"]}</FormFeedback>
+        ) : null}
       </div>
     </>
   );
@@ -80,6 +131,8 @@ interface FormInputProps extends InputHTMLAttributes<HTMLInputElement> {
   control?: any;
   withoutLabel?: boolean;
   hidePasswordButton?: boolean;
+  options?: any[];
+  dafaultValue?: any;
 }
 
 const FormInput: React.FunctionComponent<FormInputProps> = ({
@@ -97,6 +150,8 @@ const FormInput: React.FunctionComponent<FormInputProps> = ({
   control,
   withoutLabel,
   hidePasswordButton,
+  options,
+  defaultValue,
   ...otherProps
 }) => {
   return (
@@ -116,9 +171,9 @@ const FormInput: React.FunctionComponent<FormInputProps> = ({
                 <>
                   {!withoutLabel && (
                     <div className="float-end">
-                      <a href="auth-recoverpw" className="text-muted">
-                        Forgot password?
-                      </a>
+                      <Link to="/auth-recoverpw" className="text-muted">
+                        忘記密碼?
+                      </Link>
                     </div>
                   )}
 
@@ -164,38 +219,64 @@ const FormInput: React.FunctionComponent<FormInputProps> = ({
                   </div>
                   {errors && errors[name] ? (
                     <FormFeedback type="invalid">
-                      {errors[name]["message"]}
+                      {errors.name?.message}
                     </FormFeedback>
                   ) : null}
                 </>
               ) : (
                 <>
-                  {label ? (
-                    <Label htmlFor={name} className={labelClassName}>
-                      {label}
-                    </Label>
-                  ) : null}
-                  <input
-                    type={type}
-                    placeholder={placeholder}
-                    name={name}
-                    id={name}
-                    ref={(r: HTMLInputElement) => {
-                      if (refCallback) refCallback(r);
-                    }}
-                    className={classNames(className, {
-                      "is-invalid": errors && errors[name],
-                    })}
-                    {...(register ? register(name) : {})}
-                    {...otherProps}
-                    autoComplete={name}
-                    tag="input"
-                  />
-                  {errors && errors[name] ? (
-                    <FormFeedback type="invalid">
-                      {errors[name]["message"]}
-                    </FormFeedback>
-                  ) : null}
+                  {type === "select" ? (
+                    <>
+                      {label ? (
+                        <Label htmlFor={name} className={labelClassName}>
+                          {label}
+                        </Label>
+                      ) : null}
+                      <SelectInput
+                        name={name}
+                        refCallback={refCallback}
+                        errors={errors}
+                        register={register}
+                        className={className}
+                        options={options}
+                        defaultValue={defaultValue}
+                      />
+                      {errors && errors[name] ? (
+                        <FormFeedback type="invalid">
+                          {errors.name?.message}
+                        </FormFeedback>
+                      ) : null}
+                    </>
+                  ) : (
+                    <>
+                      {label ? (
+                        <Label htmlFor={name} className={labelClassName}>
+                          {label}
+                        </Label>
+                      ) : null}
+                      <input
+                        type={type}
+                        placeholder={placeholder}
+                        name={name}
+                        id={name}
+                        ref={(r: HTMLInputElement) => {
+                          if (refCallback) refCallback(r);
+                        }}
+                        className={classNames(className, {
+                          "is-invalid": errors && errors[name],
+                        })}
+                        {...(register ? register(name) : {})}
+                        {...otherProps}
+                        autoComplete={name}
+                        tag="input"
+                      />
+                      {errors && errors[name] ? (
+                        <FormFeedback type="invalid">
+                          {errors.name?.message}
+                        </FormFeedback>
+                      ) : null}
+                    </>
+                  )}
                 </>
               )}
             </>

@@ -1,5 +1,6 @@
 import { createStore, applyMiddleware, compose } from "redux";
 import createSagaMiddleware from "redux-saga";
+import { persistStore } from "redux-persist";
 import reducers from "./reducers";
 import rootSaga from "./sagas";
 
@@ -12,7 +13,7 @@ declare global {
   }
 }
 
-let store: any;
+export let store: any;
 export function configureStore(initialState: any) {
   const composeEnhancers =
     window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
@@ -23,6 +24,7 @@ export function configureStore(initialState: any) {
     composeEnhancers(applyMiddleware(...middlewares))
   );
   sagaMiddleware.run(rootSaga);
+  persistStore(store); //把整個store(所有state)裡面有persistReducer的內容永久保存
   return store;
 }
 

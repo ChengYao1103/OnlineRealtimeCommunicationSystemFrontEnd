@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
-
+import { toast } from "react-toastify";
 import { Button, Form, UncontrolledTooltip } from "reactstrap";
 import { Link } from "react-router-dom";
+// action
+import { getUserId, clearOtherUserId } from "../../../redux/actions";
 // hooks
-import { useRedux } from "../../../hooks/index";
+import { useProfile, useRedux } from "../../../hooks/index";
 
 // actions
 import {
@@ -12,6 +14,7 @@ import {
   getFavourites,
   getDirectMessages,
   getChannels,
+  getRecentChat,
   addContacts,
   createChannel,
   changeSelectedChat,
@@ -19,16 +22,25 @@ import {
   getChatUserConversations,
   getChannelDetails,
   getArchiveContact,
+  onSendMessage,
   readConversation,
 } from "../../../redux/actions";
 
 // interfaces
 import { CreateChannelPostData } from "../../../redux/actions";
+import { userModel } from "../../../redux/auth/types";
+import {
+  channelModel,
+  messageModel,
+  recentChatUserModel,
+} from "../../../redux/chats/types";
+import { DataTypes as newMessageTypes } from "../../../components/StartNewMessageModal";
 
 // components
 import AppSimpleBar from "../../../components/AppSimpleBar";
 import AddGroupModal from "../../../components/AddGroupModal";
 import InviteContactModal from "../../../components/InviteContactModal";
+import StartNewMessageModal from "../../../components/StartNewMessageModal";
 import AddButton from "../../../components/AddButton";
 import ContactModal from "../../../components/ContactModal";
 
@@ -37,6 +49,8 @@ import DirectMessages from "./DirectMessages";
 import Chanels from "./Chanels";
 import Archive from "./Archive";
 import { CHATS_TABS } from "../../../constants";
+import { showErrorNotification } from "../../../helpers/notifications";
+import { ErrorMessages } from "../../../repository/Enum";
 
 interface IndexProps {}
 const Index = (props: IndexProps) => {
@@ -44,39 +58,44 @@ const Index = (props: IndexProps) => {
   const { dispatch, useAppSelector } = useRedux();
 
   const {
+    AuthState,
     isContactInvited,
     favourites,
-    directMessages,
+    recentChatUsers,
     channels,
     isContactsAdded,
     isChannelCreated,
     selectedChat,
+    selectedChatInfo,
     isFavouriteContactToggled,
     archiveContacts,
     isContactArchiveToggled,
     chatUserDetails,
   } = useAppSelector(state => ({
+    AuthState: state.Auth,
     isContactInvited: state.Contacts.isContactInvited,
     favourites: state.Chats.favourites,
-    directMessages: state.Chats.directMessages,
+    recentChatUsers: state.Chats.recentChatUsers,
     channels: state.Chats.channels,
     isContactsAdded: state.Chats.isContactsAdded,
     isChannelCreated: state.Chats.isChannelCreated,
     selectedChat: state.Chats.selectedChat,
+    selectedChatInfo: state.Chats.selectedChatInfo,
     isFavouriteContactToggled: state.Chats.isFavouriteContactToggled,
     archiveContacts: state.Chats.archiveContacts,
     isContactArchiveToggled: state.Chats.isContactArchiveToggled,
     chatUserDetails: state.Chats.chatUserDetails,
   }));
-
+  const { userProfile } = useProfile();
   /*
   get data
   */
   useEffect(() => {
+    dispatch(getRecentChat(10, 1)); // get recent 1 messages with 10 users
     dispatch(getFavourites());
     dispatch(getDirectMessages());
-    dispatch(getChannels());
-  }, [dispatch]);
+    dispatch(getChannels(userProfile.id.toString()));
+  }, [dispatch, userProfile]);
   useEffect(() => {
     if (isFavouriteContactToggled) {
       dispatch(getFavourites());
@@ -111,21 +130,75 @@ const Index = (props: IndexProps) => {
   }, [dispatch, isContactInvited]);
 
   /*
-  contact add handeling
+  Start a new message handeling
   */
-  const [isOpenAddContact, setIsOpenAddContact] = useState<boolean>(false);
-  const openAddContactModal = () => {
-    setIsOpenAddContact(true);
+  const [isOpenNewMessage, setIsOpenNewMessage] = useState<boolean>(false);
+  const [isGetReceicerId, setIsGetReceicerId] = useState<boolean>(false);
+  const [isWaitingSend, setIsWaitingSend] = useState<boolean>(false);
+  const [contacts, setContacts] = useState<newMessageTypes>({
+    email: null,
+    content: null,
+  });
+  const [newMessageData, setNewMessageData] = useState<messageModel>({
+    receiverID: 0,
+    content: null,
+    type: 0,
+  });
+  const openNewMessageModal = () => {
+    setIsOpenNewMessage(true);
   };
-  const closeAddContactModal = () => {
-    setIsOpenAddContact(false);
+  const closeNewMessageModal = () => {
+    setIsOpenNewMessage(false);
   };
-  const onAddContact = (contacts: Array<string | number>) => {
-    dispatch(addContacts(contacts));
+  const onCreateNewMessage = (contacts: newMessageTypes) => {
+    if (contacts.email) {
+      setContacts(contacts);
+      dispatch(getUserId(contacts.email));
+      setIsGetReceicerId(false);
+      setIsWaitingSend(true);
+    }
   };
   useEffect(() => {
+    if (AuthState.otherUserId && !isGetReceicerId) {
+      setIsGetReceicerId(true);
+      if (AuthState.otherUserId === userProfile.id) {
+        showErrorNotification("無法傳訊給自己");
+      } else if (AuthState.otherUserId !== 0) {
+        setNewMessageData({
+          receiverID: AuthState.otherUserId,
+          content: contacts.content,
+          type: 0,
+        });
+      }
+    }
+    if (AuthState.otherUserId && isGetReceicerId) {
+      dispatch(clearOtherUserId());
+    }
+    if (newMessageData.receiverID !== 0 && isWaitingSend) {
+      setIsWaitingSend(false);
+      dispatch(onSendMessage(newMessageData));
+      dispatch(getRecentChat(10, 1));
+
+      setContacts({ email: null, content: null });
+      setNewMessageData({
+        receiverID: 0,
+        content: null,
+        type: 0,
+      });
+      setIsOpenNewMessage(false);
+    }
+  }, [
+    dispatch,
+    AuthState,
+    userProfile,
+    isGetReceicerId,
+    isWaitingSend,
+    contacts,
+    newMessageData,
+  ]);
+  useEffect(() => {
     if (isContactsAdded) {
-      setIsOpenAddContact(false);
+      setIsOpenNewMessage(false);
       dispatch(getDirectMessages());
     }
   }, [dispatch, isContactsAdded]);
@@ -147,9 +220,9 @@ const Index = (props: IndexProps) => {
   useEffect(() => {
     if (isChannelCreated) {
       setIsOpenCreateChannel(false);
-      dispatch(getChannels());
+      dispatch(getChannels(userProfile.id.toString()));
     }
-  }, [dispatch, isChannelCreated]);
+  }, [dispatch, isChannelCreated, userProfile]);
 
   /*
   select chat handeling :
@@ -157,15 +230,22 @@ const Index = (props: IndexProps) => {
     get chat user details
   */
 
-  const onSelectChat = (id: string | number, isChannel?: boolean) => {
+  const onSelectChat = (
+    id: string | number,
+    info: userModel | channelModel,
+    isChannel?: boolean
+  ) => {
+    if (selectedChatInfo === info) {
+      return;
+    }
     if (isChannel) {
       dispatch(getChannelDetails(id));
     } else {
       dispatch(getChatUserDetails(id));
     }
     dispatch(readConversation(id));
-    dispatch(getChatUserConversations(id));
-    dispatch(changeSelectedChat(id));
+    //dispatch(getChatUserConversations(id));
+    dispatch(changeSelectedChat(id, info));
   };
 
   /*
@@ -187,10 +267,10 @@ const Index = (props: IndexProps) => {
       dispatch(getArchiveContact());
       dispatch(getFavourites());
       dispatch(getDirectMessages());
-      dispatch(getChannels());
+      dispatch(getChannels(userProfile.id.toString()));
       dispatch(getChatUserDetails(chatUserDetails.id));
     }
-  }, [dispatch, isContactArchiveToggled, chatUserDetails.id]);
+  }, [dispatch, isContactArchiveToggled, chatUserDetails.id, userProfile]);
 
   return (
     <>
@@ -198,24 +278,23 @@ const Index = (props: IndexProps) => {
         <div className="px-4 pt-4">
           <div className="d-flex align-items-start">
             <div className="flex-grow-1">
-              <h4 className="mb-4">Chats</h4>
+              <h4 className="mb-4">聊天</h4>
             </div>
-            <div className="flex-shrink-0">
+            {/* <div className="flex-shrink-0">
               <div id="add-contact">
-                {/* Button trigger modal */}
                 <AddButton onClick={openModal} />
               </div>
               <UncontrolledTooltip target="add-contact" placement="bottom">
-                Add Contact
+                新增聯絡人
               </UncontrolledTooltip>
-            </div>
+            </div> */}
           </div>
           <Form>
             <div className="input-group mb-3">
               <input
                 type="text"
                 className="form-control bg-light border-0 pe-0"
-                placeholder="Search here.."
+                placeholder="搜尋..."
                 aria-label="Example text with button addon"
                 aria-describedby="searchbtn-addon"
               />
@@ -234,18 +313,21 @@ const Index = (props: IndexProps) => {
           {/* Start chat-message-list */}
           {active === CHATS_TABS.DEFAULT && (
             <>
-              {/* favourite */}
+              {/* favourite *
               <Favourites
                 users={favourites}
                 selectedChat={selectedChat}
                 onSelectChat={onSelectChat}
-              />
+              />/}
 
               {/* direct messages */}
               <DirectMessages
-                users={directMessages}
-                openAddContact={openAddContactModal}
-                selectedChat={selectedChat}
+                authUser={userProfile}
+                recentChatArray={
+                  recentChatUsers || ([] as recentChatUserModel[])
+                }
+                openAddContact={openNewMessageModal}
+                selectedChatInfo={selectedChatInfo}
                 onSelectChat={onSelectChat}
               />
 
@@ -253,26 +335,25 @@ const Index = (props: IndexProps) => {
               <Chanels
                 channels={channels}
                 openCreateChannel={openCreateChannelModal}
-                selectedChat={selectedChat}
+                selectedChatInfo={selectedChatInfo}
                 onSelectChat={onSelectChat}
               />
-              <h5 className="text-center mb-2">
+              {/* <h5 className="text-center mb-2">
                 <Link
                   to="#"
                   className="mb-3 px-4 mt-4 font-size-11 text-primary"
                   onClick={() => onChangeTab(CHATS_TABS.ARCHIVE)}
                 >
-                  Archived Contacts{" "}
-                  <i className="bx bxs-archive-in align-middle" />
+                  已封存 <i className="bx bxs-archive-in align-middle" />
                 </Link>
-              </h5>
+              </h5> */}
             </>
           )}
           {active === CHATS_TABS.ARCHIVE && (
             <>
               <Archive
                 archiveContacts={archiveContacts}
-                selectedChat={selectedChat}
+                selectedChatInfo={selectedChatInfo}
                 onSelectChat={onSelectChat}
               />
               <h5 className="text-center mb-2">
@@ -281,7 +362,7 @@ const Index = (props: IndexProps) => {
                   className="mb-3 px-4 mt-4 font-size-11 text-primary"
                   onClick={() => onChangeTab(CHATS_TABS.DEFAULT)}
                 >
-                  Chats <i className="bx bxs-archive-out align-middle" />
+                  聊天 <i className="bx bxs-archive-out align-middle" />
                 </Link>
               </h5>
             </>
@@ -295,6 +376,7 @@ const Index = (props: IndexProps) => {
         <AddGroupModal
           isOpen={isOpenCreateChannel}
           onClose={closeCreateChannelModal}
+          founderId={userProfile.id}
           onCreateChannel={onCreateChannel}
         />
       )}
@@ -308,11 +390,12 @@ const Index = (props: IndexProps) => {
         />
       )}
 
-      {isOpenAddContact && (
-        <ContactModal
-          isOpen={isOpenAddContact}
-          onClose={closeAddContactModal}
-          onAddContact={onAddContact}
+      {/* start new message modal */}
+      {isOpenNewMessage && (
+        <StartNewMessageModal
+          isOpen={isOpenNewMessage}
+          onClose={closeNewMessageModal}
+          onCreateNewMessage={onCreateNewMessage}
         />
       )}
     </>

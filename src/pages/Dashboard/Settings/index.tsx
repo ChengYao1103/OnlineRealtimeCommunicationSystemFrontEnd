@@ -3,7 +3,7 @@ import { Button, Collapse } from "reactstrap";
 import classnames from "classnames";
 
 // hooks
-import { useRedux } from "../../../hooks/index";
+import { useProfile, useRedux } from "../../../hooks/index";
 
 // actions
 import { getSettings, updateSettings } from "../../../redux/actions";
@@ -13,6 +13,7 @@ import { SETTINGS_COLLAPSES } from "../../../constants";
 
 // interface
 import { SettingsTypes } from "../../../data/settings";
+import { userModel } from "../../../redux/auth/types";
 
 // components
 import Loader from "../../../components/Loader";
@@ -105,11 +106,13 @@ const Index = (props: IndexProps) => {
   // global store
   const { dispatch, useAppSelector } = useRedux();
 
+  //get user information
   const { settingsData, getSettingsLoading } = useAppSelector(state => ({
     settingsData: state.Settings.settings,
     getSettingsLoading: state.Profile.getSettingsLoading,
     isSettingsFetched: state.Profile.isSettingsFetched,
   }));
+  const { userProfile } = useProfile();
 
   // get user settings
   useEffect(() => {
@@ -143,19 +146,19 @@ const Index = (props: IndexProps) => {
   const collapseItems: CollapseItemTypes[] = [
     {
       value: SETTINGS_COLLAPSES.PROFILE,
-      label: "Personal Info",
+      label: "個人資料",
       icon: "bx bxs-user",
-      component: <PersonalInfo basicDetails={settings.basicDetails} />,
+      component: <PersonalInfo user={userProfile} />,
     },
     {
       value: SETTINGS_COLLAPSES.THEME,
-      label: "Themes",
+      label: "主題",
       icon: "bx bxs-adjust-alt",
       component: (
         <ThemeSettings theme={settings.theme} onChangeData={onChangeData} />
       ),
     },
-    {
+    /*{
       value: SETTINGS_COLLAPSES.PRIVACY,
       label: "Privacy",
       icon: "bx bxs-lock",
@@ -179,7 +182,7 @@ const Index = (props: IndexProps) => {
       label: "Help",
       icon: "bx bxs-help-circle",
       component: <Help />,
-    },
+    },*/
   ];
 
   const onChangeCollapse = (
@@ -197,12 +200,9 @@ const Index = (props: IndexProps) => {
   return (
     <div className="position-relative">
       {getSettingsLoading && <Loader />}
-      <UserCoverImage basicDetails={settings.basicDetails} />
+      <UserCoverImage user={userProfile} />
 
-      <UserProfile
-        basicDetails={settings.basicDetails}
-        status={settings.status}
-      />
+      <UserProfile user={userProfile} status={settings.status} />
       {/* Start User profile description */}
       <AppSimpleBar className="user-setting">
         <div id="settingprofile" className="accordion accordion-flush">

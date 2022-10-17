@@ -34,7 +34,7 @@ const AttachedFiles = ({
               </span>
             </Button>
             <h5 className="font-size-11 text-uppercase text-muted mt-2">
-              Message
+              傳送訊息
             </h5>
           </div>
         </div>
@@ -56,7 +56,7 @@ const AttachedFiles = ({
               </span>
             </Button>
             <h5 className="font-size-11 text-uppercase text-muted mt-2">
-              Favourite
+              最愛
             </h5>
           </div>
         </div>
@@ -72,7 +72,7 @@ const AttachedFiles = ({
               </span>
             </Button>
             <h5 className="font-size-11 text-uppercase text-muted mt-2">
-              Audio
+              語音通話
             </h5>
           </div>
         </div>
@@ -89,7 +89,7 @@ const AttachedFiles = ({
               </span>
             </Button>
             <h5 className="font-size-11 text-uppercase text-muted mt-2">
-              Video
+              視訊通話
             </h5>
           </div>
         </div>
@@ -114,12 +114,11 @@ const AttachedFiles = ({
                 >
                   {chatUserDetails.isArchived ? (
                     <>
-                      Un-Archive{" "}
-                      <i className="bx bx-archive-out text-muted"></i>
+                      解除封存 <i className="bx bx-archive-out text-muted"></i>
                     </>
                   ) : (
                     <>
-                      Archive <i className="bx bx-archive text-muted"></i>
+                      封存 <i className="bx bx-archive text-muted"></i>
                     </>
                   )}
                 </DropdownItem>
@@ -127,18 +126,18 @@ const AttachedFiles = ({
                   className=" d-flex justify-content-between align-items-center"
                   to="#"
                 >
-                  Muted <i className="bx bx-microphone-off text-muted"></i>
+                  關閉提醒 <i className="bx bx-microphone-off text-muted"></i>
                 </DropdownItem>
                 <DropdownItem
                   className=" d-flex justify-content-between align-items-center"
                   to="#"
                 >
-                  Delete <i className="bx bx-trash text-muted"></i>
+                  刪除 <i className="bx bx-trash text-muted"></i>
                 </DropdownItem>
               </DropdownMenu>
             </Dropdown>
             <h5 className="font-size-11 text-uppercase text-muted mt-2">
-              More
+              更多...
             </h5>
           </div>
         </div>

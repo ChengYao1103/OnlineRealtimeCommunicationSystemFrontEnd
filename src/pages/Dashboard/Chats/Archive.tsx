@@ -3,21 +3,23 @@ import React from "react";
 // component
 import ChatUser from "./ChatUser";
 import ChatChannel from "./ChatChannel";
+import { userModel } from "../../../redux/auth/types";
+import { channelModel } from "../../../redux/chats/types";
 
 interface ArchiveProps {
   archiveContacts: any;
-  selectedChat: string | number;
-  onSelectChat: (id: number | string) => void;
+  selectedChatInfo: any;
+  onSelectChat: (id: number | string, info: userModel | channelModel) => void;
 }
 const Archive = ({
   archiveContacts,
-  selectedChat,
+  selectedChatInfo,
   onSelectChat,
 }: ArchiveProps) => {
   return (
     <>
       <h5 className="mb-3 px-4 mt-4 font-size-11 text-muted text-uppercase">
-      Archived
+        Archived
       </h5>
 
       <div className="chat-message-list">
@@ -28,7 +30,7 @@ const Archive = ({
                 <ChatChannel
                   channel={chat}
                   key={key}
-                  selectedChat={selectedChat}
+                  selectedChatInfo={selectedChatInfo}
                   onSelectChat={onSelectChat}
                 />
               );
@@ -37,7 +39,7 @@ const Archive = ({
                 <ChatUser
                   user={chat}
                   key={key}
-                  selectedChat={selectedChat}
+                  selectedChatInfo={selectedChatInfo}
                   onSelectChat={onSelectChat}
                 />
               );

@@ -3,17 +3,17 @@ import { Link } from "react-router-dom";
 import classnames from "classnames";
 
 // interface
-import { UserTypes } from "../../../data/chat";
 import { STATUS_TYPES } from "../../../constants";
+import { userModel } from "../../../redux/auth/types";
 
 interface ChatUserProps {
-  user: UserTypes;
-  selectedChat: string | number;
-  onSelectChat: (id: number | string) => void;
+  user: userModel;
+  selectedChatInfo: userModel;
+  onSelectChat: (id: number | string, user: userModel) => void;
 }
-const ChatUser = ({ user, selectedChat, onSelectChat }: ChatUserProps) => {
-  const fullName = `${user.firstName} ${user.lastName}`;
-  const shortName = `${user.firstName.charAt(0)}${user.lastName.charAt(0)}`;
+
+const ChatUser = ({ user, selectedChatInfo, onSelectChat }: ChatUserProps) => {
+  const fullName = user.name;
 
   const colors = [
     "bg-primary",
@@ -25,13 +25,17 @@ const ChatUser = ({ user, selectedChat, onSelectChat }: ChatUserProps) => {
     "bg-purple",
   ];
   const [color] = useState(Math.floor(Math.random() * colors.length));
-  const isOnline = user.status && user.status === STATUS_TYPES.ACTIVE;
-  const unRead = user.meta && user.meta.unRead;
+  //const isOnline = user.status && user.status === STATUS_TYPES.ACTIVE;
+  //const unRead = user.meta && user.meta.unRead;
+  const isOnline = false;
+  const unRead = 0;
 
   const isSelectedChat: boolean =
-    selectedChat && selectedChat === user.id ? true : false;
+    selectedChatInfo &&
+    selectedChatInfo.id === user.id &&
+    selectedChatInfo.name === user.name;
   const onClick = () => {
-    onSelectChat(user.id);
+    onSelectChat(user.id, user);
   };
   return (
     <li className={classnames({ active: isSelectedChat })} onClick={onClick}>
@@ -46,10 +50,10 @@ const ChatUser = ({ user, selectedChat, onSelectChat }: ChatUserProps) => {
               { online: isOnline }
             )}
           >
-            {user.profileImage ? (
+            {user.photo ? (
               <>
                 <img
-                  src={user.profileImage}
+                  src={user.photo}
                   className="rounded-circle avatar-xs"
                   alt=""
                 />
@@ -66,8 +70,8 @@ const ChatUser = ({ user, selectedChat, onSelectChat }: ChatUserProps) => {
                     colors[color]
                   )}
                 >
-                  <span className="username"> {shortName}</span>
-                  <span className="user-status"></span>
+                  <span className="username">{fullName.substring(0, 1)}</span>
+                  {isOnline && <span className="user-status"></span>}
                 </span>
               </div>
             )}

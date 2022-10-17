@@ -35,6 +35,7 @@ import NonAuthLayoutWrapper from "../../components/NonAutnLayoutWrapper";
 import AuthHeader from "../../components/AuthHeader";
 import FormInput from "../../components/FormInput";
 import Loader from "../../components/Loader";
+import { ErrorMessages, ErrorMessagesKey } from "../../repository/Enum";
 
 interface LocationTypes {
   from?: Location;
@@ -46,10 +47,10 @@ const Login = (props: LoginProps) => {
 
   const { isUserLogin, error, loginLoading, isUserLogout } = useAppSelector(
     state => ({
-      isUserLogin: state.Login.isUserLogin,
-      error: state.Login.error,
-      loginLoading: state.Login.loading,
-      isUserLogout: state.Login.isUserLogout,
+      isUserLogin: state.Auth.isUserLogin,
+      error: state.Auth.error,
+      loginLoading: state.Auth.loading,
+      isUserLogout: state.Auth.isUserLogout,
     })
   );
 
@@ -71,14 +72,14 @@ const Login = (props: LoginProps) => {
 
   const resolver = yupResolver(
     yup.object().shape({
-      email: yup.string().required("Please Enter E-mail."),
-      password: yup.string().required("Please Enter Password."),
+      email: yup.string().required(ErrorMessages["required"]),
+      password: yup.string().required(ErrorMessages["required"]),
     })
   );
 
   const defaultValues: any = {
-    email: "admin@themesbrand.com",
-    password: "123456",
+    email: "a@b.c",
+    password: "1234",
   };
 
   const methods = useForm({ defaultValues, resolver });
@@ -132,12 +133,13 @@ const Login = (props: LoginProps) => {
       <Row className=" justify-content-center my-auto">
         <Col sm={8} lg={6} xl={5} className="col-xxl-4">
           <div className="py-md-5 py-4">
-            <AuthHeader
-              title="Welcome Back !"
-              subtitle="Sign in to continue to Doot."
-            />
+            <AuthHeader title="歡迎使用！" subtitle="登入以繼續" />
 
-            {error && <Alert color="danger">{error}</Alert>}
+            {error && (
+              <Alert color="danger">
+                {ErrorMessages[error as ErrorMessagesKey]}
+              </Alert>
+            )}
 
             <Form
               onSubmit={handleSubmit(onSubmitForm)}
@@ -146,21 +148,21 @@ const Login = (props: LoginProps) => {
               {loginLoading && <Loader />}
               <div className="mb-3">
                 <FormInput
-                  label="Username"
+                  label="Email"
                   type="text"
                   name="email"
                   register={register}
                   errors={errors}
                   control={control}
                   labelClassName="form-label"
-                  placeholder="Enter username"
+                  placeholder="Enter Email"
                   className="form-control"
                 />
               </div>
 
               <div className="mb-3">
                 <FormInput
-                  label="Password"
+                  label="密碼"
                   type="password"
                   name="password"
                   register={register}
@@ -182,19 +184,19 @@ const Login = (props: LoginProps) => {
                   className="form-check-label font-size-14"
                   htmlFor="remember-check"
                 >
-                  Remember me
+                  記住我
                 </Label>
               </div>
 
               <div className="text-center mt-4">
                 <Button color="primary" className="w-100" type="submit">
-                  Log In
+                  登入
                 </Button>
               </div>
 
               <div className="mt-4 text-center">
                 <div className="signin-other-title">
-                  <h5 className="font-size-14 mb-4 title">Sign in with</h5>
+                  <h5 className="font-size-14 mb-4 title">使用以下方式登入</h5>
                 </div>
                 <Row className="">
                   <div className="col-4">
@@ -263,13 +265,13 @@ const Login = (props: LoginProps) => {
 
             <div className="mt-5 text-center text-muted">
               <p>
-                Don't have an account ?{" "}
+                沒有帳號嗎?{" "}
                 <Link
                   to="/auth-register"
                   className="fw-medium text-decoration-underline"
                 >
                   {" "}
-                  Register
+                  註冊
                 </Link>
               </p>
             </div>

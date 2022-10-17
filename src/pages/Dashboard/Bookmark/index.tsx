@@ -71,7 +71,7 @@ const Index = (props: IndexProps) => {
   return (
     <div className="position-relative">
       {getBookmarksLoading && <Loader />}
-      <LeftbarTitle title="Bookmark" />
+      <LeftbarTitle title="書籤" />
       <AppSimpleBar className="chat-message-list chat-bookmark-list">
         <ul className="list-unstyled chat-list">
           {(bookmarks || []).map((bookmark: BookMarkTypes, key: number) => (
