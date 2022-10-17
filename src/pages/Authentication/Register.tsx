@@ -50,9 +50,9 @@ const Register = (props: RegisterProps) => {
   );
 
   const defaultValues: any = {
-    email: "a@b.c",
-    name: "123",
-    password: "123",
+    email: "",
+    name: "",
+    password: "",
   };
 
   const methods = useForm({ defaultValues, resolver });

@@ -78,8 +78,8 @@ const Login = (props: LoginProps) => {
   );
 
   const defaultValues: any = {
-    email: "a@b.c",
-    password: "1234",
+    email: "",
+    password: "",
   };
 
   const methods = useForm({ defaultValues, resolver });
