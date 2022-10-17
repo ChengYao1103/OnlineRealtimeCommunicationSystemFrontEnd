@@ -50,12 +50,13 @@ const VideoCallModal = ({
   //const [cameraType, setCameraType] = useState("front");
   const [currentStream, setCurrentStream] = useState(new MediaStream());
   const [connection, setConnection] = useState<RTCPeerConnection>();
-  const [displayShareingTrack, setDisplayShareingTrack] = useState<MediaStreamTrack>();
+  const [displayShareingTrack, setDisplayShareingTrack] =
+    useState<MediaStreamTrack>();
   const api = new APIClient();
 
   // end call when page refresh
   useEffect(() => {
-    window.onbeforeunload = function() {
+    window.onbeforeunload = function () {
       finishCall();
     };
 
@@ -73,11 +74,14 @@ const VideoCallModal = ({
         return;
       }
 
-      connection?.getSenders().filter((rtpSender) => {
-        return rtpSender.track?.id === displayShareingTrack.id;
-      }).forEach((sender) => {
-        connection.removeTrack(sender);
-      });
+      connection
+        ?.getSenders()
+        .filter(rtpSender => {
+          return rtpSender.track?.id === displayShareingTrack.id;
+        })
+        .forEach(sender => {
+          connection.removeTrack(sender);
+        });
 
       displayShareingTrack.enabled = false;
       displayShareingTrack.stop();
@@ -538,9 +542,15 @@ const VideoCallModal = ({
                     onClick={() => setScreenShare()}
                     className="avatar-sm rounded-circle"
                   >
-                    <span className="avatar-title bg-transparent text-muted font-size-20">
-                      <i className="mdi mdi-desktop-mac"></i>
-                    </span>
+                    {isSharing ? (
+                      <span className="avatar-title bg-transparent text-white font-size-20">
+                        <i className="mdi mdi-close-circle-outline"></i>
+                      </span>
+                    ) : (
+                      <span className="avatar-title bg-transparent text-muted font-size-20">
+                        <i className="mdi mdi-desktop-mac"></i>
+                      </span>
+                    )}
                   </Button>
                 </div>
               </div>
