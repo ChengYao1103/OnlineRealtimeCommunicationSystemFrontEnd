@@ -1,3 +1,4 @@
+import { WSEvent, WSReceiveEvents } from "../repository/wsEvent";
 import { LOGOUT_URL } from "./apiCore";
 
 export class WSConnection {
@@ -61,6 +62,12 @@ export class WSConnection {
     if (event.data === "pong") {
       this.flag = true;
       return;
+    }
+
+    let data: WSEvent = JSON.parse(event.data);
+    if (event.data === "time out" || data.event === WSReceiveEvents.TokenExpired) {
+      WSConnection.instance.onclose = null;
+      window.location.href = LOGOUT_URL;
     }
 
     if (WSConnection.onMessageEvent) WSConnection.onMessageEvent(event);
