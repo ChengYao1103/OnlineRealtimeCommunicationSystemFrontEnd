@@ -405,10 +405,16 @@
   }
 }
 
+.videocallModal.modal-dialog {
+  @media (min-width: 575.98px) {
+    max-width: 75%;
+  }
+}
+
 .videocallModal {
   .modal-content {
-    background-color: black;
-    min-height: 512px;
+    background-color: white;
+    min-height: 350px;
     overflow: hidden;
     @media (max-width: 575.98px) {
       min-height: 512px;
@@ -419,7 +425,7 @@
 .videocallModal-bg {
   width: 100%;
   height: 100%;
-  padding-bottom: 47px;
+  padding-bottom: 46px;
   object-fit: contain;
 }
 
