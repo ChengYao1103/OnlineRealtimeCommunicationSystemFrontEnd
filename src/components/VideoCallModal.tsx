@@ -45,10 +45,12 @@ const VideoCallModal = ({
   const [isMute, setIsMute] = useState(false);
   const [isCloseSpeaker, setIsCloseSpeaker] = useState(false);
   const [isCloseCamera, setIsCloseCamera] = useState(false);
+  const [isSharing, setIsSharing] = useState(false);
   const [cameraList, setCameraList] = useState<MediaDeviceInfo[]>([]);
   //const [cameraType, setCameraType] = useState("front");
   const [currentStream, setCurrentStream] = useState(new MediaStream());
   const [connection, setConnection] = useState<RTCPeerConnection>();
+  const [displayShareingTrack, setDisplayShareingTrack] = useState<MediaStreamTrack>();
   const api = new APIClient();
 
   // end call when page refresh
@@ -66,27 +68,47 @@ const VideoCallModal = ({
    * 設定螢幕共享畫面
    */
   const setScreenShare = () => {
-    let constraints = {
-      audio: true,
-      video: {
-        frameRate: { ideal: 60, max: 120 },
-      },
-    };
-    navigator.mediaDevices
-      .getDisplayMedia(constraints)
-      .then(function (stream) {
-        if (connection) {
-          stream.getTracks().forEach(track => {
-            connection.addTrack(track, stream);
-          });
-        }
-        //document.querySelector("#testVideo").srcObject = stream;
-        // 取得成功，stream 可以翻作流，可以當作取到的影像聲音
-      })
-      .catch(function (err) {
-        console.log(err);
-        // 取得失敗
+    if (isSharing) {
+      if (!displayShareingTrack) {
+        return;
+      }
+
+      connection?.getSenders().filter((rtpSender) => {
+        return rtpSender.track?.id === displayShareingTrack.id;
+      }).forEach((sender) => {
+        connection.removeTrack(sender);
       });
+
+      displayShareingTrack.enabled = false;
+      displayShareingTrack.stop();
+      setIsSharing(false);
+    } else {
+      let constraints = {
+        audio: true,
+        video: {
+          frameRate: { ideal: 60, max: 120 },
+        },
+      };
+
+      navigator.mediaDevices
+        .getDisplayMedia(constraints)
+        .then(function (stream) {
+          if (connection) {
+            setIsSharing(true);
+            console.log("tracks", stream.getTracks());
+            setDisplayShareingTrack(stream.getTracks()[0]);
+            stream.getTracks().forEach(track => {
+              connection.addTrack(track, stream);
+            });
+          }
+          //document.querySelector("#testVideo").srcObject = stream;
+          // 取得成功，stream 可以翻作流，可以當作取到的影像聲音
+        })
+        .catch(function (err) {
+          console.log(err);
+          // 取得失敗
+        });
+    }
   };
 
   /** 設定socket和RTC參數
@@ -376,6 +398,12 @@ const VideoCallModal = ({
       };
       api.WSSend(JSON.stringify(data));
     }
+    if (displayShareingTrack) {
+      displayShareingTrack.stop();
+    }
+    if (connection) {
+      connection.close();
+    }
     dispatch(resetCallingStatus());
     onClose();
   };
@@ -505,7 +533,7 @@ const VideoCallModal = ({
                 </div>
                 <div className="avatar-md h-auto">
                   <Button
-                    color="light"
+                    color={isSharing ? "danger" : "light"}
                     type="button"
                     onClick={() => setScreenShare()}
                     className="avatar-sm rounded-circle"
