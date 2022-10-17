@@ -254,9 +254,11 @@ const Chats = persistReducer(
               rollCallLoading: false,
             };
           case ChatsActionTypes.GET_MY_ROLLCALL_RECORD:
+            let rollCallRecord = action.payload.data.rollCallRecord;
             return {
               ...state,
-              myRollCallRecord: action.payload.data.rollCallRecord,
+              myRollCallRecord:
+                rollCallRecord.rollCallID === 0 ? null : rollCallRecord,
               rollCallLoading: false,
             };
           case ChatsActionTypes.GET_HOMEWORK_SCORE:
