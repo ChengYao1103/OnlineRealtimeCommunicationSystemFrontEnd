@@ -109,8 +109,8 @@ const RollCallModal = ({ isOpen, onClose, role }: RollCallModalProps) => {
       dispatch(getMyRollCallRecord(rollCall?.id));
       if (new Date(rollCall.startTime).toISOString() !== "Invalid Date")
         setStartDateTime(new Date(rollCall.startTime).toLocaleString());
-      if (new Date(rollCall.end).toLocaleString() !== "Invalid Date")
-        setEndDateTime(new Date(rollCall.end).toLocaleString());
+      if (new Date(rollCall.endTime).toLocaleString() !== "Invalid Date")
+        setEndDateTime(new Date(rollCall.endTime).toLocaleString());
     }
   }, [rollCall]);
 
@@ -135,7 +135,7 @@ const RollCallModal = ({ isOpen, onClose, role }: RollCallModalProps) => {
       </ModalHeader>
       {mode === 0 && (
         <ModalFooter>
-          {role == 0 && (
+          {role === 0 && (
             <>
               <Button disabled={!rollCall} onClick={() => setMode(1)}>
                 編輯進行中的點名
@@ -183,7 +183,7 @@ const RollCallModal = ({ isOpen, onClose, role }: RollCallModalProps) => {
       {mode === 3 && (
         <ModalFooter>
           <Button onClick={() => setMode(0)}>查看進行中的點名</Button>
-          {role != 2 && <Button onClick={() => setMode(2)}>新增點名</Button>}
+          {role !== 2 && <Button onClick={() => setMode(2)}>新增點名</Button>}
         </ModalFooter>
       )}
       {(mode === 4 || mode === 5) && (

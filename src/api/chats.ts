@@ -239,7 +239,7 @@ const updateRollCall = (data: object) => {
 // };
 
 const getRollCallByChannelID = (id: string | number) => {
-  return api.create(url.GET_ROLLCALL_RECORDS, id);
+  return api.get(`${url.GET_ROLLCALL}/${id}`);
 };
 
 const getMyRollCallRecord = (id: string | number) => {
@@ -339,7 +339,7 @@ export {
   uploadHomework,
   downloadHomework,
   setHomeworkScore,
-  getHomeworkScore,  
+  getHomeworkScore,
   getHomework,
   uploadChannelFile,
   downloadChannelFile,

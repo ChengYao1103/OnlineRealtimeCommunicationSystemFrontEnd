@@ -454,7 +454,6 @@ function* deleteImage({ payload: { userId, messageId, imageId } }: any) {
 function* uploadMessageFile({ payload: data }: any) {
   try {
     const response: Promise<any> = yield call(uploadMessageFileApi, data);
-    console.log(response);
     let wsData = {
       to: data.receiverID,
       messageID: (response as any).id,
