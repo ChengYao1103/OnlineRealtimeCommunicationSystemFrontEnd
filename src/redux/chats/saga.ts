@@ -544,7 +544,7 @@ function* getPostComments({ payload: id }: any) {
 function* createRollCall({ payload: rollCallData }: any) {
   try {
     const response: Promise<any> = yield call(createRollCallApi, rollCallData);
-    yield call(showErrorNotification, "建立點名成功!");
+    yield call(showSuccessNotification, "建立點名成功!");
     yield put(
       chatsApiResponseSuccess(ChatsActionTypes.CREATE_ROLLCALL, response)
     );
@@ -561,6 +561,7 @@ function* createRollCall({ payload: rollCallData }: any) {
 function* updateRollCall({ payload: HomeworkData }: any) {
   try {
     const response: Promise<any> = yield call(updateRollCallApi, HomeworkData);
+    yield call(showSuccessNotification, "更新成功!");
     yield put(
       chatsApiResponseSuccess(ChatsActionTypes.UPDATE_HOMEWORK, response)
     );
@@ -599,6 +600,7 @@ function* getRollCall({ payload: id }: any) {
 function* doRollCall({ payload: id }: any) {
   try {
     const response: Promise<any> = yield call(doRollCallApi, id);
+    yield call(showSuccessNotification, "簽到成功!");
     yield put(chatsApiResponseSuccess(ChatsActionTypes.DO_ROLLCALL, response));
   } catch (error: any) {
     yield put(chatsApiResponseError(ChatsActionTypes.DO_ROLLCALL, error));

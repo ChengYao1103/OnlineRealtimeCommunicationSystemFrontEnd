@@ -38,14 +38,11 @@ const InviteChannelModal = ({ isOpen, onClose }: InviteContactModalProps) => {
       channelInfo.founderID === userProfile.id
     ) {
       return roleOption.map((role, key) => {
-        if (channelRole) {
-          return (
-            <option key={key} value={key}>
-              {role}
-            </option>
-          );
-        }
-        return null;
+        return (
+          <option key={key} value={key}>
+            {role}
+          </option>
+        );
       });
     }
     return (

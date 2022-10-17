@@ -82,6 +82,20 @@ const HomeworkModal = ({ isOpen, onClose, role }: HomeworkModalProps) => {
     }
   };
 
+  useEffect(() => {
+    if (homeworkInfo && mode === 2) {
+      setName(homeworkInfo.name);
+      setDescription(homeworkInfo.description);
+    } else {
+      setName("");
+      setDescription("");
+      setStartDate("");
+      setStartTime("");
+      setEndDate("");
+      setEndTime("");
+    }
+  }, [homeworkInfo, mode]);
+
   const onUpload = () => {
     let data = {
       homeworkID: homeworkInfo.id,

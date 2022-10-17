@@ -135,7 +135,7 @@ const RollCallModal = ({ isOpen, onClose, role }: RollCallModalProps) => {
       </ModalHeader>
       {mode === 0 && (
         <ModalFooter>
-          {role === 0 && (
+          {role !== 2 && (
             <>
               <Button disabled={!rollCall} onClick={() => setMode(1)}>
                 編輯進行中的點名
@@ -437,8 +437,12 @@ const RollCallModal = ({ isOpen, onClose, role }: RollCallModalProps) => {
                 dispatch(
                   updateRollCall({
                     id: rollCall.id,
-                    startTime: startDate + " " + startTime,
-                    endTime: endDate ? endDate + " " + endTime : null,
+                    startTime: new Date(
+                      startDate + " " + startTime
+                    ).toISOString(),
+                    endTime: endDate
+                      ? new Date(endDate + " " + endTime).toISOString()
+                      : null,
                   })
                 );
               } else if (mode === 2) {
@@ -447,7 +451,9 @@ const RollCallModal = ({ isOpen, onClose, role }: RollCallModalProps) => {
                 dispatch(
                   createRollCall({
                     channelID: channelInfo.id,
-                    startTime: new Date(tmpStartDateTime).toISOString(),
+                    startTime: startDate
+                      ? new Date(tmpStartDateTime).toISOString()
+                      : null,
                     endTime: endDate
                       ? new Date(tmpEndDateTime).toISOString()
                       : null,
