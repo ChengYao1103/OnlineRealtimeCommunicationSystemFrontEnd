@@ -226,8 +226,8 @@ const doRollCall = (data: object) => {
   return api.create(url.DO_ROLLCALL, data);
 };
 
-const closeRollCall = (id: string | number) => {
-  return api.patch(url.CLOSE_ROLLCALL, id);
+const closeRollCall = (data: object) => {
+  return api.patch(url.CLOSE_ROLLCALL, data);
 };
 
 const updateRollCall = (data: object) => {
@@ -239,7 +239,7 @@ const updateRollCall = (data: object) => {
 // };
 
 const getRollCallByChannelID = (id: string | number) => {
-  return api.create(url.GET_ROLLCALL_RECORDS, id);
+  return api.get(`${url.GET_ROLLCALL}/${id}`);
 };
 
 const getMyRollCallRecord = (id: string | number) => {
@@ -339,7 +339,7 @@ export {
   uploadHomework,
   downloadHomework,
   setHomeworkScore,
-  getHomeworkScore,  
+  getHomeworkScore,
   getHomework,
   uploadChannelFile,
   downloadChannelFile,

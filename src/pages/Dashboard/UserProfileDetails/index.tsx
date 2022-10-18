@@ -29,6 +29,8 @@ import ProfileChannel from "./ProfileChannel";
 import ChannelMeetingModal from "../../../components/ChannelMeetingModal";
 import InviteChannelModal from "../../../components/InviteChannelModal";
 import RollCallModal from "../../../components/RollCallModal";
+import HomeworkModal from "../../../components/HomeworkModal";
+import FileModal from "../../../components/FileModal";
 
 interface IndexProps {
   isChannel: boolean;
@@ -112,6 +114,29 @@ const Index = ({ isChannel }: IndexProps) => {
   };
 
   /*
+  homework modal
+  */
+  const [isOpenHomeworkModal, setIsOpenHomeworkModal] =
+    useState<boolean>(false);
+  const onOpenHomework = () => {
+    setIsOpenHomeworkModal(true);
+  };
+  const onCloseHomework = () => {
+    setIsOpenHomeworkModal(false);
+  };
+
+  /*
+ file modal
+  */
+  const [isOpenFileModal, setIsOpenFileModal] = useState<boolean>(false);
+  const onOpenFile = () => {
+    setIsOpenFileModal(true);
+  };
+  const onCloseFile = () => {
+    setIsOpenFileModal(false);
+  };
+
+  /*
   favourite
   */
   const onToggleFavourite = () => {
@@ -148,6 +173,8 @@ const Index = ({ isChannel }: IndexProps) => {
               selectedChatInfo={selectedChatInfo}
               onOpenInvite={onOpenInvite}
               onOpenRollCall={onOpenRollCall}
+              onOpenHomework={onOpenHomework}
+              onOpenFile={onOpenFile}
             />
           )}
           {/* <!-- End profile user --> */}
@@ -211,6 +238,20 @@ const Index = ({ isChannel }: IndexProps) => {
             <RollCallModal
               isOpen={isOpenRollCallModal}
               onClose={onCloseRollCall}
+              role={channelRole}
+            />
+          )}
+          {isOpenHomeworkModal && (
+            <HomeworkModal
+              isOpen={isOpenHomeworkModal}
+              onClose={onCloseHomework}
+              role={channelRole}
+            />
+          )}
+          {isOpenFileModal && (
+            <FileModal
+              isOpen={isOpenFileModal}
+              onClose={onCloseFile}
               role={channelRole}
             />
           )}

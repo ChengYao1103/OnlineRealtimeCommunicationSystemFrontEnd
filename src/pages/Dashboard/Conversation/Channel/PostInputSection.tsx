@@ -73,7 +73,6 @@ const PostInputSection = ({
   useEffect(() => {
     if (text !== "" || images.length > 0 || files.length > 0) {
       setDisabled(false);
-      console.log(files);
     } else {
       setDisabled(true);
     }

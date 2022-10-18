@@ -92,8 +92,8 @@ const Index = (props: IndexProps) => {
   */
   useEffect(() => {
     dispatch(getRecentChat(10, 1)); // get recent 1 messages with 10 users
-    dispatch(getFavourites());
-    dispatch(getDirectMessages());
+    // dispatch(getFavourites());
+    // dispatch(getDirectMessages());
     dispatch(getChannels(userProfile.id.toString()));
   }, [dispatch, userProfile]);
   useEffect(() => {
@@ -238,12 +238,12 @@ const Index = (props: IndexProps) => {
     if (selectedChatInfo === info) {
       return;
     }
-    if (isChannel) {
-      dispatch(getChannelDetails(id));
-    } else {
-      dispatch(getChatUserDetails(id));
-    }
-    dispatch(readConversation(id));
+    // if (isChannel) {
+    //   dispatch(getChannelDetails(id));
+    // } else {
+    //   dispatch(getChatUserDetails(id));
+    // }
+    // dispatch(readConversation(id));
     //dispatch(getChatUserConversations(id));
     dispatch(changeSelectedChat(id, info));
   };
@@ -259,18 +259,18 @@ const Index = (props: IndexProps) => {
   /*
   archive contacts
   */
-  useEffect(() => {
-    dispatch(getArchiveContact());
-  }, [dispatch]);
-  useEffect(() => {
-    if (isContactArchiveToggled) {
-      dispatch(getArchiveContact());
-      dispatch(getFavourites());
-      dispatch(getDirectMessages());
-      dispatch(getChannels(userProfile.id.toString()));
-      dispatch(getChatUserDetails(chatUserDetails.id));
-    }
-  }, [dispatch, isContactArchiveToggled, chatUserDetails.id, userProfile]);
+  // useEffect(() => {
+  //   dispatch(getArchiveContact());
+  // }, [dispatch]);
+  // useEffect(() => {
+  //   if (isContactArchiveToggled) {
+  //     dispatch(getArchiveContact());
+  //     dispatch(getFavourites());
+  //     dispatch(getDirectMessages());
+  //     dispatch(getChannels(userProfile.id.toString()));
+  //     dispatch(getChatUserDetails(chatUserDetails.id));
+  //   }
+  // }, [dispatch, isContactArchiveToggled, chatUserDetails.id, userProfile]);
 
   return (
     <>

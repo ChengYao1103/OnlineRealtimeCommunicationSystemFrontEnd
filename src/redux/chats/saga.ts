@@ -314,7 +314,7 @@ function* inviteChannelMembers({ payload: data }: any) {
     yield put(
       chatsApiResponseSuccess(ChatsActionTypes.INVITE_CHANNEL_MEMBERS, response)
     );
-    yield call(showSuccessNotification, "Invite successfully sent!");
+    yield call(showSuccessNotification, "邀請已送出!");
     yield put(refreshChannelMembers(data.channelID));
   } catch (error: any) {
     yield put(
@@ -340,7 +340,14 @@ function* kickOutMember({ payload: data }: any) {
     yield call(showSuccessNotification, "成功");
     yield put(refreshChannelMembers(data.channelID));
   } catch (error: any) {
-    yield call(showErrorNotification, "發生問題");
+    if (
+      error.data.message &&
+      error.data.message === "you do not have authority"
+    ) {
+      yield call(showErrorNotification, "權限不足");
+    } else {
+      yield call(showErrorNotification, "發生問題");
+    }
   }
 }
 
@@ -447,7 +454,6 @@ function* deleteImage({ payload: { userId, messageId, imageId } }: any) {
 function* uploadMessageFile({ payload: data }: any) {
   try {
     const response: Promise<any> = yield call(uploadMessageFileApi, data);
-    console.log(response);
     let wsData = {
       to: data.receiverID,
       messageID: (response as any).id,
@@ -538,10 +544,16 @@ function* getPostComments({ payload: id }: any) {
 function* createRollCall({ payload: rollCallData }: any) {
   try {
     const response: Promise<any> = yield call(createRollCallApi, rollCallData);
+    yield call(showSuccessNotification, "建立點名成功!");
     yield put(
       chatsApiResponseSuccess(ChatsActionTypes.CREATE_ROLLCALL, response)
     );
   } catch (error: any) {
+    if (error.data.message && error.data.message === "Conflict") {
+      yield call(showErrorNotification, "不可在相同時段內建立複數點名");
+    } else {
+      yield call(showErrorNotification, "發生錯誤");
+    }
     yield put(chatsApiResponseError(ChatsActionTypes.CREATE_ROLLCALL, error));
   }
 }
@@ -549,6 +561,7 @@ function* createRollCall({ payload: rollCallData }: any) {
 function* updateRollCall({ payload: HomeworkData }: any) {
   try {
     const response: Promise<any> = yield call(updateRollCallApi, HomeworkData);
+    yield call(showSuccessNotification, "更新成功!");
     yield put(
       chatsApiResponseSuccess(ChatsActionTypes.UPDATE_HOMEWORK, response)
     );
@@ -557,9 +570,9 @@ function* updateRollCall({ payload: HomeworkData }: any) {
   }
 }
 
-function* closeRollCall({ payload: id }: any) {
+function* closeRollCall({ payload: data }: any) {
   try {
-    const response: Promise<any> = yield call(closeRollCallApi, id);
+    const response: Promise<any> = yield call(closeRollCallApi, data);
     yield put(
       chatsApiResponseSuccess(ChatsActionTypes.CLOSE_ROLLCALL, response)
     );
@@ -571,43 +584,63 @@ function* closeRollCall({ payload: id }: any) {
 function* getRollCall({ payload: id }: any) {
   try {
     const response: Promise<any> = yield call(getRollCallByChannelIDApi, id);
-    yield put(chatsApiResponseSuccess(ChatsActionTypes.GET_ROLLCALL_BY_CHANNELID, response));
+    yield put(
+      chatsApiResponseSuccess(
+        ChatsActionTypes.GET_ROLLCALL_BY_CHANNELID,
+        response
+      )
+    );
   } catch (error: any) {
-    yield put(chatsApiResponseError(ChatsActionTypes.GET_ROLLCALL_BY_CHANNELID, error));
+    yield put(
+      chatsApiResponseError(ChatsActionTypes.GET_ROLLCALL_BY_CHANNELID, error)
+    );
   }
 }
 
 function* doRollCall({ payload: id }: any) {
   try {
     const response: Promise<any> = yield call(doRollCallApi, id);
+    yield call(showSuccessNotification, "簽到成功!");
     yield put(chatsApiResponseSuccess(ChatsActionTypes.DO_ROLLCALL, response));
   } catch (error: any) {
     yield put(chatsApiResponseError(ChatsActionTypes.DO_ROLLCALL, error));
   }
 }
 
-
 function* getRollCallRecordsByID({ payload: id }: any) {
   try {
     const response: Promise<any> = yield call(getRollCallRecordsByIDApi, id);
-    yield put(chatsApiResponseSuccess(ChatsActionTypes.GET_ROLLCALL_RECORDS_BY_ID, response));
+    console.log(response);
+    yield put(
+      chatsApiResponseSuccess(
+        ChatsActionTypes.GET_ROLLCALL_RECORDS_BY_ID,
+        response
+      )
+    );
   } catch (error: any) {
-    yield put(chatsApiResponseError(ChatsActionTypes.GET_ROLLCALL_RECORDS_BY_ID, error));
+    yield put(
+      chatsApiResponseError(ChatsActionTypes.GET_ROLLCALL_RECORDS_BY_ID, error)
+    );
   }
 }
 
 function* getMyRollCallRecord({ payload: id }: any) {
   try {
     const response: Promise<any> = yield call(getMyRollCallRecordApi, id);
-    yield put(chatsApiResponseSuccess(ChatsActionTypes.GET_MY_ROLLCALL_RECORD, response));
+    yield put(
+      chatsApiResponseSuccess(ChatsActionTypes.GET_MY_ROLLCALL_RECORD, response)
+    );
   } catch (error: any) {
-    yield put(chatsApiResponseError(ChatsActionTypes.GET_MY_ROLLCALL_RECORD, error));
+    yield put(
+      chatsApiResponseError(ChatsActionTypes.GET_MY_ROLLCALL_RECORD, error)
+    );
   }
 }
 
 function* createHomework({ payload: homeworkData }: any) {
   try {
     const response: Promise<any> = yield call(createHomeworkApi, homeworkData);
+    yield call(showSuccessNotification, "建立作業成功！");
     yield put(
       chatsApiResponseSuccess(ChatsActionTypes.CREATE_HOMEWORK, response)
     );
@@ -619,6 +652,7 @@ function* createHomework({ payload: homeworkData }: any) {
 function* updateHomework({ payload: homeworkData }: any) {
   try {
     const response: Promise<any> = yield call(updateHomeworkApi, homeworkData);
+    yield call(showSuccessNotification, "更新作業資訊成功！");
     yield put(
       chatsApiResponseSuccess(ChatsActionTypes.UPDATE_HOMEWORK, response)
     );
@@ -630,6 +664,7 @@ function* updateHomework({ payload: homeworkData }: any) {
 function* closeHomework({ payload: data }: any) {
   try {
     const response: Promise<any> = yield call(closeHomeworkApi, data);
+    yield call(showSuccessNotification, "結束作業成功！");
     yield put(
       chatsApiResponseSuccess(ChatsActionTypes.CLOSE_HOMEWORK, response)
     );
@@ -650,6 +685,7 @@ function* getHomework({ payload: id }: any) {
 function* uploadHomework({ payload: data }: any) {
   try {
     const response: Promise<any> = yield call(uploadHomeworkApi, data);
+    yield call(showSuccessNotification, "作業上傳成功！");
     yield put(
       chatsApiResponseSuccess(ChatsActionTypes.UPLOAD_HOMEWORK, response)
     );
@@ -676,6 +712,7 @@ function* downloadHomework({ payload: { data, filename } }: any) {
 function* setHomeworkScore({ payload: data }: any) {
   try {
     const response: Promise<any> = yield call(setHomeworkScoreApi, data);
+    yield call(showSuccessNotification, "分數設定成功！");
     yield put(
       chatsApiResponseSuccess(ChatsActionTypes.SET_HOMEWORK_SCORE, response)
     );
@@ -705,6 +742,7 @@ function* uploadChannelFile({ payload: data }: any) {
     yield put(
       chatsApiResponseSuccess(ChatsActionTypes.UPLOAD_CHANNEL_FILE, response)
     );
+    yield call(showSuccessNotification, "檔案上傳成功！");
   } catch (error: any) {
     yield put(
       chatsApiResponseError(ChatsActionTypes.UPLOAD_CHANNEL_FILE, error)
@@ -917,7 +955,10 @@ export function* watchDoRollCall() {
 }
 
 export function* watchGetRollCallRecordByID() {
-  yield takeEvery(ChatsActionTypes.GET_ROLLCALL_RECORDS_BY_ID, getRollCallRecordsByID);
+  yield takeEvery(
+    ChatsActionTypes.GET_ROLLCALL_RECORDS_BY_ID,
+    getRollCallRecordsByID
+  );
 }
 
 export function* watchGetMyRollCallRecord() {

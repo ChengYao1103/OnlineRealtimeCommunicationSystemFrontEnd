@@ -24,12 +24,16 @@ interface ProfileChannelProps {
   selectedChatInfo: userModel;
   onOpenInvite: () => void;
   onOpenRollCall: () => void;
+  onOpenHomework: () => void;
+  onOpenFile: () => void;
 }
 const ProfileChannel = ({
   onCloseUserDetails,
   selectedChatInfo,
   onOpenInvite,
   onOpenRollCall,
+  onOpenHomework,
+  onOpenFile,
 }: ProfileChannelProps) => {
   const { dispatch } = useRedux();
   const { userProfile } = useProfile();
@@ -112,6 +116,7 @@ const ProfileChannel = ({
                     <DropdownItem
                       className="d-flex justify-content-between align-items-center"
                       to="#"
+                      onClick={onOpenFile}
                     >
                       檔案{" "}
                       <i className="mdi mdi-folder-multiple-outline text-muted"></i>
@@ -119,17 +124,17 @@ const ProfileChannel = ({
                     <DropdownItem
                       className="d-flex justify-content-between align-items-center"
                       to="#"
-                      //onClick={onDelete}
+                      onClick={onOpenHomework}
                     >
                       作業 <i className="mdi mdi-pencil-outline text-muted"></i>
                     </DropdownItem>
-                    <DropdownItem
+                    {/* <DropdownItem
                       className="d-flex text-danger justify-content-between align-items-center"
                       to="#"
                       onClick={onLeave}
                     >
                       退出群組 <i className="bx bx-trash text-danger"></i>
-                    </DropdownItem>
+                    </DropdownItem> */}
                   </DropdownMenu>
                 </Dropdown>
               </div>

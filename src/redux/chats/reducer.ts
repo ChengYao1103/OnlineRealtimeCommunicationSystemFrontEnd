@@ -253,16 +253,18 @@ const Chats = persistReducer(
               rollCallRecords: action.payload.data.rollCallRecord,
               rollCallLoading: false,
             };
-          case ChatsActionTypes.GET_MY_ROLLCALL_RECORD:
+          case ChatsActionTypes.GET_ROLLCALL_RECORDS_BY_ID:
+            state.rollCallRecords = action.payload.data.rollCallRecord;
             return {
               ...state,
-              myRollCallRecord: action.payload.data.rollCallRecord,
               rollCallLoading: false,
             };
-          case ChatsActionTypes.GET_ROLLCALL_BY_CHANNELID:
+          case ChatsActionTypes.GET_MY_ROLLCALL_RECORD:
+            let rollCallRecord = action.payload.data.rollCallRecord;
             return {
               ...state,
-              studentRollCallRecords: action.payload.data.rollCallRecord,
+              myRollCallRecord:
+                rollCallRecord.rollCallID === 0 ? null : rollCallRecord,
               rollCallLoading: false,
             };
           case ChatsActionTypes.GET_HOMEWORK_SCORE:
@@ -378,14 +380,14 @@ const Chats = persistReducer(
           case ChatsActionTypes.GET_ROLLCALL_BY_CHANNELID:
             return {
               ...state,
-              rollCall: undefined,              
-              rollCallLoading: true,
+              rollCall: undefined,
+              rollCallLoading: false,
             };
           case ChatsActionTypes.GET_HOMEWORK:
             return {
               ...state,
               homework: undefined,
-              homeworkLoading: true,
+              homeworkLoading: false,
             };
           case ChatsActionTypes.GET_CHANNEL_DIRS:
             return {
@@ -398,24 +400,25 @@ const Chats = persistReducer(
             return {
               ...state,
               rollCallRecords: action.payload.data.rollCallRecord,
-              rollCallLoading: true,
+              rollCallLoading: false,
+            };
+          case ChatsActionTypes.GET_ROLLCALL_RECORDS_BY_ID:
+            state.rollCallRecords = [];
+            return {
+              ...state,
+              rollCallLoading: false,
             };
           case ChatsActionTypes.GET_MY_ROLLCALL_RECORD:
             return {
               ...state,
-              myRollCallRecord: action.payload.data.rollCallRecord,
-              rollCallLoading: true,
-            };       
+              myRollCallRecord: null,
+              rollCallLoading: false,
+            };
           case ChatsActionTypes.GET_CHANNEL_ROLLCALLS:
             return {
               ...state,
               channelRollCalls: [],
-              rollCallLoading: true,
-            };
-          case ChatsActionTypes.GET_CHANNEL_DIRS:
-            return {
-              ...state,
-              fileLoading: true,
+              rollCallLoading: false,
             };
           default:
             return { ...state };
@@ -531,14 +534,13 @@ const Chats = persistReducer(
         return {
           ...state,
           selectedHomework: action.payload.selectedHomework,
-          homeworkLoading: state.channelRole === 2 ? true : false
         };
       case ChatsActionTypes.CHANGE_SELECTED_ROLLCALL:
         state.selectedRollCall = null;
         return {
           ...state,
           selectedRollCall: action.payload.selectedRollCall,
-          rollCallLoading: true
+          rollCallLoading: true,
         };
       case ChatsActionTypes.BACK_SELECTED_DIR:
         return {

@@ -253,14 +253,14 @@ const More = ({
         </DropdownItem>
 
         <DropdownItem
-          className="d-flex justify-content-between align-items-center d-xxl-none"
+          className="d-flex justify-content-between align-items-center user-profile-show"
           to="#"
           onClick={onOpenRollCall}
         >
           點名 <i className="mdi mdi-bell-ring-outline text-muted"></i>
         </DropdownItem>
         <DropdownItem
-          className="d-flex justify-content-between align-items-center d-xxl-none"
+          className="d-flex justify-content-between align-items-center user-profile-show"
           to="#"
           onClick={onOpenVideo}
         >
@@ -295,13 +295,13 @@ const More = ({
         >
           作業 <i className="mdi mdi-pencil-outline text-muted"></i>
         </DropdownItem>
-        <DropdownItem
+        {/* <DropdownItem
           className="d-flex text-danger justify-content-between align-items-center"
           to="#"
           onClick={onLeave}
         >
           退出群組 <i className="bx bx-trash text-danger"></i>
-        </DropdownItem>
+        </DropdownItem> */}
       </DropdownMenu>
     </Dropdown>
   );
