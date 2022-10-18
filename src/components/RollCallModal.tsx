@@ -65,17 +65,27 @@ const RollCallModal = ({ isOpen, onClose, role }: RollCallModalProps) => {
   const [endDateInvalid, setEndDateInvalid] = useState(false);
   const [endTimeInvalid, setEndTimeInvalid] = useState(false);
   const [buttonDisabled, setButtonDisabled] = useState(false);
+  const [endDateInvalidMsg, setEndDateInvalidMsg] = useState("");
 
   const IsInvalid = () => {
     if (mode === 1 || mode === 2) {
       setStartDateInvalid(startTime !== "" && startDate === "")
-      setEndDateInvalid(endTime !== "" && endDate === "")
+      if (endTime !== "" && endDate === "") {
+        setEndDateInvalid(true)
+        setEndDateInvalidMsg("結束時間不能為空")
+      }
+      if (startDate !== "" && endDate !== "") {
+        if (new Date(startDate + " " + startTime) > new Date(endDate + " " + endTime)) {
+          setEndDateInvalid(true)
+          setEndDateInvalidMsg("結束時間必須在開始時間之後")
+        }
+      }
     }
   }
 
   const IsButtonDisabled = () => {
-    if (mode === 1) {
-      if ((!startDate && !endDate) || startDateInvalid || endDateInvalid) setButtonDisabled(true)
+    if (mode === 1 || mode === 2) {
+      if ((mode === 1 && !startDate && !endDate) || startDateInvalid || endDateInvalid) setButtonDisabled(true)
       else setButtonDisabled(false)
     }
     else if (mode === 0) {
@@ -287,7 +297,7 @@ const RollCallModal = ({ isOpen, onClose, role }: RollCallModalProps) => {
                       setEndDate(e.target.value);
                     }}
                   ></Input>
-                  {endDateInvalid && <FormFeedback>結束日期不能為空</FormFeedback>}
+                  {endDateInvalid && <FormFeedback>{endDateInvalidMsg}</FormFeedback>}
                 </FormGroup>
                 <FormGroup>
                   <Label htmlFor="RollCallEndTime-input" className="form-label">
