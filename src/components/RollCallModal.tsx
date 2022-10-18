@@ -60,6 +60,30 @@ const RollCallModal = ({ isOpen, onClose, role }: RollCallModalProps) => {
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
   const [mode, setMode] = useState(0); //0: 查看進行中的點名 1: 編輯進行中點名(老師) 2: 新增點名(老師) 3: 點名總表 4: 查看點名狀況(老師) 5: 查看點名狀況(學生)
+  const [startDateInvalid, setStartDateInvalid] = useState(false);
+  const [startTimeInvalid, setStartTimeInvalid] = useState(false);
+  const [endDateInvalid, setEndDateInvalid] = useState(false);
+  const [endTimeInvalid, setEndTimeInvalid] = useState(false);
+  const [buttonDisabled, setButtonDisabled] = useState(false);
+
+  const IsInvalid = () => {
+    if (mode === 1 || mode === 2) {
+      setStartDateInvalid(startTime !== "" && startDate === "")
+      setEndDateInvalid(endTime !== "" && endDate === "")
+    }
+  }
+
+  const IsButtonDisabled = () => {
+    if (mode === 1) {
+      if ((!startDate && !endDate) || startDateInvalid || endDateInvalid) setButtonDisabled(true)
+      else setButtonDisabled(false)
+    }
+    else if (mode === 0) {
+      if (role === 2 && (!rollCall || myRollCallRecord)) setButtonDisabled(true)
+      else setButtonDisabled(false)
+    }
+    else setButtonDisabled(false)
+  }
 
   const onLoad = () => {
     onClear();
@@ -92,6 +116,11 @@ const RollCallModal = ({ isOpen, onClose, role }: RollCallModalProps) => {
   };
 
   useEffect(() => {
+    IsInvalid()
+    IsButtonDisabled()
+  }, [mode, startDate, startTime, endDate, endTime]);
+
+  useEffect(() => {
     if (mode === 0) {
       onClear();
       dispatch(getRollCall(channelInfo.id));
@@ -115,7 +144,6 @@ const RollCallModal = ({ isOpen, onClose, role }: RollCallModalProps) => {
     }
   }, [rollCall]);
 
-  console.log(endDateTime)
   return (
     <Modal
       isOpen={isOpen}
@@ -219,12 +247,12 @@ const RollCallModal = ({ isOpen, onClose, role }: RollCallModalProps) => {
                     id="RollCallStartDate-input"
                     placeholder="Choose start date"
                     value={startDate}
-                    invalid={startTime !== "" && startDate === ""}
+                    invalid={startDateInvalid}
                     onChange={(e: any) => {
                       setStartDate(e.target.value);
                     }}
                   />
-                  {(startTime !== "" && startDate === "") && <FormFeedback>開始日期不能為空</FormFeedback>}
+                  {startDateInvalid && <FormFeedback>開始日期不能為空</FormFeedback>}
                 </FormGroup>
                 <FormGroup>
                   <Label
@@ -254,12 +282,12 @@ const RollCallModal = ({ isOpen, onClose, role }: RollCallModalProps) => {
                     id="RollCallEndDate-input"
                     placeholder="Choose end date (optional)"
                     value={endDate}
-                    invalid={(endTime !== "" && endDate === "")}
+                    invalid={endDateInvalid}
                     onChange={(e: any) => {
                       setEndDate(e.target.value);
                     }}
                   ></Input>
-                  {(endTime !== "" && endDate === "") && <FormFeedback>結束日期不能為空</FormFeedback>}
+                  {endDateInvalid && <FormFeedback>結束日期不能為空</FormFeedback>}
                 </FormGroup>
                 <FormGroup>
                   <Label htmlFor="RollCallEndTime-input" className="form-label">
@@ -435,7 +463,7 @@ const RollCallModal = ({ isOpen, onClose, role }: RollCallModalProps) => {
         <Button
           color="primary"
           className="m-3"
-          disabled={(mode === 0 && (!rollCall || myRollCallRecord)) || (startTime !== "" && startDate === "") || (endTime !== "" && endDate === "")}
+          disabled={buttonDisabled}
           onClick={() => {
             if (role !== 2) {
               if (mode === 0) {
@@ -444,9 +472,9 @@ const RollCallModal = ({ isOpen, onClose, role }: RollCallModalProps) => {
                 dispatch(
                   updateRollCall({
                     id: rollCall.id,
-                    startTime: new Date(
-                      startDate + " " + startTime
-                    ).toISOString(),
+                    startTime: startDate 
+                      ? new Date(startDate + " " + startTime).toISOString()
+                      : null,
                     endTime: endDate
                       ? new Date(endDate + " " + endTime).toISOString()
                       : null,
@@ -473,7 +501,7 @@ const RollCallModal = ({ isOpen, onClose, role }: RollCallModalProps) => {
           }}
         >
           {(mode === 0 &&
-            (role === 0 ? "關閉點名" : myRollCallRecord ? "已簽到" : "簽到")) ||
+            (role !== 2 ? "關閉點名" : myRollCallRecord ? "已簽到" : "簽到")) ||
             (mode === 1 && "儲存變更") ||
             (mode === 2 && "建立點名")}
         </Button>
