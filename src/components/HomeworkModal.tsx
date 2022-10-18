@@ -75,9 +75,8 @@ const HomeworkModal = ({ isOpen, onClose, role }: HomeworkModalProps) => {
   const [inputScore, setInputScore] = useState("");
   const [nameInvalid, setNameInvalid] = useState(false);
   const [startDateInvalid, setStartDateInvalid] = useState(false);
-  const [startTimeInvalid, setStartTimeInvalid] = useState(false);
   const [endDateInvalid, setEndDateInvalid] = useState(false);
-  const [endTimeInvalid, setEndTimeInvalid] = useState(false);
+  const [fileInvalid, setFileInvalid] = useState(false);
   const [buttonDisabled, setButtonDisabled] = useState(false);
   const [endDateInvalidMsg, setEndDateInvalidMsg] = useState("");
   
@@ -101,6 +100,9 @@ const HomeworkModal = ({ isOpen, onClose, role }: HomeworkModalProps) => {
         }
       }
     }
+    else if (role === 2 && mode === 1) {
+      setFileInvalid(!file)
+    }
   }
 
   const IsButtonDisabled = () => {
@@ -110,6 +112,7 @@ const HomeworkModal = ({ isOpen, onClose, role }: HomeworkModalProps) => {
       else if (mode === 3 && (!name || !startDate)) setButtonDisabled(true)
       else setButtonDisabled(false)
     }
+    else if (role === 2 && mode === 1) setButtonDisabled(!file)
     else setButtonDisabled(false)
   }
 
@@ -126,7 +129,7 @@ const HomeworkModal = ({ isOpen, onClose, role }: HomeworkModalProps) => {
   useEffect(() => {
     IsInvalid()
     IsButtonDisabled()
-  }, [mode, name, description, startDate, startTime, endDate, endTime, homeworkInfo]);
+  }, [mode, name, description, startDate, startTime, endDate, endTime, file, homeworkInfo]);
 
   useEffect(() => {
     if (homeworkInfo && mode === 2) {
@@ -141,9 +144,7 @@ const HomeworkModal = ({ isOpen, onClose, role }: HomeworkModalProps) => {
       setEndTime("");
       setNameInvalid(false)
       setStartDateInvalid(false);
-      setStartTimeInvalid(false);
       setEndDateInvalid(false);
-      setEndTimeInvalid(false);
       setButtonDisabled(false);
       setEndDateInvalidMsg("");
     }
@@ -324,9 +325,11 @@ const HomeworkModal = ({ isOpen, onClose, role }: HomeworkModalProps) => {
                     type="file"
                     className="form-control mb-3"
                     id="HomeworkFile-input"
+                    invalid={fileInvalid}
                     //value={"test"}
                     onChange={(e: any) => onSelectFile(e)}
                   />
+                  {fileInvalid && <FormFeedback>{"請選擇要繳交的檔案"}</FormFeedback>}
                 </FormGroup>
                 <FormGroup>
                   <Label htmlFor="HomeworkScore-input" className="form-label">
@@ -566,11 +569,11 @@ const HomeworkModal = ({ isOpen, onClose, role }: HomeworkModalProps) => {
             disabled={buttonDisabled}
             onClick={() => {
               IsInvalid()
-              if (nameInvalid || startDateInvalid || endDateInvalid) return
+              if (nameInvalid || startDateInvalid || endDateInvalid || fileInvalid) return
               if (mode === 1) {
-                if (role === 2) {
+                if (role === 2 && file) {
                   onUpload();
-                } else {
+                } else if (role !== 2) {
                   dispatch(
                     closeHomework({
                       id: homeworkInfo.id,
