@@ -239,9 +239,9 @@ export const doRollCall = (data: any) => ({
   payload: data,
 });
 
-export const closeRollCall = (id: number | string) => ({
+export const closeRollCall = (data: any) => ({
   type: ChatsActionTypes.CLOSE_ROLLCALL,
-  payload: id,
+  payload: data,
 });
 
 export const updateRollCall = (data: any) => ({

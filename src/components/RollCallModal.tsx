@@ -467,7 +467,7 @@ const RollCallModal = ({ isOpen, onClose, role }: RollCallModalProps) => {
           onClick={() => {
             if (role !== 2) {
               if (mode === 0) {
-                dispatch(closeRollCall(rollCall.id));
+                dispatch(closeRollCall({id: rollCall.id}));
               } else if (mode === 1) {
                 dispatch(
                   updateRollCall({

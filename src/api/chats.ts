@@ -226,8 +226,8 @@ const doRollCall = (data: object) => {
   return api.create(url.DO_ROLLCALL, data);
 };
 
-const closeRollCall = (id: string | number) => {
-  return api.patch(url.CLOSE_ROLLCALL, id);
+const closeRollCall = (data: object) => {
+  return api.patch(url.CLOSE_ROLLCALL, data);
 };
 
 const updateRollCall = (data: object) => {

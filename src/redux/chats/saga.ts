@@ -570,9 +570,9 @@ function* updateRollCall({ payload: HomeworkData }: any) {
   }
 }
 
-function* closeRollCall({ payload: id }: any) {
+function* closeRollCall({ payload: data }: any) {
   try {
-    const response: Promise<any> = yield call(closeRollCallApi, id);
+    const response: Promise<any> = yield call(closeRollCallApi, data);
     yield put(
       chatsApiResponseSuccess(ChatsActionTypes.CLOSE_ROLLCALL, response)
     );
