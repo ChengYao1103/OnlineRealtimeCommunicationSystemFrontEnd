@@ -77,7 +77,7 @@ const HomeworkModal = ({ isOpen, onClose, role }: HomeworkModalProps) => {
   const [startDateInvalid, setStartDateInvalid] = useState(false);
   const [endDateInvalid, setEndDateInvalid] = useState(false);
   const [fileInvalid, setFileInvalid] = useState(false);
-  const [buttonDisabled, setButtonDisabled] = useState(false);
+  const [buttonDisabled, setButtonDisabled] = useState(true); //控制button的disabled
   const [endDateInvalidMsg, setEndDateInvalidMsg] = useState("");
   
   const IsInvalid = () => {
@@ -100,20 +100,22 @@ const HomeworkModal = ({ isOpen, onClose, role }: HomeworkModalProps) => {
         }
       }
     }
-    else if (role === 2 && mode === 1) {
-      setFileInvalid(!file)
-    }
+    // else if (role === 2 && mode === 1) { //情境：學生繳交作業
+    //   setFileInvalid(!file)
+    // }
   }
 
   const IsButtonDisabled = () => {
-    if (mode === 2 || mode === 3) {
+    if (mode === 2 || mode === 3) { //情境：老師或助教修改/新增作業
       if (nameInvalid || startDateInvalid || endDateInvalid) setButtonDisabled(true)
       else if (mode === 2 && (!name && !description && !startDate && !endDate)) setButtonDisabled(true)
       else if (mode === 3 && (!name || !startDate)) setButtonDisabled(true)
       else setButtonDisabled(false)
     }
-    else if (role === 2 && mode === 1) setButtonDisabled(!file)
-    else setButtonDisabled(false)
+    else if (role === 2 && mode === 1) {
+      setButtonDisabled(!file) //情境：學生繳交作業
+    }
+    //else setButtonDisabled(false)
   }
 
   const onSelectHomework = (info: channelHomeworkModel | null) => {
@@ -142,10 +144,11 @@ const HomeworkModal = ({ isOpen, onClose, role }: HomeworkModalProps) => {
       setStartTime("");
       setEndDate("");
       setEndTime("");
-      setNameInvalid(false)
+      setNameInvalid(false);
+      setFileInvalid(false);
       setStartDateInvalid(false);
       setEndDateInvalid(false);
-      setButtonDisabled(false);
+      setButtonDisabled(true);
       setEndDateInvalidMsg("");
     }
   }, [homeworkInfo, mode]);
@@ -569,6 +572,9 @@ const HomeworkModal = ({ isOpen, onClose, role }: HomeworkModalProps) => {
             disabled={buttonDisabled}
             onClick={() => {
               IsInvalid()
+              if (role === 2 && mode === 1) { //情境：學生繳交作業
+                setFileInvalid(!file)
+              }
               if (nameInvalid || startDateInvalid || endDateInvalid || fileInvalid) return
               if (mode === 1) {
                 if (role === 2 && file) {
