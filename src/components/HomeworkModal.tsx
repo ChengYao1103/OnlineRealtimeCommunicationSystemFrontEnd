@@ -12,6 +12,7 @@ import {
   Input,
   Table,
   Col,
+  FormFeedback,
 } from "reactstrap";
 import { useRedux } from "../hooks";
 import {
@@ -72,6 +73,41 @@ const HomeworkModal = ({ isOpen, onClose, role }: HomeworkModalProps) => {
   const [file, setFile] = useState<any>();
   const [isEditing, setIsEditing] = useState(false);
   const [inputScore, setInputScore] = useState("");
+  const [nameInvalid, setNameInvalid] = useState(false);
+  const [startDateInvalid, setStartDateInvalid] = useState(false);
+  const [startTimeInvalid, setStartTimeInvalid] = useState(false);
+  const [endDateInvalid, setEndDateInvalid] = useState(false);
+  const [endTimeInvalid, setEndTimeInvalid] = useState(false);
+  const [buttonDisabled, setButtonDisabled] = useState(false);
+  const [endDateInvalidMsg, setEndDateInvalidMsg] = useState("");
+  
+  const IsInvalid = () => {
+    if (mode === 2 || mode === 3) {
+      setStartDateInvalid(startTime !== "" && startDate === "")
+      if (mode === 3) {
+        setNameInvalid(!name)
+      }
+      if (endTime !== "" && endDate === "") {
+        setEndDateInvalid(true)
+        setEndDateInvalidMsg("結束時間不能為空")
+      }
+      if (startDate !== "" && endDate !== "") {
+        if (new Date(startDate + " " + startTime) > new Date(endDate + " " + endTime)) {
+          setEndDateInvalid(true)
+          setEndDateInvalidMsg("結束時間必須在開始時間之後")
+        }
+      }
+    }
+  }
+
+  const IsButtonDisabled = () => {
+    if (mode === 2 || mode === 3) {
+      if ((!name && !description && !startDate && !endDate) ||  startDateInvalid || endDateInvalid) setButtonDisabled(true)
+      else setButtonDisabled(false)
+    }
+    else setButtonDisabled(false)
+  }
+
   const onSelectHomework = (info: channelHomeworkModel | null) => {
     if (homeworkInfo === info) {
       return;
@@ -81,6 +117,11 @@ const HomeworkModal = ({ isOpen, onClose, role }: HomeworkModalProps) => {
       if (info) dispatch(getHomeworkScore(info.id));
     }
   };
+
+  useEffect(() => {
+    IsInvalid()
+    IsButtonDisabled()
+  }, [mode, name, description, startDate, startTime, endDate, endTime]);
 
   useEffect(() => {
     if (homeworkInfo && mode === 2) {
@@ -93,6 +134,12 @@ const HomeworkModal = ({ isOpen, onClose, role }: HomeworkModalProps) => {
       setStartTime("");
       setEndDate("");
       setEndTime("");
+      setStartDateInvalid(false);
+      setStartTimeInvalid(false);
+      setEndDateInvalid(false);
+      setEndTimeInvalid(false);
+      setButtonDisabled(false);
+      setEndDateInvalidMsg("");
     }
   }, [homeworkInfo, mode]);
 
@@ -298,11 +345,13 @@ const HomeworkModal = ({ isOpen, onClose, role }: HomeworkModalProps) => {
                   className="form-control mb-3"
                   id="HomeworkName-input"
                   placeholder="請輸入此作業的名稱"
+                  invalid={nameInvalid}
                   value={name}
                   onChange={(e: any) => {
                     setName(e.target.value);
                   }}
                 />
+                {nameInvalid && <FormFeedback>{"名字不能為空"}</FormFeedback>}
               </FormGroup>
               <FormGroup>
                 <Label
@@ -331,10 +380,12 @@ const HomeworkModal = ({ isOpen, onClose, role }: HomeworkModalProps) => {
                   id="HomeworkStartDate-input"
                   placeholder="Choose start date"
                   value={startDate}
+                  invalid={startDateInvalid}
                   onChange={(e: any) => {
                     setStartDate(e.target.value);
                   }}
                 />
+                {startDateInvalid && <FormFeedback>{"開始日期不能為空"}</FormFeedback>}
               </FormGroup>
               <FormGroup>
                 <Label htmlFor="HomeworkStartTime-input" className="form-label">
@@ -361,10 +412,12 @@ const HomeworkModal = ({ isOpen, onClose, role }: HomeworkModalProps) => {
                   id="HomeworkEndDate-input"
                   placeholder="Choose end date (optional)"
                   value={endDate}
+                  invalid={endDateInvalid}
                   onChange={(e: any) => {
                     setEndDate(e.target.value);
                   }}
                 ></Input>
+                {endDateInvalid && <FormFeedback>{endDateInvalidMsg}</FormFeedback>}
               </FormGroup>
               <FormGroup>
                 <Label htmlFor="HomeworkEndTime-input" className="form-label">
@@ -500,7 +553,7 @@ const HomeworkModal = ({ isOpen, onClose, role }: HomeworkModalProps) => {
           <Button
             type="button"
             color="primary"
-            //disabled={!valid}
+            disabled={buttonDisabled}
             onClick={() => {
               if (mode === 1) {
                 if (role === 2) {
