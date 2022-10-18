@@ -10,6 +10,7 @@ import {
   Label,
   Input,
   Table,
+  FormFeedback,
 } from "reactstrap";
 import { useRedux } from "../hooks";
 import {
@@ -114,6 +115,7 @@ const RollCallModal = ({ isOpen, onClose, role }: RollCallModalProps) => {
     }
   }, [rollCall]);
 
+  console.log(endDateTime)
   return (
     <Modal
       isOpen={isOpen}
@@ -217,10 +219,12 @@ const RollCallModal = ({ isOpen, onClose, role }: RollCallModalProps) => {
                     id="RollCallStartDate-input"
                     placeholder="Choose start date"
                     value={startDate}
+                    invalid={startTime !== "" && startDate === ""}
                     onChange={(e: any) => {
                       setStartDate(e.target.value);
                     }}
                   />
+                  {(startTime !== "" && startDate === "") && <FormFeedback>開始日期不能為空</FormFeedback>}
                 </FormGroup>
                 <FormGroup>
                   <Label
@@ -250,10 +254,12 @@ const RollCallModal = ({ isOpen, onClose, role }: RollCallModalProps) => {
                     id="RollCallEndDate-input"
                     placeholder="Choose end date (optional)"
                     value={endDate}
+                    invalid={(endTime !== "" && endDate === "")}
                     onChange={(e: any) => {
                       setEndDate(e.target.value);
                     }}
                   ></Input>
+                  {(endTime !== "" && endDate === "") && <FormFeedback>結束日期不能為空</FormFeedback>}
                 </FormGroup>
                 <FormGroup>
                   <Label htmlFor="RollCallEndTime-input" className="form-label">
@@ -305,9 +311,10 @@ const RollCallModal = ({ isOpen, onClose, role }: RollCallModalProps) => {
                     type="datetime"
                     className="form-control mb-3"
                     id="RollCallEndTime-input"
-                    value={endDateTime}
+                    value={rollCall?.endTime === "0001-01-01T00:00:00Z" ? undefined : endDateTime}
                     disabled={true}
                     onChange={(e: any) => {
+                      console.log(endDateTime)
                       if (!Date.parse(e.target.value)) setEndDateTime("");
                       else setEndDateTime(e.target.value);
                     }}
@@ -428,7 +435,7 @@ const RollCallModal = ({ isOpen, onClose, role }: RollCallModalProps) => {
         <Button
           color="primary"
           className="m-3"
-          disabled={mode === 0 && (!rollCall || myRollCallRecord)}
+          disabled={(mode === 0 && (!rollCall || myRollCallRecord)) || (startTime !== "" && startDate === "") || (endTime !== "" && endDate === "")}
           onClick={() => {
             if (role !== 2) {
               if (mode === 0) {
