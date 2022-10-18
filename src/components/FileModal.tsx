@@ -191,17 +191,15 @@ const FileModal = ({ isOpen, onClose, role }: FileModalProps) => {
       <ModalBody className="p-4">
         <Form>
           <FormGroup>
-            <Button
-              type="button"
-              color="none"
-              className="btn nav-btn"
-              disabled={path.length === 0 || !path}
+            <Link
+              to="#"
+              style={{pointerEvents: path.length === 0 || !path ?  'none' : undefined}}
               onClick={() => {
                 onBack();
               }}
             >
-              <i className="bx bx-left-arrow-alt"></i>
-            </Button>
+              <i className="bx bx-left-arrow-alt" style={{padding: 10}}></i>
+            </Link>
             <Label htmlFor="RollCallStartTime-input" className="form-label">
               現在位置:{" "}
             </Label>
