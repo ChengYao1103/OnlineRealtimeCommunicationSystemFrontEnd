@@ -521,7 +521,9 @@ const HomeworkModal = ({ isOpen, onClose, role }: HomeworkModalProps) => {
                     id: homeworkInfo.id,
                     name: name,
                     description: description,
-                    startTime: new Date(tmpStartDateTime).toISOString(),
+                    startTime: startDate 
+                      ? new Date(tmpStartDateTime).toISOString() 
+                      : null,
                     endTime: endDate
                       ? new Date(tmpEndDateTime).toISOString()
                       : null,
