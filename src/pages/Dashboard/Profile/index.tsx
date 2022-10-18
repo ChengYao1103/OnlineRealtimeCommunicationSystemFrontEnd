@@ -29,9 +29,9 @@ const Index = (props: IndexProps) => {
   const user: userModel = useProfile().userProfile;
 
   // get user profile details
-  useEffect(() => {
-    dispatch(getProfileDetails());
-  }, [dispatch]);
+  // useEffect(() => {
+  //   dispatch(getProfileDetails());
+  // }, [dispatch]);
 
   return (
     <div className="position-relative">

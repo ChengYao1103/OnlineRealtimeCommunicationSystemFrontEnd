@@ -115,9 +115,9 @@ const Index = (props: IndexProps) => {
   const { userProfile } = useProfile();
 
   // get user settings
-  useEffect(() => {
-    dispatch(getSettings());
-  }, [dispatch]);
+  // useEffect(() => {
+  //   dispatch(getSettings());
+  // }, [dispatch]);
 
   const [settings, setSettings] = useState<SettingsTypes>(settingsData);
   useEffect(() => {
