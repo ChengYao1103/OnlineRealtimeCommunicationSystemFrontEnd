@@ -147,45 +147,61 @@ const FileModal = ({ isOpen, onClose, role }: FileModalProps) => {
       {isOpenInputName && (
         <ModalBody>
           <Label htmlFor="path-input" className="form-label">
-            請輸入資料夾名稱:{" "}
+            資料夾名稱:
           </Label>
-          <Input
-            className="form-control mb-3"
-            id="path-input"
-            value={dirName}
-            onChange={(e: any) => {
-              setDirName(e.target.value);
-            }}
-          />
-          <Button
-            disabled={dirName.trim().length === 0}
-            color="primary"
-            onClick={onAddDir}
-          >
-            確認
-          </Button>
+          
+          <Form inline>
+            <FormGroup row>
+              <div className="input-group">
+                <Input
+                  className="form-control mb-3"
+                  id="path-input"
+                  value={dirName}
+                  placeholder={"請輸入資料夾名稱"}
+                  onChange={(e: any) => {
+                    setDirName(e.target.value);
+                  }}
+                />
+                <Button
+                  disabled={dirName.trim().length === 0}
+                  color="primary"
+                  size="sm"
+                  style={{height: 40}}
+                  onClick={onAddDir}
+                >
+                  確認
+                </Button>                              
+              </div>
+            </FormGroup>
+          </Form>
         </ModalBody>
       )}
       {isOpenUploadFile && (
         <ModalBody>
-          <FormGroup>
-            <Label htmlFor="file-input" className="form-label">
-              檔案:
-            </Label>
-            <Input
-              type="file"
-              className="form-control mb-3"
-              id="file-input"
-              onChange={(e: any) => onSelectFiles(e)}
-            />
-            <Button
-              disabled={files.length == 0}
-              color="primary"
-              onClick={onUpload}
-            >
-              確認
-            </Button>
-          </FormGroup>
+          <Label htmlFor="file-input" className="form-label">
+            檔案:
+          </Label>          
+          <Form inline>
+            <FormGroup row>
+              <div className="input-group">
+                <Input
+                  type="file"
+                  className="form-control mb-3"
+                  id="file-input"
+                  onChange={(e: any) => onSelectFiles(e)}
+                />
+                <Button
+                  disabled={files.length == 0}
+                  color="primary"
+                  size="sm"
+                  style={{height: 40}}
+                  onClick={onUpload}
+                >
+                  確認
+                </Button>                                
+              </div>
+            </FormGroup>
+          </Form>
         </ModalBody>
       )}
       <ModalBody className="p-4">
