@@ -84,16 +84,19 @@ const HomeworkModal = ({ isOpen, onClose, role }: HomeworkModalProps) => {
   const IsInvalid = () => {
     if (mode === 2 || mode === 3) {
       setStartDateInvalid(startTime !== "" && startDate === "")
+      setEndDateInvalid((endTime !== "" && endDate === "") || (startDate !== "" && endDate !== "" &&(new Date(startDate + " " + startTime) > new Date(endDate + " " + endTime))))
+
       if (mode === 3) {
         setNameInvalid(!name)
+        setStartDateInvalid(!startDate)
       }
       if (endTime !== "" && endDate === "") {
-        setEndDateInvalid(true)
+       // setEndDateInvalid(true)
         setEndDateInvalidMsg("結束時間不能為空")
       }
       if (startDate !== "" && endDate !== "") {
         if (new Date(startDate + " " + startTime) > new Date(endDate + " " + endTime)) {
-          setEndDateInvalid(true)
+          //setEndDateInvalid(true)
           setEndDateInvalidMsg("結束時間必須在開始時間之後")
         }
       }
@@ -102,7 +105,9 @@ const HomeworkModal = ({ isOpen, onClose, role }: HomeworkModalProps) => {
 
   const IsButtonDisabled = () => {
     if (mode === 2 || mode === 3) {
-      if ((!name && !description && !startDate && !endDate) ||  startDateInvalid || endDateInvalid) setButtonDisabled(true)
+      if (nameInvalid || startDateInvalid || endDateInvalid) setButtonDisabled(true)
+      else if (mode === 2 && (!name && !description && !startDate && !endDate)) setButtonDisabled(true)
+      else if (mode === 3 && (!name || !startDate)) setButtonDisabled(true)
       else setButtonDisabled(false)
     }
     else setButtonDisabled(false)
@@ -121,7 +126,7 @@ const HomeworkModal = ({ isOpen, onClose, role }: HomeworkModalProps) => {
   useEffect(() => {
     IsInvalid()
     IsButtonDisabled()
-  }, [mode, name, description, startDate, startTime, endDate, endTime]);
+  }, [mode, name, description, startDate, startTime, endDate, endTime, homeworkInfo]);
 
   useEffect(() => {
     if (homeworkInfo && mode === 2) {
@@ -134,6 +139,7 @@ const HomeworkModal = ({ isOpen, onClose, role }: HomeworkModalProps) => {
       setStartTime("");
       setEndDate("");
       setEndTime("");
+      setNameInvalid(false)
       setStartDateInvalid(false);
       setStartTimeInvalid(false);
       setEndDateInvalid(false);
@@ -142,6 +148,10 @@ const HomeworkModal = ({ isOpen, onClose, role }: HomeworkModalProps) => {
       setEndDateInvalidMsg("");
     }
   }, [homeworkInfo, mode]);
+
+  useEffect(() => {
+    IsButtonDisabled()
+  }, [nameInvalid, startDateInvalid, endDateInvalid])
 
   const onUpload = () => {
     let data = {
@@ -555,6 +565,8 @@ const HomeworkModal = ({ isOpen, onClose, role }: HomeworkModalProps) => {
             color="primary"
             disabled={buttonDisabled}
             onClick={() => {
+              IsInvalid()
+              if (nameInvalid || startDateInvalid || endDateInvalid) return
               if (mode === 1) {
                 if (role === 2) {
                   onUpload();
@@ -585,6 +597,7 @@ const HomeworkModal = ({ isOpen, onClose, role }: HomeworkModalProps) => {
                 );
               }
               if (mode === 3) {
+                if (name && startDate) {
                 let tmpStartDateTime = startDate + " " + startTime;
                 let tmpEndDateTime = endDate + " " + endTime;
                 dispatch(
@@ -599,6 +612,7 @@ const HomeworkModal = ({ isOpen, onClose, role }: HomeworkModalProps) => {
                     type: false,
                   })
                 );
+              }
               }
             }}
           >
