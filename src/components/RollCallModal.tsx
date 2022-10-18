@@ -70,13 +70,12 @@ const RollCallModal = ({ isOpen, onClose, role }: RollCallModalProps) => {
   const IsInvalid = () => {
     if (mode === 1 || mode === 2) {
       setStartDateInvalid(startTime !== "" && startDate === "")
+      setEndDateInvalid((endTime !== "" && endDate === "") || (startDate !== "" && endDate !== "" &&(new Date(startDate + " " + startTime) > new Date(endDate + " " + endTime))))
       if (endTime !== "" && endDate === "") {
-        setEndDateInvalid(true)
         setEndDateInvalidMsg("結束時間不能為空")
       }
       if (startDate !== "" && endDate !== "") {
         if (new Date(startDate + " " + startTime) > new Date(endDate + " " + endTime)) {
-          setEndDateInvalid(true)
           setEndDateInvalidMsg("結束時間必須在開始時間之後")
         }
       }
@@ -89,7 +88,7 @@ const RollCallModal = ({ isOpen, onClose, role }: RollCallModalProps) => {
       else setButtonDisabled(false)
     }
     else if (mode === 0) {
-      if (role === 2 && (!rollCall || myRollCallRecord)) setButtonDisabled(true)
+      if (!rollCall || (role ===  2 && myRollCallRecord)) setButtonDisabled(true)
       else setButtonDisabled(false)
     }
     else setButtonDisabled(false)
@@ -128,11 +127,15 @@ const RollCallModal = ({ isOpen, onClose, role }: RollCallModalProps) => {
   useEffect(() => {
     IsInvalid()
     IsButtonDisabled()
-  }, [mode, startDate, startTime, endDate, endTime]);
+  }, [mode, startDate, startTime, endDate, endTime, rollCall]);
 
   useEffect(() => {
+    IsButtonDisabled()
+  }, [startDateInvalid, endDateInvalid])
+
+  useEffect(() => {
+    onClear();
     if (mode === 0) {
-      onClear();
       dispatch(getRollCall(channelInfo.id));
       if (role === 2) if (rollCall) dispatch(getMyRollCallRecord(rollCall?.id));
     }
