@@ -474,7 +474,7 @@ const HomeworkModal = ({ isOpen, onClose, role }: HomeworkModalProps) => {
                       }}
                     >
                       <td>
-                        <Link to="#" className="p-0">
+                        <Link to="#" className="p-0" style={{pointerEvents: 'none'}}>
                           <div className="d-flex align-items-center">
                             <div className="chat-avatar me-2">
                               <img
@@ -546,6 +546,18 @@ const HomeworkModal = ({ isOpen, onClose, role }: HomeworkModalProps) => {
                                     style={{ margin: 10 }}
                                   >
                                     {" "}
+                                  </i>
+                                </Link>
+                                <Link
+                                  to="#"
+                                  onClick={() => {
+                                      setIsEditing(false);
+                                  }}
+                                >
+                                  <i
+                                    className="mdi mdi-window-close"
+                                    style={{margin: 10}}
+                                  >
                                   </i>
                                 </Link>
                               </div>
