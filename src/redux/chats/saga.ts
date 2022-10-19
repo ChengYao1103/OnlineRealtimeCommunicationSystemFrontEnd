@@ -72,6 +72,7 @@ import {
   getDirectMessages as getDirectMessagesAction,
   getFavourites as getFavouritesAction,
   getChannelMembers as refreshChannelMembers,
+  getChannelDir as refreshChanneldir,
   chatsApiResponseSuccess,
   chatsApiResponseError,
 } from "./actions";
@@ -739,6 +740,9 @@ function* getHomeworkScore({ payload: id }: any) {
 function* uploadChannelFile({ payload: data }: any) {
   try {
     const response: Promise<any> = yield call(uploadChannelFileApi, data);
+    yield put(refreshChanneldir(data.channelID, {
+      path:  data.dirArray.length === 0 ? "" : data.dirArray.join("/"),
+    }));
     yield put(
       chatsApiResponseSuccess(ChatsActionTypes.UPLOAD_CHANNEL_FILE, response)
     );
@@ -770,10 +774,15 @@ function* downloadChannelFile({ payload: { data, filename } }: any) {
 function* createChannelDir({ payload: dirData }: any) {
   try {
     const response: Promise<any> = yield call(createChannelDirApi, dirData);
+    let path = dirData.path.split("/");
+    path.pop();
+    yield put(refreshChanneldir(dirData.id, {
+      path:  path.length === 0 ? "" : path.join("/"),
+    }));
+    yield call(showSuccessNotification, "資料夾建立成功!");
     yield put(
       chatsApiResponseSuccess(ChatsActionTypes.CREATE_CHANNEL_DIRS, response)
     );
-    yield call(showSuccessNotification, "資料夾建立成功!");
   } catch (error: any) {
     yield call(showErrorNotification, error.data.message);
     yield put(

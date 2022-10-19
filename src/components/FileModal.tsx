@@ -50,6 +50,9 @@ const FileModal = ({ isOpen, onClose, role }: FileModalProps) => {
   const [isOpenInputName, setIsOpenInputName] = useState(false);
   const [isOpenUploadFile, setIsOpenUploadFile] = useState(false);
   const [dirName, setDirName] = useState("");
+  const [tempDir, setTempDir] = useState<Array<string>>();
+  const [tempIsDir, setTempIsDir] = useState<Array<boolean>>();
+
 
   const onSelectDir = (info: string) => {
     dispatch(changeSelectedDir(info));
@@ -87,6 +90,10 @@ const FileModal = ({ isOpen, onClose, role }: FileModalProps) => {
         path: tmp.length === 0 ? "" : tmp.join("/"),
       })
     );
+    // let data = {
+    //   path: path.length === 0 ? "" : path.join("/"),
+    // }
+    // dispatch(getChannelDir(channelInfo.id, data));
   };
   const onUpload = () => {
     let tmp = [...path];
@@ -98,6 +105,10 @@ const FileModal = ({ isOpen, onClose, role }: FileModalProps) => {
       };
       dispatch(uploadChannelFile(data));
     });
+    let data = {
+      path: tmp.length === 0 ? "" : tmp.join("/"),
+    }
+    dispatch(getChannelDir(channelInfo.id, data));  
   };
 
   const onDownload = (filename: string) => {
@@ -113,6 +124,11 @@ const FileModal = ({ isOpen, onClose, role }: FileModalProps) => {
     console.log(e.target.files);
     setFiles([...e.target.files]);
   };
+
+  useEffect(() => {
+    setTempDir(channelDir)
+    setTempIsDir(isDir)
+  }, [channelDir])
 
   return (
     <Modal
@@ -234,7 +250,7 @@ const FileModal = ({ isOpen, onClose, role }: FileModalProps) => {
               <th>名稱</th>
             </tr>
           </thead>
-          {(channelDir || []).map((dir: string, key: number) => {
+          {(tempDir || []).map((dir: string, key: number) => {
             return (
               <tbody key={key}>
                 <tr className="table-primary" style={{ padding: "20px" }}>
@@ -242,10 +258,10 @@ const FileModal = ({ isOpen, onClose, role }: FileModalProps) => {
                     <Link
                       to="#"
                       onClick={() => {
-                        isDir[key] ? onSelectDir(dir) : onDownload(dir);
+                        tempIsDir && tempIsDir[key] ? onSelectDir(dir) : onDownload(dir);
                       }}
                     >
-                      {isDir[key] ? (
+                      {tempIsDir && tempIsDir[key] ? (
                         <i
                           className="mdi mdi-folder"
                           style={{ margin: "10px" }}
