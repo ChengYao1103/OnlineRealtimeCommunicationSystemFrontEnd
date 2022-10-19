@@ -79,6 +79,7 @@ const HomeworkModal = ({ isOpen, onClose, role }: HomeworkModalProps) => {
   const [fileInvalid, setFileInvalid] = useState(false);
   const [buttonDisabled, setButtonDisabled] = useState(true); //控制button的disabled
   const [endDateInvalidMsg, setEndDateInvalidMsg] = useState("");
+  const [allUpload, setAllUpload] = useState<Array<homeworkUploadModel>>();
   
   const IsInvalid = () => {
     if (mode === 2 || mode === 3) {
@@ -127,6 +128,10 @@ const HomeworkModal = ({ isOpen, onClose, role }: HomeworkModalProps) => {
       if (info) dispatch(getHomeworkScore(info.id));
     }
   };
+
+  useEffect(() => {
+    setAllUpload(homeworkUploads)
+  }, [homeworkUploads])
 
   useEffect(() => {
     IsInvalid()
@@ -182,8 +187,11 @@ const HomeworkModal = ({ isOpen, onClose, role }: HomeworkModalProps) => {
   };
 
   useEffect(() => {
-    dispatch(getChannelHomeworks(channelInfo.id));
-  }, []);
+    if (mode === 0)
+      dispatch(getChannelHomeworks(channelInfo.id));
+  }, [mode]);
+
+
 
   return (
     <Modal isOpen={isOpen} toggle={onClose} tabIndex={-1} centered scrollable>
@@ -462,19 +470,16 @@ const HomeworkModal = ({ isOpen, onClose, role }: HomeworkModalProps) => {
                 <th>分數</th>
               </tr>
             </thead>
-            {(homeworkUploads || []).map(
+            {(allUpload || []).map(
               (upload: homeworkUploadModel, key: number) => {
                 return (
                   <tbody key={key}>
                     <tr
                       className="table-primary"
                       style={{ padding: "20px" }}
-                      onClick={() => {
-                        //isDir[key] ? onSelectDir(dir) : onDownload(dir);
-                      }}
                     >
                       <td>
-                        <Link to="#" className="p-0">
+                        <Link to="#" className="p-0" style={{pointerEvents: 'none'}}>
                           <div className="d-flex align-items-center">
                             <div className="chat-avatar me-2">
                               <img
@@ -538,6 +543,7 @@ const HomeworkModal = ({ isOpen, onClose, role }: HomeworkModalProps) => {
                                           score: Number(inputScore),
                                         })
                                       );
+                                      getAllHomewrkUpload();
                                     setInputScore("");
                                   }}
                                 >
@@ -546,6 +552,18 @@ const HomeworkModal = ({ isOpen, onClose, role }: HomeworkModalProps) => {
                                     style={{ margin: 10 }}
                                   >
                                     {" "}
+                                  </i>
+                                </Link>
+                                <Link
+                                  to="#"
+                                  onClick={() => {
+                                      setIsEditing(false);
+                                  }}
+                                >
+                                  <i
+                                    className="mdi mdi-window-close"
+                                    style={{margin: 10}}
+                                  >
                                   </i>
                                 </Link>
                               </div>

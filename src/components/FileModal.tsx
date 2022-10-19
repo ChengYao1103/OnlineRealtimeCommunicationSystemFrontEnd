@@ -130,12 +130,12 @@ const FileModal = ({ isOpen, onClose, role }: FileModalProps) => {
         <ModalFooter>
           {role !== 2 && (
             <>
-              <Button onClick={() => setIsOpenInputName(true)}>
+              <Button onClick={() => {setIsOpenInputName(!isOpenInputName); setIsOpenUploadFile(false);}}>
                 新增資料夾
               </Button>
               <Button
                 className="btn btn-primary"
-                onClick={() => setIsOpenUploadFile(true)}
+                onClick={() => {setIsOpenInputName(false); setIsOpenUploadFile(!isOpenUploadFile);}}
               >
                 上傳檔案
               </Button>
