@@ -97,7 +97,8 @@ const Post = ({
   const postAuthor = channelPost.user;
 
   const isInMeeting =
-    channelPost.meetingID &&
+    channelPost.meetingID !== undefined &&
+    channelPost.meetingID !== 0 &&
     channelPost.content.split(" ").slice(-1)[0] !== "end.\n";
 
   const date = getDateTime(message.timestamp);
